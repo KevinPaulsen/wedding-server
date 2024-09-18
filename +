@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.paulsen'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.9.0'
+    }
+}
+
+apply plugin: 'com.bmuschko.cargo'
+
+cargo {
+    containerId = 'tomcat9x' // Adjust to your Tomcat version
+    port = 8080 // Default Tomcat port
+
+    remote {
+        hostname = 'your-ec2-public-ip' // EC2 instance public IP
+        username = 'your-tomcat-manager-username' // Tomcat manager username
+        password = 'your-tomcat-manager-password' // Tomcat manager password
+    }
+
+    deployable {
+        file = file('build/libs/your-app.war') // Path to your WAR file
+        context = 'your-app-context' // Context path for the app
+    }
+}
+
+cargoDeployRemote.dependsOn assemble
