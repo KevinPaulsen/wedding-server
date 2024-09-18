@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping
 public class WebController {
-    @GetMapping("/") 
-    public String getMessage()
-    {
+    @GetMapping("/")
+    public String getMessage() {
         return "r u coming to the wedding? yes ... or no?";
     }
 }

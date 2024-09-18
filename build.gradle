@@ -29,6 +29,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -50,13 +51,13 @@ cargo {
 
     remote {
         hostname = '52.12.29.118' // EC2 instance public IP
-        username = 'admin' // Tomcat manager username
-        password = 'admin' // Tomcat manager password
+        username = project.findProperty('cargo.username') ?: 'deployer'
+        password = project.findProperty('cargo.password') ?: 'password'
     }
 
     deployable {
         file = file('build/libs/wedding-app.war') // Path to your WAR file
-        context = 'wedding' // Context path for the app
+        context = '/' // Context path for the app
     }
 }
 
