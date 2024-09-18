@@ -1,0 +1,33 @@
+<!-- src/main/resources/templates/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Wedding Website - Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>Welcome to Our Wedding!</h1>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/about}">About Us</a>
+        <a th:href="@{/contact}">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <section>
+        <h2>Join Us in Celebrating</h2>
+        <p>We're excited to share our special day with you.</p>
+        <button th:onclick="|location.href='@{/rsvp}'|">RSVP Now</button>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Our Wedding. All rights reserved.</p>
+</footer>
+</body>
+</html>
