@@ -31,9 +31,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation "mysql:mysql-connector-java:8.0.33"
+
+    // Add H2 dependency for development profile
+    runtimeOnly 'com.h2database:h2:2.3.232'
 }
 
 tasks.named('test') {
@@ -59,6 +64,14 @@ cargo {
     deployable {
         file = file('build/libs/wedding-app.war') // Path to your WAR file
         context = '/' // Context path for the app
+    }
+
+    // Set system property to activate Spring profile
+    local {
+        systemProperties {
+            property 'spring.profiles.active', 'prod'
+            property 'spring.datasource.password', project.findProperty('cargo.password') ?: ''
+        }
     }
 }
 
