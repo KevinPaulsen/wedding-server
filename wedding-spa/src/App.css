@@ -4,3 +4,9 @@
   margin: 0 auto;
   max-width: 1200px;
 }
+
+/* App.css */
+.container {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
