@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../assets/Transitions.css';
-import { useFlow } from '../FlowProvider'; // Import the flow context
+import '../../styles/Transitions.css';
+import {useFlow} from '../../FlowProvider'; // Import the flow context
 
 const PreferredInfoPage = () => {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ const PreferredInfoPage = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
 
-    const { step, setStep } = useFlow();
+    const {step, setStep} = useFlow();
 
     // Redirect to RSVP page if RSVP hasn't been completed
     useEffect(() => {
@@ -20,7 +20,7 @@ const PreferredInfoPage = () => {
     }, [step, navigate]);
 
     const handleNext = () => {
-        setStep((prevStep) => ({ ...prevStep, preferredInfoCompleted: true }));
+        setStep((prevStep) => ({...prevStep, preferredInfoCompleted: true}));
         navigate('/rsvp-status');
     };
 
