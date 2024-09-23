@@ -41,4 +41,19 @@ public class Role {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role role)) return false;
+
+        return getName().equals(role.getName()) && getUsers().equals(role.getUsers());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName().hashCode();
+        result = 31 * result + getUsers().hashCode();
+        return result;
+    }
 }

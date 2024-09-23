@@ -60,4 +60,31 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+
+        return isEnabled() == user.isEnabled() && getUsername().equals(user.getUsername()) && getPassword().equals(user.getPassword()) && getRoles().equals(user.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUsername().hashCode();
+        result = 31 * result + getPassword().hashCode();
+        result = 31 * result + Boolean.hashCode(isEnabled());
+        result = 31 * result + getRoles().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", roles=" + roles +
+                '}';
+    }
 }
