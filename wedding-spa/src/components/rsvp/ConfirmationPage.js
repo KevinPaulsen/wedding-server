@@ -7,16 +7,27 @@ import {useFlow} from "../../FlowProvider";
 const ConfirmationPage = () => {
     const navigate = useNavigate();
 
-    const {step} = useFlow();
+    const {step, setStep} = useFlow();
 
     // Redirect to RSVP page if RSVP hasn't been completed
     useEffect(() => {
         if (!step.rsvpStatusCompleted) {
             navigate('/rsvp-status');
+        } else {
+            setStep({
+                rsvpCompleted: false,
+                preferredInfoCompleted: false,
+                rsvpStatusCompleted: true,
+            });
         }
     }, [step, navigate]);
 
     const goHome = () => {
+        setStep({
+            rsvpCompleted: false,
+            preferredInfoCompleted: false,
+            rsvpStatusCompleted: false,
+        })
         navigate('/');
     };
 

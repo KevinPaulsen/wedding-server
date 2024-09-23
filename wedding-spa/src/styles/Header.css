@@ -1,8 +1,8 @@
 .elegant-title {
+    font-size: clamp(3rem, 100vw, 5rem);
     font-family: "Great Vibes", cursive;
     font-style: normal;
-    font-weight: bold;
-    font-size: 400%;
+    font-weight: normal;
 }
 
 header {
@@ -10,9 +10,6 @@ header {
 }
 
 .rsvp-button {
-    position: absolute;
-    top: 0;
-    right: 20px;
-    margin: 10px; /* Adjust spacing if needed */
+    position: relative;
 }
 
