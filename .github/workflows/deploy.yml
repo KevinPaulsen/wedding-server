@@ -33,10 +33,13 @@ jobs:
       - name: Build with Gradle
         run: JWT_SECRET=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 ./gradlew build
 
-      # Step 5: Login to Amazon ECR
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      # Step 5: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # Step 6: Build and Push Docker Image
       - name: Build, Tag, and Push Image to ECR
@@ -46,7 +49,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build Docker image
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker buildx build --platform linux/amd64 -t $ECR_REPOSITORY:$IMAGE_TAG .
           
           # Tag image for ECR
           docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
