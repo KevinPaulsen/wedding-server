@@ -31,7 +31,7 @@ jobs:
 
       # Step 4: Build the JAR
       - name: Build with Gradle
-        run: ./gradlew build
+        run: JWT_SECRET=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 ./gradlew build
 
       # Step 5: Login to Amazon ECR
       - name: Login to Amazon ECR
