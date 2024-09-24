@@ -1,4 +1,4 @@
-package com.paulsen.wedding;
+package com.paulsen.wedding.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class WebControllerTest {
+class AuthenticationControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Test
-    public void getHello() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+    public void get() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/users/me").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }
