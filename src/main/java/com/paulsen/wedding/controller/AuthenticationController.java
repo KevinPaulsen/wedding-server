@@ -1,9 +1,9 @@
 package com.paulsen.wedding.controller;
 
 import com.paulsen.wedding.model.User;
+import com.paulsen.wedding.responses.LoginResponse;
 import com.paulsen.wedding.security.LoginUserDto;
 import com.paulsen.wedding.security.RegisterUserDto;
-import com.paulsen.wedding.responses.LoginResponse;
 import com.paulsen.wedding.service.AuthenticationService;
 import com.paulsen.wedding.service.JwtService;
 import org.springframework.http.ResponseEntity;
