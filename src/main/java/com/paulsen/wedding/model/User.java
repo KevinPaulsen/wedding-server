@@ -1,34 +1,42 @@
 package com.paulsen.wedding.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
-@Entity
 @Table(name = "users")
-public class User {
+@Entity
+public class User implements UserDetails {
 
     @Id
-    private String username; // Use username as primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private long id;
 
+    @Column(nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String password;
-    private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_username", referencedColumnName = "username"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_name", referencedColumnName = "name"))
-    private Set<Role> roles;
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
     public String getUsername() {
         return username;
     }
@@ -45,20 +53,9 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     @Override
@@ -66,25 +63,14 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
-        return isEnabled() == user.isEnabled() && getUsername().equals(user.getUsername()) && getPassword().equals(user.getPassword()) && getRoles().equals(user.getRoles());
+        return getId() == user.getId() && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword());
     }
 
     @Override
     public int hashCode() {
-        int result = getUsername().hashCode();
-        result = 31 * result + getPassword().hashCode();
-        result = 31 * result + Boolean.hashCode(isEnabled());
-        result = 31 * result + getRoles().hashCode();
+        int result = Long.hashCode(getId());
+        result = 31 * result + Objects.hashCode(getUsername());
+        result = 31 * result + Objects.hashCode(getPassword());
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                ", roles=" + roles +
-                '}';
     }
 }
