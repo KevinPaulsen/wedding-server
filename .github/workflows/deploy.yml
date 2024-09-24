@@ -44,7 +44,7 @@ jobs:
       # Step 6: Build and Push Docker Image
       - name: Build, Tag, and Push Image to ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: 900444243797.dkr.ecr.us-west-2.amazonaws.com
           ECR_REPOSITORY: paulsen/wedding-app
           IMAGE_TAG: ${{ github.sha }}
         run: |
