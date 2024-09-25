@@ -59,10 +59,10 @@ jobs:
           docker buildx build --platform linux/amd64 -t $ECR_REPOSITORY:$IMAGE_TAG .
           
           # Tag image for ECR
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG:latest
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-latest
           
           # Push image to ECR
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-latest
 
       # Step 8: Update ECS Service with Force New Deployment
       - name: Force New Deployment on ECS Service
