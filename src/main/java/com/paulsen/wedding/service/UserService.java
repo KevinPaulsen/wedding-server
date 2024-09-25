@@ -18,4 +18,8 @@ public class UserService {
     public List<User> allUsers() {
         return new ArrayList<>(userRepository.findAll());
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
+    }
 }
