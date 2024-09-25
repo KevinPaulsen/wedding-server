@@ -24,10 +24,12 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.github.boostchicken:spring-data-dynamodb:5.2.5'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.772'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
@@ -36,9 +38,6 @@ dependencies {
     implementation "mysql:mysql-connector-java:8.0.33"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // Add H2 dependency for development profile
-    runtimeOnly 'com.h2database:h2:2.3.232'
 }
 
 tasks.named('test') {
