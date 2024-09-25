@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
-import {useFlow} from '../../FlowProvider'; // Import the flow context
+import {useFlow} from '../../FlowProvider';
+import CancelButton from "./CancelButton"; // Import the flow context
 
 const RSVPCodePage = () => {
     const navigate = useNavigate();
@@ -16,16 +17,10 @@ const RSVPCodePage = () => {
         navigate('/rsvp-info');
     };
 
-    const handleCancel = () => {
-        navigate('/');
-    };
-
     return (
         <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor: 'ivory'}}>
             <div className="position-absolute top-0 start-0 m-4">
-                <button className="btn btn-outline-secondary" onClick={handleCancel}>
-                    Cancel
-                </button>
+                <CancelButton/>
             </div>
 
             <div className="text-center fade-in">

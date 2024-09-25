@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
-import {useFlow} from '../../FlowProvider'; // Import the flow context
+import {useFlow} from '../../FlowProvider';
+import CancelButton from "./CancelButton"; // Import the flow context
 
 const PreferredInfoPage = () => {
     const navigate = useNavigate();
@@ -24,10 +25,6 @@ const PreferredInfoPage = () => {
         navigate('/rsvp-status');
     };
 
-    const handleCancel = () => {
-        navigate('/');
-    };
-
     const handleBack = () => {
         navigate('/rsvp');
     };
@@ -36,10 +33,8 @@ const PreferredInfoPage = () => {
         <div className="d-flex justify-content-center align-items-center vh-100"
              style={{backgroundColor: 'ivory'}}>
             {/* Cancel button in the top-left corner */}
-            <div className="position-absolute top-0 start-0 m-3">
-                <button className="btn btn-outline-secondary" onClick={handleCancel}>
-                    Cancel
-                </button>
+            <div className="position-absolute top-0 start-0 m-4">
+                <CancelButton/>
             </div>
 
             {/* Form in the center */}

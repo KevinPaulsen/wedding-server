@@ -1,10 +1,10 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Header from './components/Header';
-import PhotoSection from './components/PhotoSection';
-import Schedule from './components/Schedule';
-import WeddingDetails from './components/WeddingDetails';
-import Countdown from './components/Countdown';
+import Header from './components/home/Header';
+import PhotoSection from './components/home/PhotoSection';
+import Schedule from './components/home/Schedule';
+import WeddingDetails from './components/home/WeddingDetails';
+import Countdown from './components/home/Countdown';
 import RSVPCodePage from './components/rsvp/RSVPCodePage';
 import PreferredInfoPage from './components/rsvp/PreferredInfoPage';
 import StatusPage from './components/rsvp/StatusPage';

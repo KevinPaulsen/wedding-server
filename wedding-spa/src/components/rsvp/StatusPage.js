@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/Transitions.css';
 import {useFlow} from "../../FlowProvider";
+import CancelButton from "./CancelButton";
 
 const StatusPage = () => {
     const navigate = useNavigate();
@@ -29,6 +30,10 @@ const StatusPage = () => {
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor: 'ivory'}}>
+            <div className="position-absolute top-0 start-0 m-4">
+                <CancelButton/>
+            </div>
+
             {/* Container for the status selection cards and buttons */}
             <div className="text-center fade-in">
                 <p>Are You Coming?</p>
