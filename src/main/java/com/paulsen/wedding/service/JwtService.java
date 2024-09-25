@@ -32,11 +32,7 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return buildToken(new HashMap<>(), userDetails);
     }
 
     public long getExpirationTime() {
@@ -45,15 +41,14 @@ public class JwtService {
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
+            UserDetails userDetails
     ) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), Jwts.SIG.HS256)
                 .compact();
     }
