@@ -39,7 +39,7 @@ const Countdown = () => {
 
     return (
         <div className="bg-dark text-white py-4">
-            <InfoContainer title={"Countdown"} elements={schedule} />
+            <InfoContainer title={"Countdown"} elements={schedule}/>
         </div>
     );
 };

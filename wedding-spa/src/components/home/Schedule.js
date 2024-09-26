@@ -11,7 +11,7 @@ const Schedule = () => {
 
     return (
         <div className="bg-dark text-white py-4">
-            <InfoContainer title={"Schedule"} elements={schedule} />
+            <InfoContainer title={"Schedule"} elements={schedule}/>
         </div>
     );
 };

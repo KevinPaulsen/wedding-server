@@ -10,7 +10,7 @@ const WeddingDetails = () => {
 
     return (
         <div className="container my-5">
-            < InfoContainer title={'Wedding Details'} elements={details} />
+            < InfoContainer title={'Wedding Details'} elements={details}/>
         </div>
     );
 };
