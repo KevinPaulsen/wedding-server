@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
         private static final String[] allowedOrigins = {
                 "http://localhost:3000",
-                "https://d2dpdnd8n81fv6.cloudfront.net",
+                "https://d32ajgyhym5hws.cloudfront.net",
                 "https://master.d17kqty0y5q092.amplifyapp.com"
         };
 

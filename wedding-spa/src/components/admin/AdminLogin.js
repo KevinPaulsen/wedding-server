@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from "../../auth/AuthContext";
 import {useNavigate} from "react-router-dom";
 
-const url = 'https://d2dpdnd8n81fv6.cloudfront.net'
+const url = 'https://d32ajgyhym5hws.cloudfront.net'
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
