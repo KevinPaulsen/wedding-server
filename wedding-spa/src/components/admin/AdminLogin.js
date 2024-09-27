@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from "../../auth/AuthContext";
 import {useNavigate} from "react-router-dom";
 
-const url = 'https://d32ajgyhym5hws.cloudfront.net'
+const url = "http://WeddingAppLB-2002632457.us-west-2.elb.amazonaws.com/auth/login"
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
@@ -32,7 +32,7 @@ function AdminLogin() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Login failed');
+                throw new Error(errorData.description || 'Login failed');
             }
 
             const data = await response.json();
