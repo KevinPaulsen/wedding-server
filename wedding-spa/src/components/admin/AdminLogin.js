@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {AuthContext} from "../../auth/AuthContext";
 import {useNavigate} from "react-router-dom";
 
-const url = "http://WeddingAppLB-2002632457.us-west-2.elb.amazonaws.com/auth/login"
+const url = "https://api.KevinLovesOlivia.com"
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
