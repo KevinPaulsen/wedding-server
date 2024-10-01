@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 "http://localhost:3000",
                 "https://kevinlovesolivia.com",
                 "https://api.kevinlovesolivia.com",
+                "https://www.kevinlovesolivia.com",
+                "https://www.api.kevinlovesolivia.com",
         };
 
         @Override
