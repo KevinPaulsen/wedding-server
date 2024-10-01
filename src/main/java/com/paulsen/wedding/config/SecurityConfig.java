@@ -1,6 +1,7 @@
 package com.paulsen.wedding.config;
 
-import com.paulsen.wedding.repository.UserRepository;
+import com.paulsen.wedding.model.User;
+import com.paulsen.wedding.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -21,8 +24,13 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User"
+                    + " not found"));
+
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                    List.of());
+        };
     }
 
     @Bean

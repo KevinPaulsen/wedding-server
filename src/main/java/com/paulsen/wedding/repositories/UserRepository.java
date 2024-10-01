@@ -1,4 +1,4 @@
-package com.paulsen.wedding.repository;
+package com.paulsen.wedding.repositories;
 
 import com.paulsen.wedding.model.User;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;

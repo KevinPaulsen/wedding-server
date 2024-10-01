@@ -1,4 +1,4 @@
-package com.paulsen.wedding.config;
+package com.paulsen.wedding.security;
 
 import com.paulsen.wedding.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 
+        // Filter the request if the authorization is missing
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

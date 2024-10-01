@@ -1,7 +1,7 @@
 package com.paulsen.wedding.service;
 
 import com.paulsen.wedding.model.User;
-import com.paulsen.wedding.repository.UserRepository;
+import com.paulsen.wedding.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
