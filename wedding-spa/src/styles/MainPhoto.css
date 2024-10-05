@@ -1,0 +1,16 @@
+.main-image {
+    object-fit: cover;
+    object-position: 50% 35%;
+    top: 0;
+    left: 0;
+    filter: brightness(69%);
+}
+
+.date-text {
+    font-family: "Baskervville", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #ece4da;
+    display: flex;
+    font-size: 4rem;
+}

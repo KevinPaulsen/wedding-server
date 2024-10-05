@@ -1,49 +1,45 @@
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import Header from './components/home/Header';
-import PhotoSection from './components/home/PhotoSection';
-import Schedule from './components/home/Schedule';
-import WeddingDetails from './components/home/WeddingDetails';
-import Countdown from './components/home/Countdown';
 import RSVPCodePage from './components/rsvp/RSVPCodePage';
 import PreferredInfoPage from './components/rsvp/PreferredInfoPage';
 import StatusPage from './components/rsvp/StatusPage';
 import ConfirmationPage from './components/rsvp/ConfirmationPage';
-import {FlowProvider} from "./FlowProvider";
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import PrivateRoute from "./auth/PrivateRoute";
 import NotFound from "./components/NotFound";
+import Home from "./pages/Home";
+import './styles/App.css';
+import Story from "./pages/Story";
+import Contact from "./pages/Contact";
+import Details from "./pages/Details";
+import Gallery from "./pages/Gallery";
 
 function App() {
     return (
-        <FlowProvider>
-            <Routes>
-                <Route path="/admin/login" element={<AdminLogin/>}/>
-                <Route path="/login" element={<Navigate to="/admin/login" replace/>}/>
-                <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
-                <Route
-                    path="/admin/dashboard"
-                    element={<PrivateRoute component={<AdminDashboard/>}/>}
-                />
-                <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
-                <Route path="/" element={
-                    <div>
-                        <Header/>
-                        <PhotoSection/>
-                        <Schedule/>
-                        <WeddingDetails/>
-                        <Countdown/>
-                    </div>
-                }/>
-                <Route path="/rsvp" element={<RSVPCodePage/>}/>
-                <Route path="/rsvp-info" element={<PreferredInfoPage/>}/>
-                <Route path="/rsvp-status" element={<StatusPage/>}/>
-                <Route path="/rsvp-confirmation" element={<ConfirmationPage/>}/>
+        <Routes>
+            {/* Login page/redirects */}
+            <Route path="/admin/login" element={<AdminLogin/>}/>
+            <Route path="/login" element={<Navigate to="/admin/login" replace/>}/>
+            <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
 
-                <Route path="*" element={<NotFound/>}/>
-            </Routes>
-        </FlowProvider>
+            {/* Dashboard Page/redirects */}
+            <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminDashboard/>}/>}/>
+            <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
+
+            <Route path="/" element={<Home/>}/>
+            <Route path="/gallery" element={<Gallery/>}/>
+            <Route path="/details" element={<Details/>}/>
+            <Route path="/contact" element={<Contact/>}/>
+            <Route path="/story" element={<Story/>}/>
+            {/* RSVP Pages*/}
+            <Route path="/rsvp" element={<RSVPCodePage/>}/>
+            <Route path="/rsvp-info" element={<PreferredInfoPage/>}/>
+            <Route path="/rsvp-status" element={<StatusPage/>}/>
+            <Route path="/rsvp-confirmation" element={<ConfirmationPage/>}/>
+
+            <Route path="*" element={<NotFound/>}/>
+        </Routes>
     );
 }
 

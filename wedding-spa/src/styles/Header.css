@@ -1,15 +1,47 @@
-.elegant-title {
-    font-size: clamp(3rem, 100vw, 5rem);
-    font-family: "Great Vibes", cursive;
-    font-style: normal;
-    font-weight: normal;
+.title {
+    font-size: 2.99rem;
 }
 
-header {
-    position: relative; /* Allows the button to be positioned relative to the header */
+.custom-button {
+    background: #574c3f;
+    color: #ece4da;
+    border: 2px solid #574c3f;
+    border-radius: 0;
+    padding: 7px 10px;
 }
 
-.rsvp-button {
-    position: relative;
+.custom-button:hover {
+    background: #3f362b;
+    border: 2px solid #3f362b;
+    color: #ece4da;
 }
 
+.custom-button:focus,
+.custom-button:active {
+    background: #574c3f !important;
+    border-color: #574c3f !important;
+    color: #ece4da;
+}
+
+
+.fixed-size-btn {
+    height: 100%;
+    max-height: 75px;
+    width: 100%;
+    max-width: 100px;
+}
+
+.home-button {
+    background-color: transparent;
+    border: none;
+    color: #574c3f;
+    font-size: 2rem;
+}
+
+.home-button:hover,
+.home-button:focus,
+.home-button:active,
+.home-button:focus-visible {
+    background: transparent !important;
+    color: #3f362b !important;
+}

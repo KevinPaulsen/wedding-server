@@ -10,7 +10,7 @@ const Schedule = () => {
     ];
 
     return (
-        <div className="bg-dark text-white py-4">
+        <div className="bg-dark text-white py-5">
             <InfoContainer title={"Schedule"} elements={schedule}/>
         </div>
     );

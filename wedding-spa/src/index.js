@@ -1,19 +1,21 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom/client';
-import './styles/globals.css';
-import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AuthProvider} from "./auth/AuthContext";
 import {BrowserRouter as Router} from "react-router-dom";
+import {FlowProvider} from "./FlowProvider";
+import './styles/App.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <AuthProvider>
             <Router>
-                <App/>
+                <FlowProvider>
+                    <App/>
+                </FlowProvider>
             </Router>
         </AuthProvider>
     </React.StrictMode>
