@@ -8,7 +8,7 @@ import HomeButton from "./HomeButton";
 
 const WeddingHeader = () => {
     return (
-        <Container className="py-5 px-1 px-sm-3 text-center">
+        <Container className="py-5 px-1 px-sm-5 text-center">
             {/* Header Row - Home Button, Stack Button, Title */}
             <Row className="g-0 align-items-center">
                 <Col className="col-1 d-flex justify-content-start">
