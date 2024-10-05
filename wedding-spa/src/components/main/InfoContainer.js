@@ -1,19 +1,20 @@
 import React from 'react';
+import {Col, Container, Row} from "react-bootstrap";
 
 const InfoContainer = (props) => {
     return (
-        <div>
+        <Container fluid>
             <h1 className="text-center mb-4">{props.title}</h1>
-            <div className="row justify-content-around align-items-center">
+            <Row className='g-0 justify-content-around align-items-center'>
                 {props.elements.map((item, index) => (
-                    <div key={index} className="col-3 text-center">
+                    <Col key={index} className='text-center'>
                         <p className="info_element">{item.header}</p>
                         <p className="info_element">{item.body}</p>
-                    </div>
+                    </Col>
                 ))}
-            </div>
-        </div>
-    )
+            </Row>
+        </Container>
+    );
 }
 
 export default InfoContainer;
