@@ -1,5 +1,6 @@
 package com.paulsen.wedding.service;
 
+import com.paulsen.wedding.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -31,7 +32,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         return buildToken(new HashMap<>(), userDetails);
     }
 
@@ -41,7 +42,7 @@ public class JwtService {
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            User userDetails
     ) {
         return Jwts
                 .builder()
