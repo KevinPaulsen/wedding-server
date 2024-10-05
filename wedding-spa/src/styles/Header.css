@@ -3,11 +3,25 @@
 }
 
 .custom-button {
+    border-radius: 0;
+    padding: 7px 10px;
+
+    height: 100%;
+    max-height: 75px;
+    width: 100%;
+    max-width: 100px;
+}
+
+.custom-button.light {
+    background: #ece4da;
+    color: #574c3f;
+    border: 2px solid #ece4da;
+}
+
+.custom-button.dark {
     background: #574c3f;
     color: #ece4da;
     border: 2px solid #574c3f;
-    border-radius: 0;
-    padding: 7px 10px;
 }
 
 .custom-button:hover {
@@ -21,14 +35,6 @@
     background: #574c3f !important;
     border-color: #574c3f !important;
     color: #ece4da;
-}
-
-
-.fixed-size-btn {
-    height: 100%;
-    max-height: 75px;
-    width: 100%;
-    max-width: 100px;
 }
 
 .home-button {

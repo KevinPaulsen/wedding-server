@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Container} from 'react-bootstrap';
+import {Button, Container, Row} from 'react-bootstrap';
 import '../../styles/FullScreenMenu.css';
+import {Link} from "react-router-dom";
+import Title from "./Title";
 
 const FullScreenMenu = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -26,11 +28,21 @@ const FullScreenMenu = () => {
             </div>
 
             <div className={`fullscreen-overlay ${menuOpen ? 'show' : ''}`}>
-                <Container className="d-flex flex-column justify-content-center align-items-center h-100">
-                    <a href="/gallery" className="menu-link">Gallery</a>
-                    <a href="/details" className="menu-link">Details</a>
-                    <a href="/contact" className="menu-link">Contact</a>
-                    <a href="/story" className="menu-link">Our Story</a>
+                <Container className={`h-100`}>
+                    <Row className='mt-5'>
+                        <Title color="#ece4da"/>
+                    </Row>
+                    <Row className='flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
+                        <Link to="/gallery" className='menu-link'>Gallery</Link>
+                        <Link to="/details" className='menu-link'>Details</Link>
+                        <Link to="/contact" className='menu-link'>Contact</Link>
+                        <Link to="/story" className='menu-link'>Our Story</Link>
+                    </Row>
+                    <Row className='mb-5 justify-content-center align-items-center'>
+                        <Button as={Link} to="/rsvp" className="custom-button light">
+                            RSVP
+                        </Button>
+                    </Row>
                 </Container>
             </div>
         </>
