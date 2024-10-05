@@ -1,6 +1,6 @@
 import React from 'react';
-import BaseLayout from "../components/home/BaseLayout";
-import MainPhoto from "../components/home/MainPhoto";
+import BaseLayout from "../components/main/BaseLayout";
+import MainPhoto from "../components/main/MainPhoto";
 
 const Home = () => {
     return (

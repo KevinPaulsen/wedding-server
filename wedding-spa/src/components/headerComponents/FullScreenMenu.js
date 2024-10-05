@@ -11,7 +11,7 @@ const FullScreenMenu = () => {
 
     return (
         <>
-            <div className={`menu-button-container ${menuOpen ? 'above-overlay' : ''}`}>
+            <div className={`d-sm-none menu-button-container ${menuOpen ? 'above-overlay' : ''}`}>
                 <Button
                     onClick={toggleMenu}
                     className={`menu-button ${menuOpen ? 'open' : ''}`}

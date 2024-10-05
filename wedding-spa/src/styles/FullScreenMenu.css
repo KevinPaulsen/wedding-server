@@ -8,10 +8,15 @@
 }
 
 .menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background: transparent !important; /* Make sure background stays transparent */
-    border: none;
+    width: 50px;
+    height: 50px;
     transition: background 0.3s ease;
-    box-shadow: none; /* Prevent any shadow from showing up */
+    border: none;
 }
 
 .menu-button:hover,

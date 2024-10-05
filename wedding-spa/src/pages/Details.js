@@ -1,7 +1,7 @@
 import React from 'react';
-import BaseLayout from "../components/home/BaseLayout";
-import WeddingDetails from "../components/home/WeddingDetails";
-import Schedule from "../components/home/Schedule";
+import BaseLayout from "../components/main/BaseLayout";
+import WeddingDetails from "../components/main/WeddingDetails";
+import Schedule from "../components/main/Schedule";
 
 const Home = () => {
     return (
