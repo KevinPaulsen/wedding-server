@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private static final String[] allowedOrigins = {
-            "*",
             "http://localhost:3000",
             "https://kevinlovesolivia.com",
             "https://api.kevinlovesolivia.com",
