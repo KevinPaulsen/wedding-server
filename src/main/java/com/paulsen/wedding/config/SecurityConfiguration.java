@@ -29,7 +29,6 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(corsConfigurer -> corsConfigurer.configure(http))
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/actuator/health").permitAll()
                         .anyRequest().authenticated())
