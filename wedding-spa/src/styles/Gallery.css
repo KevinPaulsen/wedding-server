@@ -1,0 +1,9 @@
+.info-text {
+    color: #574c3f;
+    background: none;
+}
+
+.max-image {
+    width: 100%;
+    max-width: 400px;
+}

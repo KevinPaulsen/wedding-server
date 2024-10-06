@@ -8,12 +8,12 @@ import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import PrivateRoute from "./auth/PrivateRoute";
 import NotFound from "./components/NotFound";
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 import './styles/App.css';
-import Story from "./pages/Story";
-import Contact from "./pages/Contact";
+import Story from "./pages/StoryPage";
+import Contact from "./pages/ContactPage";
 import Details from "./pages/Details";
-import Gallery from "./pages/Gallery";
+import Gallery from "./pages/GalleryPage";
 
 function App() {
     return (
@@ -27,11 +27,12 @@ function App() {
             <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminDashboard/>}/>}/>
             <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
 
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<HomePage/>}/>
             <Route path="/gallery" element={<Gallery/>}/>
             <Route path="/details" element={<Details/>}/>
             <Route path="/contact" element={<Contact/>}/>
             <Route path="/story" element={<Story/>}/>
+
             {/* RSVP Pages*/}
             <Route path="/rsvp" element={<RSVPCodePage/>}/>
             <Route path="/rsvp-info" element={<PreferredInfoPage/>}/>

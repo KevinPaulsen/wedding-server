@@ -1,0 +1,9 @@
+.story {
+    color: #574c3f;
+    background: none;
+}
+
+.gallery-image {
+    width: 100%;
+    max-width: 200px;
+}

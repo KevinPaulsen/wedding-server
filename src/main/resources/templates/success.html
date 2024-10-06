@@ -12,7 +12,7 @@
 <header>
     <h1>Thank You!</h1>
     <nav>
-        <a th:href="@{/}">Home</a>
+        <a th:href="@{/}">HomePage</a>
         <a th:href="@{/about}">About Us</a>
         <a th:href="@{/contact}">Contact</a>
     </nav>
@@ -22,7 +22,7 @@
     <section>
         <p>Thank you, <span th:text="${name}">Guest</span>, for your submission.</p>
         <p>We look forward to celebrating with you!</p>
-        <button th:onclick="|location.href='@{/}'|">Return to Home</button>
+        <button th:onclick="|location.href='@{/}'|">Return to HomePage</button>
     </section>
 
     <button id="alertButton">Click Me</button>

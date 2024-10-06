@@ -10,7 +10,7 @@ import Title from "./Title";
 const WeddingHeader = () => {
     return (
         <Container className="py-5 px-1 px-sm-5 text-center">
-            {/* Header Row - Home Button, Stack Button, Title */}
+            {/* Header Row - HomePage Button, Stack Button, Title */}
             <Row className="g-0 align-items-center">
                 <Col className="col-1 d-flex justify-content-start">
                     <HomeButton/>

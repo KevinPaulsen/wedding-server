@@ -1,10 +1,10 @@
 import React from 'react';
 import BaseLayout from "../components/main/BaseLayout";
-import MainPhoto from "../components/main/MainPhoto";
+import Story from "../components/main/Story";
 
 const Home = () => {
     return (
-        <BaseLayout children={<MainPhoto/>}/>
+        <BaseLayout children={<Story />}/>
     );
 }
 
