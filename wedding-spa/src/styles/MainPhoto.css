@@ -8,9 +8,9 @@
 
 .date-text {
     font-family: "Baskervville", serif;
-    font-weight: 400;
-    font-style: normal;
+    font-weight: 800;
     color: #ece4da;
     display: flex;
-    font-size: 4rem;
+    font-size: clamp(1em, 10vw + 1em, 15rem);
+    transform: translateY(80%);
 }
