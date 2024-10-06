@@ -9,7 +9,7 @@
 .date-text {
     font-family: "Baskervville", serif;
     font-weight: 800;
-    color: #ece4da;
+    color: var(--main-light);
     display: flex;
     font-size: clamp(1em, 10vw + 1em, 15rem);
     transform: translateY(80%);

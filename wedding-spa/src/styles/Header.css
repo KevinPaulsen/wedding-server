@@ -4,37 +4,36 @@
 
 .custom-button {
     border-radius: 0;
-
     height: 40px;
     width: 80px;
 }
 
 .custom-button.light {
-    background: #ece4da;
-    color: #574c3f;
-    border: 2px solid #ece4da;
+    background: var(--main-light);
+    color: var(--main-dark);
+    border: 2px solid var(--main-light);
 }
 
 .custom-button.dark {
-    background: #574c3f;
-    color: #ece4da;
-    border: 2px solid #574c3f;
+    background: var(--main-dark);
+    color: var(--main-light);
+    border: 2px solid var(--main-dark);
 }
 
 .custom-button:hover {
-    background: #3f362b;
-    color: #ece4da;
+    background: var(--hover-dark);
+    color: var(--main-light);
 }
 
 .custom-button:focus,
 .custom-button:active {
-    background: #574c3f !important;
-    border-color: #574c3f !important;
-    color: #ece4da;
+    background: var(--main-dark) !important;
+    border-color: var(--main-dark) !important;
+    color: var(--main-light);
 }
 
 .nav-link {
-    color: #574c3f;
+    color: var(--main-dark);
     font-size: 1.2em;
     text-decoration: none;
 }
@@ -54,7 +53,7 @@
 
     background-color: transparent;
     border: none;
-    color: #574c3f;
+    color: var(--main-dark);
     overflow: visible;
 }
 
@@ -69,5 +68,5 @@
 .home-button:active,
 .home-button:focus-visible {
     background: transparent !important;
-    color: #3f362b !important;
+    color: var(--hover-dark) !important;
 }

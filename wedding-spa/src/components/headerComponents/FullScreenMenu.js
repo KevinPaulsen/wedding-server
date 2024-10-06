@@ -30,7 +30,7 @@ const FullScreenMenu = () => {
             <div className={`fullscreen-overlay ${menuOpen ? 'show' : ''}`}>
                 <Container className={`h-100`}>
                     <Row className='mt-5'>
-                        <Title color="#ece4da"/>
+                        <Title color="var(--main-light)"/>
                     </Row>
                     <Row className='flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
                         <Link to="/gallery" className='menu-link'>Gallery</Link>

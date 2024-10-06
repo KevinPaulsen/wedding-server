@@ -1,5 +1,5 @@
 .info-text {
-    color: #574c3f;
+    color: var(--main-dark);
     background: none;
 }
 

@@ -1,24 +1,26 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFlow} from "../../FlowProvider";
+import {Button} from "react-bootstrap";
+import '../../styles/rsvp/CancelButton.css'
 
 function CancelButton() {
     const navigate = useNavigate();
     const {setStep} = useFlow();
 
     const handleCancel = () => {
-        navigate('/');
         setStep({
             rsvpCompleted: false,
             preferredInfoCompleted: false,
             rsvpStatusCompleted: false,
         })
+        navigate('/');
     };
 
     return (
-        <button className="btn btn-outline-secondary" onClick={handleCancel}>
+        <Button className='cancel-button dark wire' onClick={() => handleCancel()}>
             Cancel
-        </button>
+        </Button>
     )
 }
 

@@ -5,7 +5,7 @@ import CancelButton from "./CancelButton";
 
 const RsvpLayout = (props) => {
     return (
-        <Container fluid className="d-flex flex-column vh-100 p-0" style={{backgroundColor: '#ece4da'}}>
+        <Container fluid className="d-flex flex-column vh-100 p-0" style={{backgroundColor: 'var(--main-light)'}}>
             <Row className='g-0 mt-5 text-center align-items-center'>
                 <Col>
                     <Title />
