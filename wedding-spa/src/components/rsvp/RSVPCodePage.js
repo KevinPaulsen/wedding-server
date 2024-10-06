@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
+import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
-import CancelButton from "./CancelButton";
-import RsvpLayout from "./RsvpLayout"; // Import the flow context
+import RsvpLayout from "./RsvpLayout";
+import {Button} from "react-bootstrap";
 
 const RSVPCodePage = () => {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ const RSVPCodePage = () => {
     };
 
     return (
-        <RsvpLayout children={<>
+        <RsvpLayout cancel={true} children={<>
             <div className="text-center fade-in">
                 <input
                     type="text"
@@ -39,9 +40,7 @@ const RSVPCodePage = () => {
                     style={{maxWidth: '300px', margin: '0 auto'}}
                 />
 
-                <button className="btn btn-dark mt-3" onClick={handleNext}>
-                    Next
-                </button>
+                <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
             </div>
         </>}/>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFlow} from "../../FlowProvider";
 import {Button} from "react-bootstrap";
-import '../../styles/rsvp/CancelButton.css'
+import '../../styles/rsvp/RsvpButtons.css'
 
 function CancelButton() {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ function CancelButton() {
     };
 
     return (
-        <Button className='cancel-button dark wire' onClick={() => handleCancel()}>
+        <Button className='rsvp-button dark wire' onClick={() => handleCancel()}>
             Cancel
         </Button>
     )

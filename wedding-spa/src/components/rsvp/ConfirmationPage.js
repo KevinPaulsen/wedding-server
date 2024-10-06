@@ -2,8 +2,10 @@ import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
+import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from "../../FlowProvider";
 import RsvpLayout from "./RsvpLayout";
+import {Button} from "react-bootstrap";
 
 const ConfirmationPage = () => {
     const navigate = useNavigate();
@@ -33,15 +35,15 @@ const ConfirmationPage = () => {
     };
 
     return (
-        <RsvpLayout children={<>
+        <RsvpLayout cancel={false} children={
             <div className="text-center fade-in">
                 <p>Thank You for Your Response!</p>
                 <p>Your RSVP has been submitted.</p>
-                <button className="btn btn-dark" onClick={goHome}>
+                <Button className='rsvp-button long dark' onClick={goHome}>
                     Return Home
-                </button>
+                </Button>
             </div>
-        </>}/>
+        }/>
     );
 };
 

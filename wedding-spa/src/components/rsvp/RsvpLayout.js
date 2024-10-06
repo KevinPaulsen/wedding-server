@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 import Title from "../headerComponents/Title";
 import CancelButton from "./CancelButton";
 
@@ -15,9 +15,11 @@ const RsvpLayout = (props) => {
                 {props.children}
             </Row>
             <Row className='g-0 mb-5 text-center align-items-center'>
-                <Col>
-                    <CancelButton />
-                </Col>
+                {props.cancel && (
+                    <Col>
+                        <CancelButton />
+                    </Col>
+                )}
             </Row>
         </Container>
 )

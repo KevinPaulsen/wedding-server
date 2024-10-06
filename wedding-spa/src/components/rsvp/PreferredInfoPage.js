@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
 import CancelButton from "./CancelButton";
-import RsvpLayout from "./RsvpLayout"; // Import the flow context
+import RsvpLayout from "./RsvpLayout";
+import {Button} from "react-bootstrap"; // Import the flow context
 
 const PreferredInfoPage = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const PreferredInfoPage = () => {
     };
 
     return (
-        <RsvpLayout children={<>
+        <RsvpLayout cancel={true} children={<>
             {/* Form in the center */}
             <div className="text-center fade-in">
 
@@ -63,12 +64,8 @@ const PreferredInfoPage = () => {
                 />
 
                 <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
-                    <button className="btn btn-dark" onClick={handleBack}>
-                        Back
-                    </button>
-                    <button className="btn btn-dark" onClick={handleNext}>
-                        Next
-                    </button>
+                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
+                    <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
                 </div>
             </div>
         </>}/>

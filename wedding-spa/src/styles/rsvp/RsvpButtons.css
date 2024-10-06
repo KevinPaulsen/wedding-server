@@ -1,0 +1,57 @@
+.rsvp-button {
+    border-radius: 0;
+    height: 40px;
+    width: 80px;
+}
+
+.rsvp-button.long {
+    width: 120px;
+}
+
+.rsvp-button.dark {
+    background: var(--main-dark);
+    color: var(--main-light);
+    border: 2px solid var(--main-dark);
+}
+
+.rsvp-button.dark:hover {
+    background: var(--hover-dark);
+}
+
+.rsvp-button.dark.wire {
+    background: none;
+    color: var(--main-dark);
+}
+
+.rsvp-button.dark.wire:hover {
+    background: var(--main-dark);
+    color: var(--main-light);
+}
+
+.rsvp-button.light {
+    background: var(--main-light);
+    color: var(--main-dark);
+    border: 2px solid var(--main-light);
+}
+
+.rsvp-button.light:hover {
+    background: var(--hover-light);
+}
+
+.rsvp-button.light.wire {
+    background: none;
+    color: var(--main-light);
+}
+
+.rsvp-button.light.wire:hover {
+    background: var(--main-light);
+    color: var(--main-dark);
+}
+
+.rsvp-button:disabled,
+.rsvp-button:focus,
+.rsvp-button:active {
+    background: var(--main-dark) !important;
+    border-color: var(--main-dark) !important;
+    color: var(--main-light);
+}

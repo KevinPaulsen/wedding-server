@@ -4,6 +4,7 @@ import '../../styles/Transitions.css';
 import {useFlow} from "../../FlowProvider";
 import CancelButton from "./CancelButton";
 import RsvpLayout from "./RsvpLayout";
+import {Button} from "react-bootstrap";
 
 const StatusPage = () => {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const StatusPage = () => {
     };
 
     return (
-        <RsvpLayout children={<>
+        <RsvpLayout cancel={true} children={<>
             {/* Container for the status selection cards and buttons */}
             <div className="text-center fade-in">
                 <p>Are You Coming?</p>
@@ -62,12 +63,10 @@ const StatusPage = () => {
 
                 {/* Back and Next buttons aligned with the input fields */}
                 <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
-                    <button className="btn btn-dark" onClick={handleBack}>
-                        Back
-                    </button>
-                    <button className="btn btn-dark" onClick={handleNext} disabled={!status}>
-                        Next
-                    </button>
+                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
+                    <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
+                        Submit
+                    </Button>
                 </div>
             </div>
         </>}/>
