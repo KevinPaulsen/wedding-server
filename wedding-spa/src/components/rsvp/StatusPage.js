@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import '../../styles/Transitions.css';
 import {useFlow} from "../../FlowProvider";
 import CancelButton from "./CancelButton";
+import RsvpLayout from "./RsvpLayout";
 
 const StatusPage = () => {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ const StatusPage = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor: 'ivory'}}>
+        <RsvpLayout children={<>
             <div className="position-absolute top-0 start-0 m-4">
                 <CancelButton/>
             </div>
@@ -73,7 +74,7 @@ const StatusPage = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </>}/>
     );
 };
 

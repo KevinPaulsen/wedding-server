@@ -3,7 +3,8 @@ import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
-import CancelButton from "./CancelButton"; // Import the flow context
+import CancelButton from "./CancelButton";
+import RsvpLayout from "./RsvpLayout"; // Import the flow context
 
 const RSVPCodePage = () => {
     const navigate = useNavigate();
@@ -18,13 +19,8 @@ const RSVPCodePage = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor: 'ivory'}}>
-            <div className="position-absolute top-0 start-0 m-4">
-                <CancelButton/>
-            </div>
-
+        <RsvpLayout children={<>
             <div className="text-center fade-in">
-
                 <input
                     type="text"
                     className="form-control my-3"
@@ -47,7 +43,7 @@ const RSVPCodePage = () => {
                     Next
                 </button>
             </div>
-        </div>
+        </>}/>
     );
 };
 

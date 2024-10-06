@@ -3,7 +3,8 @@ import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
-import CancelButton from "./CancelButton"; // Import the flow context
+import CancelButton from "./CancelButton";
+import RsvpLayout from "./RsvpLayout"; // Import the flow context
 
 const PreferredInfoPage = () => {
     const navigate = useNavigate();
@@ -30,8 +31,7 @@ const PreferredInfoPage = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100"
-             style={{backgroundColor: 'ivory'}}>
+        <RsvpLayout children={<>
             {/* Cancel button in the top-left corner */}
             <div className="position-absolute top-0 start-0 m-4">
                 <CancelButton/>
@@ -76,7 +76,7 @@ const PreferredInfoPage = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </>}/>
     );
 };
 
