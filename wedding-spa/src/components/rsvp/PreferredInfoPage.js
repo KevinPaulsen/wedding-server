@@ -32,11 +32,6 @@ const PreferredInfoPage = () => {
 
     return (
         <RsvpLayout children={<>
-            {/* Cancel button in the top-left corner */}
-            <div className="position-absolute top-0 start-0 m-4">
-                <CancelButton/>
-            </div>
-
             {/* Form in the center */}
             <div className="text-center fade-in">
 

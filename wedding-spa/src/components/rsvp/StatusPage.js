@@ -31,10 +31,6 @@ const StatusPage = () => {
 
     return (
         <RsvpLayout children={<>
-            <div className="position-absolute top-0 start-0 m-4">
-                <CancelButton/>
-            </div>
-
             {/* Container for the status selection cards and buttons */}
             <div className="text-center fade-in">
                 <p>Are You Coming?</p>
