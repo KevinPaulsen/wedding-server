@@ -13,7 +13,6 @@ const WeddingHeader = () => {
             {/* Header Row - HomePage Button, Stack Button, Title */}
             <Row className="g-0 align-items-center">
                 <Col className="col-1 d-flex justify-content-start">
-                    <HomeButton/>
                 </Col>
                 <Col className={"col-10 d-flex justify-content-center"}>
                     <Title />
