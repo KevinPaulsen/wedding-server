@@ -31,43 +31,41 @@ const StatusPage = () => {
     };
 
     return (
-        <RsvpLayout cancel={true} children={<>
-            {/* Container for the status selection cards and buttons */}
-            <div className="text-center fade-in">
-                <p>Are You Coming?</p>
-
-                {/* Cards for Yes or No selection */}
-                <div className="d-flex justify-content-center my-4">
-                    {/* Yes card */}
-                    <div
-                        className={`card mx-2 ${status === 'Yes' ? 'bg-dark text-white' : ''}`}
-                        style={{width: '150px', cursor: 'pointer'}}
-                        onClick={() => setStatus('Yes')}
-                    >
-                        <div className="card-body">
-                            <p className="card-title">Yes</p>
-                        </div>
-                    </div>
-
-                    {/* No card */}
-                    <div
-                        className={`card mx-2 ${status === 'No' ? 'bg-dark text-white' : ''}`}
-                        style={{width: '150px', cursor: 'pointer'}}
-                        onClick={() => setStatus('No')}
-                    >
-                        <div className="card-body">
-                            <p className="card-title">No</p>
-                        </div>
+        <RsvpLayout
+            title={"Are you coming?"}
+            cancel={true}
+            children={<>
+            {/* Cards for Yes or No selection */}
+            <div className="d-flex justify-content-center my-4">
+                {/* Yes card */}
+                <div
+                    className={`card mx-2 ${status === 'Yes' ? 'bg-dark text-white' : ''}`}
+                    style={{width: '150px', cursor: 'pointer'}}
+                    onClick={() => setStatus('Yes')}
+                >
+                    <div className="card-body">
+                        <p className="card-title">Yes</p>
                     </div>
                 </div>
 
-                {/* Back and Next buttons aligned with the input fields */}
-                <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
-                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                    <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
-                        Submit
-                    </Button>
+                {/* No card */}
+                <div
+                    className={`card mx-2 ${status === 'No' ? 'bg-dark text-white' : ''}`}
+                    style={{width: '150px', cursor: 'pointer'}}
+                    onClick={() => setStatus('No')}
+                >
+                    <div className="card-body">
+                        <p className="card-title">No</p>
+                    </div>
                 </div>
+            </div>
+
+            {/* Back and Next buttons aligned with the input fields */}
+            <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
+                <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
+                <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
+                    Submit
+                </Button>
             </div>
         </>}/>
     );

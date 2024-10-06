@@ -12,7 +12,10 @@ const RsvpLayout = (props) => {
                 </Col>
             </Row>
             <Row className="g-0 flex-grow-1 align-items-center">
-                {props.children}
+                <div className="text-center fade-in">
+                    <h3>{props.title}</h3>
+                    {props.children}
+                </div>
             </Row>
             <Row className='g-0 mb-5 text-center align-items-center'>
                 {props.cancel && (

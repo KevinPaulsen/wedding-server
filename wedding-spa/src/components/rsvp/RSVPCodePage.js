@@ -20,28 +20,29 @@ const RSVPCodePage = () => {
     };
 
     return (
-        <RsvpLayout cancel={true} children={<>
-            <div className="text-center fade-in">
-                <input
-                    type="text"
-                    className="form-control my-3"
-                    placeholder="RSVP Code"
-                    value={rsvpCode}
-                    onChange={(e) => setRSVPCode(e.target.value)}
-                    style={{maxWidth: '300px', margin: '0 auto'}}
-                />
+        <RsvpLayout
+            title={"RSVP Information"}
+            cancel={true}
+            children={<>
+            <input
+                type="text"
+                className="form-control my-3"
+                placeholder="RSVP Code"
+                value={rsvpCode}
+                onChange={(e) => setRSVPCode(e.target.value)}
+                style={{maxWidth: '300px', margin: '0 auto'}}
+            />
 
-                <input
-                    type="text"
-                    className="form-control my-3"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    style={{maxWidth: '300px', margin: '0 auto'}}
-                />
+            <input
+                type="text"
+                className="form-control my-3"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                style={{maxWidth: '300px', margin: '0 auto'}}
+            />
 
-                <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
-            </div>
+            <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
         </>}/>
     );
 };

@@ -35,15 +35,15 @@ const ConfirmationPage = () => {
     };
 
     return (
-        <RsvpLayout cancel={false} children={
-            <div className="text-center fade-in">
-                <p>Thank You for Your Response!</p>
-                <p>Your RSVP has been submitted.</p>
-                <Button className='rsvp-button long dark' onClick={goHome}>
-                    Return Home
-                </Button>
-            </div>
-        }/>
+        <RsvpLayout
+            title={"Thank you or your Response!"}
+            cancel={false}
+            children={<>
+            <p>Your RSVP has been submitted.</p>
+            <Button className='rsvp-button long dark' onClick={goHome}>
+                Return Home
+            </Button>
+        </>}/>
     );
 };
 

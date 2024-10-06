@@ -32,41 +32,40 @@ const PreferredInfoPage = () => {
     };
 
     return (
-        <RsvpLayout cancel={true} children={<>
-            {/* Form in the center */}
-            <div className="text-center fade-in">
+        <RsvpLayout
+            title={"Preferred contact information"}
+            cancel={true}
+            children={<>
+            <input
+                type="text"
+                className="form-control my-3"
+                placeholder="Preferred Name"
+                value={preferredName}
+                onChange={(e) => setPreferredName(e.target.value)}
+                style={{maxWidth: '300px', margin: '0 auto'}}
+            />
 
-                <input
-                    type="text"
-                    className="form-control my-3"
-                    placeholder="Preferred Name"
-                    value={preferredName}
-                    onChange={(e) => setPreferredName(e.target.value)}
-                    style={{maxWidth: '300px', margin: '0 auto'}}
-                />
+            <input
+                type="email"
+                className="form-control my-3"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{maxWidth: '300px', margin: '0 auto'}}
+            />
 
-                <input
-                    type="email"
-                    className="form-control my-3"
-                    placeholder="Email Address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{maxWidth: '300px', margin: '0 auto'}}
-                />
+            <input
+                type="tel"
+                className="form-control my-3"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                style={{maxWidth: '300px', margin: '0 auto'}}
+            />
 
-                <input
-                    type="tel"
-                    className="form-control my-3"
-                    placeholder="Phone Number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    style={{maxWidth: '300px', margin: '0 auto'}}
-                />
-
-                <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
-                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                    <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
-                </div>
+            <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
+                <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
+                <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
             </div>
         </>}/>
     );
