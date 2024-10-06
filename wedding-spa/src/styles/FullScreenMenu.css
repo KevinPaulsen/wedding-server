@@ -92,6 +92,6 @@
 }
 
 .menu-link:hover {
-    color: #ccc;
+    text-decoration: underline;
 }
 

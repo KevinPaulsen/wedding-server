@@ -1,9 +1,8 @@
 import React from 'react';
-import {Button, Col, Container, Nav, Navbar, Row} from 'react-bootstrap';
+import {Button, Col, Container, Row} from 'react-bootstrap';
 import '../../styles/Header.css';
 import {Link} from "react-router-dom";
 import FullScreenMenu from "./FullScreenMenu";
-import HomeButton from "./HomeButton";
 import Title from "./Title";
 
 
@@ -23,21 +22,28 @@ const WeddingHeader = () => {
             </Row>
 
             {/* Content Row - RSVP Button, Navigation */}
-            <Row className="g-0 mt-3 justify-content-center">
-                <Navbar className='p-0 d-none d-sm-block'>
-                    <Navbar.Collapse id="navbar-nav" className="justify-content-center align-items-center">
-                        <Nav>
-                            <Nav.Link as={Link} to="/gallery">Gallery</Nav.Link>
-                            <Nav.Link as={Link} to="/details">Details</Nav.Link>
-                        </Nav>
-                        <Button as={Link} to="/rsvp" className='custom-button dark'>RSVP</Button>
-                        <Nav>
-                            <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
-                            <Nav.Link as={Link} to="/story">Our Story</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-                <Button as={Link} to="/rsvp" className='custom-button dark d-sm-none'>
+            <Row className="g-0 mt-3 justify-content-center align-items-center d-sm-flex d-none" style={{backgroundcolor: 'red'}}>
+                {/* Left Links */}
+                <Col className="d-flex justify-content-end text-center flex-grow-1 gap-3">
+                    <Link to="/gallery" className='nav-link'>Gallery</Link>
+                    <Link to="/details" className='nav-link'>Details</Link>
+                </Col>
+
+                {/* Centered Button */}
+                <Col xs="auto" className='mx-3'>
+                    <Button as={Link} to="/rsvp" className='custom-button dark'>RSVP</Button>
+                </Col>
+
+                {/* Right Links */}
+                <Col className="d-flex justify-content-start flex-grow-1 gap-3">
+                    <Link to="/contact" className='nav-link'>Contact</Link>
+                    <Link to="/story" className='nav-link'>Our Story</Link>
+                </Col>
+            </Row>
+
+            {/* RSVP Button for Small Screens */}
+            <Row className="g-0 mt-3 justify-content-center d-sm-none">
+                <Button as={Link} to="/rsvp" className='custom-button dark'>
                     RSVP
                 </Button>
             </Row>
