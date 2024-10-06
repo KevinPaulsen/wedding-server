@@ -1,9 +1,9 @@
 .main-image {
     object-fit: cover;
-    object-position: 50% 35%;
+    object-position: 50% 38%;
     top: 0;
     left: 0;
-    filter: brightness(69%);
+    filter: brightness(50%);
 }
 
 .date-text {
@@ -11,6 +11,5 @@
     font-weight: 800;
     color: var(--main-light);
     display: flex;
-    font-size: clamp(1em, 10vw + 1em, 15rem);
-    transform: translateY(80%);
+    font-size: clamp(1em, 10vw + 2em, 15rem);
 }
