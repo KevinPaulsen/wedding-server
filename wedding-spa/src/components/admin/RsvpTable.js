@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table, Accordion, Card, Button } from 'react-bootstrap';
 
-const RsvpTable = ({ data }) => {
+const url = "https://api.KevinLovesOlivia.com"
+
+const RsvpTable = () => {
     // State to keep track of which row is expanded
     const [expandedRows, setExpandedRows] = useState({});
+
+    // State to store fetched data
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // Toggle row expanded state
     const toggleRowExpansion = (id) => {
@@ -12,6 +19,33 @@ const RsvpTable = ({ data }) => {
             [id]: !prev[id],
         }));
     };
+
+    // Fetch data from API endpoint
+    useEffect(() => {
+        const fetchRsvpData = async () => {
+            try {
+                const response = await fetch(url + '/rsvp/rsvps', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+                    },
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                setData(result);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchRsvpData();
+    }, []);
 
     return (
         <div className="table-responsive">
