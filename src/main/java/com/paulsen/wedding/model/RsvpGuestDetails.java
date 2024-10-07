@@ -2,14 +2,14 @@ package com.paulsen.wedding.model;
 
 import java.util.List;
 
-public record RsvpDetails(String name, FoodOption foodOption, List<DietaryRestriction> dietaryRestrictions,
-                          String other) {
+public record RsvpGuestDetails(String name, FoodOption foodOption, List<DietaryRestriction> dietaryRestrictions,
+                               String other) {
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof RsvpDetails that))
+        if (!(o instanceof RsvpGuestDetails that))
             return false;
 
         return name().equals(that.name()) && foodOption() == that.foodOption() && dietaryRestrictions().equals(that.dietaryRestrictions()) && other().equals(that.other());
