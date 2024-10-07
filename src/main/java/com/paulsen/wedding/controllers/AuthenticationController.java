@@ -1,4 +1,4 @@
-package com.paulsen.wedding.controller;
+package com.paulsen.wedding.controllers;
 
 import com.paulsen.wedding.model.User;
 import com.paulsen.wedding.responses.LoginResponse;

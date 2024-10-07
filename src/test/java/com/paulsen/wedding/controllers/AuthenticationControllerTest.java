@@ -1,4 +1,4 @@
-package com.paulsen.wedding.controller;
+package com.paulsen.wedding.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
