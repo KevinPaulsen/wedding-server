@@ -2,32 +2,41 @@ package com.paulsen.wedding.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @DynamoDBTable(tableName="wedding_rsvps")
 public class Rsvp {
 
     @DynamoDBHashKey(attributeName="rsvp_code")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private String rsvpCode;
 
-
     @DynamoDBAttribute(attributeName="primary_contact")
+    @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
     @DynamoDBAttribute(attributeName="last_names")
-    private String[] lastNames;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
+    private List<String> lastNames;
 
     @DynamoDBAttribute(attributeName="allowed_guest_count")
-    private int allowedGuestCount;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
+    private Integer allowedGuestCount;
 
     @DynamoDBAttribute(attributeName="guest_count")
-    private int guestCount;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
+    private Integer guestCount;
 
     @DynamoDBAttribute(attributeName="rsvp_details")
-    private RsvpGuestDetails[] rsvpGuestDetails;
+    @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
+    private List<RsvpGuestDetails> rsvpGuestDetails;
+
 
     public String getRsvpCode() {
         return rsvpCode;
@@ -45,11 +54,11 @@ public class Rsvp {
         this.primaryContact = primaryContact;
     }
 
-    public String[] getLastNames() {
+    public List<String> getLastNames() {
         return lastNames;
     }
 
-    public void setLastNames(String[] lastNames) {
+    public void setLastNames(List<String> lastNames) {
         this.lastNames = lastNames;
     }
 
@@ -69,11 +78,11 @@ public class Rsvp {
         this.guestCount = guestCount;
     }
 
-    public RsvpGuestDetails[] getRsvpGuestDetails() {
+    public List<RsvpGuestDetails> getRsvpGuestDetails() {
         return rsvpGuestDetails;
     }
 
-    public void setRsvpGuestDetails(RsvpGuestDetails[] rsvpGuestDetails) {
+    public void setRsvpGuestDetails(List<RsvpGuestDetails> rsvpGuestDetails) {
         this.rsvpGuestDetails = rsvpGuestDetails;
     }
 
@@ -84,17 +93,17 @@ public class Rsvp {
         if (!(o instanceof Rsvp rsvp))
             return false;
 
-        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() && Objects.equals(getRsvpCode(), rsvp.getRsvpCode()) && Objects.equals(getPrimaryContact(), rsvp.getPrimaryContact()) && Arrays.equals(getLastNames(), rsvp.getLastNames()) && Arrays.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
+        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() && getRsvpCode().equals(rsvp.getRsvpCode()) && getPrimaryContact().equals(rsvp.getPrimaryContact()) && getLastNames().equals(rsvp.getLastNames()) && Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(getRsvpCode());
-        result = 31 * result + Objects.hashCode(getPrimaryContact());
-        result = 31 * result + Arrays.hashCode(getLastNames());
+        int result = getRsvpCode().hashCode();
+        result = 31 * result + getPrimaryContact().hashCode();
+        result = 31 * result + getLastNames().hashCode();
         result = 31 * result + getAllowedGuestCount();
         result = 31 * result + getGuestCount();
-        result = 31 * result + Arrays.hashCode(getRsvpGuestDetails());
+        result = 31 * result + Objects.hashCode(getRsvpGuestDetails());
         return result;
     }
 }
