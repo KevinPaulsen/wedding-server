@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequestMapping("/rsvp")
 @RestController
 public class RsvpController {
@@ -31,5 +33,10 @@ public class RsvpController {
         Rsvp rsvp = rsvpService.findRsvpByRsvpCode(rsvpCode);
 
         return ResponseEntity.ok(rsvp);
+    }
+
+    @GetMapping("/rsvps")
+    public ResponseEntity<List<Rsvp>> getAllRsvps() {
+        return ResponseEntity.ok(rsvpService.allRsvps());
     }
 }

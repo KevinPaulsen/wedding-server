@@ -49,7 +49,7 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
 
             // TODO: Make this null safe
             String name = rsvpEntries.get("name").getS();
-            FoodOption foodOption = FoodOption.valueOf(rsvpEntries.get("food_option").getN());
+            FoodOption foodOption = FoodOption.valueOf(rsvpEntries.get("food_option").getS());
             List<DietaryRestriction> dietaryRestrictions = rsvpEntries.get("dietary_restrictions").getL()
                     .stream()
                     .map(restriction -> DietaryRestriction.valueOf(restriction.getS()))
