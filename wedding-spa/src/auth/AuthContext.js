@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
     const [authToken, setAuthToken] = useState(sessionStorage.getItem('authToken'));
 
-    const login = (token) => {
+    const login = async (token) => {
         sessionStorage.setItem('authToken', token);
         setAuthToken(token);
     };

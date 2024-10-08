@@ -6,9 +6,11 @@ import com.paulsen.wedding.security.LoginUserDto;
 import com.paulsen.wedding.security.RegisterUserDto;
 import com.paulsen.wedding.service.AuthenticationService;
 import com.paulsen.wedding.service.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,5 +44,11 @@ public class AuthenticationController {
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/verify-token")
+    public ResponseEntity<Boolean> verifyToken(@RequestHeader("Authorization") String authorizationHeader) {
+        boolean isValid = authorizationHeader.length() > 7 && jwtService.isTokenValid(authorizationHeader.substring(7));
+        return ResponseEntity.ok(isValid);
     }
 }
