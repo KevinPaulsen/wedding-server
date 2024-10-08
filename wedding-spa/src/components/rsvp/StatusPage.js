@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/Transitions.css';
 import {useFlow} from "../../FlowProvider";
-import CancelButton from "./CancelButton";
 import RsvpLayout from "./RsvpLayout";
 import {Button} from "react-bootstrap";
 

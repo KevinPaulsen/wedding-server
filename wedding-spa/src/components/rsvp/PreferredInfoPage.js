@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
-import CancelButton from "./CancelButton";
 import RsvpLayout from "./RsvpLayout";
 import {Button} from "react-bootstrap"; // Import the flow context
 
