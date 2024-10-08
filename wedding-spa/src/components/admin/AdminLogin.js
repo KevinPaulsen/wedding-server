@@ -1,47 +1,34 @@
-import {useContext, useEffect, useState} from 'react';
-import {AuthContext} from "../../auth/AuthContext";
-import {useNavigate} from "react-router-dom";
-
-const url = "https://api.KevinLovesOlivia.com"
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import useAuthRedirect from "../../hooks/useAuthRedirect";
+import {loginUser} from "../../services/authService";
+import FormInput from "../FormInput";
+import {Button, Form} from "react-bootstrap";
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const {authToken, login} = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (authToken) {
-            navigate('/admin/dashboard');
-        }
-    }, [authToken, navigate]);
+    useAuthRedirect();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         try {
-            const response = await fetch(url + '/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({username, password}),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.description || 'Login failed');
-            }
-
-            const data = await response.json();
+            const data = await loginUser(username, password);
             login(data.token); // Update auth state
-            // Redirect to dashboard or another page
-            window.location.href = '/admin/dashboard';
+            navigate('/admin/dashboard'); // Redirect using React Router
         } catch (err) {
             setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -49,31 +36,27 @@ function AdminLogin() {
         <div className="container mt-5">
             <h2>Login</h2>
             {error && <div className="alert alert-danger">{error}</div>}
-            <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary">Login</button>
-            </form>
+            <Form onSubmit={handleLogin}>
+                <FormInput
+                    label="Username"
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <FormInput
+                    label="Password"
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <Button type="submit" className="btn btn-primary" disabled={loading}>
+                    {loading ? 'Logging in...' : 'Login'}
+                </Button>
+            </Form>
         </div>
     );
 }
