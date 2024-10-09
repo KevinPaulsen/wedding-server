@@ -7,16 +7,19 @@ import {AuthProvider} from "./auth/AuthContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import {FlowProvider} from "./FlowProvider";
 import './styles/App.css';
+import {FormProvider} from "./components/rsvp/FormContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <AuthProvider>
-            <Router>
-                <FlowProvider>
-                    <App/>
-                </FlowProvider>
-            </Router>
+            <FormProvider>
+                <Router>
+                    <FlowProvider>
+                        <App/>
+                    </FlowProvider>
+                </Router>
+            </FormProvider>
         </AuthProvider>
     </React.StrictMode>
 );

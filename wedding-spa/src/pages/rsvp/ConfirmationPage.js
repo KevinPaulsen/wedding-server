@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from "../../FlowProvider";
-import RsvpLayout from "./RsvpLayout";
+import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button} from "react-bootstrap";
 
 const ConfirmationPage = () => {

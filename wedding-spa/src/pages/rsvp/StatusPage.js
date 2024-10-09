@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../../styles/Transitions.css';
 import {useFlow} from "../../FlowProvider";
-import RsvpLayout from "./RsvpLayout";
+import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button} from "react-bootstrap";
+import {useFormContext} from "../../components/rsvp/FormContext";
 
 const StatusPage = () => {
     const navigate = useNavigate();
     const [status, setStatus] = useState(''); // Tracks the selected status ("Yes" or "No")
+    const {formData, setFormData} = useFormContext();
 
     const {step, setStep} = useFlow();
 
@@ -19,7 +21,15 @@ const StatusPage = () => {
     }, [step, navigate]);
 
     const handleNext = () => {
-        // Logic for when the user hits Next
+        // TODO: send to server
+
+        setFormData({
+            rsvpCode: '',
+            lastName: '',
+            prefName: '',
+            prefEmail: '',
+            prefPhone: '',
+        });
         setStep((prevStep) => ({...prevStep, rsvpStatusCompleted: true}));
         navigate('/rsvp-confirmation');
     };
@@ -60,7 +70,7 @@ const StatusPage = () => {
             </div>
 
             {/* Back and Next buttons aligned with the input fields */}
-            <div className="d-flex justify-content-between mt-3" style={{maxWidth: '300px', margin: '0 auto'}}>
+                <div className="d-flex justify-content-between mt-3 px-3">
                 <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
                 <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
                     Submit
