@@ -17,7 +17,7 @@ const ConfirmationPage = () => {
         if (!step.rsvpStatusCompleted) {
             navigate('/rsvp-status');
         } else {
-            setStep({...step, rsvpStatusCompleted: true});
+            setStep(prevStep => ({...prevStep, rsvpStatusCompleted: true}));
         }
     }, [step, navigate]);
 

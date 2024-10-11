@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
@@ -33,7 +33,7 @@ const PreferredInfoPage = () => {
 
         if (isCodeValid && isEmailValid && isPhoneValid) {
             setStep((prevStep) => ({...prevStep, preferredInfoCompleted: true}));
-            navigate('/rsvp-status');
+            navigate('/rsvp-guests');
         }
     };
 

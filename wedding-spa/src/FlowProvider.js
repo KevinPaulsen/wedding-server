@@ -11,6 +11,7 @@ export const FlowProvider = ({children}) => {
         rsvpCompleted: false,
         preferredInfoCompleted: false,
         rsvpStatusCompleted: false,
+        guestInfoCompleted: false,
     };
 
     const initialFormDataState = {
@@ -34,8 +35,15 @@ export const FlowProvider = ({children}) => {
         setStep(initialStepState)
     }
 
+    const addGuest = (guest) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            guests: [...prevFormData.guests, guest]
+        }));
+    };
+
     return (
-        <FlowContext.Provider value={{step, setStep, formData, setFormData, resetFormData, resetStepState}}>
+        <FlowContext.Provider value={{step, setStep, formData, setFormData, resetFormData, resetStepState, addGuest}}>
             {children}
         </FlowContext.Provider>
     );

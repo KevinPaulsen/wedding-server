@@ -28,7 +28,7 @@ const StatusPage = () => {
 
     const handleBack = () => {
         // Logic for going back to the previous page
-        navigate('/rsvp-info');
+        navigate('/rsvp-guests');
     };
 
     return (
