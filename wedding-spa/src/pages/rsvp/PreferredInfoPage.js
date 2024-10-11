@@ -5,17 +5,12 @@ import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
 import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button, Form} from "react-bootstrap";
-import {useFormContext} from "../../components/rsvp/FormContext";
 import CustomInputField from "../../components/rsvp/CustomInputField";
 
 const PreferredInfoPage = () => {
     const navigate = useNavigate();
-    const [preferredName, setPreferredName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const {formData, setFormData} = useFormContext();
 
-    const {step, setStep} = useFlow();
+    const {formData, setFormData, step, setStep} = useFlow();
     const prefNameRef = useRef();
     const prefEmailRef = useRef();
     const prefPhoneRef = useRef();

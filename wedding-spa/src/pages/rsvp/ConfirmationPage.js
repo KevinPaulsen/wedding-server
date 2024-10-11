@@ -10,27 +10,19 @@ import {Button} from "react-bootstrap";
 const ConfirmationPage = () => {
     const navigate = useNavigate();
 
-    const {step, setStep} = useFlow();
+    const {step, setStep, resetStepState} = useFlow();
 
     // Redirect to RSVP page if RSVP hasn't been completed
     useEffect(() => {
         if (!step.rsvpStatusCompleted) {
             navigate('/rsvp-status');
         } else {
-            setStep({
-                rsvpCompleted: false,
-                preferredInfoCompleted: false,
-                rsvpStatusCompleted: true,
-            });
+            setStep({...step, rsvpStatusCompleted: true});
         }
     }, [step, navigate]);
 
     const goHome = () => {
-        setStep({
-            rsvpCompleted: false,
-            preferredInfoCompleted: false,
-            rsvpStatusCompleted: false,
-        })
+        resetStepState();
         navigate('/');
     };
 

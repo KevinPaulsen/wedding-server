@@ -7,13 +7,11 @@ import {useFlow} from '../../FlowProvider';
 import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../../components/rsvp/CustomInputField";
-import {useFormContext} from "../../components/rsvp/FormContext";
 
 const RSVPCodePage = () => {
     const navigate = useNavigate();
-    const {formData, setFormData} = useFormContext();
 
-    const {setStep} = useFlow();
+    const {formData, setFormData, setStep} = useFlow();
 
     const rsvpCodeInputRef = useRef();
     const lastNameInputRef = useRef();
