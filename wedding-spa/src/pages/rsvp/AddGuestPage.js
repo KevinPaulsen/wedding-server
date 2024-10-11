@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
@@ -9,9 +9,10 @@ import CustomInputField from "../../components/rsvp/CustomInputField";
 
 const AddGuestPage = () => {
     const navigate = useNavigate();
-
     const {formData, setFormData, step, setStep, addGuest} = useFlow();
     const guestName = useRef();
+    const location = useLocation();
+
     const [newGuest, setNewGuest] = useState({
         "name": "",
         "foodOption": "",
@@ -25,8 +26,10 @@ const AddGuestPage = () => {
             navigate('/rsvp-info');
         }
 
-        //addGuest(newGuest);
-    }, [step, navigate]);
+        if (location.state && location.state.guest) {
+            setNewGuest(location.state.guest);
+        }
+    }, [step, navigate, location.step]);
 
     const handleChange = (e) => {
         setNewGuest((prevGuest) => ({
@@ -43,10 +46,22 @@ const AddGuestPage = () => {
         const guestNameValid = guestName.current.validate();
 
         if (guestNameValid) {
-            setFormData((prevData) => ({
-                ...prevData,
-                guests: [...(prevData.guests || []), newGuest],
-            }));
+
+            if (location.state && location.state.index !== undefined) {
+                // Editing existing guest
+                setFormData((prevData) => ({
+                    ...prevData,
+                    guests: prevData.guests.map((guest, idx) =>
+                        idx === location.state.index ? newGuest : guest
+                    ),
+                }));
+            } else {
+                // Adding new guest
+                setFormData((prevData) => ({
+                    ...prevData,
+                    guests: [...(prevData.guests || []), newGuest],
+                }));
+            }
 
             navigate('/rsvp-guests');
         }
@@ -68,7 +83,7 @@ const AddGuestPage = () => {
                     />
                     <Row className="d-flex justify-content-between px-2">
                         <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                        <Button className='rsvp-button dark long' onClick={handleAddGuest}> Add Guest </Button>
+                        <Button className='rsvp-button dark long' onClick={handleAddGuest}> {location.state && location.state.guest ? "Save Changes" : "Add Guest"} </Button>
                     </Row>
                 </Form>
             }/>

@@ -1,3 +1,37 @@
 .table-hover tbody tr.no-hover:hover {
     background-color: inherit;
 }
+
+.custom-table {
+    background-color: transparent; /* Make the background transparent */
+    color: var(--main-dark); /* Set text color */
+    border-collapse: separate; /* Allow custom border styling */
+    border-spacing: 0 8px; /* Add spacing between rows to make them visually distinct */
+}
+
+.custom-table th,
+.custom-table td {
+    background-color: transparent; /* Make the background transparent */
+    border: none; /* Remove default borders between cells */
+    text-align: left;
+}
+
+.custom-table tr {
+    border-bottom: 1px solid var(--main-dark); /* Add border between rows */
+}
+
+.custom-table thead th {
+    border-bottom: 2px solid var(--main-dark); /* Optional: distinct header bottom border */
+    font-weight: bold;
+}
+
+.custom-table tbody tr:last-child {
+    border-bottom: none; /* Remove the bottom border for the last row */
+}
+
+.custom-table .btn {
+    color: var(--main-dark);
+    font-weight: bold;
+}
+
+
