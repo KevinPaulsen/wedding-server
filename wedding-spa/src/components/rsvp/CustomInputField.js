@@ -45,7 +45,7 @@ const CustomInputField = forwardRef(({
     }));
 
     return (
-        <Form.Group controlId={name} className='mt-3'>
+        <Form.Group controlId={name} className='pb-2'>
             {label && <Form.Label column={"lg"}>{label}</Form.Label>}
             <Form.Control
                 name={name}
@@ -61,11 +61,13 @@ const CustomInputField = forwardRef(({
                 }}
                 className={hasError ? 'is-invalid' : ''}
             />
-            {hasError && (
-                <Form.Text className="text-danger">
-                    This field must not be empty
-                </Form.Text>
-            )}
+            <div style={{height: "20px"}}>
+                {hasError && (
+                    <Form.Text className="text-danger">
+                        This field must not be empty
+                    </Form.Text>
+                )}
+            </div>
         </Form.Group>
     );
 });

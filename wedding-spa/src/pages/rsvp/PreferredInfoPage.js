@@ -51,7 +51,7 @@ const PreferredInfoPage = () => {
                         ref={prefNameRef}
                         name="prefName"
                         type="text"
-                        placeholder="Enter your Preferred Name"
+                        placeholder="Preferred Name"
                         value={formData.prefName}
                         onChange={handleChange}
                     />
@@ -59,7 +59,7 @@ const PreferredInfoPage = () => {
                         ref={prefEmailRef}
                         name="prefEmail"
                         type="text"
-                        placeholder="Enter your Preferred Email"
+                        placeholder="Preferred Email"
                         value={formData.prefEmail}
                         onChange={handleChange}
                     />
@@ -67,11 +67,11 @@ const PreferredInfoPage = () => {
                         ref={prefPhoneRef}
                         name="prefPhone"
                         type="text"
-                        placeholder="Enter your Preferred Phone Number"
+                        placeholder="Preferred Phone Number"
                         value={formData.prefPhone}
                         onChange={handleChange}
                     />
-                    <div className="d-flex justify-content-between mt-3 px-2">
+                    <div className="d-flex justify-content-between px-2">
                         <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
                         <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
                     </div>

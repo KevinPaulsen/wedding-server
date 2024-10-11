@@ -53,7 +53,7 @@ const RSVPCodePage = () => {
                         value={formData.lastName}
                         onChange={handleChange}
                     />
-                    <Button className='rsvp-button dark my-3' onClick={handleNext}> Next </Button>
+                    <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
                 </Form>
             }/>
     );
