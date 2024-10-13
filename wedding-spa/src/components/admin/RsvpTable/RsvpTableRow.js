@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Row, Col, Card} from 'react-bootstrap';
 import PrimaryContactInfo from './PrimaryContactInfo';
 import GuestsDetails from './GuestsDetails';
+import LastNamesInfo from "./LastNamesInfo";
 
 const RsvpTableRow = ({ item }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -26,16 +27,17 @@ const RsvpTableRow = ({ item }) => {
                 <tr className="no-hover">
                     <td colSpan="4">
                         <Card className="p-3">
-                            <Row>
+                            <Row className="justify-content-center">
                                 {/* Primary Contact Section */}
-                                <Col xs={12} md={4} className="text-center mb-4">
-                                    <PrimaryContactInfo primaryContact={item.primaryContact} />
+                                <Col xs={11} md={4} className="text-center mb-4">
+                                    <PrimaryContactInfo primaryContact={item.primaryContact} lastNames={item.lastNames} />
                                 </Col>
 
                                 {/* Guests Section */}
-                                <Col xs={12} md={8}>
-                                    <GuestsDetails guests={item.rsvpGuestDetails} />
-                                </Col>
+                                {item.guestCount > 0 ?
+                                    <Col xs={12} md={8}>
+                                        <GuestsDetails guests={item.rsvpGuestDetails} />
+                                    </Col> : null}
                             </Row>
                         </Card>
                     </td>
@@ -53,6 +55,7 @@ RsvpTableRow.propTypes = {
             phoneNumber: PropTypes.string,
             address: PropTypes.string,
         }).isRequired,
+        lastNames: PropTypes.arrayOf(PropTypes.string),
         rsvpCode: PropTypes.string.isRequired,
         allowedGuestCount: PropTypes.number.isRequired,
         guestCount: PropTypes.number.isRequired,
