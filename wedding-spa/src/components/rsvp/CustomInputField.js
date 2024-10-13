@@ -8,7 +8,8 @@ const CustomInputField = forwardRef(({
                                          value,
                                          onChange,
                                          required = true,
-                                         name
+                                         name,
+                                         min
                                      }, ref) => {
     const [isTouched, setIsTouched] = useState(false);
     const [hasError, setHasError] = useState(false);
@@ -36,7 +37,7 @@ const CustomInputField = forwardRef(({
     // Expose a validate method to parent components using ref
     useImperativeHandle(ref, () => ({
         validate: () => {
-            if (required && value.trim() === '') {
+            if (required && value.toString().trim() === '') {
                 setHasError(true);
                 return false;
             }
@@ -55,6 +56,7 @@ const CustomInputField = forwardRef(({
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 placeholder={placeholder}
+                min={min}
                 style={{
                     width: '300px',
                     outline: hasError ? '2px solid red' : '2px solid var(--main-dark)',

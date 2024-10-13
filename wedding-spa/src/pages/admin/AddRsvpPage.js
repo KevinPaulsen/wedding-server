@@ -1,11 +1,11 @@
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
-import RsvpTable from "../../components/admin/RsvpTable";
+import AddRsvp from "../../components/admin/AddRsvp";
 
 const AddRsvpPage = () => {
     return (
         <AdminLayout children={
-            <RsvpTable />
+            <AddRsvp />
         }/>
     );
 }
