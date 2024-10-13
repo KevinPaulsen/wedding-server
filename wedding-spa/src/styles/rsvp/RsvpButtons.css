@@ -19,7 +19,7 @@
 }
 
 @media (hover: none) {
-    .rsvp-button:hover {
+    .rsvp-button.dark.wire:hover {
         background-color: initial;
         box-shadow: none;
     }
