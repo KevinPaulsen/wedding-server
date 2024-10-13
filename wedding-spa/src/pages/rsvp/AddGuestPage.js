@@ -100,7 +100,7 @@ const AddGuestPage = () => {
             title={"Add Guest"}
             cancel={false}
             children={
-                <Form style={{backgroundColor: "darkgray"}}>
+                <Form>
                     <CustomInputField
                         ref={guestFName}
                         name="fName"
