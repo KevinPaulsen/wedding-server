@@ -40,7 +40,7 @@ const AddRsvp = () => {
                 const formattedRsvpData = {
                     rsvpCode: rsvp.rsvpCode,
                     primaryContact: {
-                        fName: rsvp.fName,
+                        name: rsvp.fName,
                     },
                     lastNames: rsvp.lNames.split(',').map((name) => name.trim()),
                     allowedGuestCount: rsvp.allowedGuestCount,
