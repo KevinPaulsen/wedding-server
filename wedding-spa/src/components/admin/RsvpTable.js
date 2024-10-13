@@ -1,6 +1,6 @@
 // RsvpTable.js
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import {Container, Table} from 'react-bootstrap';
 import useRsvpData from "../../hooks/useRsvpData";
 import LoadingSpinner from "./RsvpTable/LoadingSpinner";
 import ErrorMessage from "./RsvpTable/ErrorMessage";
@@ -12,7 +12,7 @@ const RsvpTable = () => {
 
 
     return (
-        <div>
+        <Container fluid>
             <h2 className="text-center my-4">RSVP List</h2>
             {loading ? ( <LoadingSpinner /> ) : error ? ( <ErrorMessage error={error} /> ) : (
                 <Table striped bordered hover responsive="sm">
@@ -31,7 +31,7 @@ const RsvpTable = () => {
                     </tbody>
                 </Table>
             )}
-        </div>
+        </Container>
     );
 };
 
