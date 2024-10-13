@@ -62,7 +62,7 @@ const StatusPage = () => {
             </div>
 
             {/* Back and Next buttons aligned with the input fields */}
-                <div className="d-flex justify-content-between px-3">
+                <div className="d-flex justify-content-evenly px-3">
                 <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
                 <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
                     Submit

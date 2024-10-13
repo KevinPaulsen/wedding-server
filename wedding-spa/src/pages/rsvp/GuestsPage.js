@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
 import RsvpLayout from "../../components/rsvp/RsvpLayout";
-import {Button, Container, Row, Table, Modal, Form} from "react-bootstrap";
+import {Button, Container, Row, Table} from "react-bootstrap";
 import "../../styles/rsvp/RsvpTable.css"
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import {FaEdit, FaTrash} from 'react-icons/fa';
 
 const GuestsPage = () => {
     const navigate = useNavigate();
@@ -52,51 +52,72 @@ const GuestsPage = () => {
             title={"Add Guests (including yourself)"}
             cancel={true}
             children={
-                <Container className="" style={{width: "90vw", maxWidth: "900px"}}>
+                <Container style={{maxWidth: "900px"}}>
                     <Row className="mb-4">
-                        {formData.guests.length === 0 ?
-                            "" :
+                        {formData.guests.length === 0 ? (
+                            ""
+                        ) : (
                             <Table hover className="custom-table">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Dietary Restrictions</th>
-                                    <th>Other</th>
+                                    <th>
+                                        {formData.guests.some(
+                                            (guest) => guest.other && guest.other.trim() !== ""
+                                        ) && "Other"}
+                                    </th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {formData.guests && formData.guests.map((guest, index) => (
-                                    <tr key={index}>
-                                        <td>{guest.name}</td>
-                                        <td>{guest.dietaryRestrictions.join(', ')}</td>
-                                        <td>{guest.other}</td>
-                                        <td>
-                                            <Button
-                                                variant="link"
-                                                className="me-2 p-0"
-                                                onClick={() => handleEditGuest(index)}
-                                            >
-                                                <FaEdit size={20} color="var(--main-dark)" />
-                                            </Button>
-                                            <Button
-                                                variant="link"
-                                                className="p-0"
-                                                onClick={() => handleDeleteGuest(index)}
-                                            >
-                                                <FaTrash size={20} color="var(--main-dark)" />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {formData.guests &&
+                                    formData.guests.map((guest, index) => (
+                                        <tr key={index}>
+                                            <td className="align-middle">
+                                                {guest.fName + " " + guest.lName}
+                                            </td>
+                                            <td className="align-middle">
+                                                {guest.dietaryRestrictions.map((restriction, idx) => (
+                                                    <span key={idx}>
+                                            {restriction}
+                                                        <br/>
+                                        </span>
+                                                ))}
+                                            </td>
+                                            <td className="align-middle">{guest.other}</td>
+                                            <td className="align-middle">
+                                                <Button
+                                                    variant="link"
+                                                    className="me-2 p-0"
+                                                    onClick={() => handleEditGuest(index)}
+                                                >
+                                                    <FaEdit size={20} color="var(--main-dark)"/>
+                                                </Button>
+                                                <Button
+                                                    variant="link"
+                                                    className="p-0"
+                                                    onClick={() => handleDeleteGuest(index)}
+                                                >
+                                                    <FaTrash size={20} color="var(--main-dark)"/>
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
-                        }
+                        )}
                     </Row>
                     <Row className="d-flex justify-content-evenly my-5 px-2">
-                        <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                        <Button className='rsvp-button dark long' onClick={handleNewGuest}> Add Guest </Button>
-                        <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
+                        <Button className="rsvp-button dark" onClick={handleBack}>
+                            Back
+                        </Button>
+                        <Button className="rsvp-button dark long" onClick={handleNewGuest}>
+                            Add Guest
+                        </Button>
+                        <Button className="rsvp-button dark" onClick={handleNext}>
+                            Next
+                        </Button>
                     </Row>
                 </Container>
             }/>

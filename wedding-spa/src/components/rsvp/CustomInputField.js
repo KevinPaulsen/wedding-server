@@ -45,7 +45,7 @@ const CustomInputField = forwardRef(({
     }));
 
     return (
-        <Form.Group controlId={name} className='pb-2'>
+        <Form.Group controlId={name} className="d-flex flex-column align-items-center">
             {label && <Form.Label column={"lg"}>{label}</Form.Label>}
             <Form.Control
                 name={name}
@@ -61,7 +61,7 @@ const CustomInputField = forwardRef(({
                 }}
                 className={hasError ? 'is-invalid' : ''}
             />
-            <div style={{height: "20px"}}>
+            <div style={{height: "28px"}}>
                 {hasError && (
                     <Form.Text className="text-danger">
                         This field must not be empty

@@ -71,7 +71,7 @@ const PreferredInfoPage = () => {
                         value={formData.prefPhone}
                         onChange={handleChange}
                     />
-                    <div className="d-flex justify-content-between px-2">
+                    <div className="d-flex justify-content-evenly px-2">
                         <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
                         <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
                     </div>
