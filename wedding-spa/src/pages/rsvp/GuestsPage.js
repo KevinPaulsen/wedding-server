@@ -73,7 +73,7 @@ const GuestsPage = () => {
                                 <tbody>
                                 {formData.guests &&
                                     formData.guests.map((guest, index) => (
-                                        <tr key={index}>
+                                        <tr key={index} onClick={() => handleEditGuest(index)} style={{ cursor: "pointer" }}>
                                             <td className="align-middle">
                                                 {guest.fName + " " + guest.lName}
                                             </td>
@@ -87,13 +87,6 @@ const GuestsPage = () => {
                                             </td>
                                             <td className="align-middle">{guest.other}</td>
                                             <td className="align-middle">
-                                                <Button
-                                                    variant="link"
-                                                    className="me-2 p-0"
-                                                    onClick={() => handleEditGuest(index)}
-                                                >
-                                                    <FaEdit size={20} color="var(--main-dark)"/>
-                                                </Button>
                                                 <Button
                                                     variant="link"
                                                     className="p-0"

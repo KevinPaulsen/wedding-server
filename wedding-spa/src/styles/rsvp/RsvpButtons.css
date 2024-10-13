@@ -18,6 +18,13 @@
     border: 2px solid var(--main-dark);
 }
 
+@media (hover: none) {
+    .rsvp-button:hover {
+        background-color: initial;
+        box-shadow: none;
+    }
+}
+
 .rsvp-button.dark:hover {
     background: var(--hover-dark);
 }
