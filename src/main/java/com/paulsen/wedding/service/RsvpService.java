@@ -1,10 +1,10 @@
 package com.paulsen.wedding.service;
 
+import com.amazonaws.services.dynamodbv2.model.IndexNotFoundException;
 import com.paulsen.wedding.model.AddRsvpDto;
+import com.paulsen.wedding.model.PutRsvpDto;
 import com.paulsen.wedding.model.Rsvp;
-import com.paulsen.wedding.model.User;
 import com.paulsen.wedding.repositories.RsvpRepository;
-import com.paulsen.wedding.security.RegisterUserDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +35,20 @@ public class RsvpService {
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setAllowedGuestCount(input.getAllowedGuestCount());
         rsvp.setGuestCount(input.getGuestCount());
+        rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
+
+        return rsvpRepository.save(rsvp);
+    }
+
+    public Rsvp updateRsvp(PutRsvpDto input) {
+        Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
+
+        if (!rsvp.getLastNames().contains(input.getLastName())) {
+            throw new IndexNotFoundException(String.format("RSVP with code %s and last name %s not found",
+                    input.getRsvpCode(), input.getLastName()));
+        }
+
+        rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
 
         return rsvpRepository.save(rsvp);

@@ -1,11 +1,13 @@
 package com.paulsen.wedding.controllers;
 
 import com.paulsen.wedding.model.AddRsvpDto;
+import com.paulsen.wedding.model.PutRsvpDto;
 import com.paulsen.wedding.model.Rsvp;
 import com.paulsen.wedding.service.RsvpService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,9 +30,17 @@ public class RsvpController {
         return ResponseEntity.ok(addedRsvp);
     }
 
+    @PutMapping
+    public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
+        Rsvp rsvp = rsvpService.updateRsvp(putRsvpDto);
+
+        return ResponseEntity.ok(rsvp);
+    }
+
     @GetMapping("/getRsvp")
     public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode) {
         Rsvp rsvp = rsvpService.findRsvpByRsvpCode(rsvpCode);
+
 
         return ResponseEntity.ok(rsvp);
     }

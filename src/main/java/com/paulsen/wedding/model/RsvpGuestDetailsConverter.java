@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
 
@@ -20,8 +21,9 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
 
             Map<String, AttributeValue> detailsMap = new HashMap<>();
             detailsMap.put("name", new AttributeValue(rsvpGuestDetails.name()));
-            detailsMap.put("food_option", new AttributeValue(rsvpGuestDetails.foodOption().name()));
-            detailsMap.put("dietary_restrictions", new AttributeValue().withL(dietaryAttributes));
+            detailsMap.put("foodOption", new AttributeValue(Objects.requireNonNullElse(rsvpGuestDetails.foodOption(),
+                    FoodOption.DEFAULT).name()));
+            detailsMap.put("dietaryRestrictions", new AttributeValue().withL(dietaryAttributes));
             detailsMap.put("other", new AttributeValue(rsvpGuestDetails.other()));
 
             rsvpGuestDetailAttributes.add(new AttributeValue().withM(detailsMap));
@@ -49,8 +51,8 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
 
             // TODO: Make this null safe
             String name = rsvpEntries.get("name").getS();
-            FoodOption foodOption = FoodOption.valueOf(rsvpEntries.get("food_option").getS());
-            List<DietaryRestriction> dietaryRestrictions = rsvpEntries.get("dietary_restrictions").getL()
+            FoodOption foodOption = FoodOption.valueOf(rsvpEntries.get("foodOption").getS());
+            List<DietaryRestriction> dietaryRestrictions = rsvpEntries.get("dietaryRestrictions").getL()
                     .stream()
                     .map(restriction -> DietaryRestriction.valueOf(restriction.getS()))
                     .toList();
