@@ -17,7 +17,7 @@ const CustomInputField = forwardRef(({
     // Handle input change
     const handleInputChange = (e) => {
         onChange(e); // Parent component manages the input value
-        if (hasError && e.target.value.trim() !== '') {
+        if (hasError && e.target.value.toString().trim() !== '') {
             setHasError(false); // Reset error if user starts typing
         }
     };
@@ -29,7 +29,7 @@ const CustomInputField = forwardRef(({
 
     // Handle blur (user deselects input)
     const handleBlur = () => {
-        if (required && value.trim() === '') {
+        if (required && value.toString().trim() === '') {
             setHasError(true);
         }
     };

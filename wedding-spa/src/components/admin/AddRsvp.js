@@ -9,15 +9,12 @@ import {useAddRsvp} from "../../hooks/useAddRsvp";
 
 const AddRsvp = () => {
     const navigate = useNavigate();
-    const rsvpCodeRef = useRef();
     const { addRsvp, loading, error } = useAddRsvp();
-    const fNameRef = useRef();
-    const lNamesRef = useRef();
+    const nameRef = useRef();
     const allowedGuestsRef = useRef();
 
     const [rsvp, setRsvp] = useState({
-        "rsvpCode": "",
-        "fName": "",
+        "name": "",
         "lNames": "",
         "allowedGuestCount": 0,
     });
@@ -30,17 +27,15 @@ const AddRsvp = () => {
     };
 
     const handleAddGuest = async () => {
-        const rsvpCodeValid = rsvpCodeRef.current.validate();
-        const fNameValid = fNameRef.current.validate();
-        const lNamesValid = lNamesRef.current.validate();
+        const fNameValid = nameRef.current.validate();
         const guestCountValid = allowedGuestsRef.current.validate();
 
-        if (rsvpCodeValid && fNameValid && lNamesValid && guestCountValid) {
+        if (fNameValid && guestCountValid) {
             try {
                 const formattedRsvpData = {
-                    rsvpCode: rsvp.rsvpCode,
+                    rsvpCode: "",
                     primaryContact: {
-                        name: rsvp.fName,
+                        name: rsvp.name,
                     },
                     lastNames: rsvp.lNames.split(',').map((name) => name.trim()),
                     allowedGuestCount: rsvp.allowedGuestCount,
@@ -60,29 +55,27 @@ const AddRsvp = () => {
         <Container fluid className="flex-grow-1 align-items-center justify-content-center text-center">
             <Form>
                 <CustomInputField
-                    ref={rsvpCodeRef}
-                    name="rsvpCode"
+                    ref={nameRef}
+                    name="name"
                     type="text"
-                    placeholder="RSVP Code"
-                    value={rsvp.rsvpCode}
+                    placeholder="Name"
+                    value={rsvp.name}
                     onChange={handleChange}
                 />
-                <CustomInputField
-                    ref={fNameRef}
-                    name="fName"
-                    type="text"
-                    placeholder="First Name"
-                    value={rsvp.fName}
-                    onChange={handleChange}
-                />
-                <CustomInputField
-                    ref={lNamesRef}
-                    name="lNames"
-                    type="text"
-                    placeholder="Last Names (comma seperated)"
-                    value={rsvp.lNames}
-                    onChange={handleChange}
-                />
+                <Form.Group controlId="lNames" className="d-flex flex-column align-items-center">
+                    <Form.Control
+                        name="lNames"
+                        type="text"
+                        value={rsvp.lNames}
+                        onChange={handleChange}
+                        placeholder="Addional Last Names (comma seperated)"
+                        style={{
+                            width: '300px',
+                            outline: '2px solid var(--main-dark)',
+                        }}
+                    />
+                    <div style={{height: "28px"}}></div>
+                </Form.Group>
 
                 <CustomInputField
                     ref={allowedGuestsRef}
