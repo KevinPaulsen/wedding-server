@@ -9,7 +9,7 @@ import {useAddRsvp} from "../../hooks/useAddRsvp";
 
 const AddRsvp = () => {
     const navigate = useNavigate();
-    const { addRsvp, loading, error } = useAddRsvp();
+    const {addRsvp, loading, error} = useAddRsvp();
     const nameRef = useRef();
     const allowedGuestsRef = useRef();
 

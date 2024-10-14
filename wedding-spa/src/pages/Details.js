@@ -6,8 +6,8 @@ import Schedule from "../components/main/Schedule";
 const Home = () => {
     return (
         <BaseLayout children={<>
-            <WeddingDetails />
-            <Schedule />
+            <WeddingDetails/>
+            <Schedule/>
         </>}/>
     );
 }

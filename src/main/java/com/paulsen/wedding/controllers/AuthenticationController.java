@@ -6,7 +6,6 @@ import com.paulsen.wedding.security.LoginUserDto;
 import com.paulsen.wedding.security.RegisterUserDto;
 import com.paulsen.wedding.service.AuthenticationService;
 import com.paulsen.wedding.service.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -17,11 +17,8 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(
-            UserRepository userRepository,
-            AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
-    ) {
+    public AuthenticationService(UserRepository userRepository, AuthenticationManager authenticationManager,
+                                 PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -36,12 +33,8 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getUsername(),
-                        input.getPassword()
-                )
-        );
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUsername(),
+                input.getPassword()));
 
         return userRepository.findByUsername(input.getUsername()).orElseThrow();
     }

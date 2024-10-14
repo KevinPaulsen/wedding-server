@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LastNamesInfo = ({ lastNames }) => (
+const LastNamesInfo = ({lastNames}) => (
     <div>
         <h5>Last Names</h5>
         <div className="text-start">

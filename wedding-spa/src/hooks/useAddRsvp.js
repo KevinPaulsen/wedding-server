@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { API_URL } from '../config';
+import {useState} from 'react';
+import {API_URL} from '../config';
 
 export const useAddRsvp = () => {
     const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ export const useAddRsvp = () => {
         setError(null);
 
         try {
-            const response = await fetch(`${API_URL}/rsvp/addRsvp`, {
+            const response = await fetch(`${API_URL}/rsvp/create`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
@@ -34,5 +34,5 @@ export const useAddRsvp = () => {
         }
     };
 
-    return { addRsvp, loading, error };
+    return {addRsvp, loading, error};
 };

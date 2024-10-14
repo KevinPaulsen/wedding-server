@@ -19,7 +19,6 @@ class AuthenticationControllerTest {
 
     @Test
     public void get() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/users/me").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+        mvc.perform(MockMvcRequestBuilders.get("/users/me").accept(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
     }
 }

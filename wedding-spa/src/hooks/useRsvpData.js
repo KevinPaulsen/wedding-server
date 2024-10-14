@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { API_URL } from '../config';
+import {useEffect, useState} from 'react';
+import {API_URL} from '../config';
 
 const useRsvpData = () => {
     const [data, setData] = useState([]);
@@ -11,7 +11,7 @@ const useRsvpData = () => {
 
         const fetchRsvpData = async () => {
             try {
-                const response = await fetch(`${API_URL}/rsvp/rsvps`, {
+                const response = await fetch(`${API_URL}/rsvp/all`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
@@ -42,7 +42,7 @@ const useRsvpData = () => {
         };
     }, []);
 
-    return { data, loading, error };
+    return {data, loading, error};
 };
 
 export default useRsvpData;

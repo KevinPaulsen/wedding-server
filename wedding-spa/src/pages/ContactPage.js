@@ -4,7 +4,7 @@ import Contact from "../components/main/Contact";
 
 const Home = () => {
     return (
-        <BaseLayout children={<Contact />}/>
+        <BaseLayout children={<Contact/>}/>
     );
 }
 

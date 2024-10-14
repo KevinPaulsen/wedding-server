@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 
-const GuestsDetails = ({ guests }) => (
+const GuestsDetails = ({guests}) => (
     <div>
         <h5 className="text-center">Guests Details</h5>
         <Table size="sm">

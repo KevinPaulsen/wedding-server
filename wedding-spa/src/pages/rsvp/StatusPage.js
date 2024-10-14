@@ -36,39 +36,39 @@ const StatusPage = () => {
             title={"Are you coming?"}
             cancel={true}
             children={<>
-            {/* Cards for Yes or No selection */}
-            <div className="d-flex justify-content-center my-4">
-                {/* Yes card */}
-                <div
-                    className={`card mx-2 ${status === 'Yes' ? 'bg-dark text-white' : ''}`}
-                    style={{width: '150px', cursor: 'pointer'}}
-                    onClick={() => setStatus('Yes')}
-                >
-                    <div className="card-body">
-                        <p className="card-title">Yes</p>
+                {/* Cards for Yes or No selection */}
+                <div className="d-flex justify-content-center my-4">
+                    {/* Yes card */}
+                    <div
+                        className={`card mx-2 ${status === 'Yes' ? 'bg-dark text-white' : ''}`}
+                        style={{width: '150px', cursor: 'pointer'}}
+                        onClick={() => setStatus('Yes')}
+                    >
+                        <div className="card-body">
+                            <p className="card-title">Yes</p>
+                        </div>
+                    </div>
+
+                    {/* No card */}
+                    <div
+                        className={`card mx-2 ${status === 'No' ? 'bg-dark text-white' : ''}`}
+                        style={{width: '150px', cursor: 'pointer'}}
+                        onClick={() => setStatus('No')}
+                    >
+                        <div className="card-body">
+                            <p className="card-title">No</p>
+                        </div>
                     </div>
                 </div>
 
-                {/* No card */}
-                <div
-                    className={`card mx-2 ${status === 'No' ? 'bg-dark text-white' : ''}`}
-                    style={{width: '150px', cursor: 'pointer'}}
-                    onClick={() => setStatus('No')}
-                >
-                    <div className="card-body">
-                        <p className="card-title">No</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Back and Next buttons aligned with the input fields */}
+                {/* Back and Next buttons aligned with the input fields */}
                 <div className="d-flex justify-content-evenly px-3">
-                <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
-                    Submit
-                </Button>
-            </div>
-        </>}/>
+                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
+                    <Button className='rsvp-button dark' onClick={handleNext} disabled={!status}>
+                        Submit
+                    </Button>
+                </div>
+            </>}/>
     );
 };
 

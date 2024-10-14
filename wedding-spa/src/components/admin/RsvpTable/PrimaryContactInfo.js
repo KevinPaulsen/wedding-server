@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Col, Container, Row} from "react-bootstrap";
 
-const PrimaryContactInfo = ({ primaryContact, lastNames }) => (
+const PrimaryContactInfo = ({primaryContact, lastNames}) => (
     <Container>
         <Row>
             <h5>Primary Contact Information</h5>

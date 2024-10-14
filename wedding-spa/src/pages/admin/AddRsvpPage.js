@@ -5,7 +5,7 @@ import AddRsvp from "../../components/admin/AddRsvp";
 const AddRsvpPage = () => {
     return (
         <AdminLayout children={
-            <AddRsvp />
+            <AddRsvp/>
         }/>
     );
 }

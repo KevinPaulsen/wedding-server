@@ -8,7 +8,7 @@ const RsvpLayout = (props) => {
         <Container fluid className="d-flex flex-column vh-100" style={{backgroundColor: 'var(--main-light)'}}>
             <Row className='g-0 mt-5 text-center align-items-center'>
                 <Col>
-                    <Title />
+                    <Title/>
                 </Col>
             </Row>
 
@@ -22,13 +22,13 @@ const RsvpLayout = (props) => {
             <Row style={{height: '75px'}} className='pb-3 pt-2 text-center justify-content-center align-items-center'>
                 {props.cancel && (
                     <Col>
-                        <CancelButton />
+                        <CancelButton/>
                     </Col>
                 )}
             </Row>
         </Container>
-)
-    ;
+    )
+        ;
 };
 
 export default RsvpLayout;

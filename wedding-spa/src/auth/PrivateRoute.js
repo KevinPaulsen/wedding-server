@@ -1,12 +1,12 @@
-import { useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import {useContext} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {AuthContext} from './AuthContext';
 import useTokenVerification from '../hooks/useTokenVerification';
 import {Spinner} from "react-bootstrap";
 import AdminLayout from "../components/admin/AdminLayout";
 
-function PrivateRoute({ component }) {
-    const { authToken, logout } = useContext(AuthContext);
+function PrivateRoute({component}) {
+    const {authToken, logout} = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const isValidToken = useTokenVerification(authToken);
@@ -14,7 +14,7 @@ function PrivateRoute({ component }) {
     // Redirect to login if the token is invalid
     if (isValidToken === false) {
         logout()
-        navigate('/admin/login', { replace: true, state: { from: location } });
+        navigate('/admin/login', {replace: true, state: {from: location}});
         return null;
     }
 

@@ -3,7 +3,7 @@ import {Container, Image} from 'react-bootstrap';
 import '../../styles/Gallery.css'
 
 const Gallery = () => {
-    return(
+    return (
         <Container fluid className='text-center'>
             <h1 className="text-center mb-3">Gallery</h1>
             <Image src="/assets/Gallery.jpg" alt="Story Image" className="gallery-image mb-3"/>

@@ -84,4 +84,8 @@ public class RsvpService {
 
         return availableRsvpCode == null ? "" : availableRsvpCode.getCode();
     }
+
+    public void delete(String rsvpCode) {
+        rsvpRepository.deleteById(rsvpCode);
+    }
 }

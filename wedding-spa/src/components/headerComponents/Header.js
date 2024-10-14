@@ -14,7 +14,7 @@ const WeddingHeader = () => {
                 <Col className="col-1 d-flex justify-content-start">
                 </Col>
                 <Col className={"col-10 d-flex justify-content-center"}>
-                    <Title />
+                    <Title/>
                 </Col>
                 <Col className={'col-1 d-flex justify-content-end'}>
                     <FullScreenMenu/>
@@ -22,7 +22,8 @@ const WeddingHeader = () => {
             </Row>
 
             {/* Content Row - RSVP Button, Navigation */}
-            <Row className="g-0 mt-3 justify-content-center align-items-center d-sm-flex d-none" style={{backgroundcolor: 'red'}}>
+            <Row className="g-0 mt-3 justify-content-center align-items-center d-sm-flex d-none"
+                 style={{backgroundcolor: 'red'}}>
                 {/* Left Links */}
                 <Col className="d-flex justify-content-end text-center flex-grow-1 gap-3">
                     <Link to="/gallery" className='nav-link'>Gallery</Link>

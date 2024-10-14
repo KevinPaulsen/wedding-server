@@ -4,7 +4,7 @@ import Story from "../components/main/Story";
 
 const Home = () => {
     return (
-        <BaseLayout children={<Story />}/>
+        <BaseLayout children={<Story/>}/>
     );
 }
 

@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
-import { AuthContext } from '../../auth/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import {useContext, useState} from 'react';
+import {AuthContext} from '../../auth/AuthContext';
+import {useNavigate} from 'react-router-dom';
 import useAuthRedirect from "../../hooks/useAuthRedirect";
 import {loginUser} from "../../services/authService";
 import FormInput from "../FormInput";
@@ -11,7 +11,7 @@ function AdminLogin() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login } = useContext(AuthContext);
+    const {login} = useContext(AuthContext);
     const navigate = useNavigate();
 
     useAuthRedirect();

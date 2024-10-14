@@ -1,7 +1,7 @@
 // components/FormInput.js
 import React from 'react';
 
-function FormInput({ label, type, id, value, onChange, required = false }) {
+function FormInput({label, type, id, value, onChange, required = false}) {
     return (
         <div className="mb-3">
             <label htmlFor={id} className="form-label">{label}</label>

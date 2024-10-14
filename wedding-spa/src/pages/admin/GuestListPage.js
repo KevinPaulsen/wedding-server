@@ -5,7 +5,7 @@ import RsvpTable from "../../components/admin/RsvpTable";
 const GuestListPage = () => {
     return (
         <AdminLayout children={
-            <RsvpTable />
+            <RsvpTable/>
         }/>
     );
 }

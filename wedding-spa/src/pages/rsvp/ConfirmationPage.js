@@ -31,11 +31,11 @@ const ConfirmationPage = () => {
             title={"Thank you or your Response!"}
             cancel={false}
             children={<>
-            <p>Your RSVP has been submitted.</p>
-            <Button className='rsvp-button long dark' onClick={goHome}>
-                Return Home
-            </Button>
-        </>}/>
+                <p>Your RSVP has been submitted.</p>
+                <Button className='rsvp-button long dark' onClick={goHome}>
+                    Return Home
+                </Button>
+            </>}/>
     );
 };
 

@@ -6,7 +6,7 @@ import {useFlow} from '../../FlowProvider';
 import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button, Container, Row, Table} from "react-bootstrap";
 import "../../styles/rsvp/RsvpTable.css"
-import {FaEdit, FaTrash} from 'react-icons/fa';
+import {FaTrash} from 'react-icons/fa';
 
 const GuestsPage = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const GuestsPage = () => {
     };
 
     const handleEditGuest = (index) => {
-        navigate('/rsvp-add-guest', { state: { guest: formData.guests[index], index } });
+        navigate('/rsvp-add-guest', {state: {guest: formData.guests[index], index}});
     };
 
     return (
@@ -73,7 +73,8 @@ const GuestsPage = () => {
                                 <tbody>
                                 {formData.guests &&
                                     formData.guests.map((guest, index) => (
-                                        <tr key={index} onClick={() => handleEditGuest(index)} style={{ cursor: "pointer" }}>
+                                        <tr key={index} onClick={() => handleEditGuest(index)}
+                                            style={{cursor: "pointer"}}>
                                             <td className="align-middle">
                                                 {guest.fName + " " + guest.lName}
                                             </td>

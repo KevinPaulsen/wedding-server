@@ -38,6 +38,12 @@ public class Rsvp {
     @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
+    private static String extractLastName(String name) {
+        name = name.strip();
+        String[] nameArray = name.split("\\s+");
+
+        return nameArray.length > 1 ? nameArray[nameArray.length - 1] : null;
+    }
 
     public String getRsvpCode() {
         return rsvpCode;
@@ -136,12 +142,5 @@ public class Rsvp {
         if (!lastNames.contains(lastName)) {
             lastNames.add(lastName);
         }
-    }
-
-    private static String extractLastName(String name) {
-        name = name.strip();
-        String[] nameArray = name.split("\\s+");
-
-        return nameArray.length > 1 ? nameArray[nameArray.length - 1] : null;
     }
 }

@@ -5,7 +5,7 @@ import RsvpTable from "../../components/admin/RsvpTable";
 const AdminRsvpInfoPage = () => {
     return (
         <AdminLayout children={
-            <RsvpTable />
+            <RsvpTable/>
         }/>
     );
 }
