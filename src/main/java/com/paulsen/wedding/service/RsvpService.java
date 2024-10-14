@@ -1,5 +1,7 @@
 package com.paulsen.wedding.service;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.IndexNotFoundException;
 import com.paulsen.wedding.model.AvailableRsvpCode;
 import com.paulsen.wedding.model.rsvp.AddRsvpDto;
@@ -7,25 +9,24 @@ import com.paulsen.wedding.model.rsvp.PutRsvpDto;
 import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.repositories.AvailableRsvpCodeRepository;
 import com.paulsen.wedding.repositories.RsvpRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Service
 public class RsvpService {
 
     private final RsvpRepository rsvpRepository;
     private final AvailableRsvpCodeRepository availableRsvpCodeRepository;
+    private final DynamoDBMapper dynamoDBMapper;
 
-    public RsvpService(RsvpRepository rsvpRepository, AvailableRsvpCodeRepository availableRsvpCodeRepository) {
+    public RsvpService(RsvpRepository rsvpRepository, AvailableRsvpCodeRepository availableRsvpCodeRepository, DynamoDBMapper dynamoDBMapper) {
         this.rsvpRepository = rsvpRepository;
         this.availableRsvpCodeRepository = availableRsvpCodeRepository;
+        this.dynamoDBMapper = dynamoDBMapper;
     }
 
     public List<Rsvp> allRsvps() {
@@ -40,7 +41,7 @@ public class RsvpService {
 
     @Transactional
     public Rsvp createRsvp(AddRsvpDto input) {
-        if (rsvpRepository.findByRsvpCode(input.getRsvpCode()).isPresent()) {
+        if (!input.getRsvpCode().isEmpty() && rsvpRepository.findByRsvpCode(input.getRsvpCode()).isPresent()) {
             throw new IndexNotFoundException("RSVP already exists");
         }
 
@@ -76,13 +77,17 @@ public class RsvpService {
     }
 
     private synchronized String generateUniqueCode() {
-        for (AvailableRsvpCode code : availableRsvpCodeRepository.findAll()) {
-            if (rsvpRepository.findByRsvpCode(code.getCode()).isEmpty()) {
-                availableRsvpCodeRepository.delete(code);
-                return code.getCode();
+        AvailableRsvpCode availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
+
+        while (availableRsvpCode != null) {
+            if (rsvpRepository.findByRsvpCode(availableRsvpCode.getCode()).isEmpty()) {
+                availableRsvpCodeRepository.delete(availableRsvpCode);
+                break;
             }
+
+            availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
         }
 
-        return "";
+        return availableRsvpCode == null ? "" : availableRsvpCode.getCode();
     }
 }
