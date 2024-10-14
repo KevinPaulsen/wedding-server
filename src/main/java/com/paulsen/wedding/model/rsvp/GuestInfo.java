@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model;
+package com.paulsen.wedding.model.rsvp;
 
 public record GuestInfo(String name, String email, String phoneNumber, String address) {
     @Override
