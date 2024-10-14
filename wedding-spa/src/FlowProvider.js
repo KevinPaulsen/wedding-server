@@ -27,6 +27,8 @@ export const FlowProvider = ({children}) => {
 
     const [formData, setFormData] = useState(initialFormDataState);
 
+    const [editingGuest, setEditingGuest] = useState(null);
+
     const resetFormData = () => {
         setFormData(initialFormDataState)
     }
@@ -43,7 +45,17 @@ export const FlowProvider = ({children}) => {
     };
 
     return (
-        <FlowContext.Provider value={{step, setStep, formData, setFormData, resetFormData, resetStepState, addGuest}}>
+        <FlowContext.Provider value={{
+            step,
+            setStep,
+            formData,
+            setFormData,
+            editingGuest,
+            setEditingGuest,
+            resetFormData,
+            resetStepState,
+            addGuest
+        }}>
             {children}
         </FlowContext.Provider>
     );
