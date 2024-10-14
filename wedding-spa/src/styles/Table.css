@@ -1,6 +1,21 @@
-.table-hover tbody tr.no-hover:hover {
-    background-color: inherit;
+.drop-down-animation {
+    animation: dropDown 0.3s ease-in-out;
 }
+
+@keyframes dropDown {
+    0% {
+        max-height: 0;
+        opacity: 0;
+    }
+    100% {
+        max-height: 500px; /* Arbitrary value to ensure smooth dropdown */
+        opacity: 1;
+    }
+}
+
+/*.table-hover tbody tr.no-hover:hover {
+    background-color: inherit;
+}//*/
 
 .custom-table {
     background-color: transparent; /* Make the background transparent */
@@ -11,6 +26,7 @@
 
 .custom-table th,
 .custom-table td {
+    color: var(--main-dark);
     background-color: transparent; /* Make the background transparent */
     border: none; /* Remove default borders between cells */
     text-align: left;

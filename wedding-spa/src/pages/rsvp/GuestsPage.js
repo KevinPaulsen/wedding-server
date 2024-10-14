@@ -5,7 +5,7 @@ import '../../styles/Transitions.css';
 import {useFlow} from '../../FlowProvider';
 import RsvpLayout from "../../components/rsvp/RsvpLayout";
 import {Button, Container, Row, Table} from "react-bootstrap";
-import "../../styles/rsvp/RsvpTable.css"
+import "../../styles/Table.css"
 import {FaTrash} from 'react-icons/fa';
 
 const GuestsPage = () => {

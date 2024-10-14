@@ -1,14 +1,27 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Card, Col, Row} from 'react-bootstrap';
+import {Button, Card, Col, Row} from 'react-bootstrap';
 import PrimaryContactInfo from './PrimaryContactInfo';
 import GuestsDetails from './GuestsDetails';
+import "../../../styles/Table.css"
+import {FaTrash} from "react-icons/fa";
+import {useDeleteRsvp} from "../../../hooks/useDeleteRsvp";
+import LoadingSpinner from "./LoadingSpinner";
 
 const RsvpTableRow = ({item}) => {
+    const {deleteRsvp, loading, error} = useDeleteRsvp();
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleRowExpansion = () => {
         setIsExpanded(!isExpanded);
+    };
+
+    const handleDeleteGuest = async (rsvpCode) => {
+        try {
+            await deleteRsvp(rsvpCode);
+        } catch (error) {
+            console.error('Failed to delete RSVP:', error);
+        }
     };
 
     return (
@@ -19,12 +32,21 @@ const RsvpTableRow = ({item}) => {
                 <td>{item.rsvpCode}</td>
                 <td>{item.allowedGuestCount}</td>
                 <td>{item.guestCount}</td>
+                <td className="align-middle">
+                    {loading ? <LoadingSpinner /> : <Button
+                        variant="link"
+                        className="p-0"
+                        onClick={() => handleDeleteGuest(item.rsvpCode)}>
+                        <FaTrash size={20} color="var(--main-dark)"/>
+                    </Button>
+                    }
+                </td>
             </tr>
 
             {/* Expanded Content Row */}
             {isExpanded && (
-                <tr className="no-hover">
-                    <td colSpan="4">
+                <tr className="expanded-row no-hover drop-down-animation">
+                    <td colSpan="5">
                         <Card className="p-3">
                             <Row className="justify-content-center">
                                 {/* Primary Contact Section */}
