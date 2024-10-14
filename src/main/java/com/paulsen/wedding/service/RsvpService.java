@@ -1,7 +1,5 @@
 package com.paulsen.wedding.service;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.IndexNotFoundException;
 import com.paulsen.wedding.model.AvailableRsvpCode;
 import com.paulsen.wedding.model.rsvp.AddRsvpDto;
@@ -14,19 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class RsvpService {
 
     private final RsvpRepository rsvpRepository;
     private final AvailableRsvpCodeRepository availableRsvpCodeRepository;
-    private final DynamoDBMapper dynamoDBMapper;
 
-    public RsvpService(RsvpRepository rsvpRepository, AvailableRsvpCodeRepository availableRsvpCodeRepository, DynamoDBMapper dynamoDBMapper) {
+    public RsvpService(RsvpRepository rsvpRepository, AvailableRsvpCodeRepository availableRsvpCodeRepository) {
         this.rsvpRepository = rsvpRepository;
         this.availableRsvpCodeRepository = availableRsvpCodeRepository;
-        this.dynamoDBMapper = dynamoDBMapper;
     }
 
     public List<Rsvp> allRsvps() {
@@ -41,18 +36,13 @@ public class RsvpService {
 
     @Transactional
     public Rsvp createRsvp(AddRsvpDto input) {
-        if (!input.getRsvpCode().isEmpty() && rsvpRepository.findByRsvpCode(input.getRsvpCode()).isPresent()) {
+        if (!input.getRsvpCode().isEmpty() && rsvpRepository.existsById(input.getRsvpCode())) {
             throw new IndexNotFoundException("RSVP already exists");
         }
 
         Rsvp rsvp = new Rsvp();
 
-        if (input.getRsvpCode().isEmpty()) {
-            rsvp.setRsvpCode(generateUniqueCode());
-        } else {
-            rsvp.setRsvpCode(input.getRsvpCode());
-        }
-
+        rsvp.setRsvpCode(generateUniqueCode(input.getRsvpCode()));
         rsvp.setLastNames(input.getLastNames());
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setAllowedGuestCount(input.getAllowedGuestCount());
@@ -76,7 +66,11 @@ public class RsvpService {
         return rsvpRepository.save(rsvp);
     }
 
-    private synchronized String generateUniqueCode() {
+    private synchronized String generateUniqueCode(String rsvpCode) {
+        if (rsvpCode != null && !rsvpCode.isEmpty()) {
+            return rsvpCode;
+        }
+
         AvailableRsvpCode availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
 
         while (availableRsvpCode != null) {

@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,6 +53,8 @@ public class Rsvp {
 
     public void setPrimaryContact(GuestInfo primaryContact) {
         this.primaryContact = primaryContact;
+
+        addName(primaryContact.name());
     }
 
     public List<String> getLastNames() {
@@ -59,7 +62,15 @@ public class Rsvp {
     }
 
     public void setLastNames(List<String> lastNames) {
-        this.lastNames = lastNames;
+        if (this.lastNames == null) {
+            this.lastNames = lastNames;
+        } else {
+            for (String lastName : lastNames) {
+                if (!this.lastNames.contains(lastName)) {
+                    lastNames.add(lastName);
+                }
+            }
+        }
     }
 
     public int getAllowedGuestCount() {
@@ -84,6 +95,10 @@ public class Rsvp {
 
     public void setRsvpGuestDetails(List<RsvpGuestDetails> rsvpGuestDetails) {
         this.rsvpGuestDetails = rsvpGuestDetails;
+
+        for (RsvpGuestDetails rsvpGuestDetail : rsvpGuestDetails) {
+            addName(rsvpGuestDetail.name());
+        }
     }
 
     @Override
@@ -105,5 +120,28 @@ public class Rsvp {
         result = 31 * result + getGuestCount();
         result = 31 * result + Objects.hashCode(getRsvpGuestDetails());
         return result;
+    }
+
+    private void addName(String name) {
+        String lastName = extractLastName(name);
+
+        if (lastName == null) {
+            return;
+        }
+
+        if (lastNames == null) {
+            lastNames = new ArrayList<>();
+        }
+
+        if (!lastNames.contains(lastName)) {
+            lastNames.add(lastName);
+        }
+    }
+
+    private static String extractLastName(String name) {
+        name = name.strip();
+        String[] nameArray = name.split("\\s+");
+
+        return nameArray.length > 1 ? nameArray[nameArray.length - 1] : null;
     }
 }

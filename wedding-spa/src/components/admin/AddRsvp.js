@@ -35,9 +35,9 @@ const AddRsvp = () => {
                 const formattedRsvpData = {
                     rsvpCode: "",
                     primaryContact: {
-                        name: rsvp.name,
+                        name: rsvp.name.trim(),
                     },
-                    lastNames: rsvp.lNames.split(',').map((name) => name.trim()),
+                    lastNames: rsvp.lNames === '' ? [] : rsvp.lNames.split(',').map((name) => name.trim()),
                     allowedGuestCount: rsvp.allowedGuestCount,
                     guestCount: 0,
                     rsvpGuestDetails: [],
