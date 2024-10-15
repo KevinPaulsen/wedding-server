@@ -4,7 +4,7 @@ import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
 import {Button, Form} from "react-bootstrap";
-import CustomInputField from "../../components/rsvp/CustomInputField";
+import CustomInputField from "../CustomInputField";
 import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
 
 const RsvpInfo = ({changePage}) => {

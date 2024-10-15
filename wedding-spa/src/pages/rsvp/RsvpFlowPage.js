@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {CSSTransition} from 'react-transition-group';
 import Title from "../../components/headerComponents/Title";
-import CancelButton from "../../components/rsvp/CancelButton";
+import CancelButton from "../../components/rsvpFlow/CancelButton";
 import RSVPFormStep from "../../components/rsvpFlow/RsvpFormStep";
 import '../../styles/RsvpFlow.css'
 import {RSVP_INFO_STEP} from "../../components/rsvpFlow/RsvpInfo";
 import {RSVP_CONFIRMATION_STEP} from "../../components/rsvpFlow/RsvpConfirmation";
 
-const RsvpFlow = (props) => {
-    const [currentStep, setCurrentStep] = useState(RSVP_INFO_STEP); // Target step
-    const [displayedStep, setDisplayedStep] = useState(RSVP_INFO_STEP); // Currently displayed step
-    const [inProp, setInProp] = useState(true); // Controls fade-in/out
+const RsvpFlow = () => {
+    const [currentStep, setCurrentStep] = useState(RSVP_INFO_STEP);
+    const [displayedStep, setDisplayedStep] = useState(RSVP_INFO_STEP);
+    const [inProp, setInProp] = useState(true);
 
     const changePage = (step) => {
         if (inProp) {
@@ -21,8 +21,8 @@ const RsvpFlow = (props) => {
     }
 
     const onExited = () => {
-        setDisplayedStep(currentStep); // Update to next step after fade-out
-        setInProp(true); // Start fade-in of new component
+        setDisplayedStep(currentStep);
+        setInProp(true);
     };
 
     return (

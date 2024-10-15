@@ -7,11 +7,12 @@ import {useFlow} from "../../FlowProvider";
 import {useNavigate} from "react-router-dom";
 
 const RsvpConfirmation = () => {
-    const {resetStepState} = useFlow();
+    const {resetStepState, resetFormData} = useFlow();
     const navigate = useNavigate();
 
     const goHome = () => {
         resetStepState();
+        resetFormData();
         navigate('/');
     };
 

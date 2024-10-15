@@ -36,9 +36,9 @@ function App() {
             <Route path="/story" element={<Story/>}/>
 
             {/* RSVP Pages*/}
-                <Route path="/rsvp" element={<RsvpFlowPage/>}/>
+            <Route path="/rsvp" element={<RsvpFlowPage/>}/>
 
-                <Route path="*" element={<NotFound/>}/>
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     );
 }

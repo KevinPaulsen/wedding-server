@@ -4,7 +4,7 @@ import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
 import {Button, Form, Row} from "react-bootstrap";
-import CustomInputField from "../rsvp/CustomInputField";
+import CustomInputField from "../CustomInputField";
 import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
 
 const RsvpAddGuest = ({changePage}) => {
