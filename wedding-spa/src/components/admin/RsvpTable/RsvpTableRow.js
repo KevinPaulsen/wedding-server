@@ -6,7 +6,7 @@ import GuestsDetails from './GuestsDetails';
 import "../../../styles/Table.css"
 import {FaTrash} from "react-icons/fa";
 import {useDeleteRsvp} from "../../../hooks/useDeleteRsvp";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 const RsvpTableRow = ({item}) => {
     const {deleteRsvp, loading, error} = useDeleteRsvp();

@@ -13,6 +13,7 @@ import AdminMain from "./pages/admin/AdminRsvpInfoPage";
 import GuestListPage from "./pages/admin/GuestListPage";
 import AddRsvpPage from "./pages/admin/AddRsvpPage";
 import RsvpFlowPage from "./pages/rsvp/RsvpFlowPage";
+import AdminRsvpFlow from "./pages/admin/AdminRsvpFlow";
 
 function App() {
     return (
@@ -23,9 +24,11 @@ function App() {
             <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
 
             {/* Dashboard Page/redirects */}
+            <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain/>}/>}/>
             <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
 
-            <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain/>}/>}/>
+            <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow/>}/>}/>
+
             <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage/>}/>}/>
             <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage/>}/>}/>
 

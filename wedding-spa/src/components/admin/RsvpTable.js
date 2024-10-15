@@ -2,8 +2,8 @@
 import React from 'react';
 import {Container, Table} from 'react-bootstrap';
 import useRsvpData from "../../hooks/useRsvpData";
-import LoadingSpinner from "./RsvpTable/LoadingSpinner";
-import ErrorMessage from "./RsvpTable/ErrorMessage";
+import LoadingSpinner from "./LoadingSpinner";
+import ErrorMessage from "./ErrorMessage";
 import RsvpTableRow from "./RsvpTable/RsvpTableRow";
 import '../../styles/Table.css'
 
