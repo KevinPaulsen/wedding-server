@@ -48,7 +48,11 @@ const RsvpGuests = ({changePage}) => {
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Dietary Restrictions</th>
+                            <th>
+                                {formData.guests.some(
+                                    (guest) => guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
+                                ) && "Dietary Restrictions"}
+                            </th>
                             <th>
                                 {formData.guests.some(
                                     (guest) => guest.other && guest.other.trim() !== ""
