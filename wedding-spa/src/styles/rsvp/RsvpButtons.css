@@ -12,23 +12,23 @@
     width: auto;
 }
 
+/* Dark Variant */
 .rsvp-button.dark {
     background: var(--main-dark);
     color: var(--main-light);
     border: 2px solid var(--main-dark);
 }
 
-@media (hover: none) {
-    .rsvp-button.dark.wire:hover {
-        background-color: initial;
-        box-shadow: none;
-    }
+.rsvp-button.dark.wire:hover {
+    background-color: initial;
+    box-shadow: none;
 }
 
 .rsvp-button.dark:hover {
     background: var(--hover-dark);
 }
 
+/* Wire Button: Starts with no background */
 .rsvp-button.dark.wire {
     background: none;
     color: var(--main-dark);
@@ -39,6 +39,7 @@
     color: var(--main-light);
 }
 
+/* Light Variant */
 .rsvp-button.light {
     background: var(--main-light);
     color: var(--main-dark);
@@ -59,10 +60,6 @@
     color: var(--main-dark);
 }
 
-.rsvp-button:disabled,
 .rsvp-button:focus,
 .rsvp-button:active {
-    background: var(--main-dark) !important;
-    border-color: var(--main-dark) !important;
-    color: var(--main-light);
 }

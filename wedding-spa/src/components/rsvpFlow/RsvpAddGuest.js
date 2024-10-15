@@ -108,7 +108,7 @@ const RsvpAddGuest = ({changePage}) => {
                 <Button
                     key={option}
                     onClick={() => handleDietaryChange(option)}
-                    className={`m-2 rsvp-button rsvp-button width-auto ${
+                    className={`m-2 rsvp-button width-auto ${
                         newGuest.dietaryRestrictions.includes(option) ? "dark" : "dark wire"
                     }`}
                 >
