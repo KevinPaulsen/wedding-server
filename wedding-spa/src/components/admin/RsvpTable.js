@@ -27,7 +27,7 @@ const RsvpTable = () => {
                     </thead>
                     <tbody>
                     {data.map((item, index) => (
-                        <RsvpTableRow key={index} item={item}/>
+                        <RsvpTableRow key={index} rsvp={item}/>
                     ))}
                     </tbody>
                 </Table>

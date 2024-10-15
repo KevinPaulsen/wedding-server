@@ -8,7 +8,7 @@ import CustomInputField from "../CustomInputField";
 import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
 import {RSVP_INFO_STEP} from "./RsvpInfo";
 
-const RsvpPrimaryContact = ({changePage}) => {
+const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
     const {formData, setFormData} = useFlow();
 
     const prefNameRef = useRef();
@@ -42,6 +42,7 @@ const RsvpPrimaryContact = ({changePage}) => {
                 placeholder="Preferred Name"
                 value={formData.prefName}
                 onChange={handleChange}
+                required={requireAnswers}
             />
             <CustomInputField
                 ref={prefEmailRef}
@@ -50,6 +51,7 @@ const RsvpPrimaryContact = ({changePage}) => {
                 placeholder="Preferred Email"
                 value={formData.prefEmail}
                 onChange={handleChange}
+                required={requireAnswers}
             />
             <CustomInputField
                 ref={prefPhoneRef}
@@ -58,6 +60,7 @@ const RsvpPrimaryContact = ({changePage}) => {
                 placeholder="Preferred Phone Number"
                 value={formData.prefPhone}
                 onChange={handleChange}
+                required={requireAnswers}
             />
 
             <div className="d-flex justify-content-evenly px-2">

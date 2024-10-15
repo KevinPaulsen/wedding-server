@@ -7,7 +7,7 @@ import {Button, Form, Row} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
 import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
 
-const RsvpAddGuest = ({changePage}) => {
+const RsvpAddGuest = ({ changePage, requireAnswers }) => {
     const {setFormData, editingGuest, setEditingGuest} = useFlow();
     const guestFName = useRef();
     const guestLName = useRef();
@@ -93,6 +93,7 @@ const RsvpAddGuest = ({changePage}) => {
                 placeholder="First Name"
                 value={newGuest.fName}
                 onChange={handleChange}
+                required={requireAnswers}
             />
             <CustomInputField
                 ref={guestLName}
@@ -101,6 +102,7 @@ const RsvpAddGuest = ({changePage}) => {
                 placeholder="Last Name"
                 value={newGuest.lName}
                 onChange={handleChange}
+                required={requireAnswers}
             />
 
             <h4 className="pb-2">Dietary Restrictions</h4>
@@ -125,6 +127,7 @@ const RsvpAddGuest = ({changePage}) => {
                         placeholder="Other Restrictions"
                         value={newGuest.other}
                         onChange={handleChange}
+                        required={requireAnswers}
                     />
                 </div> : null}
 

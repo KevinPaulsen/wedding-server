@@ -1,0 +1,8 @@
+.dark-card {
+    color: var(--main-light);
+    background-color: var(--main-dark);
+}
+
+h5 {
+    color: var(--main-light);
+}

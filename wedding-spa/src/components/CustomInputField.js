@@ -9,9 +9,9 @@ const CustomInputField = forwardRef(({
                                          onChange,
                                          required = true,
                                          name,
-                                         min
+                                         min,
                                      }, ref) => {
-    const [isTouched, setIsTouched] = useState(false);
+    const [_, setIsTouched] = useState(false);
     const [hasError, setHasError] = useState(false);
 
     // Handle input change

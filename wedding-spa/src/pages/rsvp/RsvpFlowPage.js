@@ -29,7 +29,7 @@ const RsvpFlow = () => {
         <Container fluid className="d-flex flex-column vh-100" style={{backgroundColor: 'var(--main-light)'}}>
             <Row className='g-0 mt-5 text-center align-items-center'>
                 <Col>
-                    <Title/>
+                    <Title link={false}/>
                 </Col>
             </Row>
 

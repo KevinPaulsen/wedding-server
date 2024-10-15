@@ -8,9 +8,11 @@ import {FaTrash} from "react-icons/fa";
 import {RSVP_CONFIRMATION_STEP} from "./RsvpConfirmation";
 import {RSVP_ADD_GUEST_STEP} from "./RsvpAddGuest";
 import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
+import {useNavigate} from "react-router-dom";
 
-const RsvpGuests = ({changePage}) => {
-    const {formData, setFormData, setEditingGuest} = useFlow();
+const RsvpGuests = ({changePage, returnPage}) => {
+    const {formData, setFormData, setEditingGuest, resetFormData, resetStepState} = useFlow();
+    const navigate = useNavigate();
 
     const handleBack = () => {
         changePage(RSVP_PRIMARY_CONTACT_STEP)
@@ -18,7 +20,15 @@ const RsvpGuests = ({changePage}) => {
 
     const handleNext = () => {
         // TODO: Make at least one guest be required
-        changePage(RSVP_CONFIRMATION_STEP)
+        // TODO: Send in information
+        resetFormData();
+
+        if (returnPage === null) {
+            changePage(RSVP_CONFIRMATION_STEP);
+        } else {
+            resetStepState();
+            navigate(returnPage);
+        }
     };
 
     const handleNewGuest = () => {
@@ -107,7 +117,7 @@ const RsvpGuests = ({changePage}) => {
                     Add Guest
                 </Button>
                 <Button className="rsvp-button dark" onClick={handleNext}>
-                    Next
+                    Submit
                 </Button>
             </Row>
         </Container>

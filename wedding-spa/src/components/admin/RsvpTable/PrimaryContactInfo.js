@@ -7,14 +7,14 @@ const PrimaryContactInfo = ({primaryContact, lastNames}) => (
         <Row>
             <h5>Primary Contact Information</h5>
         </Row>
-        <Row>
-            <Col xs={8}>
+        <Row className="justify-content-center">
+            <Col xs={"auto"}>
                 <div>{primaryContact.name}</div>
                 <div>{primaryContact.email}</div>
                 <div>{primaryContact.phoneNumber}</div>
                 <div>{primaryContact.address}</div>
             </Col>
-            <Col xs={4}>
+            <Col xs={"auto"}>
                 {lastNames.map(lastName => <div>{lastName}</div>)}
             </Col>
         </Row>
