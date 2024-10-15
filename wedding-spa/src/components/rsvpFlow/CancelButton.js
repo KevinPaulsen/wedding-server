@@ -4,14 +4,14 @@ import {useFlow} from "../../FlowProvider";
 import {Button} from "react-bootstrap";
 import '../../styles/rsvp/RsvpButtons.css'
 
-function CancelButton() {
+function CancelButton({ route }) {
     const navigate = useNavigate();
     const {resetFormData, resetStepState} = useFlow();
 
     const handleCancel = () => {
         resetFormData();
         resetStepState();
-        navigate('/');
+        navigate(route);
     };
 
     return (

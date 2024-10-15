@@ -53,7 +53,7 @@ const RsvpFlow = () => {
             <Row style={{height: '75px'}} className='pb-3 pt-2 text-center justify-content-center align-items-center'>
                 {currentStep !== RSVP_CONFIRMATION_STEP &&
                     <Col>
-                        <CancelButton/>
+                        <CancelButton route="/"/>
                     </Col>}
             </Row>
         </Container>
