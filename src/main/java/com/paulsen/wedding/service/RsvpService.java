@@ -32,7 +32,7 @@ import java.util.List;
     public Rsvp findMatchingRsvp(String rsvpCode, String lastname) {
         Rsvp rsvp = rsvpRepository.findByRsvpCode(rsvpCode).orElse(null);
 
-        if (rsvp == null || !rsvp.getLastNames().contains(lastname)) {
+        if (rsvp == null || !rsvp.getLastnames().contains(lastname.toLowerCase())) {
             throw new IndexNotFoundException(
                     String.format("No RSVP found with code %s and lastname %s", rsvpCode, lastname));
         }
@@ -52,7 +52,7 @@ import java.util.List;
         Rsvp rsvp = new Rsvp();
 
         rsvp.setRsvpCode(generateUniqueCode(input.getRsvpCode()));
-        rsvp.setLastNames(input.getLastNames());
+        rsvp.setLastnames(input.getLastNames());
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setAllowedGuestCount(input.getAllowedGuestCount());
         rsvp.setGuestCount(input.getGuestCount());
@@ -64,7 +64,7 @@ import java.util.List;
     public Rsvp updateRsvp(PutRsvpDto input) {
         Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
 
-        if (!rsvp.getLastNames().contains(input.getLastName())) {
+        if (!rsvp.getLastnames().contains(input.getLastName())) {
             throw new IndexNotFoundException(
                     String.format("RSVP with code %s and last name %s not found", input.getRsvpCode(),
                                   input.getLastName()));

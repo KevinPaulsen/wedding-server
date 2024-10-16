@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @DynamoDBTable(tableName="wedding_rsvps") public class Rsvp {
 
@@ -20,7 +21,7 @@ import java.util.Objects;
     private GuestInfo primaryContact;
 
     @DynamoDBAttribute(attributeName="last_names") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
-    private List<String> lastNames;
+    private List<String> lastnames;
 
     @DynamoDBAttribute(attributeName="allowed_guest_count")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private Integer allowedGuestCount;
@@ -56,17 +57,18 @@ import java.util.Objects;
         addName(primaryContact.name());
     }
 
-    public List<String> getLastNames() {
-        return lastNames;
+    public List<String> getLastnames() {
+        return lastnames;
     }
 
-    public void setLastNames(List<String> lastNames) {
-        if (this.lastNames == null) {
-            this.lastNames = lastNames;
+    public void setLastnames(List<String> lastnames) {
+        if (this.lastnames == null) {
+            this.lastnames = lastnames.stream().map(String::toLowerCase)
+                    .collect(Collectors.toCollection(ArrayList::new));
         } else {
-            for (String lastName : lastNames) {
-                if (!this.lastNames.contains(lastName)) {
-                    lastNames.add(lastName);
+            for (String lastName : lastnames) {
+                if (!this.lastnames.contains(lastName.toLowerCase())) {
+                    this.lastnames.add(lastName.toLowerCase());
                 }
             }
         }
@@ -110,14 +112,14 @@ import java.util.Objects;
 
         return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() &&
                getRsvpCode().equals(rsvp.getRsvpCode()) && getPrimaryContact().equals(rsvp.getPrimaryContact()) &&
-               getLastNames().equals(rsvp.getLastNames()) &&
+               getLastnames().equals(rsvp.getLastnames()) &&
                Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
     }
 
     @Override public int hashCode() {
         int result = getRsvpCode().hashCode();
         result = 31 * result + getPrimaryContact().hashCode();
-        result = 31 * result + getLastNames().hashCode();
+        result = 31 * result + getLastnames().hashCode();
         result = 31 * result + getAllowedGuestCount();
         result = 31 * result + getGuestCount();
         result = 31 * result + Objects.hashCode(getRsvpGuestDetails());
@@ -131,12 +133,12 @@ import java.util.Objects;
             return;
         }
 
-        if (lastNames == null) {
-            lastNames = new ArrayList<>();
+        if (lastnames == null) {
+            lastnames = new ArrayList<>();
         }
 
-        if (!lastNames.contains(lastName)) {
-            lastNames.add(lastName);
+        if (!lastnames.contains(lastName.toLowerCase())) {
+            lastnames.add(lastName.toLowerCase());
         }
     }
 }

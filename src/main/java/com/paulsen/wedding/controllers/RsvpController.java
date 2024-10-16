@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -35,8 +36,8 @@ import java.util.List;
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode, @RequestBody String lastName) {
-        Rsvp rsvp = rsvpService.findMatchingRsvp(rsvpCode, lastName);
+    public ResponseEntity<Rsvp> authenticatedUser(@RequestParam String rsvpCode, @RequestParam String lastname) {
+        Rsvp rsvp = rsvpService.findMatchingRsvp(rsvpCode, lastname);
 
         return ResponseEntity.ok(rsvp);
     }
