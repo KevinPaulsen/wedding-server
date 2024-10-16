@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Table} from 'react-bootstrap';
+import {Container, Row, Table} from 'react-bootstrap';
+import '../../../styles/Card.css'
 
 const GuestsDetails = ({guests}) => (
-    <div>
-        <h5 className="text-center">Guests Details</h5>
-        <Table size="sm">
+    <Container>
+        <Row>
+            <h5>Guests Details</h5>
+        </Row>
+        <Table size="sm" className="card-table">
             <thead>
             <tr>
                 <th>Guest Name</th>
@@ -16,31 +19,29 @@ const GuestsDetails = ({guests}) => (
             </thead>
             <tbody>
             {guests.map((guest, i) => (
-                <tr key={i}>
-                    <td>{guest.name}</td>
-                    <td>{guest.foodOption}</td>
-                    <td>
-                        {guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
-                            ? guest.dietaryRestrictions.join(', ')
-                            : 'None'}
-                    </td>
-                    <td>{guest.other || 'None'}</td>
-                </tr>
+                    <tr key={i}>
+                        <td>{guest.name}</td>
+                        <td>{guest.foodOption}</td>
+                        <td>
+                            {guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
+                                    ? guest.dietaryRestrictions.join(', ')
+                                    : 'None'}
+                        </td>
+                        <td>{guest.other || 'None'}</td>
+                    </tr>
             ))}
             </tbody>
         </Table>
-    </div>
+    </Container>
 );
 
 GuestsDetails.propTypes = {
-    guests: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            foodOption: PropTypes.string,
-            dietaryRestrictions: PropTypes.arrayOf(PropTypes.string),
-            other: PropTypes.string,
-        })
-    ).isRequired,
+    guests: PropTypes.arrayOf(PropTypes.shape({
+                                                  name: PropTypes.string.isRequired,
+                                                  foodOption: PropTypes.string,
+                                                  dietaryRestrictions: PropTypes.arrayOf(PropTypes.string),
+                                                  other: PropTypes.string,
+                                              })).isRequired,
 };
 
 export default GuestsDetails;

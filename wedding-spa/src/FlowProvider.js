@@ -20,11 +20,7 @@ export const FlowProvider = ({children}) => {
         prefName: '',
         prefEmail: '',
         prefPhone: '',
-        guests: [
-            {
-                "fName": "", "lName": "", "foodOption": "", "dietaryRestrictions": [], "other": "",
-            }
-        ],
+        guests: [],
     };
 
     const [step, setStep] = useState(initialStepState);

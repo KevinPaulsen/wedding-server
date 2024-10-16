@@ -27,7 +27,7 @@ const RsvpTableRow = ({rsvp}) => {
         <>
             {/* Main Row */}
             <tr onClick={toggleRowExpansion}>
-                <td>{rsvp.primaryContact ? rsvp.primaryContact.name : rsvp.lastNames}</td>
+                <td>{rsvp.primaryContact ? rsvp.primaryContact.name : rsvp.lastnames}</td>
                 <td>{rsvp.rsvpCode}</td>
                 <td>{rsvp.allowedGuestCount}</td>
                 <td>{rsvp.guestCount}</td>
@@ -62,7 +62,7 @@ RsvpTableRow.propTypes = {
             phoneNumber: PropTypes.string,
             address: PropTypes.string,
         }).isRequired,
-        lastNames: PropTypes.arrayOf(PropTypes.string),
+        lastnames: PropTypes.arrayOf(PropTypes.string),
         rsvpCode: PropTypes.string.isRequired,
         allowedGuestCount: PropTypes.number.isRequired,
         guestCount: PropTypes.number.isRequired,
@@ -70,7 +70,7 @@ RsvpTableRow.propTypes = {
             PropTypes.shape({
                 name: PropTypes.string.isRequired,
                 foodOption: PropTypes.string,
-                dietaryRestrictions: PropTypes.string,
+                dietaryRestrictions: PropTypes.arrayOf(PropTypes.string),
                 other: PropTypes.string,
             })
         ).isRequired,

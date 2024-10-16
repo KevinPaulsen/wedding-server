@@ -6,3 +6,9 @@
 h5 {
     color: var(--main-light);
 }
+
+.card-table th,
+.card-table td {
+    color: var(--main-light);
+}
+

@@ -11,10 +11,10 @@ const useRsvpData = () => {
 
         const fetchRsvpData = async () => {
             try {
-                const data = await getRsvps();
+                const rsvps = await getRsvps();
 
                 if (isMounted) {
-                    setData(data);
+                    setData(rsvps);
                 }
             } catch (err) {
                 setError(err.message);
