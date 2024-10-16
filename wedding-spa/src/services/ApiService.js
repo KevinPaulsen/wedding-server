@@ -40,7 +40,8 @@ export const deleteRsvpRequest = (rsvpCode) => {
 }
 
 export const updateRsvp = (updateData) => {
-    return request('/update', {
+    console.log(updateData);
+    return request('/rsvp/update', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

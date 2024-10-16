@@ -22,12 +22,23 @@ const RsvpGuests = ({changePage, returnPage}) => {
 
     const handleNext = async () => {
         // TODO: Make at least one guest be required
-        await putRsvp({
-                          "rsvpCode": formData.rsvpCode,
-                          "lastName": formData.lastName,
-                          "primaryContact": formData.primaryContact,
-                          "rsvpGuestDetails": formData.rsvpGuestDetails
-                      });
+        const putRsvpDto = {
+            rsvpCode: formData.rsvpCode,
+            lastName: formData.lastName,
+            primaryContact: {
+                name: formData.prefName,
+                email: formData.prefEmail,
+                phone: formData.prefPhone,
+                address: "",
+            },
+            rsvpGuestDetails: formData.guests.map((guest) => ({
+                name: guest.fName + " " + guest.lName,
+                foodOption: "",
+                dietaryRestrictions: guest.dietaryRestrictions,
+                other: guest.other,
+            })),
+        };
+        await putRsvp(putRsvpDto);
 
         if (error === '') {
             resetFormData();
