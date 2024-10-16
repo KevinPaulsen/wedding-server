@@ -28,7 +28,7 @@ const RsvpInfo = ({changePage}) => {
                                 ...formData,
                                 prefName: rsvp.primaryContact.name,
                                 prefEmail: rsvp.primaryContact.email,
-                                prefPhone: rsvp.primaryContact.phone,
+                                prefPhone: rsvp.primaryContact.phoneNumber,
                                 guests: transformGuestDetails(rsvp.rsvpGuestDetails),
                             });
                 changePage(RSVP_PRIMARY_CONTACT_STEP)

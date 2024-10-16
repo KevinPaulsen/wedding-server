@@ -13,9 +13,10 @@ const RsvpInfoCard = ({ rsvp }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
+        console.log(rsvp.primaryContact)
         const prefName = rsvp.primaryContact ? (rsvp.primaryContact.name ? rsvp.primaryContact.name : '') : '';
         const email = rsvp.primaryContact ? (rsvp.primaryContact.email ? rsvp.primaryContact.email : '') : '';
-        const phone = rsvp.primaryContact ? (rsvp.primaryContact.phone ? rsvp.primaryContact.phone : '') : '';
+        const phone = rsvp.primaryContact ? (rsvp.primaryContact.phoneNumber ? rsvp.primaryContact.phoneNumber : '') : '';
 
         setFormData({
             rsvpCode: rsvp.rsvpCode,
