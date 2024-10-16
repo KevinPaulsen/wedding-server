@@ -3,11 +3,11 @@ import {updateRsvp} from "../services/ApiService";
 
 export const usePutRsvp = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
 
     const putRsvp = async (rsvpData) => {
         setLoading(true);
-        setError(null);
+        setError('');
         let data = null;
 
         try {

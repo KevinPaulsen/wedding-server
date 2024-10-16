@@ -29,11 +29,9 @@ const RsvpGuests = ({changePage, returnPage}) => {
                 name: formData.prefName,
                 email: formData.prefEmail,
                 phone: formData.prefPhone,
-                address: "",
             },
             rsvpGuestDetails: formData.guests.map((guest) => ({
                 name: guest.fName + " " + guest.lName,
-                foodOption: "",
                 dietaryRestrictions: guest.dietaryRestrictions,
                 other: guest.other,
             })),
