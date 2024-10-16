@@ -6,6 +6,7 @@ import PrimaryContactInfo from "./PrimaryContactInfo";
 import {useFlow} from "../../../FlowProvider";
 import '../../../styles/Card.css'
 import {useNavigate} from "react-router-dom";
+import {transformGuestDetails} from "../../../services/DataTransformService";
 
 const RsvpInfoCard = ({ rsvp }) => {
     const {setFormData} = useFlow();
@@ -15,13 +16,14 @@ const RsvpInfoCard = ({ rsvp }) => {
         const prefName = rsvp.primaryContact ? (rsvp.primaryContact.name ? rsvp.primaryContact.name : '') : '';
         const email = rsvp.primaryContact ? (rsvp.primaryContact.email ? rsvp.primaryContact.email : '') : '';
         const phone = rsvp.primaryContact ? (rsvp.primaryContact.phone ? rsvp.primaryContact.phone : '') : '';
+
         setFormData({
             rsvpCode: rsvp.rsvpCode,
-            lastnames: rsvp.lastnames ? rsvp.lastnames.join(',') : '',
+            lastName: rsvp.lastnames ? rsvp.lastnames.join(',') : '',
             prefName: prefName,
             prefEmail: email,
             prefPhone: phone,
-            guests: rsvp.rsvpGuestDetails,
+            guests: transformGuestDetails(rsvp.rsvpGuestDetails),
         })
         navigate('/admin/edit-rsvp');
     }

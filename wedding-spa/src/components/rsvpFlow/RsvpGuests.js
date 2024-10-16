@@ -28,7 +28,7 @@ const RsvpGuests = ({changePage, returnPage}) => {
             primaryContact: {
                 name: formData.prefName,
                 email: formData.prefEmail,
-                phone: formData.prefPhone,
+                phoneNumber: formData.prefPhone,
             },
             rsvpGuestDetails: formData.guests.map((guest) => ({
                 name: guest.fName + " " + guest.lName,

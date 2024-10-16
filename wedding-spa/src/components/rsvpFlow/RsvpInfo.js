@@ -7,6 +7,7 @@ import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
 import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
 import {useGetRsvp} from "../../hooks/useGetRsvp";
+import {transformGuestDetails} from "../../services/DataTransformService";
 
 const RsvpInfo = ({changePage}) => {
     const {formData, setFormData} = useFlow();
@@ -22,13 +23,13 @@ const RsvpInfo = ({changePage}) => {
         if (isCodeValid && isLastNameValid) {
             const rsvp = await getRsvp(formData.rsvpCode, formData.lastName);
 
-            if (error === '') {
+            if (error !== '') {
                 setFormData({
                                 ...formData,
                                 prefName: rsvp.primaryContact.name,
                                 prefEmail: rsvp.primaryContact.email,
                                 prefPhone: rsvp.primaryContact.phone,
-                                guests: rsvp.rsvpGuestDetails,
+                                guests: transformGuestDetails(rsvp.rsvpGuestDetails),
                             });
                 changePage(RSVP_PRIMARY_CONTACT_STEP)
             }
