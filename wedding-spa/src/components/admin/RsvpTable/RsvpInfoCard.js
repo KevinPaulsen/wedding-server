@@ -19,7 +19,7 @@ const RsvpInfoCard = ({ rsvp }) => {
 
         setFormData({
             rsvpCode: rsvp.rsvpCode,
-            lastName: rsvp.lastnames ? rsvp.lastnames.join(',') : '',
+            lastName: rsvp.lastnames && rsvp.lastnames.length > 0 ? rsvp.lastnames[0] : '',
             prefName: prefName,
             prefEmail: email,
             prefPhone: phone,
