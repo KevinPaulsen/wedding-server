@@ -11,31 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@DynamoDBTable(tableName="wedding_rsvps")
-public class Rsvp {
+@DynamoDBTable(tableName="wedding_rsvps") public class Rsvp {
 
-    @DynamoDBHashKey(attributeName="rsvp_code")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+    @DynamoDBHashKey(attributeName="rsvp_code") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private String rsvpCode;
 
-    @DynamoDBAttribute(attributeName="primary_contact")
-    @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
+    @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
-    @DynamoDBAttribute(attributeName="last_names")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
+    @DynamoDBAttribute(attributeName="last_names") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
     private List<String> lastNames;
 
     @DynamoDBAttribute(attributeName="allowed_guest_count")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
-    private Integer allowedGuestCount;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private Integer allowedGuestCount;
 
-    @DynamoDBAttribute(attributeName="guest_count")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
+    @DynamoDBAttribute(attributeName="guest_count") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
     private Integer guestCount;
 
-    @DynamoDBAttribute(attributeName="rsvp_details")
-    @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
+    @DynamoDBAttribute(attributeName="rsvp_details") @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
     private static String extractLastName(String name) {
@@ -107,18 +100,21 @@ public class Rsvp {
         }
     }
 
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o)
+    @Override public final boolean equals(Object o) {
+        if (this == o) {
             return true;
-        if (!(o instanceof Rsvp rsvp))
+        }
+        if (!(o instanceof Rsvp rsvp)) {
             return false;
+        }
 
-        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() && getRsvpCode().equals(rsvp.getRsvpCode()) && getPrimaryContact().equals(rsvp.getPrimaryContact()) && getLastNames().equals(rsvp.getLastNames()) && Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
+        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() &&
+               getRsvpCode().equals(rsvp.getRsvpCode()) && getPrimaryContact().equals(rsvp.getPrimaryContact()) &&
+               getLastNames().equals(rsvp.getLastNames()) &&
+               Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = getRsvpCode().hashCode();
         result = 31 * result + getPrimaryContact().hashCode();
         result = 31 * result + getLastNames().hashCode();

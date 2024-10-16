@@ -15,43 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/rsvp")
-@RestController
-public class RsvpController {
+@RequestMapping("/rsvp") @RestController public class RsvpController {
     private final RsvpService rsvpService;
 
     public RsvpController(RsvpService rsvpService) {
         this.rsvpService = rsvpService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Rsvp> register(@RequestBody AddRsvpDto addRsvpDto) {
+    @PostMapping("/create") public ResponseEntity<Rsvp> register(@RequestBody AddRsvpDto addRsvpDto) {
         Rsvp addedRsvp = rsvpService.createRsvp(addRsvpDto);
 
         return ResponseEntity.ok(addedRsvp);
     }
 
-    @PutMapping
-    public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
+    @PutMapping public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
         Rsvp rsvp = rsvpService.updateRsvp(putRsvpDto);
 
         return ResponseEntity.ok(rsvp);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode) {
+    @GetMapping("/get") public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode) {
         Rsvp rsvp = rsvpService.findRsvpByRsvpCode(rsvpCode);
 
         return ResponseEntity.ok(rsvp);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Rsvp>> getAllRsvps() {
+    @GetMapping("/all") public ResponseEntity<List<Rsvp>> getAllRsvps() {
         return ResponseEntity.ok(rsvpService.allRsvps());
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestBody String rsvpCode) {
+    @DeleteMapping("/delete") public ResponseEntity<Void> delete(@RequestBody String rsvpCode) {
         rsvpService.delete(rsvpCode);
 
         return ResponseEntity.noContent().build();

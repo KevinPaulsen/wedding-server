@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public class AvailableRsvpCodeRepository {
+@Repository public class AvailableRsvpCodeRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
 

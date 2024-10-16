@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class RsvpService {
+@Service public class RsvpService {
 
     private final RsvpRepository rsvpRepository;
     private final AvailableRsvpCodeRepository availableRsvpCodeRepository;
@@ -34,8 +33,7 @@ public class RsvpService {
         return rsvpRepository.findByRsvpCode(rsvpCode).orElseThrow();
     }
 
-    @Transactional
-    public Rsvp createRsvp(AddRsvpDto input) {
+    @Transactional public Rsvp createRsvp(AddRsvpDto input) {
         if (!input.getRsvpCode().isEmpty() && rsvpRepository.existsById(input.getRsvpCode())) {
             throw new IndexNotFoundException("RSVP already exists");
         }
@@ -56,8 +54,9 @@ public class RsvpService {
         Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
 
         if (!rsvp.getLastNames().contains(input.getLastName())) {
-            throw new IndexNotFoundException(String.format("RSVP with code %s and last name %s not found",
-                    input.getRsvpCode(), input.getLastName()));
+            throw new IndexNotFoundException(
+                    String.format("RSVP with code %s and last name %s not found", input.getRsvpCode(),
+                                  input.getLastName()));
         }
 
         rsvp.setPrimaryContact(input.getPrimaryContact());
@@ -85,8 +84,7 @@ public class RsvpService {
         return availableRsvpCode == null ? "" : availableRsvpCode.getCode();
     }
 
-    @Transactional
-    public void delete(String rsvpCode) {
+    @Transactional public void delete(String rsvpCode) {
         rsvpRepository.deleteById(rsvpCode);
     }
 }

@@ -14,37 +14,32 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-@Configuration
-public class SecurityConfig {
+@Configuration public class SecurityConfig {
     private final UserRepository userRepository;
 
     public SecurityConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Bean
-    UserDetailsService userDetailsService() {
+    @Bean UserDetailsService userDetailsService() {
         return username -> {
-            User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User"
-                    + " not found"));
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User" + " not found"));
 
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                    List.of());
+                                                                          List.of());
         };
     }
 
-    @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    @Bean BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    @Bean public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    AuthenticationProvider authenticationProvider() {
+    @Bean AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService());

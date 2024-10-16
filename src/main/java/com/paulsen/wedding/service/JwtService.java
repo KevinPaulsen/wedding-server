@@ -15,13 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Service
-public class JwtService {
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
+@Service public class JwtService {
+    @Value("${security.jwt.secret-key}") private String secretKey;
 
-    @Value("${security.jwt.expiration-time}")
-    private long jwtExpiration;
+    @Value("${security.jwt.expiration-time}") private long jwtExpiration;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -41,7 +38,10 @@ public class JwtService {
     }
 
     private String buildToken(Map<String, Object> extraClaims, User userDetails) {
-        return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername()).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + jwtExpiration)).signWith(getSignInKey(), Jwts.SIG.HS256).compact();
+        return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSignInKey(), Jwts.SIG.HS256).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
