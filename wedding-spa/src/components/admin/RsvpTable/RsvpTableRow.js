@@ -27,7 +27,7 @@ const RsvpTableRow = ({rsvp}) => {
         <>
             {/* Main Row */}
             <tr onClick={toggleRowExpansion}>
-                <td>{rsvp.primaryContact.name}</td>
+                <td>{rsvp.primaryContact ? rsvp.primaryContact.name : rsvp.lastNames}</td>
                 <td>{rsvp.rsvpCode}</td>
                 <td>{rsvp.allowedGuestCount}</td>
                 <td>{rsvp.guestCount}</td>
