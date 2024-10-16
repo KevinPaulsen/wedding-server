@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
     }
 
     public void setRsvpCode(String rsvpCode) {
+        if (rsvpCode == null || rsvpCode.isEmpty()) {
+            throw new IllegalArgumentException("RSVP code cannot be empty");
+        }
+
         this.rsvpCode = rsvpCode;
     }
 
@@ -54,7 +58,9 @@ import java.util.stream.Collectors;
     public void setPrimaryContact(GuestInfo primaryContact) {
         this.primaryContact = primaryContact;
 
-        addName(primaryContact.name());
+        if (primaryContact != null) {
+            addName(primaryContact.name());
+        }
     }
 
     public List<String> getLastnames() {
@@ -62,6 +68,10 @@ import java.util.stream.Collectors;
     }
 
     public void setLastnames(List<String> lastnames) {
+        if (lastnames == null) {
+            lastnames = new ArrayList<>();
+        }
+
         if (this.lastnames == null) {
             this.lastnames = lastnames.stream().map(String::toLowerCase)
                     .collect(Collectors.toCollection(ArrayList::new));
@@ -79,6 +89,10 @@ import java.util.stream.Collectors;
     }
 
     public void setAllowedGuestCount(int allowedGuestCount) {
+        if (allowedGuestCount < 0) {
+            throw new IllegalArgumentException("Allowed guest count cannot be negative");
+        }
+
         this.allowedGuestCount = allowedGuestCount;
     }
 
@@ -87,6 +101,9 @@ import java.util.stream.Collectors;
     }
 
     public void setGuestCount(int guestCount) {
+        if (guestCount < 0) {
+            throw new IllegalArgumentException("Guest count cannot be negative");
+        }
         this.guestCount = guestCount;
     }
 
@@ -95,6 +112,10 @@ import java.util.stream.Collectors;
     }
 
     public void setRsvpGuestDetails(List<RsvpGuestDetails> rsvpGuestDetails) {
+        if (rsvpGuestDetails == null) {
+            rsvpGuestDetails = new ArrayList<>();
+        }
+
         this.rsvpGuestDetails = rsvpGuestDetails;
 
         for (RsvpGuestDetails rsvpGuestDetail : rsvpGuestDetails) {

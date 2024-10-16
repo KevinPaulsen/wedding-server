@@ -37,6 +37,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     implementation "mysql:mysql-connector-java:8.0.33"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

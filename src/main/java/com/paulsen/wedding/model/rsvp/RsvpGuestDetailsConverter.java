@@ -4,60 +4,119 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
 
-    @Override public AttributeValue convert(List<RsvpGuestDetails> object) {
-        List<AttributeValue> rsvpGuestDetailAttributes = new ArrayList<>();
-
-        for (RsvpGuestDetails rsvpGuestDetails : object) {
-            List<AttributeValue> dietaryAttributes = rsvpGuestDetails.dietaryRestrictions().stream()
-                    .map(restriction -> new AttributeValue().withS(restriction.name())).toList();
-
-            Map<String, AttributeValue> detailsMap = new HashMap<>();
-            detailsMap.put("name", new AttributeValue(rsvpGuestDetails.name()));
-            detailsMap.put("foodOption", new AttributeValue(
-                    Objects.requireNonNullElse(rsvpGuestDetails.foodOption(), FoodOption.DEFAULT).name()));
-            detailsMap.put("dietaryRestrictions", new AttributeValue().withL(dietaryAttributes));
-            detailsMap.put("other", new AttributeValue(rsvpGuestDetails.other()));
-
-            rsvpGuestDetailAttributes.add(new AttributeValue().withM(detailsMap));
-        }
+    @Override public AttributeValue convert(List<RsvpGuestDetails> allGuestDetails) {
+        // Use stream to transform each RsvpGuestDetails into an AttributeValue
+        List<AttributeValue> rsvpGuestDetailAttributes = allGuestDetails.stream()
+                .map(this::convertGuestDetailsToAttributeValue).collect(Collectors.toList());
 
         return new AttributeValue().withL(rsvpGuestDetailAttributes);
     }
 
-    // TODO: test this unconvert function
+    private AttributeValue convertGuestDetailsToAttributeValue(RsvpGuestDetails guestDetails) {
+        var nameAttribute = new AttributeValue(guestDetails.name());
+        var foodAttribute = new AttributeValue(Objects.requireNonNullElse(guestDetails.foodOption(), FoodOption.DEFAULT)
+                                                       .name());
+        var dietaryAttribute = new AttributeValue().withL(guestDetails.dietaryRestrictions().stream()
+                                                                  .map(restriction -> new AttributeValue().withS(
+                                                                          restriction.name())).toList());
+        var otherAttribute = new AttributeValue(guestDetails.other());
+
+        // Create a map with guest details as AttributeValue
+        var detailsMap = Map.of("name",
+                                nameAttribute,
+                                "foodOption",
+                                foodAttribute,
+                                "dietaryRestrictions",
+                                dietaryAttribute,
+                                "other",
+                                otherAttribute);
+
+        return new AttributeValue().withM(detailsMap);
+    }
+
     @Override public List<RsvpGuestDetails> unconvert(AttributeValue object) {
         List<RsvpGuestDetails> rsvpGuestDetails = new ArrayList<>();
         List<AttributeValue> rsvpDetails = object.getL();
 
         if (rsvpDetails == null) {
-            return null;
+            throw new IllegalArgumentException(
+                    "Input AttributeValue is improperly formatted: 'List' attribute is " + "null.");
         }
 
         for (AttributeValue rsvpDetail : rsvpDetails) {
             Map<String, AttributeValue> rsvpEntries = rsvpDetail.getM();
 
             if (rsvpEntries == null) {
-                continue;
+                throw new IllegalArgumentException(
+                        "Input AttributeValue is improperly formatted: 'Map' attribute is null.");
             }
 
-            // TODO: Make this null safe
-            String name = rsvpEntries.get("name").getS();
-            FoodOption foodOption = FoodOption.valueOf(rsvpEntries.get("foodOption").getS());
-            List<DietaryRestriction> dietaryRestrictions = rsvpEntries.get("dietaryRestrictions").getL().stream()
-                    .map(restriction -> DietaryRestriction.valueOf(restriction.getS())).toList();
-            String other = rsvpEntries.get("other").getS();
+            try {
+                // Null-safe retrieval of values with error handling
+                String name = getStringValue(rsvpEntries, "name", true);
+                FoodOption foodOption = getFoodOption(rsvpEntries);
+                List<DietaryRestriction> dietaryRestrictions = getDietaryRestrictionsList(rsvpEntries);
+                String other = getStringValue(rsvpEntries, "other", false);
 
-            rsvpGuestDetails.add(new RsvpGuestDetails(name, foodOption, dietaryRestrictions, other));
+                // Add the guest details to the list
+                rsvpGuestDetails.add(new RsvpGuestDetails(name, foodOption, dietaryRestrictions, other));
+
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error while parsing RSVP details: " + e.getMessage(), e);
+            }
         }
 
-
         return rsvpGuestDetails;
+    }
+
+    private String getStringValue(Map<String, AttributeValue> map, String key, boolean required) {
+        AttributeValue value = map.get(key);
+        if (value == null || value.getS() == null) {
+            if (required) {
+                throw new IllegalArgumentException("Missing required string value for key: " + key);
+            }
+            return null;
+        }
+        return value.getS();
+    }
+
+    private FoodOption getFoodOption(Map<String, AttributeValue> map) {
+        AttributeValue value = map.get("foodOption");
+        if (value == null || value.getS() == null) {
+            return FoodOption.DEFAULT;
+        }
+        try {
+            return FoodOption.valueOf(value.getS());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(
+                    "Invalid enum value for key: " + "foodOption" + ". Expected values are: " +
+                    Arrays.toString(FoodOption.values()));
+        }
+    }
+
+    private List<DietaryRestriction> getDietaryRestrictionsList(Map<String, AttributeValue> map) {
+        AttributeValue listValue = map.get("dietaryRestrictions");
+        if (listValue == null || listValue.getL() == null) {
+            return Collections.emptyList(); // Return an empty list if the value is missing
+        }
+        return listValue.getL().stream().map(attribute -> {
+            if (attribute.getS() == null) {
+                throw new IllegalArgumentException("Invalid value in list for key: " + "dietaryRestrictions");
+            }
+            try {
+                return Enum.valueOf(DietaryRestriction.class, attribute.getS());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid enum value in list for key: " + "dietaryRestrictions");
+            }
+        }).collect(Collectors.toList());
     }
 }

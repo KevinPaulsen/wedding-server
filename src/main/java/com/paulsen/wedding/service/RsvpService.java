@@ -45,10 +45,6 @@ import java.util.List;
     }
 
     @Transactional public Rsvp createRsvp(AddRsvpDto input) {
-        if (!input.getRsvpCode().isEmpty() && rsvpRepository.existsById(input.getRsvpCode())) {
-            throw new IndexNotFoundException("RSVP already exists");
-        }
-
         Rsvp rsvp = new Rsvp();
 
         rsvp.setRsvpCode(generateUniqueCode(input.getRsvpCode()));
@@ -58,10 +54,22 @@ import java.util.List;
         rsvp.setGuestCount(input.getGuestCount());
         rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
 
+        if (rsvpRepository.existsById(rsvp.getRsvpCode())) {
+            throw new IndexNotFoundException("RSVP already exists");
+        }
+
         return rsvpRepository.save(rsvp);
     }
 
     public Rsvp updateRsvp(PutRsvpDto input) {
+        if (input.getRsvpCode() == null || input.getRsvpCode().isEmpty()) {
+            throw new IllegalArgumentException("RSVP code is required");
+        }
+
+        if (input.getLastName() == null || input.getLastName().isEmpty()) {
+            throw new IllegalArgumentException("Lastname is required");
+        }
+
         Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
 
         if (!rsvp.getLastnames().contains(input.getLastName().toLowerCase())) {
