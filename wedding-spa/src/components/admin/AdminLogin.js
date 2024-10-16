@@ -2,9 +2,9 @@ import {useContext, useState} from 'react';
 import {AuthContext} from '../../auth/AuthContext';
 import {useNavigate} from 'react-router-dom';
 import useAuthRedirect from "../../hooks/useAuthRedirect";
-import {loginUser} from "../../services/authService";
 import FormInput from "../FormInput";
 import {Button, Form} from "react-bootstrap";
+import {adminLogin} from "../../services/ApiService";
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
@@ -22,7 +22,7 @@ function AdminLogin() {
         setLoading(true);
 
         try {
-            const data = await loginUser(username, password);
+            const data = await adminLogin(username, password);
             login(data.token); // Update auth state
             navigate('/admin/dashboard'); // Redirect using React Router
         } catch (err) {

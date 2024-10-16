@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {API_URL} from "../config";
+import {verifyToken} from "../services/ApiService";
 
 const useTokenVerification = (authToken) => {
     const [isValidToken, setIsValidToken] = useState(null);
@@ -12,22 +12,9 @@ const useTokenVerification = (authToken) => {
             }
 
             try {
-                // Verify token with the server
-                const response = await fetch(`${API_URL}/auth/verify-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
-
-                if (response.ok) {
-                    setIsValidToken(true);
-                } else {
-                    setIsValidToken(false);
-                }
-            } catch (error) {
-                console.error('Token verification failed:', error);
+                const isValid = await verifyToken(authToken);
+                setIsValidToken(isValid === true);
+            } catch (err) {
                 setIsValidToken(false);
             }
         };

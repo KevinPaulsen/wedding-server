@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {API_URL} from '../config';
+import {deleteRsvpRequest} from "../services/ApiService";
 
 export const useDeleteRsvp = () => {
     const [loading, setLoading] = useState(false);
@@ -8,30 +8,17 @@ export const useDeleteRsvp = () => {
     const deleteRsvp = async (rsvpCode) => {
         setLoading(true);
         setError(null);
+        let response = null;
 
         try {
-            const response = await fetch(`${API_URL}/rsvp/delete`, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(rsvpCode),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete RSVP');
-            }
-
+            response = await deleteRsvpRequest(rsvpCode);
+        } catch (err) {
+            setError(err.message);
+        } finally {
             setLoading(false);
-            return await response.json();
-        } catch (error) {
-            setLoading(false);
-            setError(error);
-            console.error('Error deleting RSVP:', error);
-            throw error;
         }
+
+        return response;
     };
 
     return {deleteRsvp, loading, error};

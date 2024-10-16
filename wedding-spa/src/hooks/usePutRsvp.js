@@ -1,17 +1,17 @@
 import {useState} from 'react';
-import {createRsvp} from "../services/ApiService";
+import {updateRsvp} from "../services/ApiService";
 
-export const useAddRsvp = () => {
+export const usePutRsvp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const addRsvp = async (rsvpData) => {
+    const putRsvp = async (rsvpData) => {
         setLoading(true);
         setError(null);
         let data = null;
 
         try {
-            data = await createRsvp(rsvpData);
+            data = await updateRsvp(rsvpData);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -21,5 +21,5 @@ export const useAddRsvp = () => {
         return data;
     };
 
-    return {addRsvp, loading, error};
+    return {putRsvp, loading, error};
 };

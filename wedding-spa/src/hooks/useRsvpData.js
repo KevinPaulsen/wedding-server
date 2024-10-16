@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {API_URL} from '../config';
+import {getRsvps} from "../services/ApiService";
 
 const useRsvpData = () => {
     const [data, setData] = useState([]);
@@ -11,27 +11,15 @@ const useRsvpData = () => {
 
         const fetchRsvpData = async () => {
             try {
-                const response = await fetch(`${API_URL}/rsvp/all`, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-                    },
-                    credentials: 'include',
-                });
+                const data = await getRsvps();
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json();
                 if (isMounted) {
-                    setData(result);
-                    setLoading(false);
+                    setData(data);
                 }
             } catch (err) {
-                if (isMounted) {
-                    setError(err.message);
-                    setLoading(false);
-                }
+                setError(err.message);
+            } finally {
+                setLoading(false);
             }
         };
 

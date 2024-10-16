@@ -1,0 +1,81 @@
+export const API_URL = 'https://api.KevinLovesOlivia.com';
+
+const request = async (endpoint, options = {}) => {
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, options);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('API Request Error:', error);
+        throw error;
+    }
+};
+
+export const createRsvp = (rsvpData) => {
+    return request('/rsvp/create', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(rsvpData),
+    });
+}
+
+export const deleteRsvpRequest = (rsvpCode) => {
+    return request('/rsvp/delete', {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(rsvpCode),
+    });
+}
+
+export const updateRsvp = (updateData) => {
+    return request('/update', {
+        method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(updateData),
+    });
+};
+
+export const verifyToken = (authToken) => {
+    return request('/auth/verify-token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authToken}`,
+        },
+    });
+}
+
+export const getRsvps = () => {
+    return request('/rsvp/all', {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+        },
+        credentials: 'include',
+    });
+}
+
+export const adminLogin = (username, password) => {
+    return request('/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({username, password}),
+    });
+}

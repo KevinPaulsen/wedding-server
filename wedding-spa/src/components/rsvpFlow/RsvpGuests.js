@@ -21,6 +21,7 @@ const RsvpGuests = ({changePage, returnPage}) => {
     const handleNext = () => {
         // TODO: Make at least one guest be required
         // TODO: Send in information
+
         resetFormData();
 
         if (returnPage === null) {
