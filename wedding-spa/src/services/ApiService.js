@@ -4,7 +4,9 @@ const request = async (endpoint, options = {}) => {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, options);
         if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            const errorData = await response.json();
+            const errorMessage = errorData.detail || 'An unknown error occurred';
+            throw new Error(errorMessage);
         }
         return await response.json();
     } catch (error) {
@@ -56,6 +58,18 @@ export const verifyToken = (authToken) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${authToken}`,
         },
+    });
+}
+
+export const getRsvpRequest = (rsvpCode, lastname) => {
+    const params = new URLSearchParams({ rsvpCode, lastname });
+
+    return request(`/rsvp/get?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
     });
 }
 

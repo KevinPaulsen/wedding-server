@@ -6,19 +6,32 @@ import {useFlow} from '../../FlowProvider';
 import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
 import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
+import {useGetRsvp} from "../../hooks/useGetRsvp";
 
 const RsvpInfo = ({changePage}) => {
     const {formData, setFormData} = useFlow();
+    const {getRsvp, loading, error} = useGetRsvp();
 
     const rsvpCodeInputRef = useRef();
     const lastNameInputRef = useRef();
 
-    const handleNext = () => {
+    const handleNext = async () => {
         const isCodeValid = rsvpCodeInputRef.current.validate();
         const isLastNameValid = lastNameInputRef.current.validate();
 
         if (isCodeValid && isLastNameValid) {
-            changePage(RSVP_PRIMARY_CONTACT_STEP)
+            const rsvp = await getRsvp(formData.rsvpCode, formData.lastName);
+
+            if (error === '') {
+                setFormData({
+                                ...formData,
+                                prefName: rsvp.primaryContact.name,
+                                prefEmail: rsvp.primaryContact.email,
+                                prefPhone: rsvp.primaryContact.phone,
+                                guests: rsvp.rsvpGuestDetails,
+                            });
+                changePage(RSVP_PRIMARY_CONTACT_STEP)
+            }
         }
     }
 
@@ -26,30 +39,31 @@ const RsvpInfo = ({changePage}) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     };
 
-    return (
-        <Form>
-            <CustomInputField
-                ref={rsvpCodeInputRef}
-                name="rsvpCode"
-                type="text"
-                placeholder="Enter your RSVP Code"
-                value={formData.rsvpCode}
-                onChange={handleChange}
-            />
-            <CustomInputField
-                ref={lastNameInputRef}
-                name="lastName"
-                type="text"
-                placeholder="Enter your Last Name"
-                value={formData.lastName}
-                onChange={handleChange}
-            />
+    return (<Form>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <CustomInputField
+                        ref={rsvpCodeInputRef}
+                        name="rsvpCode"
+                        type="text"
+                        placeholder="Enter your RSVP Code"
+                        value={formData.rsvpCode}
+                        onChange={handleChange}
+                />
+                <CustomInputField
+                        ref={lastNameInputRef}
+                        name="lastName"
+                        type="text"
+                        placeholder="Enter your Last Name"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                />
 
-            <div className="d-flex justify-content-evenly px-2">
-                <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
-            </div>
-        </Form>
-    );
+                <div className="d-flex justify-content-evenly px-2">
+                    <Button className='rsvp-button width-auto dark' onClick={handleNext}>
+                        {loading ? "Checking RSVP Info" : "Next"}
+                    </Button>
+                </div>
+            </Form>);
 };
 
 export default RsvpInfo;

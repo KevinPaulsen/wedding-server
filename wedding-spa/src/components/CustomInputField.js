@@ -29,7 +29,7 @@ const CustomInputField = forwardRef(({
 
     // Handle blur (user deselects input)
     const handleBlur = () => {
-        if (required && value.toString().trim() === '') {
+        if (required && (value === null || value.toString().trim() === '')) {
             setHasError(true);
         }
     };
@@ -37,7 +37,7 @@ const CustomInputField = forwardRef(({
     // Expose a validate method to parent components using ref
     useImperativeHandle(ref, () => ({
         validate: () => {
-            if (required && value.toString().trim() === '') {
+            if (required && (value === null || value.toString().trim() === '')) {
                 setHasError(true);
                 return false;
             }
