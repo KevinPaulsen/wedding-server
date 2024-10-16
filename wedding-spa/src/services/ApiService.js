@@ -43,7 +43,6 @@ export const updateRsvp = (updateData) => {
     return request('/update', {
         method: 'PUT',
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
             'Content-Type': 'application/json',
         },
         credentials: 'include',
