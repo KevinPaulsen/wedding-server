@@ -46,7 +46,7 @@ import java.util.List;
         return ResponseEntity.ok(rsvpService.allRsvps());
     }
 
-    @DeleteMapping("/delete") public ResponseEntity<Void> delete(@RequestBody String rsvpCode) {
+    @DeleteMapping("/delete") public ResponseEntity<Void> delete(@RequestParam String rsvpCode) {
         rsvpService.delete(rsvpCode);
 
         return ResponseEntity.noContent().build();
