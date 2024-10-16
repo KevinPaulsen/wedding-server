@@ -29,6 +29,17 @@ import java.util.List;
         return users;
     }
 
+    public Rsvp findMatchingRsvp(String rsvpCode, String lastname) {
+        Rsvp rsvp = rsvpRepository.findByRsvpCode(rsvpCode).orElse(null);
+
+        if (rsvp == null || !rsvp.getLastNames().contains(lastname)) {
+            throw new IndexNotFoundException(
+                    String.format("No RSVP found with code %s and lastname %s", rsvpCode, lastname));
+        }
+
+        return rsvp;
+    }
+
     public Rsvp findRsvpByRsvpCode(String rsvpCode) {
         return rsvpRepository.findByRsvpCode(rsvpCode).orElseThrow();
     }

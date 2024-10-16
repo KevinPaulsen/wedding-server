@@ -28,15 +28,15 @@ import java.util.List;
         return ResponseEntity.ok(addedRsvp);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
+    @PutMapping("/update") public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
         Rsvp rsvp = rsvpService.updateRsvp(putRsvpDto);
 
         return ResponseEntity.ok(rsvp);
     }
 
-    @GetMapping("/get") public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode) {
-        Rsvp rsvp = rsvpService.findRsvpByRsvpCode(rsvpCode);
+    @GetMapping("/get")
+    public ResponseEntity<Rsvp> authenticatedUser(@RequestBody String rsvpCode, @RequestBody String lastName) {
+        Rsvp rsvp = rsvpService.findMatchingRsvp(rsvpCode, lastName);
 
         return ResponseEntity.ok(rsvp);
     }
