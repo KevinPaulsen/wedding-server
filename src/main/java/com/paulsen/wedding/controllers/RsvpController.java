@@ -28,7 +28,8 @@ import java.util.List;
         return ResponseEntity.ok(addedRsvp);
     }
 
-    @PutMapping public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
+    @PutMapping("/update")
+    public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
         Rsvp rsvp = rsvpService.updateRsvp(putRsvpDto);
 
         return ResponseEntity.ok(rsvp);
