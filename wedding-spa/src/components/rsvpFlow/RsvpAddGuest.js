@@ -66,11 +66,12 @@ const RsvpAddGuest = ({ changePage, requireAnswers }) => {
 
         if (guestNameValid) {
             setFormData((prevData) => {
-                const updatedGuests = editingGuest
-                    ? prevData.guests.map((guest, idx) =>
-                        idx === editingGuest.index ? newGuest : guest
-                    )
-                    : [...(prevData.guests || []), newGuest];
+                let updatedGuests;
+                if (editingGuest && editingGuest.index) {
+                    updatedGuests = prevData.guests.map((guest, idx) => idx === editingGuest.index ? newGuest : guest);
+                } else {
+                    updatedGuests = [...(prevData.guests || []), newGuest];
+                }
 
                 return {...prevData, guests: updatedGuests};
             });

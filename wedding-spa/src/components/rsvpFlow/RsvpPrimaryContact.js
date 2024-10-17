@@ -6,9 +6,10 @@ import {useFlow} from '../../FlowProvider';
 import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
 import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
+import {RSVP_ADD_GUEST_STEP} from "./RsvpAddGuest";
 
 const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
-    const {formData, setFormData} = useFlow();
+    const {formData, setFormData, setEditingGuest} = useFlow();
 
     const prefNameRef = useRef();
     const prefEmailRef = useRef();
@@ -24,7 +25,19 @@ const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
         const isPhoneValid = prefPhoneRef.current.validate();
 
         if (isCodeValid && isEmailValid && isPhoneValid) {
-            changePage(RSVP_GUESTS_PAGE);
+            console.log(formData.guests);
+            console.log(formData.guests && formData.guests.length === 0);
+            if (formData.guests && formData.guests.length === 0) {
+                setEditingGuest({
+                                    "name": formData.prefName,
+                                    "foodOption": "",
+                                    "dietaryRestrictions": [],
+                                    "other": "",
+                });
+                changePage(RSVP_ADD_GUEST_STEP);
+            } else {
+                changePage(RSVP_GUESTS_PAGE);
+            }
         }
     }
 
