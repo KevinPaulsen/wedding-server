@@ -31,7 +31,7 @@ const RsvpGuests = ({changePage, returnPage}) => {
                 phoneNumber: formData.prefPhone,
             },
             rsvpGuestDetails: formData.guests.map((guest) => ({
-                name: guest.fName + " " + guest.lName,
+                name: guest.name,
                 dietaryRestrictions: guest.dietaryRestrictions,
                 other: guest.other,
             })),
@@ -91,7 +91,7 @@ const RsvpGuests = ({changePage, returnPage}) => {
                                                 style={{cursor: "pointer"}}
                                         >
                                             <td className="align-middle">
-                                                {guest.fName + " " + guest.lName}
+                                                {guest.name}
                                             </td>
                                             <td className="align-middle">
                                                 {guest.dietaryRestrictions.map((restriction, idx) => (<span key={idx}>

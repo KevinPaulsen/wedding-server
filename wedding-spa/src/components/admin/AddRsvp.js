@@ -27,10 +27,10 @@ const AddRsvp = () => {
     };
 
     const handleAddGuest = async () => {
-        const fNameValid = nameRef.current.validate();
+        const nameValid = nameRef.current.validate();
         const guestCountValid = allowedGuestsRef.current.validate();
 
-        if (fNameValid && guestCountValid) {
+        if (nameValid && guestCountValid) {
             try {
                 const formattedRsvpData = {
                     rsvpCode: "",

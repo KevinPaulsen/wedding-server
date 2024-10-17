@@ -9,13 +9,11 @@ import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
 
 const RsvpAddGuest = ({ changePage, requireAnswers }) => {
     const {setFormData, editingGuest, setEditingGuest} = useFlow();
-    const guestFName = useRef();
-    const guestLName = useRef();
+    const guestName = useRef();
     const other = useRef();
 
     const [newGuest, setNewGuest] = useState({
-        "fName": "",
-        "lName": "",
+        "name": "",
         "foodOption": "",
         "dietaryRestrictions": [],
         "other": "",
@@ -64,10 +62,9 @@ const RsvpAddGuest = ({ changePage, requireAnswers }) => {
     }
 
     const handleAddGuest = () => {
-        const guestNameValid = guestFName.current.validate();
-        const guestLNameValid = guestLName.current.validate();
+        const guestNameValid = guestName.current.validate();
 
-        if (guestNameValid && guestLNameValid) {
+        if (guestNameValid) {
             setFormData((prevData) => {
                 const updatedGuests = editingGuest
                     ? prevData.guests.map((guest, idx) =>
@@ -87,20 +84,11 @@ const RsvpAddGuest = ({ changePage, requireAnswers }) => {
     return (
         <Form>
             <CustomInputField
-                ref={guestFName}
-                name="fName"
+                ref={guestName}
+                name="name"
                 type="text"
-                placeholder="First Name"
-                value={newGuest.fName}
-                onChange={handleChange}
-                required={requireAnswers}
-            />
-            <CustomInputField
-                ref={guestLName}
-                name="lName"
-                type="text"
-                placeholder="Last Name"
-                value={newGuest.lName}
+                placeholder="Guest full name"
+                value={newGuest.name}
                 onChange={handleChange}
                 required={requireAnswers}
             />
