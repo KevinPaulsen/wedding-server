@@ -23,7 +23,7 @@ const RsvpInfo = ({changePage}) => {
         if (isCodeValid && isLastNameValid) {
             const rsvp = await getRsvp(formData.rsvpCode, formData.lastName);
 
-            if (error !== '') {
+            if (!error) {
                 setFormData({
                                 ...formData,
                                 prefName: rsvp.primaryContact.name,

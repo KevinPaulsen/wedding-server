@@ -6,7 +6,6 @@ import {useFlow} from '../../FlowProvider';
 import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
 import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
-import {RSVP_INFO_STEP} from "./RsvpInfo";
 
 const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
     const {formData, setFormData} = useFlow();
@@ -18,10 +17,6 @@ const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     };
-
-    const handleBack = () => {
-        changePage(RSVP_INFO_STEP)
-    }
 
     const handleNext = () => {
         const isCodeValid = prefNameRef.current.validate();
@@ -64,7 +59,6 @@ const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
             />
 
             <div className="d-flex justify-content-evenly px-2">
-                <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
                 <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
             </div>
         </Form>
