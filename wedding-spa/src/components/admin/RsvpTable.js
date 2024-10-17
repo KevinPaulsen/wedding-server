@@ -8,7 +8,7 @@ import RsvpTableRow from "./RsvpTable/RsvpTableRow";
 import '../../styles/Table.css'
 
 const RsvpTable = () => {
-    const {data, loading, error} = useRsvpData();
+    const {removeRsvp, data, loading, error} = useRsvpData();
 
 
     return (
@@ -27,7 +27,7 @@ const RsvpTable = () => {
                     </thead>
                     <tbody>
                     {data.map((rsvp, index) => (
-                        <RsvpTableRow key={index} rsvp={rsvp}/>
+                        <RsvpTableRow key={index} rsvp={rsvp} handleDelete={removeRsvp}/>
                     ))}
                     </tbody>
                 </Table>

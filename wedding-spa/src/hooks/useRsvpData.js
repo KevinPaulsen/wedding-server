@@ -30,7 +30,11 @@ const useRsvpData = () => {
         };
     }, []);
 
-    return {data, loading, error};
+    const removeRsvp = (rsvpCode) => {
+        setData(prevData => prevData.filter(rsvp => rsvp.rsvpCode !== rsvpCode));
+    }
+
+    return {removeRsvp, data, loading, error};
 };
 
 export default useRsvpData;

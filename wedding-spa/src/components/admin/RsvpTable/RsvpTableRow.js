@@ -7,7 +7,7 @@ import {useDeleteRsvp} from "../../../hooks/useDeleteRsvp";
 import LoadingSpinner from "../LoadingSpinner";
 import RsvpInfoCard from "./RsvpInfoCard";
 
-const RsvpTableRow = ({rsvp}) => {
+const RsvpTableRow = ({rsvp, handleDelete}) => {
     const {deleteRsvp, loading, error} = useDeleteRsvp();
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -16,10 +16,10 @@ const RsvpTableRow = ({rsvp}) => {
     };
 
     const handleDeleteGuest = async (rsvpCode) => {
-        try {
-            await deleteRsvp(rsvpCode);
-        } catch (error) {
-            console.error('Failed to delete RSVP:', error);
+        await deleteRsvp(rsvpCode);
+
+        if (!error) {
+            handleDelete(rsvpCode);
         }
     };
 
@@ -35,7 +35,10 @@ const RsvpTableRow = ({rsvp}) => {
                     {loading ? <LoadingSpinner /> : <Button
                         variant="link"
                         className="p-0"
-                        onClick={() => handleDeleteGuest(rsvp.rsvpCode)}>
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteGuest(rsvp.rsvpCode);
+                        }}>
                         <FaTrash size={20} color="var(--main-dark)"/>
                     </Button>
                     }

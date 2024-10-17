@@ -28,19 +28,19 @@ export const createRsvp = (rsvpData) => {
 }
 
 export const deleteRsvpRequest = (rsvpCode) => {
-    return request('/rsvp/delete', {
+    const params = new URLSearchParams({ rsvpCode });
+
+    return request(`/rsvp/delete?${params}`, {
         method: 'DELETE',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
             'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(rsvpCode),
     });
 }
 
 export const updateRsvp = (updateData) => {
-    console.log(updateData);
     return request('/rsvp/update', {
         method: 'PUT',
         headers: {
