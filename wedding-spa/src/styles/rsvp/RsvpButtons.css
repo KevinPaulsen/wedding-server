@@ -19,6 +19,15 @@
     border: 2px solid var(--main-dark);
 }
 
+/* Disable focus and hover on mobile */
+@media (hover: none) {
+    .rsvp-button.dark.wire:hover,
+    .rsvp-button.dark.wire:focus {
+        background: none;
+        color: var(--main-dark);
+    }
+
+}
 .rsvp-button.dark.wire:hover {
     background-color: initial;
     box-shadow: none;
@@ -62,4 +71,6 @@
 
 .rsvp-button:focus,
 .rsvp-button:active {
+    outline: none;
+    box-shadow: none;
 }
