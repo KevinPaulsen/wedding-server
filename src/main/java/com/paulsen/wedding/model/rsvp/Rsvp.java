@@ -22,10 +22,13 @@ import java.util.Set;
     private GuestInfo primaryContact;
 
     @DynamoDBAttribute(attributeName="allowed_guest_count")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private Integer allowedGuestCount;
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private int allowedGuestCount;
 
     @DynamoDBAttribute(attributeName="rsvp_details") @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
     private List<RsvpGuestDetails> rsvpGuestDetails;
+
+    @DynamoDBAttribute(attributeName="rsvp_status") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+    private RsvpStatus rsvpStatus;
 
     private final Set<String> names;
 
@@ -57,8 +60,7 @@ import java.util.Set;
         }
     }
 
-    @DynamoDBAttribute(attributeName="last_names")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
+    @DynamoDBAttribute(attributeName="last_names") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
     public List<String> getLastnames() {
         List<String> lastnames = new ArrayList<>();
 
@@ -71,6 +73,14 @@ import java.util.Set;
         }
 
         return lastnames;
+    }
+
+    public RsvpStatus getRsvpStatus() {
+        return Objects.requireNonNullElse(rsvpStatus, RsvpStatus.PENDING);
+    }
+
+    public void setRsvpStatus(RsvpStatus rsvpStatus) {
+        this.rsvpStatus = rsvpStatus;
     }
 
     private static String extractLastName(String name) {
@@ -95,8 +105,7 @@ import java.util.Set;
         this.allowedGuestCount = allowedGuestCount;
     }
 
-    @DynamoDBAttribute(attributeName="guest_count")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
+    @DynamoDBAttribute(attributeName="guest_count") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
     public int getGuestCount() {
         return (rsvpGuestDetails != null) ? rsvpGuestDetails.size() : 0;
     }
@@ -127,19 +136,19 @@ import java.util.Set;
             return false;
         }
 
-        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() && getGuestCount() == rsvp.getGuestCount() &&
-               getRsvpCode().equals(rsvp.getRsvpCode()) && getPrimaryContact().equals(rsvp.getPrimaryContact()) &&
-               getLastnames().equals(rsvp.getLastnames()) &&
-               Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails());
+        return getAllowedGuestCount() == rsvp.getAllowedGuestCount() &&
+               Objects.equals(getRsvpCode(), rsvp.getRsvpCode()) &&
+               Objects.equals(getPrimaryContact(), rsvp.getPrimaryContact()) &&
+               Objects.equals(getRsvpGuestDetails(), rsvp.getRsvpGuestDetails()) &&
+               getRsvpStatus() == rsvp.getRsvpStatus();
     }
 
     @Override public int hashCode() {
-        int result = getRsvpCode().hashCode();
-        result = 31 * result + getPrimaryContact().hashCode();
-        result = 31 * result + getLastnames().hashCode();
+        int result = Objects.hashCode(getRsvpCode());
+        result = 31 * result + Objects.hashCode(getPrimaryContact());
         result = 31 * result + getAllowedGuestCount();
-        result = 31 * result + getGuestCount();
         result = 31 * result + Objects.hashCode(getRsvpGuestDetails());
+        result = 31 * result + Objects.hashCode(getRsvpStatus());
         return result;
     }
 }

@@ -48,6 +48,7 @@ import java.util.List;
         Rsvp rsvp = new Rsvp();
 
         rsvp.setRsvpCode(generateUniqueCode(input.getRsvpCode()));
+        rsvp.setRsvpStatus(input.getRsvpStatus());
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setAllowedGuestCount(input.getAllowedGuestCount());
         rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
@@ -76,6 +77,7 @@ import java.util.List;
                                   input.getLastName()));
         }
 
+        rsvp.setRsvpStatus(input.getRsvpStatus());
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
 

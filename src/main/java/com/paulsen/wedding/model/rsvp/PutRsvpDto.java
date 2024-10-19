@@ -6,6 +6,8 @@ public class PutRsvpDto {
     private String rsvpCode;
     private String lastName;
 
+    private RsvpStatus rsvpStatus;
+
     private GuestInfo primaryContact;
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
@@ -23,6 +25,14 @@ public class PutRsvpDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public RsvpStatus getRsvpStatus() {
+        return rsvpStatus;
+    }
+
+    public void setRsvpStatus(RsvpStatus rsvpStatus) {
+        this.rsvpStatus = rsvpStatus;
     }
 
     public GuestInfo getPrimaryContact() {

@@ -5,6 +5,7 @@ import java.util.List;
 public class AddRsvpDto {
 
     private String rsvpCode;
+    private RsvpStatus rsvpStatus;
     private GuestInfo primaryContact;
     private int allowedGuestCount;
     private int guestCount;
@@ -16,6 +17,14 @@ public class AddRsvpDto {
 
     public void setRsvpCode(String rsvpCode) {
         this.rsvpCode = rsvpCode;
+    }
+
+    public RsvpStatus getRsvpStatus() {
+        return rsvpStatus;
+    }
+
+    public void setRsvpStatus(RsvpStatus rsvpStatus) {
+        this.rsvpStatus = rsvpStatus;
     }
 
     public GuestInfo getPrimaryContact() {
