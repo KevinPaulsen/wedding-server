@@ -6,7 +6,6 @@ public class AddRsvpDto {
 
     private String rsvpCode;
     private GuestInfo primaryContact;
-    private List<String> lastNames;
     private int allowedGuestCount;
     private int guestCount;
     private List<RsvpGuestDetails> rsvpGuestDetails;
@@ -25,14 +24,6 @@ public class AddRsvpDto {
 
     public void setPrimaryContact(GuestInfo primaryContact) {
         this.primaryContact = primaryContact;
-    }
-
-    public List<String> getLastNames() {
-        return lastNames;
-    }
-
-    public void setLastNames(List<String> lastNames) {
-        this.lastNames = lastNames;
     }
 
     public int getAllowedGuestCount() {

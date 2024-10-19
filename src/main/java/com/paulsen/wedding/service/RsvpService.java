@@ -48,10 +48,8 @@ import java.util.List;
         Rsvp rsvp = new Rsvp();
 
         rsvp.setRsvpCode(generateUniqueCode(input.getRsvpCode()));
-        rsvp.setLastnames(input.getLastNames());
         rsvp.setPrimaryContact(input.getPrimaryContact());
         rsvp.setAllowedGuestCount(input.getAllowedGuestCount());
-        rsvp.setGuestCount(input.getGuestCount());
         rsvp.setRsvpGuestDetails(input.getRsvpGuestDetails());
 
         if (rsvpRepository.existsById(rsvp.getRsvpCode())) {

@@ -8,9 +8,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @DynamoDBTable(tableName="wedding_rsvps") public class Rsvp {
 
@@ -20,23 +21,16 @@ import java.util.stream.Collectors;
     @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
-    @DynamoDBAttribute(attributeName="last_names") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
-    private List<String> lastnames;
-
     @DynamoDBAttribute(attributeName="allowed_guest_count")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private Integer allowedGuestCount;
-
-    @DynamoDBAttribute(attributeName="guest_count") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
-    private Integer guestCount;
 
     @DynamoDBAttribute(attributeName="rsvp_details") @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
-    private static String extractLastName(String name) {
-        name = name.strip();
-        String[] nameArray = name.split("\\s+");
+    private final Set<String> names;
 
-        return nameArray.length > 1 ? nameArray[nameArray.length - 1] : null;
+    public Rsvp() {
+        this.names = new HashSet<>();
     }
 
     public String getRsvpCode() {
@@ -59,28 +53,33 @@ import java.util.stream.Collectors;
         this.primaryContact = primaryContact;
 
         if (primaryContact != null) {
-            addName(primaryContact.name());
+            names.add(primaryContact.name());
         }
     }
 
+    @DynamoDBAttribute(attributeName="last_names")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
     public List<String> getLastnames() {
+        List<String> lastnames = new ArrayList<>();
+
+        for (String name : names) {
+            String lastName = extractLastName(name);
+
+            if (!lastName.isEmpty()) {
+                lastnames.add(lastName);
+            }
+        }
+
         return lastnames;
     }
 
-    public void setLastnames(List<String> lastnames) {
-        if (lastnames == null) {
-            lastnames = new ArrayList<>();
-        }
+    private static String extractLastName(String name) {
+        String[] names = name.strip().split("\\s+", 2);
 
-        if (this.lastnames == null) {
-            this.lastnames = lastnames.stream().map(String::toLowerCase)
-                    .collect(Collectors.toCollection(ArrayList::new));
+        if (names.length == 1) {
+            return "";
         } else {
-            for (String lastName : lastnames) {
-                if (!this.lastnames.contains(lastName.toLowerCase())) {
-                    this.lastnames.add(lastName.toLowerCase());
-                }
-            }
+            return names[1].toLowerCase();
         }
     }
 
@@ -96,15 +95,10 @@ import java.util.stream.Collectors;
         this.allowedGuestCount = allowedGuestCount;
     }
 
+    @DynamoDBAttribute(attributeName="guest_count")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
     public int getGuestCount() {
-        return guestCount;
-    }
-
-    public void setGuestCount(int guestCount) {
-        if (guestCount < 0) {
-            throw new IllegalArgumentException("Guest count cannot be negative");
-        }
-        this.guestCount = guestCount;
+        return (rsvpGuestDetails != null) ? rsvpGuestDetails.size() : 0;
     }
 
     public List<RsvpGuestDetails> getRsvpGuestDetails() {
@@ -119,7 +113,9 @@ import java.util.stream.Collectors;
         this.rsvpGuestDetails = rsvpGuestDetails;
 
         for (RsvpGuestDetails rsvpGuestDetail : rsvpGuestDetails) {
-            addName(rsvpGuestDetail.name());
+            if (rsvpGuestDetail != null && rsvpGuestDetail.name() != null) {
+                names.add(rsvpGuestDetail.name());
+            }
         }
     }
 
@@ -145,21 +141,5 @@ import java.util.stream.Collectors;
         result = 31 * result + getGuestCount();
         result = 31 * result + Objects.hashCode(getRsvpGuestDetails());
         return result;
-    }
-
-    private void addName(String name) {
-        String lastName = extractLastName(name);
-
-        if (lastName == null) {
-            return;
-        }
-
-        if (lastnames == null) {
-            lastnames = new ArrayList<>();
-        }
-
-        if (!lastnames.contains(lastName.toLowerCase())) {
-            lastnames.add(lastName.toLowerCase());
-        }
     }
 }
