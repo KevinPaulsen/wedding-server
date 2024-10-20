@@ -16,6 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test public void get() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/users/me").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+           .andExpect(status().isForbidden());
     }
 }

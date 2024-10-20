@@ -20,19 +20,15 @@ import static org.mockito.Mockito.when;
 
 class RsvpControllerTest {
 
-    @Mock
-    private RsvpService rsvpService;
+    @Mock private RsvpService rsvpService;
 
-    @InjectMocks
-    private RsvpController rsvpController;
+    @InjectMocks private RsvpController rsvpController;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeEach void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testRegister() {
+    @Test void testRegister() {
         AddRsvpDto addRsvpDto = new AddRsvpDto();
         Rsvp mockRsvp = new Rsvp();
         when(rsvpService.createRsvp(any(AddRsvpDto.class))).thenReturn(mockRsvp);
@@ -43,8 +39,7 @@ class RsvpControllerTest {
         assertEquals(mockRsvp, response.getBody());
     }
 
-    @Test
-    void testUpdate() {
+    @Test void testUpdate() {
         PutRsvpDto putRsvpDto = new PutRsvpDto();
         Rsvp mockRsvp = new Rsvp();
         when(rsvpService.updateRsvp(any(PutRsvpDto.class))).thenReturn(mockRsvp);
@@ -55,8 +50,7 @@ class RsvpControllerTest {
         assertEquals(mockRsvp, response.getBody());
     }
 
-    @Test
-    void testAuthenticatedUser() {
+    @Test void testAuthenticatedUser() {
         String rsvpCode = "testCode";
         String lastname = "Doe";
         Rsvp mockRsvp = new Rsvp();
@@ -68,8 +62,7 @@ class RsvpControllerTest {
         assertEquals(mockRsvp, response.getBody());
     }
 
-    @Test
-    void testGetAllRsvps() {
+    @Test void testGetAllRsvps() {
         List<Rsvp> mockRsvpList = new ArrayList<>();
         when(rsvpService.allRsvps()).thenReturn(mockRsvpList);
 
@@ -79,8 +72,7 @@ class RsvpControllerTest {
         assertEquals(mockRsvpList, response.getBody());
     }
 
-    @Test
-    void testDelete() {
+    @Test void testDelete() {
         String rsvpCode = "testCode";
 
         ResponseEntity<Void> response = rsvpController.delete(rsvpCode);

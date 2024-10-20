@@ -24,9 +24,10 @@ import java.util.List;
     @Bean UserDetailsService userDetailsService() {
         return username -> {
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User" + " not found"));
+                                      .orElseThrow(() -> new UsernameNotFoundException("User" + " not found"));
 
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+            return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                                                                          user.getPassword(),
                                                                           List.of());
         };
     }

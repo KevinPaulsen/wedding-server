@@ -9,13 +9,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
     private static final String[] allowedOrigins = {
             "http://localhost:3000",
             "https://kevinlovesolivia.com",
-            "https" + "://api.kevinlovesolivia.com",
+            "https://api.kevinlovesolivia.com",
             "https://www.kevinlovesolivia.com",
             "https://www.api.kevinlovesolivia.com"
     };
 
     @Override public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(allowedOrigins).allowCredentials(true)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").allowedHeaders("*");
+        registry.addMapping("/**")
+                .allowedOrigins(allowedOrigins)
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*");
     }
 }

@@ -32,16 +32,16 @@ public class AddRsvpDto {
         return primaryContact;
     }
 
+    public void setPrimaryContact(GuestInfo primaryContact) {
+        this.primaryContact = primaryContact;
+    }
+
     public Set<String> getLastnames() {
         return lastnames;
     }
 
     public void setLastnames(Set<String> lastnames) {
         this.lastnames = lastnames;
-    }
-
-    public void setPrimaryContact(GuestInfo primaryContact) {
-        this.primaryContact = primaryContact;
     }
 
     public int getAllowedGuestCount() {

@@ -8,9 +8,13 @@ import java.util.Objects;
 public class GuestInfoConverter implements DynamoDBTypeConverter<Map<String, String>, GuestInfo> {
 
     @Override public Map<String, String> convert(GuestInfo guestInfo) {
-        return Map.of("name", Objects.requireNonNullElse(guestInfo.name(), ""), "email",
-                      Objects.requireNonNullElse(guestInfo.email(), ""), "phoneNumber",
-                      Objects.requireNonNullElse(guestInfo.phoneNumber(), ""), "address",
+        return Map.of("name",
+                      Objects.requireNonNullElse(guestInfo.name(), ""),
+                      "email",
+                      Objects.requireNonNullElse(guestInfo.email(), ""),
+                      "phoneNumber",
+                      Objects.requireNonNullElse(guestInfo.phoneNumber(), ""),
+                      "address",
                       Objects.requireNonNullElse(guestInfo.address(), ""));
     }
 

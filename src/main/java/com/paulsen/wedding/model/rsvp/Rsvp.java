@@ -16,15 +16,12 @@ import java.util.Set;
 
 @DynamoDBTable(tableName="wedding_rsvps") public class Rsvp {
 
-    @DynamoDBHashKey(attributeName="rsvp_code") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
-    private String rsvpCode;
-
-    @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
-    private GuestInfo primaryContact;
-
     @DynamoDBAttribute(attributeName="lastnames") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.SS)
     private final Set<String> lastnames;
-
+    @DynamoDBHashKey(attributeName="rsvp_code") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+    private String rsvpCode;
+    @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
+    private GuestInfo primaryContact;
     @DynamoDBAttribute(attributeName="allowed_guest_count")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private int allowedGuestCount;
 
@@ -36,6 +33,20 @@ import java.util.Set;
 
     public Rsvp() {
         this.lastnames = new HashSet<>();
+    }
+
+    private static String formatName(String name) {
+        return name.strip().toLowerCase().replaceAll("[^a-z]", "*");
+    }
+
+    private static String extractLastName(String name) {
+        String[] names = name.strip().split("\\s+", 2);
+
+        if (names.length == 1) {
+            return "";
+        } else {
+            return formatName(names[1]);
+        }
     }
 
     public String getRsvpCode() {
@@ -87,22 +98,7 @@ import java.util.Set;
         this.rsvpStatus = Objects.requireNonNullElse(rsvpStatus, RsvpStatus.PENDING);
     }
 
-    private static String formatName(String name) {
-        return name.strip().toLowerCase().replaceAll("[^a-z]", "*");
-    }
-
-    private static String extractLastName(String name) {
-        String[] names = name.strip().split("\\s+", 2);
-
-        if (names.length == 1) {
-            return "";
-        } else {
-            return formatName(names[1]);
-        }
-    }
-
-    @DynamoDBIgnore
-    public boolean hasLastname(String lastname) {
+    @DynamoDBIgnore public boolean hasLastname(String lastname) {
         return lastnames.contains(formatName(lastname));
     }
 

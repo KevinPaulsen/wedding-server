@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
     }
 
     public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUsername(),
+                                                                                   input.getPassword()));
 
         return userRepository.findByUsername(input.getUsername()).orElseThrow();
     }

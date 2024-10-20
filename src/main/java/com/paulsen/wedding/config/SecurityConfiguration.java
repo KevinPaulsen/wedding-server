@@ -25,12 +25,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     }
 
     @Bean public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(corsConfigurer -> corsConfigurer.configure(http)).csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(AUTHORIZED_ENDPOINTS).permitAll().anyRequest().authenticated())
-                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors(corsConfigurer -> corsConfigurer.configure(http))
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.requestMatchers(AUTHORIZED_ENDPOINTS)
+                                               .permitAll()
+                                               .anyRequest()
+                                               .authenticated())
+            .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
