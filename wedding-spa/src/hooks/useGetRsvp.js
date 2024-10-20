@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {createRsvp, getRsvpRequest} from "../services/ApiService";
+import {getRsvpRequest} from "../services/ApiService";
 
 export const useGetRsvp = () => {
     const [loading, setLoading] = useState(false);

@@ -41,30 +41,30 @@ const RsvpInfo = ({changePage}) => {
     };
 
     return (<Form>
-                {error && <div className="alert alert-danger">{error}</div>}
-                <CustomInputField
-                        ref={rsvpCodeInputRef}
-                        name="rsvpCode"
-                        type="text"
-                        placeholder="Enter your RSVP Code"
-                        value={formData.rsvpCode}
-                        onChange={handleChange}
-                />
-                <CustomInputField
-                        ref={lastNameInputRef}
-                        name="lastName"
-                        type="text"
-                        placeholder="Enter your Last Name"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                />
+        {error && <div className="alert alert-danger">{error}</div>}
+        <CustomInputField
+                ref={rsvpCodeInputRef}
+                name="rsvpCode"
+                type="text"
+                placeholder="Enter your RSVP Code"
+                value={formData.rsvpCode}
+                onChange={handleChange}
+        />
+        <CustomInputField
+                ref={lastNameInputRef}
+                name="lastName"
+                type="text"
+                placeholder="Enter your Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+        />
 
-                <div className="d-flex justify-content-evenly px-2">
-                    <Button className='rsvp-button width-auto dark' onClick={handleNext}>
-                        {loading ? "Checking RSVP Info" : "Next"}
-                    </Button>
-                </div>
-            </Form>);
+        <div className="d-flex justify-content-evenly px-2">
+            <Button className='rsvp-button width-auto dark' onClick={handleNext}>
+                {loading ? "Checking RSVP Info" : "Next"}
+            </Button>
+        </div>
+    </Form>);
 };
 
 export default RsvpInfo;

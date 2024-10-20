@@ -20,15 +20,11 @@ function PrivateRoute({component}) {
 
     // While checking the token, we can show a loading spinner or return null
     if (isValidToken === null) {
-        return (
-            <AdminLayout children={
-                <div className="d-flex justify-content-center">
+        return (<AdminLayout children={<div className="d-flex justify-content-center">
                     <Spinner animation="border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
-                </div>
-            }/>
-        );
+                </div>}/>);
     }
 
     return component;

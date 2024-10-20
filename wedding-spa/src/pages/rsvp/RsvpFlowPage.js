@@ -25,39 +25,37 @@ const RsvpFlow = () => {
         setInProp(true);
     };
 
-    return (
-        <Container fluid className="d-flex flex-column vh-100" style={{backgroundColor: 'var(--main-light)'}}>
-            <Row className='g-0 mt-5 text-center align-items-center'>
-                <Col>
-                    <Title link={false}/>
-                </Col>
-            </Row>
-
-            <Row className="flex-grow-1 align-items-center justify-content-center text-center">
-                <Col className="col-12">
-                    <CSSTransition
-                        in={inProp}
-                        timeout={200}
-                        classNames="fade"
-                        onExited={onExited}
-                        unmountOnExit
-                    >
-                        <RSVPFormStep
-                            step={displayedStep}
-                            changePage={changePage}
-                        />
-                    </CSSTransition>
-                </Col>
-            </Row>
-
-            <Row style={{height: '75px'}} className='pb-3 pt-2 text-center justify-content-center align-items-center'>
-                {currentStep !== RSVP_CONFIRMATION_STEP &&
+    return (<Container fluid className="d-flex flex-column vh-100" style={{backgroundColor: 'var(--main-light)'}}>
+                <Row className='g-0 mt-5 text-center align-items-center'>
                     <Col>
+                        <Title link={false}/>
+                    </Col>
+                </Row>
+
+                <Row className="flex-grow-1 align-items-center justify-content-center text-center">
+                    <Col className="col-12">
+                        <CSSTransition
+                                in={inProp}
+                                timeout={200}
+                                classNames="fade"
+                                onExited={onExited}
+                                unmountOnExit
+                        >
+                            <RSVPFormStep
+                                    step={displayedStep}
+                                    changePage={changePage}
+                            />
+                        </CSSTransition>
+                    </Col>
+                </Row>
+
+                <Row style={{height: '75px'}}
+                     className='pb-3 pt-2 text-center justify-content-center align-items-center'>
+                    {currentStep !== RSVP_CONFIRMATION_STEP && <Col>
                         <CancelButton route="/"/>
                     </Col>}
-            </Row>
-        </Container>
-    );
+                </Row>
+            </Container>);
 };
 
 export default RsvpFlow;

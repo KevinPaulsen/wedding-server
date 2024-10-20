@@ -9,11 +9,9 @@ const Schedule = () => {
         {header: '8:00 PM', body: 'Dance'},
     ];
 
-    return (
-        <div className="bg-dark text-white py-5">
-            <InfoContainer title={"Schedule"} elements={schedule}/>
-        </div>
-    );
+    return (<div className="bg-dark text-white py-5">
+                <InfoContainer title={"Schedule"} elements={schedule}/>
+            </div>);
 };
 
 export default Schedule;

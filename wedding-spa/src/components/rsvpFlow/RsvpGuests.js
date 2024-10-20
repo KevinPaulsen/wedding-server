@@ -23,17 +23,10 @@ const RsvpGuests = ({changePage, returnPage}) => {
     const handleNext = async () => {
         // TODO: Make at least one guest be required
         const putRsvpDto = {
-            rsvpCode: formData.rsvpCode,
-            lastName: formData.lastName,
-            primaryContact: {
-                name: formData.prefName,
-                email: formData.prefEmail,
-                phoneNumber: formData.prefPhone,
-            },
-            rsvpGuestDetails: formData.guests.map((guest) => ({
-                name: guest.name,
-                dietaryRestrictions: guest.dietaryRestrictions,
-                other: guest.other,
+            rsvpCode: formData.rsvpCode, lastName: formData.lastName, primaryContact: {
+                name: formData.prefName, email: formData.prefEmail, phoneNumber: formData.prefPhone,
+            }, rsvpGuestDetails: formData.guests.map((guest) => ({
+                name: guest.name, dietaryRestrictions: guest.dietaryRestrictions, other: guest.other,
             })),
         };
         await putRsvp(putRsvpDto);
@@ -67,68 +60,67 @@ const RsvpGuests = ({changePage, returnPage}) => {
     };
 
     return (<Container style={{maxWidth: "900px"}}>
-                {error && <div className="alert alert-danger">{error}</div>}
-                <Row className="mb-4">
-                    {formData.guests.length === 0 ? ("") : (<Table hover className="custom-table">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>
-                                        {formData.guests.some((guest) => guest.dietaryRestrictions &&
-                                         guest.dietaryRestrictions.length > 0) && "Dietary Restrictions"}
-                                    </th>
-                                    <th>
-                                        {formData.guests.some((guest) => guest.other && guest.other.trim() !== "") &&
-                                         "Other"}
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {formData.guests && formData.guests.map((guest, index) => (<tr
-                                                key={index}
-                                                onClick={() => handleEditGuest(index)}
-                                                style={{cursor: "pointer"}}
-                                        >
-                                            <td className="align-middle">
-                                                {guest.name}
-                                            </td>
-                                            <td className="align-middle">
-                                                {guest.dietaryRestrictions.map((restriction, idx) => (<span key={idx}>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <Row className="mb-4">
+            {formData.guests.length === 0 ? ("") : (<Table hover className="custom-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>
+                        {formData.guests.some((guest) => guest.dietaryRestrictions && guest.dietaryRestrictions.length >
+                         0) && "Dietary Restrictions"}
+                    </th>
+                    <th>
+                        {formData.guests.some((guest) => guest.other && guest.other.trim() !== "") && "Other"}
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {formData.guests && formData.guests.map((guest, index) => (<tr
+                        key={index}
+                        onClick={() => handleEditGuest(index)}
+                        style={{cursor: "pointer"}}
+                >
+                    <td className="align-middle">
+                        {guest.name}
+                    </td>
+                    <td className="align-middle">
+                        {guest.dietaryRestrictions.map((restriction, idx) => (<span key={idx}>
                                                 {restriction}
-                                                            <br/>
+                            <br/>
                                             </span>))}
-                                            </td>
-                                            <td className="align-middle">{guest.other}</td>
-                                            <td className="align-middle">
-                                                <Button
-                                                        variant="link"
-                                                        className="p-0"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation(); // Prevents row click from being
-                                                            // triggered
-                                                            handleDeleteGuest(index);
-                                                        }}
-                                                >
-                                                    <FaTrash size={20} color="var(--main-dark)"/>
-                                                </Button>
-                                            </td>
-                                        </tr>))}
-                                </tbody>
-                            </Table>)}
-                </Row>
-                <Row className="d-flex justify-content-evenly my-5 px-2">
-                    <Button className="rsvp-button dark" onClick={handleBack}>
-                        Back
-                    </Button>
-                    <Button className="rsvp-button dark long" onClick={handleNewGuest}>
-                        Add Guest
-                    </Button>
-                    <Button className="rsvp-button width-auto dark" onClick={handleNext}>
-                        {loading ? "Submitting" : "Submit"}
-                    </Button>
-                </Row>
-            </Container>);
+                    </td>
+                    <td className="align-middle">{guest.other}</td>
+                    <td className="align-middle">
+                        <Button
+                                variant="link"
+                                className="p-0"
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevents row click from being
+                                    // triggered
+                                    handleDeleteGuest(index);
+                                }}
+                        >
+                            <FaTrash size={20} color="var(--main-dark)"/>
+                        </Button>
+                    </td>
+                </tr>))}
+                </tbody>
+            </Table>)}
+        </Row>
+        <Row className="d-flex justify-content-evenly my-5 px-2">
+            <Button className="rsvp-button dark" onClick={handleBack}>
+                Back
+            </Button>
+            <Button className="rsvp-button dark long" onClick={handleNewGuest}>
+                Add Guest
+            </Button>
+            <Button className="rsvp-button width-auto dark" onClick={handleNext}>
+                {loading ? "Submitting" : "Submit"}
+            </Button>
+        </Row>
+    </Container>);
 };
 
 export default RsvpGuests;

@@ -32,33 +32,31 @@ function AdminLogin() {
         }
     };
 
-    return (
-        <div className="container mt-5">
-            <h2>Login</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <Form onSubmit={handleLogin}>
-                <FormInput
-                    label="Username"
-                    type="text"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <FormInput
-                    label="Password"
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <Button type="submit" className="btn btn-primary" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'}
-                </Button>
-            </Form>
-        </div>
-    );
+    return (<div className="container mt-5">
+                <h2>Login</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <Form onSubmit={handleLogin}>
+                    <FormInput
+                            label="Username"
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                    />
+                    <FormInput
+                            label="Password"
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                    />
+                    <Button type="submit" className="btn btn-primary" disabled={loading}>
+                        {loading ? 'Logging in...' : 'Login'}
+                    </Button>
+                </Form>
+            </div>);
 }
 
 export default AdminLogin;

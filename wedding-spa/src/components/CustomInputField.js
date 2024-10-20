@@ -2,15 +2,8 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Form} from 'react-bootstrap';
 
 const CustomInputField = forwardRef(({
-                                         label,
-                                         type = 'text',
-                                         placeholder,
-                                         value,
-                                         onChange,
-                                         required = true,
-                                         name,
-                                         min,
-                                     }, ref) => {
+    label, type = 'text', placeholder, value, onChange, required = true, name, min,
+}, ref) => {
     const [_, setIsTouched] = useState(false);
     const [hasError, setHasError] = useState(false);
 
@@ -45,33 +38,28 @@ const CustomInputField = forwardRef(({
         }
     }));
 
-    return (
-        <Form.Group controlId={name} className="d-flex flex-column align-items-center">
-            {label && <Form.Label column={"lg"}>{label}</Form.Label>}
-            <Form.Control
-                name={name}
-                type={type}
-                value={value}
-                onChange={handleInputChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                placeholder={placeholder}
-                min={min}
-                style={{
-                    width: '300px',
-                    outline: hasError ? '2px solid red' : '2px solid var(--main-dark)',
-                }}
-                className={hasError ? 'is-invalid' : ''}
-            />
-            <div style={{height: "28px"}}>
-                {hasError && (
-                    <Form.Text className="text-danger">
-                        This field must not be empty
-                    </Form.Text>
-                )}
-            </div>
-        </Form.Group>
-    );
+    return (<Form.Group controlId={name} className="d-flex flex-column align-items-center">
+                {label && <Form.Label column={"lg"}>{label}</Form.Label>}
+                <Form.Control
+                        name={name}
+                        type={type}
+                        value={value}
+                        onChange={handleInputChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        placeholder={placeholder}
+                        min={min}
+                        style={{
+                            width: '300px', outline: hasError ? '2px solid red' : '2px solid var(--main-dark)',
+                        }}
+                        className={hasError ? 'is-invalid' : ''}
+                />
+                <div style={{height: "28px"}}>
+                    {hasError && (<Form.Text className="text-danger">
+                                This field must not be empty
+                            </Form.Text>)}
+                </div>
+            </Form.Group>);
 });
 
 export default CustomInputField;

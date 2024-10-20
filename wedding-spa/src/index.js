@@ -9,17 +9,15 @@ import {FlowProvider} from "./FlowProvider";
 import './styles/App.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <React.StrictMode>
-        <AuthProvider>
-            <Router>
-                <FlowProvider>
-                    <App/>
-                </FlowProvider>
-            </Router>
-        </AuthProvider>
-    </React.StrictMode>
-);
+root.render(<React.StrictMode>
+    <AuthProvider>
+        <Router>
+            <FlowProvider>
+                <App/>
+            </FlowProvider>
+        </Router>
+    </AuthProvider>
+</React.StrictMode>);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

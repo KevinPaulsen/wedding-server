@@ -15,14 +15,12 @@ const RsvpConfirmation = () => {
         navigate('/');
     };
 
-    return (
-        <>
-            <p>Your RSVP has been submitted.</p>
-            <Button className='rsvp-button long dark' onClick={goHome}>
-                Return Home
-            </Button>
-        </>
-    );
+    return (<>
+                <p>Your RSVP has been submitted.</p>
+                <Button className='rsvp-button long dark' onClick={goHome}>
+                    Return Home
+                </Button>
+            </>);
 };
 
 export default RsvpConfirmation;

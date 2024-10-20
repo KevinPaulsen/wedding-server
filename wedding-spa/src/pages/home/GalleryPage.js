@@ -3,9 +3,7 @@ import BaseLayout from "../../components/main/BaseLayout";
 import Gallery from "../../components/main/Gallery";
 
 const Home = () => {
-    return (
-        <BaseLayout children={<Gallery/>}/>
-    );
+    return (<BaseLayout children={<Gallery/>}/>);
 }
 
 

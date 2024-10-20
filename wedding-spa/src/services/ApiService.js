@@ -17,79 +17,60 @@ const request = async (endpoint, options = {}) => {
 
 export const createRsvp = (rsvpData) => {
     return request('/rsvp/create', {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(rsvpData),
+        method: 'POST', headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`, 'Content-Type': 'application/json',
+        }, credentials: 'include', body: JSON.stringify(rsvpData),
     });
 }
 
 export const deleteRsvpRequest = (rsvpCode) => {
-    const params = new URLSearchParams({ rsvpCode });
+    const params = new URLSearchParams({rsvpCode});
 
     return request(`/rsvp/delete?${params}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+        method: 'DELETE', headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`, 'Content-Type': 'application/json',
+        }, credentials: 'include',
     });
 }
 
 export const updateRsvp = (updateData) => {
     return request('/rsvp/update', {
-        method: 'PUT',
-        headers: {
+        method: 'PUT', headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(updateData),
+        }, credentials: 'include', body: JSON.stringify(updateData),
     });
 };
 
 export const verifyToken = (authToken) => {
     return request('/auth/verify-token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authToken}`,
+        method: 'POST', headers: {
+            'Content-Type': 'application/json', Authorization: `Bearer ${authToken}`,
         },
     });
 }
 
 export const getRsvpRequest = (rsvpCode, lastname) => {
-    const params = new URLSearchParams({ rsvpCode, lastname });
+    const params = new URLSearchParams({rsvpCode, lastname});
 
     return request(`/rsvp/get?${params.toString()}`, {
-        method: 'GET',
-        headers: {
+        method: 'GET', headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+        }, credentials: 'include',
     });
 }
 
 export const getRsvps = () => {
     return request('/rsvp/all', {
-        method: 'GET',
-        headers: {
+        method: 'GET', headers: {
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
-        },
-        credentials: 'include',
+        }, credentials: 'include',
     });
 }
 
 export const adminLogin = (username, password) => {
     return request('/auth/login', {
-        method: 'POST',
-        headers: {
+        method: 'POST', headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({username, password}),
+        }, credentials: 'include', body: JSON.stringify({username, password}),
     });
 }

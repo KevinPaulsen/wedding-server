@@ -29,11 +29,8 @@ const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
             console.log(formData.guests && formData.guests.length === 0);
             if (formData.guests && formData.guests.length === 0) {
                 setEditingGuest({
-                                    "name": formData.prefName,
-                                    "foodOption": "",
-                                    "dietaryRestrictions": [],
-                                    "other": "",
-                });
+                                    "name": formData.prefName, "foodOption": "", "dietaryRestrictions": [], "other": "",
+                                });
                 changePage(RSVP_ADD_GUEST_STEP);
             } else {
                 changePage(RSVP_GUESTS_PAGE);
@@ -41,41 +38,39 @@ const RsvpPrimaryContact = ({changePage, requireAnswers}) => {
         }
     }
 
-    return (
-        <Form>
-            <CustomInputField
-                ref={prefNameRef}
-                name="prefName"
-                type="text"
-                placeholder="Preferred Name"
-                value={formData.prefName}
-                onChange={handleChange}
-                required={requireAnswers}
-            />
-            <CustomInputField
-                ref={prefEmailRef}
-                name="prefEmail"
-                type="text"
-                placeholder="Preferred Email"
-                value={formData.prefEmail}
-                onChange={handleChange}
-                required={requireAnswers}
-            />
-            <CustomInputField
-                ref={prefPhoneRef}
-                name="prefPhone"
-                type="text"
-                placeholder="Preferred Phone Number"
-                value={formData.prefPhone}
-                onChange={handleChange}
-                required={requireAnswers}
-            />
+    return (<Form>
+                <CustomInputField
+                        ref={prefNameRef}
+                        name="prefName"
+                        type="text"
+                        placeholder="Preferred Name"
+                        value={formData.prefName}
+                        onChange={handleChange}
+                        required={requireAnswers}
+                />
+                <CustomInputField
+                        ref={prefEmailRef}
+                        name="prefEmail"
+                        type="text"
+                        placeholder="Preferred Email"
+                        value={formData.prefEmail}
+                        onChange={handleChange}
+                        required={requireAnswers}
+                />
+                <CustomInputField
+                        ref={prefPhoneRef}
+                        name="prefPhone"
+                        type="text"
+                        placeholder="Preferred Phone Number"
+                        value={formData.prefPhone}
+                        onChange={handleChange}
+                        required={requireAnswers}
+                />
 
-            <div className="d-flex justify-content-evenly px-2">
-                <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
-            </div>
-        </Form>
-    );
+                <div className="d-flex justify-content-evenly px-2">
+                    <Button className='rsvp-button dark' onClick={handleNext}> Next </Button>
+                </div>
+            </Form>);
 };
 
 export default RsvpPrimaryContact;

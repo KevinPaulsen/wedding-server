@@ -8,11 +8,9 @@ const WeddingDetails = () => {
         {header: 'Black Tie Optional', body: ''},
     ];
 
-    return (
-        <div className="container my-5">
-            < InfoContainer title={'Wedding Details'} elements={details}/>
-        </div>
-    );
+    return (<div className="container my-5">
+                < InfoContainer title={'Wedding Details'} elements={details}/>
+            </div>);
 };
 
 export default WeddingDetails;

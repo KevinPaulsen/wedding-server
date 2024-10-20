@@ -14,15 +14,12 @@ const AddRsvp = () => {
     const allowedGuestsRef = useRef();
 
     const [rsvp, setRsvp] = useState({
-        "name": "",
-        "lNames": "",
-        "allowedGuestCount": 0,
-    });
+                                         "name": "", "lNames": "", "allowedGuestCount": 0,
+                                     });
 
     const handleChange = (e) => {
         setRsvp((prevGuest) => ({
-            ...prevGuest,
-            [e.target.name]: e.target.value,
+            ...prevGuest, [e.target.name]: e.target.value,
         }));
     };
 
@@ -33,13 +30,9 @@ const AddRsvp = () => {
         if (nameValid && guestCountValid) {
             try {
                 const formattedRsvpData = {
-                    rsvpCode: "",
-                    primaryContact: {
+                    rsvpCode: "", primaryContact: {
                         name: rsvp.name.trim(),
-                    },
-                    allowedGuestCount: rsvp.allowedGuestCount,
-                    guestCount: 0,
-                    rsvpGuestDetails: [],
+                    }, allowedGuestCount: rsvp.allowedGuestCount, guestCount: 0, rsvpGuestDetails: [],
                 };
 
                 await addRsvp(formattedRsvpData);
@@ -50,51 +43,48 @@ const AddRsvp = () => {
         }
     };
 
-    return (
-        <Container fluid className="flex-grow-1 align-items-center justify-content-center text-center">
-            <Form>
-                <CustomInputField
-                    ref={nameRef}
-                    name="name"
-                    type="text"
-                    placeholder="Name"
-                    value={rsvp.name}
-                    onChange={handleChange}
-                />
-                <Form.Group controlId="lNames" className="d-flex flex-column align-items-center">
-                    <Form.Control
-                        name="lNames"
-                        type="text"
-                        value={rsvp.lNames}
-                        onChange={handleChange}
-                        placeholder="Addional Last Names (comma seperated)"
-                        style={{
-                            width: '300px',
-                            outline: '2px solid var(--main-dark)',
-                        }}
+    return (<Container fluid className="flex-grow-1 align-items-center justify-content-center text-center">
+                <Form>
+                    <CustomInputField
+                            ref={nameRef}
+                            name="name"
+                            type="text"
+                            placeholder="Name"
+                            value={rsvp.name}
+                            onChange={handleChange}
                     />
-                    <div style={{height: "28px"}}></div>
-                </Form.Group>
+                    <Form.Group controlId="lNames" className="d-flex flex-column align-items-center">
+                        <Form.Control
+                                name="lNames"
+                                type="text"
+                                value={rsvp.lNames}
+                                onChange={handleChange}
+                                placeholder="Addional Last Names (comma seperated)"
+                                style={{
+                                    width: '300px', outline: '2px solid var(--main-dark)',
+                                }}
+                        />
+                        <div style={{height: "28px"}}></div>
+                    </Form.Group>
 
-                <CustomInputField
-                    ref={allowedGuestsRef}
-                    name="allowedGuestCount"
-                    type="number"
-                    placeholder="Number of Allowed Guests"
-                    value={rsvp.allowedGuestCount}
-                    onChange={handleChange}
-                    min="0"
-                />
+                    <CustomInputField
+                            ref={allowedGuestsRef}
+                            name="allowedGuestCount"
+                            type="number"
+                            placeholder="Number of Allowed Guests"
+                            value={rsvp.allowedGuestCount}
+                            onChange={handleChange}
+                            min="0"
+                    />
 
-                <Row className="d-flex justify-content-evenly pt-4 px-2">
-                    <Button className='rsvp-button dark width-auto' onClick={handleAddGuest}>
-                        {loading ? 'Adding RSVP...' : 'Add RSVP'}
-                    </Button>
-                </Row>
-                {error && <p className="text-danger">Failed to add RSVP: {error.message}</p>}
-            </Form>
-        </Container>
-    );
+                    <Row className="d-flex justify-content-evenly pt-4 px-2">
+                        <Button className='rsvp-button dark width-auto' onClick={handleAddGuest}>
+                            {loading ? 'Adding RSVP...' : 'Add RSVP'}
+                        </Button>
+                    </Row>
+                    {error && <p className="text-danger">Failed to add RSVP: {error.message}</p>}
+                </Form>
+            </Container>);
 };
 
 export default AddRsvp;

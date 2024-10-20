@@ -16,34 +16,32 @@ import RsvpFlowPage from "./pages/rsvp/RsvpFlowPage";
 import AdminRsvpFlow from "./pages/admin/AdminRsvpFlow";
 
 function App() {
-    return (
-        <Routes>
-            {/* Login page/redirects */}
-            <Route path="/admin/login" element={<AdminLogin/>}/>
-            <Route path="/login" element={<Navigate to="/admin/login" replace/>}/>
-            <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
+    return (<Routes>
+                {/* Login page/redirects */}
+                <Route path="/admin/login" element={<AdminLogin/>}/>
+                <Route path="/login" element={<Navigate to="/admin/login" replace/>}/>
+                <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
 
-            {/* Dashboard Page/redirects */}
-            <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain/>}/>}/>
-            <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
+                {/* Dashboard Page/redirects */}
+                <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain/>}/>}/>
+                <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
 
-            <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow/>}/>}/>
+                <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow/>}/>}/>
 
-            <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage/>}/>}/>
-            <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage/>}/>}/>
+                <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage/>}/>}/>
+                <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage/>}/>}/>
 
-            <Route path="/" element={<HomePage/>}/>
-            <Route path="/gallery" element={<Gallery/>}/>
-            <Route path="/details" element={<Details/>}/>
-            <Route path="/contact" element={<Contact/>}/>
-            <Route path="/story" element={<Story/>}/>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/gallery" element={<Gallery/>}/>
+                <Route path="/details" element={<Details/>}/>
+                <Route path="/contact" element={<Contact/>}/>
+                <Route path="/story" element={<Story/>}/>
 
-            {/* RSVP Pages*/}
-            <Route path="/rsvp" element={<RsvpFlowPage/>}/>
+                {/* RSVP Pages*/}
+                <Route path="/rsvp" element={<RsvpFlowPage/>}/>
 
-            <Route path="*" element={<NotFound/>}/>
-        </Routes>
-    );
+                <Route path="*" element={<NotFound/>}/>
+            </Routes>);
 }
 
 export default App;

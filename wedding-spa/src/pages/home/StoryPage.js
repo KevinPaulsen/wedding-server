@@ -3,9 +3,7 @@ import BaseLayout from "../../components/main/BaseLayout";
 import Story from "../../components/main/Story";
 
 const Home = () => {
-    return (
-        <BaseLayout children={<Story/>}/>
-    );
+    return (<BaseLayout children={<Story/>}/>);
 }
 
 

@@ -37,11 +37,9 @@ const Countdown = () => {
         {header: timeLeft.seconds, body: 'Seconds'},
     ];
 
-    return (
-        <div className="bg-dark text-white py-4">
-            <InfoContainer title={"Countdown"} elements={schedule}/>
-        </div>
-    );
+    return (<div className="bg-dark text-white py-4">
+                <InfoContainer title={"Countdown"} elements={schedule}/>
+            </div>);
 };
 
 export default Countdown;

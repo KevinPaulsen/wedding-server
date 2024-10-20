@@ -4,12 +4,10 @@ import WeddingDetails from "../../components/main/WeddingDetails";
 import Schedule from "../../components/main/Schedule";
 
 const Home = () => {
-    return (
-        <BaseLayout children={<>
-            <WeddingDetails/>
-            <Schedule/>
-        </>}/>
-    );
+    return (<BaseLayout children={<>
+                <WeddingDetails/>
+                <Schedule/>
+            </>}/>);
 }
 
 
