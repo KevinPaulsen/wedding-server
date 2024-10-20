@@ -21,6 +21,10 @@ import java.util.Set;
     @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
+    @DynamoDBAttribute(attributeName = "lastnames")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.SS)
+    private Set<String> lastnames;
+
     @DynamoDBAttribute(attributeName="allowed_guest_count")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private int allowedGuestCount;
 
@@ -29,12 +33,6 @@ import java.util.Set;
 
     @DynamoDBAttribute(attributeName="rsvp_status") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private RsvpStatus rsvpStatus;
-
-    private final Set<String> names;
-
-    public Rsvp() {
-        this.names = new HashSet<>();
-    }
 
     public String getRsvpCode() {
         return rsvpCode;
@@ -56,23 +54,18 @@ import java.util.Set;
         this.primaryContact = primaryContact;
 
         if (primaryContact != null) {
-            names.add(primaryContact.name());
+            lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
+            lastnames.add(extractLastName(primaryContact.name()));
         }
     }
 
-    @DynamoDBAttribute(attributeName="last_names") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
-    public List<String> getLastnames() {
-        List<String> lastnames = new ArrayList<>();
-
-        for (String name : names) {
-            String lastName = extractLastName(name);
-
-            if (!lastName.isEmpty()) {
-                lastnames.add(lastName);
-            }
-        }
-
+    public Set<String> getLastnames() {
+        lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
         return lastnames;
+    }
+
+    public void setLastnames(Set<String> lastnames) {
+        this.lastnames = lastnames;
     }
 
     public RsvpStatus getRsvpStatus() {
@@ -105,11 +98,6 @@ import java.util.Set;
         this.allowedGuestCount = allowedGuestCount;
     }
 
-    @DynamoDBAttribute(attributeName="guest_count") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N)
-    public int getGuestCount() {
-        return (rsvpGuestDetails != null) ? rsvpGuestDetails.size() : 0;
-    }
-
     public List<RsvpGuestDetails> getRsvpGuestDetails() {
         return rsvpGuestDetails;
     }
@@ -121,9 +109,10 @@ import java.util.Set;
 
         this.rsvpGuestDetails = rsvpGuestDetails;
 
+        lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
         for (RsvpGuestDetails rsvpGuestDetail : rsvpGuestDetails) {
             if (rsvpGuestDetail != null && rsvpGuestDetail.name() != null) {
-                names.add(rsvpGuestDetail.name());
+                lastnames.add(extractLastName(rsvpGuestDetail.name()));
             }
         }
     }

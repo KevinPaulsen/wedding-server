@@ -8,7 +8,6 @@ public class AddRsvpDto {
     private RsvpStatus rsvpStatus;
     private GuestInfo primaryContact;
     private int allowedGuestCount;
-    private int guestCount;
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
     public String getRsvpCode() {
@@ -41,14 +40,6 @@ public class AddRsvpDto {
 
     public void setAllowedGuestCount(int allowedGuestCount) {
         this.allowedGuestCount = allowedGuestCount;
-    }
-
-    public int getGuestCount() {
-        return guestCount;
-    }
-
-    public void setGuestCount(int guestCount) {
-        this.guestCount = guestCount;
     }
 
     public List<RsvpGuestDetails> getRsvpGuestDetails() {
