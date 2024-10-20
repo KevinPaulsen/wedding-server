@@ -2,6 +2,7 @@ package com.paulsen.wedding.model.rsvp;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
@@ -21,9 +22,8 @@ import java.util.Set;
     @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
-    @DynamoDBAttribute(attributeName = "lastnames")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.SS)
-    private Set<String> lastnames;
+    @DynamoDBAttribute(attributeName="lastnames") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.SS)
+    private final Set<String> lastnames;
 
     @DynamoDBAttribute(attributeName="allowed_guest_count")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.N) private int allowedGuestCount;
@@ -33,6 +33,10 @@ import java.util.Set;
 
     @DynamoDBAttribute(attributeName="rsvp_status") @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private RsvpStatus rsvpStatus;
+
+    public Rsvp() {
+        this.lastnames = new HashSet<>();
+    }
 
     public String getRsvpCode() {
         return rsvpCode;
@@ -51,21 +55,28 @@ import java.util.Set;
     }
 
     public void setPrimaryContact(GuestInfo primaryContact) {
+        if (primaryContact == null) {
+            return;
+        }
+
         this.primaryContact = primaryContact;
 
-        if (primaryContact != null) {
-            lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
-            lastnames.add(extractLastName(primaryContact.name()));
+        String lastname = extractLastName(primaryContact.name());
+        if (!lastname.isEmpty()) {
+            lastnames.add(lastname);
         }
     }
 
     public Set<String> getLastnames() {
-        lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
         return lastnames;
     }
 
     public void setLastnames(Set<String> lastnames) {
-        this.lastnames = lastnames;
+        if (lastnames == null || lastnames.isEmpty()) {
+            return;
+        }
+
+        this.lastnames.addAll(lastnames.stream().map(Rsvp::formatName).toList());
     }
 
     public RsvpStatus getRsvpStatus() {
@@ -73,7 +84,11 @@ import java.util.Set;
     }
 
     public void setRsvpStatus(RsvpStatus rsvpStatus) {
-        this.rsvpStatus = rsvpStatus;
+        this.rsvpStatus = Objects.requireNonNullElse(rsvpStatus, RsvpStatus.PENDING);
+    }
+
+    private static String formatName(String name) {
+        return name.strip().toLowerCase().replaceAll("[^a-z]", "*");
     }
 
     private static String extractLastName(String name) {
@@ -82,8 +97,13 @@ import java.util.Set;
         if (names.length == 1) {
             return "";
         } else {
-            return names[1].toLowerCase();
+            return formatName(names[1]);
         }
+    }
+
+    @DynamoDBIgnore
+    public boolean hasLastname(String lastname) {
+        return lastnames.contains(formatName(lastname));
     }
 
     public int getAllowedGuestCount() {
@@ -109,9 +129,14 @@ import java.util.Set;
 
         this.rsvpGuestDetails = rsvpGuestDetails;
 
-        lastnames = Objects.requireNonNullElse(lastnames, new HashSet<>());
         for (RsvpGuestDetails rsvpGuestDetail : rsvpGuestDetails) {
-            if (rsvpGuestDetail != null && rsvpGuestDetail.name() != null) {
+
+            if (rsvpGuestDetail == null || rsvpGuestDetail.name() == null) {
+                continue;
+            }
+
+            String lastname = extractLastName(rsvpGuestDetail.name());
+            if (!lastname.isEmpty()) {
                 lastnames.add(extractLastName(rsvpGuestDetail.name()));
             }
         }

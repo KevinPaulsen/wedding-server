@@ -1,12 +1,14 @@
 package com.paulsen.wedding.model.rsvp;
 
 import java.util.List;
+import java.util.Set;
 
 public class AddRsvpDto {
 
     private String rsvpCode;
     private RsvpStatus rsvpStatus;
     private GuestInfo primaryContact;
+    private Set<String> lastnames;
     private int allowedGuestCount;
     private List<RsvpGuestDetails> rsvpGuestDetails;
 
@@ -28,6 +30,14 @@ public class AddRsvpDto {
 
     public GuestInfo getPrimaryContact() {
         return primaryContact;
+    }
+
+    public Set<String> getLastnames() {
+        return lastnames;
+    }
+
+    public void setLastnames(Set<String> lastnames) {
+        this.lastnames = lastnames;
     }
 
     public void setPrimaryContact(GuestInfo primaryContact) {
