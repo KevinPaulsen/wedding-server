@@ -27,7 +27,8 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
 
     private AttributeValue convertGuestDetailsToAttributeValue(RsvpGuestDetails guestDetails) {
         var name = new AttributeValue(Objects.requireNonNullElse(guestDetails.name(), ""));
-        var food = new AttributeValue(Objects.requireNonNullElse(guestDetails.foodOption(), FoodOption.DEFAULT).name());
+        var food = guestDetails.foodOption() == null ? new AttributeValue().withNULL(true)
+                                                     : new AttributeValue(guestDetails.name());
         var diets = new AttributeValue().withL(Objects.requireNonNullElse(guestDetails.dietaryRestrictions(),
                                                                           new ArrayList<DietaryRestriction>())
                                                       .stream()
@@ -90,7 +91,7 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
     private FoodOption getFoodOption(Map<String, AttributeValue> map) {
         AttributeValue value = map.get("foodOption");
         if (value == null || value.getS() == null) {
-            return FoodOption.DEFAULT;
+            return null;
         }
         try {
             return FoodOption.valueOf(value.getS());
