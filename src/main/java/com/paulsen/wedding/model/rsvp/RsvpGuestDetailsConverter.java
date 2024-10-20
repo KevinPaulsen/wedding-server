@@ -14,31 +14,29 @@ import java.util.stream.Collectors;
 public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
 
     @Override public AttributeValue convert(List<RsvpGuestDetails> allGuestDetails) {
+        allGuestDetails = Objects.requireNonNullElse(allGuestDetails, Collections.emptyList());
+
         // Use stream to transform each RsvpGuestDetails into an AttributeValue
         List<AttributeValue> rsvpGuestDetailAttributes = allGuestDetails.stream()
-                .map(this::convertGuestDetailsToAttributeValue).collect(Collectors.toList());
+                                                                        .filter(Objects::nonNull)
+                                                                        .map(this::convertGuestDetailsToAttributeValue)
+                                                                        .collect(Collectors.toList());
 
         return new AttributeValue().withL(rsvpGuestDetailAttributes);
     }
 
     private AttributeValue convertGuestDetailsToAttributeValue(RsvpGuestDetails guestDetails) {
-        var nameAttribute = new AttributeValue(guestDetails.name());
-        var foodAttribute = new AttributeValue(Objects.requireNonNullElse(guestDetails.foodOption(), FoodOption.DEFAULT)
-                                                       .name());
-        var dietaryAttribute = new AttributeValue().withL(guestDetails.dietaryRestrictions().stream()
-                                                                  .map(restriction -> new AttributeValue().withS(
-                                                                          restriction.name())).toList());
-        var otherAttribute = new AttributeValue(guestDetails.other());
+        var name = new AttributeValue(Objects.requireNonNullElse(guestDetails.name(), ""));
+        var food = new AttributeValue(Objects.requireNonNullElse(guestDetails.foodOption(), FoodOption.DEFAULT).name());
+        var diets = new AttributeValue().withL(Objects.requireNonNullElse(guestDetails.dietaryRestrictions(),
+                                                                          new ArrayList<DietaryRestriction>())
+                                                      .stream()
+                                                      .map(restriction -> new AttributeValue().withS(restriction.name()))
+                                                      .toList());
+        var other = new AttributeValue(Objects.requireNonNullElse(guestDetails.other(), ""));
 
         // Create a map with guest details as AttributeValue
-        var detailsMap = Map.of("name",
-                                nameAttribute,
-                                "foodOption",
-                                foodAttribute,
-                                "dietaryRestrictions",
-                                dietaryAttribute,
-                                "other",
-                                otherAttribute);
+        var detailsMap = Map.of("name", name, "foodOption", food, "dietaryRestrictions", diets, "other", other);
 
         return new AttributeValue().withM(detailsMap);
     }
