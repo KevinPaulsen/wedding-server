@@ -83,10 +83,6 @@ import java.util.Set;
     }
 
     public void setLastnames(Set<String> lastnames) {
-        if (lastnames == null || lastnames.isEmpty()) {
-            return;
-        }
-
         this.lastnames.addAll(lastnames.stream().map(Rsvp::formatName).toList());
     }
 

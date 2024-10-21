@@ -30,7 +30,7 @@ import java.util.List;
     }
 
     public Rsvp findMatchingRsvp(String rsvpCode, String lastname) {
-        Rsvp rsvp = rsvpRepository.findByRsvpCode(rsvpCode).orElse(null);
+        Rsvp rsvp = rsvpRepository.findByRsvpCode(formatRsvpCode(rsvpCode)).orElse(null);
 
         if (rsvp == null || !rsvp.hasLastname(lastname)) {
             throw new IndexNotFoundException(String.format("No RSVP found with code %s and lastname %s",
@@ -42,7 +42,7 @@ import java.util.List;
     }
 
     public Rsvp findRsvpByRsvpCode(String rsvpCode) {
-        return rsvpRepository.findByRsvpCode(rsvpCode).orElseThrow();
+        return rsvpRepository.findByRsvpCode(formatRsvpCode(rsvpCode)).orElseThrow();
     }
 
     @Transactional public Rsvp createRsvp(AddRsvpDto input) {
@@ -88,7 +88,7 @@ import java.util.List;
 
     private synchronized String generateUniqueCode(String rsvpCode) {
         if (rsvpCode != null && !rsvpCode.isEmpty()) {
-            return rsvpCode;
+            return formatRsvpCode(rsvpCode);
         }
 
         AvailableRsvpCode availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
@@ -102,7 +102,11 @@ import java.util.List;
             availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
         }
 
-        return availableRsvpCode == null ? "" : availableRsvpCode.getCode();
+        return availableRsvpCode == null ? "" : formatRsvpCode(rsvpCode);
+    }
+
+    private static String formatRsvpCode(String rsvpCode) {
+        return rsvpCode == null ? "" : rsvpCode.toUpperCase().strip();
     }
 
     @Transactional public void delete(String rsvpCode) {
