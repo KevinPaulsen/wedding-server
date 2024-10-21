@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
@@ -11,34 +11,33 @@ import {RSVP_STATUS_STEP} from "./RsvpStatusSelector";
 
 const RsvpInfo = ({changePage}) => {
     const {formData, setFormData, updatePreferredContactField} = useFlow();
-    const {getRsvp, loading, error} = useGetRsvp();
+    const {getRsvp, rsvp, loading, error} = useGetRsvp();
 
     const rsvpCodeInputRef = useRef();
     const lastNameInputRef = useRef();
+
+    useEffect(() => {
+        if (!loading && !error && rsvp) {
+            setFormData({ rsvpStatus: rsvp.rsvpStatus });
+            setFormData({ allowedGuestCount: rsvp.allowedGuestCount });
+            updatePreferredContactField("name", rsvp.primaryContact.name);
+            updatePreferredContactField("email", rsvp.primaryContact.email);
+            updatePreferredContactField("phone", rsvp.primaryContact.phoneNumber);
+            updatePreferredContactField("address", rsvp.primaryContact.address);
+            setFormData({ guests: transformGuestDetails(rsvp.rsvpGuestDetails) });
+
+            changePage(RSVP_STATUS_STEP);
+        }
+    }, [loading, error, rsvp]);
 
     const handleNext = async () => {
         const isCodeValid = rsvpCodeInputRef.current.validate();
         const isLastNameValid = lastNameInputRef.current.validate();
 
         if (isCodeValid && isLastNameValid) {
-            const rsvp = await getRsvp(formData.rsvpCode, formData.lastname);
-
-            if (!error && rsvp) {
-                setFormData({ rsvpStatus: rsvp.rsvpStatus });
-                setFormData({ allowedGuestCount: rsvp.allowedGuestCount });
-                updatePreferredContactField("name", rsvp.primaryContact.name);
-                updatePreferredContactField("email", rsvp.primaryContact.email);
-                updatePreferredContactField("phone", rsvp.primaryContact.phoneNumber);
-                updatePreferredContactField("address", rsvp.primaryContact.address);
-                setFormData({ guests: transformGuestDetails(rsvp.rsvpGuestDetails) });
-
-                changePage(RSVP_STATUS_STEP);
-            }
+            getRsvp(formData.rsvpCode, formData.lastname);
         }
     }
-
-    /*
-     */
 
     const handleChange = (e) => {
         setFormData({[e.target.name]: e.target.value});
