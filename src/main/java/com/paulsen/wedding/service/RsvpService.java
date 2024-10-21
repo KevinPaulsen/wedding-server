@@ -73,7 +73,7 @@ import java.util.List;
 
         Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
 
-        if (!rsvp.getLastnames().contains(input.getLastName().toLowerCase())) {
+        if (!rsvp.hasLastname(input.getLastName())) {
             throw new IndexNotFoundException(String.format("RSVP with code %s and last name %s not found",
                                                            input.getRsvpCode(),
                                                            input.getLastName()));
