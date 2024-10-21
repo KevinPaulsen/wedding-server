@@ -28,7 +28,7 @@ const FullScreenMenu = () => {
 
                 <div className={`fullscreen-overlay ${menuOpen ? 'show' : ''}`}>
                     <Container className={`h-100`}>
-                        <Row className='mt-5'>
+                        <Row className='mt-5 align-items-center' style={{height:'50px'}}>
                             <Title color="var(--main-light)"/>
                         </Row>
                         <Row className='flex-grow-1 d-flex flex-column justify-content-center align-items-center'>

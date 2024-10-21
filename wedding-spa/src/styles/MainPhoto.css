@@ -11,5 +11,5 @@
     font-weight: 800;
     color: var(--main-light);
     display: flex;
-    font-size: clamp(1em, 10vw + 2em, 15rem);
+    font-size: clamp(1em, 12vw + 1em, 15rem);
 }
