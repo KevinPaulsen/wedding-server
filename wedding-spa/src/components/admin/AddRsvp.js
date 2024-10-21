@@ -14,7 +14,7 @@ const AddRsvp = () => {
     const allowedGuestsRef = useRef();
 
     const [rsvp, setRsvp] = useState({
-                                         "name": "", "lNames": "", "allowedGuestCount": 0,
+                                         "name": "", "lastnames": "", "allowedGuestCount": 0,
                                      });
 
     const handleChange = (e) => {
@@ -32,7 +32,9 @@ const AddRsvp = () => {
                 const formattedRsvpData = {
                     rsvpCode: "", primaryContact: {
                         name: rsvp.name.trim(),
-                    }, allowedGuestCount: rsvp.allowedGuestCount, guestCount: 0, rsvpGuestDetails: [],
+                    },
+                    lastnames: rsvp.lastnames.trim().split(','),
+                    allowedGuestCount: rsvp.allowedGuestCount,
                 };
 
                 await addRsvp(formattedRsvpData);
@@ -55,7 +57,7 @@ const AddRsvp = () => {
                     />
                     <Form.Group controlId="lNames" className="d-flex flex-column align-items-center">
                         <Form.Control
-                                name="lNames"
+                                name="lastnames"
                                 type="text"
                                 value={rsvp.lNames}
                                 onChange={handleChange}
