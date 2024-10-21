@@ -91,18 +91,21 @@ import java.util.List;
             return formatRsvpCode(rsvpCode);
         }
 
-        AvailableRsvpCode availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
+        AvailableRsvpCode availableRsvpCode;
+        String formattedCode;
 
-        while (availableRsvpCode != null) {
-            if (rsvpRepository.findByRsvpCode(availableRsvpCode.getCode()).isEmpty()) {
-                availableRsvpCodeRepository.delete(availableRsvpCode);
-                break;
-            }
-
+        do {
             availableRsvpCode = availableRsvpCodeRepository.getAnyAvailableCode();
-        }
+            availableRsvpCodeRepository.delete(availableRsvpCode);
 
-        return availableRsvpCode == null ? "" : formatRsvpCode(rsvpCode);
+            formattedCode = formatRsvpCode(availableRsvpCode.getCode());
+
+            if (rsvpRepository.findByRsvpCode(formattedCode).isEmpty()) {
+                availableRsvpCode = null;
+            }
+        } while (availableRsvpCode != null);
+
+        return formattedCode;
     }
 
     private static String formatRsvpCode(String rsvpCode) {
