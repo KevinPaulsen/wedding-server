@@ -5,12 +5,12 @@ import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
 import {Button, Form} from "react-bootstrap";
 import CustomInputField from "../CustomInputField";
-import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
 import {useGetRsvp} from "../../hooks/useGetRsvp";
 import {transformGuestDetails} from "../../services/DataTransformService";
+import {RSVP_STATUS_STEP} from "./RsvpStatusSelector";
 
 const RsvpInfo = ({changePage}) => {
-    const {formData, setFormData} = useFlow();
+    const {formData, setFormData, updatePreferredContactField} = useFlow();
     const {getRsvp, loading, error} = useGetRsvp();
 
     const rsvpCodeInputRef = useRef();
@@ -21,23 +21,27 @@ const RsvpInfo = ({changePage}) => {
         const isLastNameValid = lastNameInputRef.current.validate();
 
         if (isCodeValid && isLastNameValid) {
-            const rsvp = await getRsvp(formData.rsvpCode, formData.lastName);
+            const rsvp = await getRsvp(formData.rsvpCode, formData.lastname);
 
-            if (!error) {
-                setFormData({
-                                ...formData,
-                                prefName: rsvp.primaryContact.name,
-                                prefEmail: rsvp.primaryContact.email,
-                                prefPhone: rsvp.primaryContact.phoneNumber,
-                                guests: transformGuestDetails(rsvp.rsvpGuestDetails),
-                            });
-                changePage(RSVP_PRIMARY_CONTACT_STEP)
+            if (!error && rsvp) {
+                setFormData({ rsvpStatus: rsvp.rsvpStatus });
+                setFormData({ allowedGuestCount: rsvp.allowedGuestCount });
+                updatePreferredContactField("name", rsvp.primaryContact.name);
+                updatePreferredContactField("email", rsvp.primaryContact.email);
+                updatePreferredContactField("phone", rsvp.primaryContact.phoneNumber);
+                updatePreferredContactField("address", rsvp.primaryContact.address);
+                setFormData({ guests: transformGuestDetails(rsvp.rsvpGuestDetails) });
+
+                changePage(RSVP_STATUS_STEP);
             }
         }
     }
 
+    /*
+     */
+
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
+        setFormData({[e.target.name]: e.target.value});
     };
 
     return (<Form>
@@ -47,20 +51,20 @@ const RsvpInfo = ({changePage}) => {
                 name="rsvpCode"
                 type="text"
                 placeholder="Enter your RSVP Code"
-                value={formData.rsvpCode}
+                value={formData.rsvpCode || ''}
                 onChange={handleChange}
         />
         <CustomInputField
                 ref={lastNameInputRef}
-                name="lastName"
+                name="lastname"
                 type="text"
                 placeholder="Enter your Last Name"
-                value={formData.lastName}
+                value={formData.lastname || ''}
                 onChange={handleChange}
         />
 
         <div className="d-flex justify-content-evenly px-2">
-            <Button className='rsvp-button width-auto dark' onClick={handleNext}>
+            <Button className='rsvp-button width-auto dark hover' onClick={handleNext}>
                 {loading ? "Checking RSVP Info" : "Next"}
             </Button>
         </div>

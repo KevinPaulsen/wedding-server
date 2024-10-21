@@ -3,22 +3,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
-import {Button, Form, Row} from "react-bootstrap";
-import CustomInputField from "../CustomInputField";
-import {RSVP_GUESTS_PAGE} from "./RsvpGuests";
+import {Button, Form, Row} from 'react-bootstrap';
+import CustomInputField from '../CustomInputField';
+import {RSVP_GUESTS_PAGE} from './RsvpGuests';
+import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
 
 const RsvpAddGuest = ({changePage, requireAnswers}) => {
-    const {setFormData, editingGuest, setEditingGuest} = useFlow();
+    const {formData, addGuest, updateGuest, editingGuest, setEditingGuest} = useFlow();
     const guestName = useRef();
     const other = useRef();
 
     const [newGuest, setNewGuest] = useState({
-                                                 "name": "", "foodOption": "", "dietaryRestrictions": [], "other": "",
+                                                 name: '', foodOption: '', dietaryRestrictions: [], other: '',
                                              });
 
     // TODO: Make this not hardcoded
     const dietaryOptions = [
-        "VEGAN", "SHELLFISH_FREE", "DAIRY_FREE", "VEGETARIAN", "GLUTEN_FREE", "NUT_FREE", "OTHER"
+        'VEGAN', 'SHELLFISH_FREE', 'DAIRY_FREE', 'VEGETARIAN', 'GLUTEN_FREE', 'NUT_FREE', 'OTHER',
     ];
 
     useEffect(() => {
@@ -47,29 +48,28 @@ const RsvpAddGuest = ({changePage, requireAnswers}) => {
 
     const handleBack = () => {
         setEditingGuest(null);
-        changePage(RSVP_GUESTS_PAGE);
-    }
+
+        if (formData.guests && formData.guests.length === 0) {
+            changePage(RSVP_PRIMARY_CONTACT_STEP);
+        } else {
+            changePage(RSVP_GUESTS_PAGE);
+        }
+    };
 
     const handleAddGuest = () => {
         const guestNameValid = guestName.current.validate();
 
         if (guestNameValid) {
-            setFormData((prevData) => {
-                let updatedGuests;
-                if (editingGuest && editingGuest.index) {
-                    updatedGuests = prevData.guests.map((guest, idx) => idx === editingGuest.index ? newGuest : guest);
-                } else {
-                    updatedGuests = [...(prevData.guests || []), newGuest];
-                }
-
-                return {...prevData, guests: updatedGuests};
-            });
+            if (editingGuest && editingGuest.index !== undefined) {
+                updateGuest(editingGuest.index, newGuest);
+            } else {
+                addGuest(newGuest);
+            }
 
             setEditingGuest(null);
-            changePage(RSVP_GUESTS_PAGE)
+            changePage(RSVP_GUESTS_PAGE);
         }
     };
-
 
     return (<Form>
                 <CustomInputField
@@ -86,28 +86,29 @@ const RsvpAddGuest = ({changePage, requireAnswers}) => {
                 {dietaryOptions.map((option) => (<Button
                                 key={option}
                                 onClick={() => handleDietaryChange(option)}
-                                className={`m-2 rsvp-button width-auto ${newGuest.dietaryRestrictions.includes(option)
-                                                                         ? "dark" : "dark wire"}`}
+                                className={`m-2 rsvp-button width-auto dark ${newGuest.dietaryRestrictions.includes(option)
+                                                                         ? '' : 'wire'}`}
                         >
                             {option.replace('_', ' ')}
                         </Button>))}
 
-                {newGuest.dietaryRestrictions.includes("OTHER") ? <div className="pt-2">
-                    <CustomInputField
-                            ref={other}
-                            name="other"
-                            type="text"
-                            placeholder="Other Restrictions"
-                            value={newGuest.other}
-                            onChange={handleChange}
-                            required={requireAnswers}
-                    />
-                </div> : null}
+                {newGuest.dietaryRestrictions.includes('OTHER') && (<div className="pt-2">
+                            <CustomInputField
+                                    ref={other}
+                                    name="other"
+                                    type="text"
+                                    placeholder="Other Restrictions"
+                                    value={newGuest.other}
+                                    onChange={handleChange}
+                                    required={requireAnswers}
+                            />
+                        </div>)}
 
                 <Row className="d-flex justify-content-evenly pt-4 px-2">
-                    <Button className='rsvp-button dark' onClick={handleBack}> Back </Button>
-                    <Button className='rsvp-button dark long'
-                            onClick={handleAddGuest}>
+                    <Button className="rsvp-button dark hover" onClick={handleBack}>
+                        Back
+                    </Button>
+                    <Button className="rsvp-button dark hover width-auto" onClick={handleAddGuest}>
                         {editingGuest ? 'Save Changes' : 'Add Guest'}
                     </Button>
                 </Row>

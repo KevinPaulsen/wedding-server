@@ -17,7 +17,7 @@ const RsvpConfirmation = () => {
 
     return (<>
                 <p>Your RSVP has been submitted.</p>
-                <Button className='rsvp-button long dark' onClick={goHome}>
+                <Button className='rsvp-button width-auto dark hover' onClick={goHome}>
                     Return Home
                 </Button>
             </>);

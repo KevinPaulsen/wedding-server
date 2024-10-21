@@ -14,7 +14,7 @@ function CancelButton({route}) {
         navigate(route);
     };
 
-    return (<Button className='rsvp-button dark wire' onClick={() => handleCancel()}>
+    return (<Button className='rsvp-button dark wire hover' onClick={() => handleCancel()}>
                 Cancel
             </Button>)
 }

@@ -1,40 +1,49 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import {useFlow} from '../../FlowProvider';
-import {Button, Container, Row, Table} from "react-bootstrap";
-import {FaTrash} from "react-icons/fa";
-import {RSVP_CONFIRMATION_STEP} from "./RsvpConfirmation";
-import {RSVP_ADD_GUEST_STEP} from "./RsvpAddGuest";
-import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
-import {useNavigate} from "react-router-dom";
-import {usePutRsvp} from "../../hooks/usePutRsvp";
+import {Button, Col, Container, Row, Table} from 'react-bootstrap';
+import {FaTrash} from 'react-icons/fa';
+import {RSVP_CONFIRMATION_STEP} from './RsvpConfirmation';
+import {RSVP_ADD_GUEST_STEP} from './RsvpAddGuest';
+import {RSVP_PRIMARY_CONTACT_STEP} from './RsvpPrimaryContact';
+import {useNavigate} from 'react-router-dom';
+import {usePutRsvp} from '../../hooks/usePutRsvp';
 
 const RsvpGuests = ({changePage, returnPage}) => {
     const {putRsvp, error, loading} = usePutRsvp();
-    const {formData, setFormData, setEditingGuest, resetFormData, resetStepState} = useFlow();
+    const {formData, setEditingGuest, resetFormData, resetStepState, deleteGuest} = useFlow();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!formData.guests || formData.guests.length === 0) {
+            changePage(RSVP_ADD_GUEST_STEP);
+        }
+    }, [formData]);
+
     const handleBack = () => {
-        changePage(RSVP_PRIMARY_CONTACT_STEP)
-    }
+        changePage(RSVP_PRIMARY_CONTACT_STEP);
+    };
 
     const handleNext = async () => {
         // TODO: Make at least one guest be required
+        // TODO: Make This be in the data transformer
         const putRsvpDto = {
-            rsvpCode: formData.rsvpCode, lastName: formData.lastName, primaryContact: {
-                name: formData.prefName, email: formData.prefEmail, phoneNumber: formData.prefPhone,
+            rsvpCode: formData.rsvpCode, lastName: formData.lastname, rsvpStatus: formData.rsvpStatus, primaryContact: {
+                name: formData.preferredContact.name,
+                email: formData.preferredContact.email,
+                phoneNumber: formData.preferredContact.phone,
             }, rsvpGuestDetails: formData.guests.map((guest) => ({
                 name: guest.name, dietaryRestrictions: guest.dietaryRestrictions, other: guest.other,
             })),
         };
-        await putRsvp(putRsvpDto);
+        const data = await putRsvp(putRsvpDto);
 
-        if (error === '') {
+        if ((!error || error === '') && data) {
             resetFormData();
 
-            if (returnPage === null) {
+            if (!returnPage) {
                 changePage(RSVP_CONFIRMATION_STEP);
             } else {
                 resetStepState();
@@ -45,33 +54,30 @@ const RsvpGuests = ({changePage, returnPage}) => {
 
     const handleNewGuest = () => {
         setEditingGuest(null);
-        changePage(RSVP_ADD_GUEST_STEP)
+        changePage(RSVP_ADD_GUEST_STEP);
     };
 
     const handleEditGuest = (index) => {
         setEditingGuest({...formData.guests[index], index});
-        changePage(RSVP_ADD_GUEST_STEP)
+        changePage(RSVP_ADD_GUEST_STEP);
     };
 
     const handleDeleteGuest = (index) => {
-        setFormData((prevData) => ({
-            ...prevData, guests: prevData.guests.filter((_, i) => i !== index),
-        }));
+        deleteGuest(index);
     };
 
-    return (<Container style={{maxWidth: "900px"}}>
+    return (<Container style={{maxWidth: '900px'}}>
         {error && <div className="alert alert-danger">{error}</div>}
         <Row className="mb-4">
-            {formData.guests.length === 0 ? ("") : (<Table hover className="custom-table">
+            {formData.guests.length === 0 ? ('') : (<Table hover className="custom-table">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>
-                        {formData.guests.some((guest) => guest.dietaryRestrictions && guest.dietaryRestrictions.length >
-                         0) && "Dietary Restrictions"}
+                        Dietary Restrictions
                     </th>
                     <th>
-                        {formData.guests.some((guest) => guest.other && guest.other.trim() !== "") && "Other"}
+                        {formData.guests.some((guest) => guest.other && guest.other.trim() !== '') && 'Other'}
                     </th>
                     <th></th>
                 </tr>
@@ -80,16 +86,13 @@ const RsvpGuests = ({changePage, returnPage}) => {
                 {formData.guests && formData.guests.map((guest, index) => (<tr
                         key={index}
                         onClick={() => handleEditGuest(index)}
-                        style={{cursor: "pointer"}}
+                        style={{cursor: 'pointer'}}
                 >
+                    <td className="align-middle">{guest.name}</td>
                     <td className="align-middle">
-                        {guest.name}
-                    </td>
-                    <td className="align-middle">
-                        {guest.dietaryRestrictions.map((restriction, idx) => (<span key={idx}>
-                                                {restriction}
-                            <br/>
-                                            </span>))}
+                        {guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
+                         ? guest.dietaryRestrictions.map((restriction, idx) => (
+                                        <span key={idx}> {restriction} <br/> </span>)) : 'None'}
                     </td>
                     <td className="align-middle">{guest.other}</td>
                     <td className="align-middle">
@@ -110,14 +113,25 @@ const RsvpGuests = ({changePage, returnPage}) => {
             </Table>)}
         </Row>
         <Row className="d-flex justify-content-evenly my-5 px-2">
-            <Button className="rsvp-button dark" onClick={handleBack}>
+            <Button className="rsvp-button dark hover" onClick={handleBack}>
                 Back
             </Button>
-            <Button className="rsvp-button dark long" onClick={handleNewGuest}>
-                Add Guest
-            </Button>
-            <Button className="rsvp-button width-auto dark" onClick={handleNext}>
-                {loading ? "Submitting" : "Submit"}
+            <Col className="col-auto">
+                {formData.allowedGuestCount > formData.guests.length && <Row className="justify-content-center">
+                    <Button className="rsvp-button dark hover width-auto" onClick={handleNewGuest}>
+                        Add Guest
+                    </Button>
+                </Row>}
+                <Row className="pt-2 justify-content-center">
+                    <body>
+                        Remaining Guests: {formData.allowedGuestCount < formData.guests.length ? 0
+                                                                                               : formData.allowedGuestCount -
+                                                                                                 formData.guests.length}
+                    </body>
+                </Row>
+            </Col>
+            <Button className="rsvp-button width-auto dark hover" onClick={handleNext}>
+                {loading ? 'Submitting' : 'Submit'}
             </Button>
         </Row>
     </Container>);

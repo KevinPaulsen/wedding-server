@@ -4,6 +4,7 @@ import RsvpPrimaryContact, {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContac
 import RsvpGuests, {RSVP_GUESTS_PAGE} from "./RsvpGuests";
 import RsvpAddGuest, {RSVP_ADD_GUEST_STEP} from "./RsvpAddGuest";
 import RsvpConfirmation, {RSVP_CONFIRMATION_STEP} from "./RsvpConfirmation";
+import RsvpStatus, {RSVP_STATUS_STEP} from "./RsvpStatusSelector";
 
 const RSVPFormStep = ({step, changePage, requireAnswers = true, returnPage = null}) => {
     switch (step) {
@@ -12,6 +13,11 @@ const RSVPFormStep = ({step, changePage, requireAnswers = true, returnPage = nul
                         <h3 className="pb-4"> RSVP Information </h3>
                         <RsvpInfo changePage={changePage}/>
                     </div>);
+        case RSVP_STATUS_STEP:
+            return (<div>
+                <h3 className="pb-4"> Will you be attending? </h3>
+                <RsvpStatus changePage={changePage} requireAnswers={requireAnswers} returnPage={returnPage}/>
+            </div>);
         case RSVP_PRIMARY_CONTACT_STEP:
             return (<div>
                         <h3 className="pb-4"> Primary Contact </h3>
