@@ -1,9 +1,9 @@
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
-import RsvpTable from "../../components/admin/RsvpTable";
+import AdminRsvpController from "../../components/admin/adminRsvpTable/AdminRsvpController";
 
 const GuestListPage = () => {
-    return (<AdminLayout children={<RsvpTable/>}/>);
+    return (<AdminLayout children={<AdminRsvpController/>}/>);
 }
 
 

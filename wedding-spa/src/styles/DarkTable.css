@@ -1,0 +1,19 @@
+.dark-table {
+    background-color: transparent !important;
+    color: var(--main-light) !important;
+    border-collapse: separate !important;
+    border-spacing: 0 0 !important;
+}
+
+.dark-table th,
+.dark-table td {
+    color: var(--main-light) !important;
+    background-color: transparent;
+    border: none !important;
+    text-align: center;
+}
+
+.dark-table thead th {
+    border-bottom: 2px solid var(--main-light) !important;
+    font-weight: bold;
+}

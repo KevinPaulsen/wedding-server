@@ -5,10 +5,10 @@ import CancelButton from "../../components/rsvpFlow/CancelButton";
 import RSVPFormStep from "../../components/rsvpFlow/RsvpFormStep";
 import '../../styles/RsvpFlow.css'
 import {RSVP_CONFIRMATION_STEP} from "../../components/rsvpFlow/RsvpConfirmation";
-import {RSVP_PRIMARY_CONTACT_STEP} from "../../components/rsvpFlow/RsvpPrimaryContact";
+import {RSVP_STATUS_STEP} from "../../components/rsvpFlow/RsvpStatusSelector";
 
 const AdminRsvpFlow = () => {
-    const [currentStep, setCurrentStep] = useState(RSVP_PRIMARY_CONTACT_STEP);
+    const [currentStep, setCurrentStep] = useState(RSVP_STATUS_STEP);
 
     const changePage = (step) => {
         setCurrentStep(step);

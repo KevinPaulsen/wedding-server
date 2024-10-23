@@ -4,10 +4,20 @@ const request = async (endpoint, options = {}) => {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, options);
         if (!response.ok) {
-            const errorData = await response.json();
-            const errorMessage = errorData.detail || 'An unknown error occurred';
+            let errorMessage = 'An unknown error occurred';
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.detail || errorMessage;
+            } catch (jsonError) {
+                console.error('Error parsing error response JSON:', jsonError);
+            }
             throw new Error(errorMessage);
         }
+
+        if (response.status === 204) {
+            return;
+        }
+
         return await response.json();
     } catch (error) {
         console.error('API Request Error:', error);

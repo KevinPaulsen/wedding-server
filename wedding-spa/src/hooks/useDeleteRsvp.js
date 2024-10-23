@@ -3,23 +3,20 @@ import {deleteRsvpRequest} from "../services/ApiService";
 
 export const useDeleteRsvp = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [deleteError, setDeleteError] = useState(null);
 
     const deleteRsvp = async (rsvpCode) => {
         setLoading(true);
-        setError(null);
-        let response = null;
+        setDeleteError(null);
 
         try {
-            response = await deleteRsvpRequest(rsvpCode);
+            await deleteRsvpRequest(rsvpCode);
         } catch (err) {
-            setError(err.message);
+            setDeleteError(err.message);
         } finally {
             setLoading(false);
         }
-
-        return response;
     };
 
-    return {deleteRsvp, loading, error};
+    return {deleteRsvp, loading, deleteError};
 };
