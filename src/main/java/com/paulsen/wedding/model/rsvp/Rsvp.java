@@ -84,7 +84,10 @@ import java.util.Set;
 
     public void setLastnames(Set<String> lastnames) {
         if (lastnames != null && !lastnames.isEmpty()) {
-            this.lastnames.addAll(lastnames.stream().map(Rsvp::formatName).toList());
+            this.lastnames.addAll(lastnames.stream()
+                                           .filter(lastname -> !lastname.isEmpty())
+                                           .map(Rsvp::formatName)
+                                           .toList());
         }
     }
 
