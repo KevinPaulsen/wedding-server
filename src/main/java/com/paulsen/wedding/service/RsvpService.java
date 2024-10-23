@@ -42,6 +42,10 @@ import java.util.List;
     }
 
     public Rsvp findRsvpByRsvpCode(String rsvpCode) {
+        if (rsvpCode == null || rsvpCode.isEmpty()) {
+            throw new IllegalArgumentException("RSVP code is required");
+        }
+
         return rsvpRepository.findByRsvpCode(formatRsvpCode(rsvpCode)).orElseThrow();
     }
 
@@ -62,11 +66,22 @@ import java.util.List;
         return rsvpRepository.save(rsvp);
     }
 
-    public Rsvp updateRsvp(PutRsvpDto input) {
-        if (input.getRsvpCode() == null || input.getRsvpCode().isEmpty()) {
-            throw new IllegalArgumentException("RSVP code is required");
-        }
+    @Transactional public Rsvp edit(AddRsvpDto input) {
+        Rsvp rsvp = findRsvpByRsvpCode(input.getRsvpCode());
 
+        rsvp.setAllowedGuestCount(
+                input.getAllowedGuestCount() == 0 ? rsvp.getAllowedGuestCount() : input.getAllowedGuestCount());
+        rsvp.setRsvpStatus(input.getRsvpStatus() == null ? rsvp.getRsvpStatus() : input.getRsvpStatus());
+        rsvp.setLastnames(input.getLastnames());
+        rsvp.setPrimaryContact(
+                input.getPrimaryContact() == null ? rsvp.getPrimaryContact() : input.getPrimaryContact());
+        rsvp.setRsvpGuestDetails(
+                input.getRsvpGuestDetails() == null ? rsvp.getRsvpGuestDetails() : input.getRsvpGuestDetails());
+
+        return rsvpRepository.save(rsvp);
+    }
+
+    public Rsvp updateRsvp(PutRsvpDto input) {
         if (input.getLastName() == null || input.getLastName().isEmpty()) {
             throw new IllegalArgumentException("Lastname is required");
         }

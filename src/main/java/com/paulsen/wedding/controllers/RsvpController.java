@@ -29,6 +29,12 @@ import java.util.List;
         return ResponseEntity.ok(addedRsvp);
     }
 
+    @PutMapping("/edit") public ResponseEntity<Rsvp> edit(@RequestBody AddRsvpDto addRsvpDto) {
+        Rsvp edited = rsvpService.edit(addRsvpDto);
+
+        return ResponseEntity.ok(edited);
+    }
+
     @PutMapping("/update") public ResponseEntity<Rsvp> update(@RequestBody PutRsvpDto putRsvpDto) {
         Rsvp rsvp = rsvpService.updateRsvp(putRsvpDto);
 
