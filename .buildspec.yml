@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11  # Adjust your Java version if needed
+  pre_build:
+    commands:
+      - echo "Starting Gradle build..."
+  build:
+    commands:
+      - ./gradlew clean build
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+artifacts:
+  files:
+    - build/libs/*.jar
+
