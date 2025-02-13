@@ -134,7 +134,7 @@ import java.util.Set;
 
             String lastname = extractLastName(rsvpGuestDetail.name());
             if (!lastname.isEmpty()) {
-                lastnames.add(extractLastName(rsvpGuestDetail.name()));
+                lastnames.add(lastname);
             }
         }
     }
