@@ -1,0 +1,9 @@
+# Ignore everything by default
+*
+
+# Explicitly include the jar files in build/libs
+!build/libs/*.jar
+
+!Procfile
+!.platform/*
+
