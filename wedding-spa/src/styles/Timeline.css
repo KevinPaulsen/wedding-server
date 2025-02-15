@@ -1,6 +1,6 @@
 :root {
     /* Layout / Sizing */
-    --container-width: 80%;
+    --container-width: 95%;
     --container-margin: 2rem auto;
     --spiral-top-offset: 0;
 
@@ -114,8 +114,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(var(--event-transform-y));
-    display: inline-block; /* so container is as narrow as needed */
-    white-space: nowrap;   /* prevent line breaks, if desired */
+
 }
 
 /* For left items: place content to the left of the intersection */
