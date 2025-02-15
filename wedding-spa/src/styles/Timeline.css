@@ -160,6 +160,7 @@
     font-size: 20px;
     color: var(--accent-text);
     justify-content: center;
+    text-align: center;
 }
 
 /* Image placed above the text */
