@@ -91,7 +91,6 @@
        We'll let .timeline-item.left or .right override "left" or "right" property. */
     transform: translateY(-70%);
     /* optional spacing or background if needed */
-    font-size: 20px;
 }
 
 .timeline-item.left .event-content {
@@ -108,9 +107,20 @@
     text-align: left;
 }
 
+.timeline-item.center {
+    /* Use auto width or a fixed width—your choice */
+    width: auto;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    text-align: center;
+    background: var(--main-light);
+}
+
 /* Title/time text: var(--main-dark). */
 .event-time-title {
     color: var(--main-dark);
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 0.25rem;
 }

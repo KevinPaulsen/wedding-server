@@ -10,6 +10,19 @@ const TimelineItem = ({
     location,
     image
 }) => {
+    // If it's center, we skip arcs & intersection
+    if (position === "center") {
+        return (
+                <div className={`timeline-item center`} style={{}}>
+                    <img src={image} alt={title} className="event-image" />
+                    <div className="event-time-title">
+                        {time} {title}
+                    </div>
+                    <div className="event-location">{location}</div>
+                </div>
+        );
+    }
+
     // Determine which half arc class to use (left item => right half arc, and vice versa)
     const halfArcClass = position === "left" ? "right-half" : "left-half";
 

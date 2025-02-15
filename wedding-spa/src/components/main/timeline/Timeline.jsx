@@ -6,14 +6,14 @@ import '../../../styles/Timeline.css';
 
 const Timeline = () => {
     const padding = 200;
-    const buffer = 100;
+    const buffer = 125;
     // Calculate a container height so the vertical line covers all items
     // For n items, the bottom item sits at (n-1)*200px + some extra padding
-    const containerHeight = buffer + (timelineEvents.length - 1) * padding + buffer + 32;
+    const containerHeight = 50 + padding + buffer + (timelineEvents.length - 2) * padding + 32;
 
     return (<div
                     className="timeline-container"
-                    style={{height: containerHeight}}
+                    style={{ height: containerHeight }}
             >
         {/* The spiral, absolutely positioned at the top center */}
         <div className="spiral-top">
@@ -32,13 +32,26 @@ const Timeline = () => {
                 />
             </svg>
         </div>
+        {timelineEvents.map((event, index) => {
+            // Is this the last item?
+            const isLast = index === timelineEvents.length - 1;
 
-                {timelineEvents.map((event, index) => (<TimelineItem
-                                key={index}
-                                position={index % 2 === 0 ? "left" : "right"}
-                                topOffset={index * padding + buffer}
-                                {...event} // pass time, title, location, image
-                        />))}
+            // If last item => "center", else alternate left/right
+            const position = isLast
+                             ? "center"
+                             : index % 2 === 1
+                               ? "left"
+                               : "right";
+
+            return (
+                    <TimelineItem
+                            key={index}
+                            position={position}
+                            topOffset={index * padding + buffer}
+                            {...event}
+                    />
+            );
+        })}
             </div>);
 };
 
