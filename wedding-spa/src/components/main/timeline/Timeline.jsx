@@ -25,7 +25,7 @@ const Timeline = () => {
                     xmlns="http://www.w3.org/2000/svg"
             >
                 <path
-                        d="M 20 58 V 45 C 20 42 21 41 23 40 C 43 33 38 3 17 6 C 4 8 0 21 7 28 C 11 32 25 30 25 21 C 25 14 16 12 14 20"
+                        d="M 20 58 V 45 C 20 42 21 41 23 40 C 43 33 38 3 17 6 C 4 8 0 21 7 28 C 13 35 25 30 25 21 C 25 14 16 12 14 20"
                         stroke="var(--main-dark)"
                         strokeWidth="var(--line-width)"
                         strokeLinecap="round"
