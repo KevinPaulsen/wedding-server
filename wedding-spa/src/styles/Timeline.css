@@ -6,7 +6,7 @@
 
     /* Vertical line */
     --timeline-top-offset: 50px;
-    --line-width: 5px;
+    --line-width: 3px;
 
     /* Timeline items */
     --timeline-item-padding: 1rem;
