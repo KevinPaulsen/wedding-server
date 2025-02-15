@@ -3,16 +3,21 @@ import React from "react";
 import '../../../styles/Timeline.css';
 import {Container, Row} from "react-bootstrap";
 
-const TimelineDetails = ({image, time, title, location}) => {
+const TimelineDetails = ({image, time, title, location, height=130}) => {
     return <>
-        <Row>
-            {image && <img src={image} alt={title} className="event-image"/>}
+        <Row className="event-image" style={{minHeight: height}}>
+            <img src={image} alt={title}/>
         </Row>
-        <Row className="event-time">{time}</Row>
-        <Row className="event-title">{title}</Row>
-        <Row className="event-location">
-            {location}
-        </Row>
+        <Row className="m-0 event-time">{time}</Row>
+        <Container className="m-0 g-0" style={{ minHeight: height}} >
+            <div className="event-title">
+                {title}
+            </div>
+
+            <div className="event-location">
+                {location}
+            </div>
+        </Container>
     </>
 }
 
@@ -23,7 +28,7 @@ const TimelineItem = ({
     if (position === "center") {
         return (
                 <Container className="timeline-item center">
-                    <TimelineDetails image={image} location={location} time={time} title={title}/>
+                    <TimelineDetails image={image} location={location} time={time} title={title} height={0}/>
                 </Container>
                 );
     }

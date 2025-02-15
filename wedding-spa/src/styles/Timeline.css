@@ -16,8 +16,8 @@
     --connector-width: 25%;        /* Enough to span from item edge to vertical center */
 
     /* Event content offsets */
-    --event-transform-y: -50%;     /* How far up/down to shift event content */
-    --event-offset: calc(var(--connector-width));
+    --event-transform-y: -52%;     /* How far up/down to shift event content */
+    --event-offset: calc(var(--connector-width) - 18px);
 
     /* Bullseye circles */
     --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
@@ -67,19 +67,18 @@
     position: absolute;
     width: calc(50% - var(--timeline-item-gap));
     padding: var(--timeline-item-padding);
+    text-align: center;
     /* No explicit z-index here, so it remains above the line’s z-index: 0 */
 }
 
 /* Left-side items: pinned to the left side */
 .timeline-item.left {
     left: 0;
-    text-align: right;
 }
 
 /* Right-side items: pinned to the right side */
 .timeline-item.right {
     right: 0;
-    text-align: left;
 }
 
 /************************************************
@@ -114,7 +113,6 @@
     width: auto;
     height: fit-content;
     position: absolute;
-    min-height: 200px;
     transform: translateY(var(--event-transform-y));
 }
 
@@ -143,22 +141,31 @@
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 0.25rem;
-    justify-content: center;
+
+    /* Fit content but still be centered */
+    display: inline-block;
+    width: fit-content;
+
+    /* Center in the row */
+    margin-left: auto;
+    margin-right: auto;
 }
+
 
 .event-title {
     color: var(--main-dark);
     font-size: 20px;
+    height: fit-content;
     font-weight: bold;
-    margin-bottom: 0.25rem;
     justify-content: center;
     text-align: center;
 }
 
 /* Location below in orange */
 .event-location {
-    font-size: 20px;
+    font-size: 19px;
     color: var(--accent-text);
+    height: fit-content;
     justify-content: center;
     text-align: center;
 }
@@ -166,6 +173,7 @@
 /* Image placed above the text */
 .event-image {
     display: block;
+    align-content: end;
     max-width: 100px;
     margin: 0 auto 0.5rem;
     filter: invert(1);
