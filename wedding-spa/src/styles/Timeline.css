@@ -22,10 +22,10 @@
     /* Bullseye circles */
     --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
     --circle2-size: 25px;
-    --circle3-size: calc(var(--circle2-size) - 2 * var(--line-width));
+    --circle3-size: 12px;
 
     /* Arc sizes */
-    --arc-container-diamater: 50px;
+    --arc-container-diamater: 45px;
     --half-arc-container-width: calc(var(--arc-container-diamater) / 2);
     --half-arc-container-height: var(--arc-container-diamater);
 }
@@ -201,7 +201,10 @@
 .circle-2 {
     width: var(--circle2-size);
     height: var(--circle2-size);
-    background-color: var(--main-dark);
+    border: var(--line-width) solid var(--main-dark);
+    background-color: var(--main-light);
+    box-sizing: border-box;
+    border-radius: 50%;
 }
 
 /* Circle #3 */

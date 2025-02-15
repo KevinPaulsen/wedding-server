@@ -1,7 +1,6 @@
 // TimelineItem.jsx
 import React from "react";
 import '../../../styles/Timeline.css';
-import {Container, Row} from "react-bootstrap";
 
 const TimelineItem = ({
     position,
