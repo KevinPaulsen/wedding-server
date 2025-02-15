@@ -1,0 +1,232 @@
+/************************************************
+ * TIMELINE CONTAINER & VERTICAL CENTER LINE
+ ************************************************/
+.timeline-container {
+    position: relative; /* needed for absolute-positioned children */
+    width: 80%;
+    margin: 2rem auto;
+    /* The height is set inline from Timeline.jsx (containerHeight) */
+}
+
+/* Main vertical line from top:0 to bottom:0
+   so it covers the entire container height */
+.timeline-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: var(--main-dark);
+    transform: translateX(-50%);
+    /* Lowest z-index so everything else sits above it */
+    z-index: 0;
+}
+
+/************************************************
+ * TIMELINE ITEM (ABSOLUTE POSITION)
+ ************************************************/
+.timeline-item {
+    position: absolute; /* We'll set 'top' dynamically in the style attribute */
+    width: calc(50% - 15px);
+    padding: 1rem;
+    /* No explicit z-index here, so it defaults above z-index:0 */
+}
+
+/* Left-side items: pinned to the left side */
+.timeline-item.left {
+    left: 0;
+    text-align: right; /* optional styling */
+}
+
+/* Right-side items: pinned to the right side */
+.timeline-item.right {
+    right: 0;
+    text-align: left; /* optional styling */
+}
+
+/************************************************
+ * HORIZONTAL CONNECTOR (via ::after)
+ ************************************************/
+/* Both left and right connectors share some styling */
+.timeline-item.left::after,
+.timeline-item.right::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25%; /* Enough width to span from item edge to vertical center */
+    height: 4px;
+    background: var(--main-dark);
+    /* This z-index is higher than the circles, so the line appears on top */
+    z-index: 2;
+}
+
+/* For left items: extends from item’s right edge to center. */
+.timeline-item.left::after {
+    right: 0;
+}
+
+/* For right items: extends from item’s left edge to center. */
+.timeline-item.right::after {
+    left: 0;
+}
+
+/************************************************
+ * EVENT CONTENT (TITLE/TIME, LOCATION, IMAGE)
+ ************************************************/
+.event-content {
+    position: absolute;
+    top: 50%;
+    /* For left items, we'll push it to the left; for right items, to the right.
+       We'll let .timeline-item.left or .right override "left" or "right" property. */
+    transform: translateY(-70%);
+    /* optional spacing or background if needed */
+    font-size: 20px;
+}
+
+.timeline-item.left .event-content {
+    right: 27%;
+    /* 105% so it sits just to the left of the intersection
+       (which is at 100% + 15px from the timeline item).
+       Tweak as needed. */
+    text-align: right;
+}
+
+.timeline-item.right .event-content {
+    left: 27%;
+    /* 105% so it sits just to the right of the intersection */
+    text-align: left;
+}
+
+/* Title/time text: var(--main-dark). */
+.event-time-title {
+    color: var(--main-dark);
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+/* Location below in orange. */
+.event-location {
+    color: orange;
+}
+
+/* Image placed above the text */
+.event-image {
+    display: block;
+    max-width: 80px; /* or any size you want */
+    margin: 0 auto 0.5rem;
+    filter: invert(1);
+    /* centers the image horizontally,
+       with some spacing below. Adjust as needed */
+}
+
+/************************************************
+ * INTERSECTION BULLSEYE (3-LAYERED CIRCLES)
+ ************************************************/
+/* The .intersection container sits at the item’s midpoint
+   and aligns with the vertical center line (50% of container). */
+.intersection {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* For left items: place intersection at the item’s right edge */
+.timeline-item.left .intersection {
+    left: calc(100% + 15px);
+}
+
+/* For right items: place intersection at the item’s left edge */
+.timeline-item.right .intersection {
+    left: -15px;
+}
+
+/* Each circle is absolutely centered within .intersection */
+.circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    /* Circles are behind z-index:2 lines, so give them z-index:1 or less */
+    z-index: 3;
+}
+
+/* Circle #1 (e.g., 50px) */
+.circle-1 {
+    width: 42px;
+    height: 42px;
+    background-color: var(--main-light);
+}
+
+/* Circle #2 (e.g., 28px) */
+.circle-2 {
+    width: 30px;
+    height: 30px;
+    background-color: var(--main-dark);
+}
+
+/* Circle #3 (e.g., 22px) */
+.circle-3 {
+    width: 22px;
+    height: 22px;
+    background-color: var(--main-light);
+}
+
+/************************************************
+ * BASE ARC (for quarter arcs)
+ ************************************************/
+.arc {
+    position: absolute;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    z-index: 4;
+}
+
+/*
+   The idea is that the .arc container (50x50) shows only one quadrant
+   of the full circle (100x100). By shifting the ::before element, you control
+   which quadrant (arc) is visible.
+*/
+
+/************************************************
+ * HALF ARCS
+ ************************************************/
+/* For half arcs we use a different container size.
+   Let’s use a container of 50px width x 100px height.
+   (You can adjust these numbers if needed.) */
+.arc.half {
+    width: 25px;
+    height: 50px;
+    overflow: hidden;
+    position: absolute;
+    transform: translate(-100%, -50%);
+}
+
+/* When the half arc is inside a left timeline item, shift it left */
+.timeline-item.left .arc.half {
+    transform: translateY(-50%);
+}
+
+/* Reapply the same pseudo-element for half arcs */
+.arc.half::before {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--main-dark);
+    border-radius: 50%;
+}
+/* Left Half Arc: shows the left half of the circle */
+.arc.left-half::before {
+    top: 0;
+    left: 0;      /* no offset needed, shows right half */
+}
+
+/* Right Half Arc: shows the right half of the circle */
+.arc.right-half::before {
+    top: 0;
+    left: -25px;  /* shift left so that only the left half is visible */
+}
