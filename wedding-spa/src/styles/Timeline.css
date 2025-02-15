@@ -16,8 +16,8 @@
     --connector-width: 25%;        /* Enough to span from item edge to vertical center */
 
     /* Event content offsets */
-    --event-transform-y: -70%;     /* How far up/down to shift event content */
-    --event-offset: calc(var(--connector-width) + 15px);
+    --event-transform-y: -50%;     /* How far up/down to shift event content */
+    --event-offset: calc(var(--connector-width));
 
     /* Bullseye circles */
     --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
@@ -111,22 +111,21 @@
  * EVENT CONTENT (TITLE/TIME, LOCATION, IMAGE)
  ************************************************/
 .event-content {
+    width: auto;
+    height: fit-content;
     position: absolute;
-    top: 50%;
+    min-height: 200px;
     transform: translateY(var(--event-transform-y));
-
 }
 
 /* For left items: place content to the left of the intersection */
 .timeline-item.left .event-content {
     right: var(--event-offset);
-    text-align: right;
 }
 
 /* For right items: place content to the right of the intersection */
 .timeline-item.right .event-content {
     left: var(--event-offset);
-    text-align: left;
 }
 
 /* Center item special styling */
@@ -135,30 +134,40 @@
     left: 50%;
     bottom: 0;
     transform: translateX(-50%);
-    text-align: center;
     background: var(--main-light);
 }
 
 /* Title/time text */
-.event-time-title {
+.event-time {
     color: var(--main-dark);
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 0.25rem;
+    justify-content: center;
+}
+
+.event-title {
+    color: var(--main-dark);
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    justify-content: center;
+    text-align: center;
 }
 
 /* Location below in orange */
 .event-location {
+    font-size: 20px;
     color: var(--accent-text);
-    text-align: center;
+    justify-content: center;
 }
 
 /* Image placed above the text */
 .event-image {
     display: block;
-    max-width: 80px;
+    max-width: 100px;
     margin: 0 auto 0.5rem;
-    filter: invert(1); /* Example color effect */
+    filter: invert(1);
 }
 
 /************************************************
