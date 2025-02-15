@@ -43,7 +43,7 @@ export const timelineEvents = [
         image: tea
     },
     {
-        time: "10:30",
+        time: "10:30 PM",
         title: "Send Off",
         image: tea,
     },
