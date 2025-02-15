@@ -8,12 +8,21 @@
     /* The height is set inline from Timeline.jsx (containerHeight) */
 }
 
+/* The spiral at the top */
+.spiral-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Adjust if you want the spiral bigger/smaller */
+}
+
 /* Main vertical line from top:0 to bottom:0
    so it covers the entire container height */
 .timeline-container::before {
     content: "";
     position: absolute;
-    top: 0;
+    top: 50px;
     bottom: 0;
     left: 50%;
     width: 4px;
@@ -108,7 +117,8 @@
 
 /* Location below in orange. */
 .event-location {
-    color: orange;
+    color: var(--accent-text);
+    text-align: center;
 }
 
 /* Image placed above the text */
