@@ -1,9 +1,9 @@
 import React from 'react';
 import BaseLayout from "../../components/main/BaseLayout";
-import Gallery from "../../components/main/Gallery";
+import PhotoGalleryComponent from "../../components/main/PhotoGalleryComponent";
 
 const Home = () => {
-    return (<BaseLayout children={<Gallery/>}/>);
+    return (<BaseLayout children={<PhotoGalleryComponent/>}/>);
 }
 
 

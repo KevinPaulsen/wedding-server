@@ -134,3 +134,10 @@ export const uploadPhoto = async (file) => {
         body: JSON.stringify(metadataPayload),
     });
 };
+
+export const getPhotoMetadata = () => {
+    return request('/gallery/all', {
+        method: 'GET', headers: {
+        }, credentials: 'include',
+    });
+}
