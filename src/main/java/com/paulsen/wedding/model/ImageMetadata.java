@@ -10,6 +10,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
     @DynamoDBAttribute(attributeName="imageUrl") private String imageUrl;
 
+    @DynamoDBAttribute(attributeName = "width") private Integer width;
+    @DynamoDBAttribute(attributeName = "height") private Integer height;
+
     @DynamoDBAttribute(attributeName="uploadTimestamp") private long uploadTimestamp;
 
     // Getters and setters
@@ -28,6 +31,22 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 
     public long getUploadTimestamp() {

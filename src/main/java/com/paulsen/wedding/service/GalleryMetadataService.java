@@ -22,10 +22,13 @@ import java.util.List;
         return allMetaData;
     }
 
-    @Transactional public ImageMetadata saveImageMetadata(String imageId, String imageUrl, long uploadTimestamp) {
+    @Transactional public ImageMetadata saveImageMetadata(String imageId, String imageUrl, int width, int height,
+            long uploadTimestamp) {
         ImageMetadata imageMetadata = new ImageMetadata();
         imageMetadata.setImageId(imageId);
         imageMetadata.setImageUrl(imageUrl);
+        imageMetadata.setWidth(width);
+        imageMetadata.setHeight(height);
         imageMetadata.setUploadTimestamp(uploadTimestamp);
         return imageMetadataRepository.save(imageMetadata);
     }

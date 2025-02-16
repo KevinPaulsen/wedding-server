@@ -5,10 +5,14 @@ import java.util.Objects;
 public class ImageMetadataDto {
     private String imageId;
     private String imageUrl;
+    private Integer width;
+    private Integer height;
 
-    public ImageMetadataDto(String imageId, String imageUrl) {
+    public ImageMetadataDto(String imageId, String imageUrl, Integer width, Integer height) {
         this.imageId = imageId;
         this.imageUrl = imageUrl;
+        this.width = width;
+        this.height = height;
     }
 
     public ImageMetadataDto() {
@@ -30,6 +34,22 @@ public class ImageMetadataDto {
         this.imageUrl = imageUrl;
     }
 
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
     @Override public final boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -38,12 +58,15 @@ public class ImageMetadataDto {
             return false;
         }
 
-        return Objects.equals(getImageId(), that.getImageId()) && Objects.equals(getImageUrl(), that.getImageUrl());
+        return Objects.equals(getImageId(), that.getImageId()) && Objects.equals(getImageUrl(), that.getImageUrl()) &&
+               Objects.equals(getWidth(), that.getWidth()) && Objects.equals(getHeight(), that.getHeight());
     }
 
     @Override public int hashCode() {
         int result = Objects.hashCode(getImageId());
         result = 31 * result + Objects.hashCode(getImageUrl());
+        result = 31 * result + Objects.hashCode(getWidth());
+        result = 31 * result + Objects.hashCode(getHeight());
         return result;
     }
 }

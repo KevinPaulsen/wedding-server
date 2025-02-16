@@ -52,6 +52,8 @@ import java.util.Map;
 
         ImageMetadata metadata = metadataService.saveImageMetadata(metadataDto.getImageId(),
                                                                    metadataDto.getImageUrl(),
+                                                                   metadataDto.getWidth(),
+                                                                   metadataDto.getHeight(),
                                                                    uploadTimestamp);
         return ResponseEntity.ok(metadata);
     }
