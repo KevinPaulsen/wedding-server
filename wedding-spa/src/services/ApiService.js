@@ -1,3 +1,5 @@
+import {getImageDimensions} from './utils';
+
 export const API_URL = 'https://api.KevinLovesOlivia.com';
 
 const request = async (endpoint, options = {}) => {
@@ -85,9 +87,11 @@ export const adminLogin = (username, password) => {
     });
 }
 
-// In your ApiService.js
 export const uploadPhoto = async (file) => {
-    // 1. Get a pre-signed URL from your backend
+    // 1. Get the image dimensions from the file
+    const { width, height } = await getImageDimensions(file);
+
+    // 2. Request a pre-signed URL from your backend
     const presignedResponse = await request('/gallery/generate-presigned-url', {
         method: 'POST',
         headers: {
@@ -99,7 +103,7 @@ export const uploadPhoto = async (file) => {
 
     const { url, key } = presignedResponse;
 
-    // 2. Upload the file directly to S3 using the pre-signed URL
+    // 3. Upload the file directly to S3 using the pre-signed URL
     const s3Response = await fetch(url, {
         method: 'PUT',
         headers: { 'Content-Type': file.type },
@@ -110,21 +114,23 @@ export const uploadPhoto = async (file) => {
         throw new Error(`S3 upload failed for ${file.name}`);
     }
 
-    // 3. Save metadata in your backend
+    // 4. Save metadata in your backend
     // We remove any query parameters from the URL to get the actual public URL (if applicable)
     const imageUrl = url.split('?')[0];
     const metadataPayload = {
         imageId: key,
         imageUrl,
+        width,
+        height,
     };
 
+    // 5. Save metadata in your backend
     return await request('/gallery/metadata', {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(metadataPayload),
-    }); // Could be the saved metadata object
+        body: JSON.stringify(metadataPayload),
+    });
 };
-
