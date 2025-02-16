@@ -84,3 +84,47 @@ export const adminLogin = (username, password) => {
         }, credentials: 'include', body: JSON.stringify({username, password}),
     });
 }
+
+// In your ApiService.js
+export const uploadPhoto = async (file) => {
+    // 1. Get a pre-signed URL from your backend
+    const presignedResponse = await request('/gallery/generate-presigned-url', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fileName: file.name }),
+    });
+
+    const { url, key } = presignedResponse;
+
+    // 2. Upload the file directly to S3 using the pre-signed URL
+    const s3Response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file,
+    });
+
+    if (!s3Response.ok) {
+        throw new Error(`S3 upload failed for ${file.name}`);
+    }
+
+    // 3. Save metadata in your backend
+    // We remove any query parameters from the URL to get the actual public URL (if applicable)
+    const imageUrl = url.split('?')[0];
+    const metadataPayload = {
+        imageId: key,
+        imageUrl,
+    };
+
+    return await request('/gallery/metadata', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(metadataPayload),
+    }); // Could be the saved metadata object
+};
+

@@ -14,6 +14,7 @@ import GuestListPage from "./pages/admin/GuestListPage";
 import AddRsvpPage from "./pages/admin/AddRsvpPage";
 import RsvpFlowPage from "./pages/rsvp/RsvpFlowPage";
 import AdminRsvpFlow from "./pages/admin/AdminRsvpFlow";
+import UploadPhotoPage from "./pages/admin/UploadToPhotoGallery";
 
 function App() {
     return (<Routes>
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow/>}/>}/>
 
                 <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage/>}/>}/>
+                <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage/>}/>}/>
                 <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage/>}/>}/>
 
                 <Route path="/" element={<HomePage/>}/>

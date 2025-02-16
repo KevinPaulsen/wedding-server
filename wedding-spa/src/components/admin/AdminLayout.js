@@ -29,6 +29,7 @@ const AdminLayout = ({children}) => {
                             <Col className="d-flex justify-content-center text-center flex-grow-1 gap-3">
                                 <Link to="/admin/guests" className='nav-link'>Guest List</Link>
                                 <Link to="/admin/dashboard" className='nav-link'>RSVP Info</Link>
+                                <Link to="/admin/add-photos" className='nav-link'>Add Photos</Link>
                                 <Link to="/admin/add-rsvp" className='nav-link'>Add RSVP</Link>
                             </Col>
                         </Row>
