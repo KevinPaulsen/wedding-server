@@ -5,7 +5,6 @@ import com.paulsen.wedding.repositories.ImageMetadataRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service public class GalleryMetadataService {
@@ -24,7 +23,8 @@ import java.util.List;
 
     @Transactional public ImageMetadata saveImageMetadata(String imageId, String imageUrl, int width, int height,
             long uploadTimestamp) {
-        ImageMetadata max = imageMetadataRepository.findFirstByPartitionOrderByOrderValueDesc(ImageMetadata.PARTITION).orElse(null);
+        ImageMetadata max = imageMetadataRepository.findFirstByPartitionOrderByOrderValueDesc(ImageMetadata.PARTITION)
+                                                   .orElse(null);
 
         ImageMetadata imageMetadata = new ImageMetadata();
         imageMetadata.setImageId(imageId);

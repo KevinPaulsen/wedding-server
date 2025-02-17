@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository @EnableScan public interface ImageMetadataRepository extends CrudRepository<ImageMetadata, ImageMetadataKey> {
+@Repository @EnableScan public interface ImageMetadataRepository
+        extends CrudRepository<ImageMetadata, ImageMetadataKey> {
     // This method will use the GSI to query items with orderGroup="PHOTO" and sort by orderValue descending.
     Optional<ImageMetadata> findFirstByPartitionOrderByOrderValueDesc(String orderGroup);
 

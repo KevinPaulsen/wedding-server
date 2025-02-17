@@ -21,17 +21,16 @@ import org.springframework.data.annotation.Id;
     @DynamoDBAttribute(attributeName="uploadTimestamp") private long uploadTimestamp;
 
     // Getters and setters
-    @DynamoDBHashKey
-    public String getImageId() {
+    @DynamoDBHashKey public String getImageId() {
         return metadataKey.getImageId();
     }
+
     public void setImageId(String imageId) {
         metadataKey.setImageId(imageId);
     }
 
-    @DynamoDBRangeKey(attributeName = "orderValue")
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "partition-orderValue-index")
-    public Long getOrderValue() {
+    @DynamoDBRangeKey(attributeName="orderValue")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName="partition-orderValue-index") public Long getOrderValue() {
         return metadataKey.getOrderValue();
     }
 
@@ -39,35 +38,42 @@ import org.springframework.data.annotation.Id;
         metadataKey.setOrderValue(orderValue);
     }
 
-    @DynamoDBAttribute(attributeName = "partition")
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "partition-orderValue-index")
-    public String getPartition() {
+    @DynamoDBAttribute(attributeName="partition")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName="partition-orderValue-index") public String getPartition() {
         return PARTITION;
     }
 
-    public void setPartition(String partition) {}
+    public void setPartition(String partition) {
+    }
 
     public String getImageUrl() {
         return imageUrl;
     }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
     public Integer getWidth() {
         return width;
     }
+
     public void setWidth(Integer width) {
         this.width = width;
     }
+
     public Integer getHeight() {
         return height;
     }
+
     public void setHeight(Integer height) {
         this.height = height;
     }
+
     public long getUploadTimestamp() {
         return uploadTimestamp;
     }
+
     public void setUploadTimestamp(long uploadTimestamp) {
         this.uploadTimestamp = uploadTimestamp;
     }

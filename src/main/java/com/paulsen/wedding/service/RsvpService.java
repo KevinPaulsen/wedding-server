@@ -23,6 +23,10 @@ import java.util.List;
         this.availableRsvpCodeRepository = availableRsvpCodeRepository;
     }
 
+    private static String formatRsvpCode(String rsvpCode) {
+        return rsvpCode == null ? "" : rsvpCode.toUpperCase().strip();
+    }
+
     public List<Rsvp> allRsvps() {
         List<Rsvp> users = new ArrayList<>();
         rsvpRepository.findAll().forEach(users::add);
@@ -121,10 +125,6 @@ import java.util.List;
         } while (availableRsvpCode != null);
 
         return formattedCode;
-    }
-
-    private static String formatRsvpCode(String rsvpCode) {
-        return rsvpCode == null ? "" : rsvpCode.toUpperCase().strip();
     }
 
     @Transactional public void delete(String rsvpCode) {
