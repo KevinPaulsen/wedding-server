@@ -1,7 +1,7 @@
 .gallery :global(.react-photo-album) {
   --position-indicator-width: 4px;
   --position-indicator-offset: calc(
-    (var(15, 0) * 1px + var(--position-indicator-width)) / -2
+    (15px + var(--position-indicator-width)) / -2
   );
 }
 
@@ -9,8 +9,6 @@
 .gallery :global(.react-photo-album--photo) {
   cursor: grab;
   position: relative;
-  border: 3px solid var(--main-dark);
-  padding: 1px;
 }
 
 .overlay {

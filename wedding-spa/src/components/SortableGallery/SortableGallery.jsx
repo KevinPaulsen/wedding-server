@@ -74,7 +74,6 @@ export default function SortableGallery({
                 <Gallery
                         ref={ref}
                         photos={photos}
-                        targetRowHeight={300}
                         render={{
                           ...render,
                           link: (props, { index, photo }) => renderSortable("a", index, photo, props),

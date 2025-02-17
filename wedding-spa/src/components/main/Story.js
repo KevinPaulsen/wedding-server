@@ -9,7 +9,7 @@ const Story = () => {
                 Legend says that Kevin Loves Olivia. Some have even said that Olivia loves Kevin back.
                 But Kevin at least made a website for her.
                 </body>
-                <Image src="/assets/Story.jpg" alt="Story Image" className="max-image"/>
+                <Image src="/assets/Story.jpg" alt="Story Image" className="gallery-image"/>
             </Container>);
 }
 
