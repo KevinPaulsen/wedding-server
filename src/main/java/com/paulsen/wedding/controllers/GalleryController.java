@@ -2,12 +2,14 @@ package com.paulsen.wedding.controllers;
 
 import com.amazonaws.HttpMethod;
 import com.paulsen.wedding.model.ChangeImageOrderDto;
+import com.paulsen.wedding.model.ImageDeleteDto;
 import com.paulsen.wedding.model.ImageMetadata;
 import com.paulsen.wedding.model.ImageMetadataDto;
 import com.paulsen.wedding.service.GalleryMetadataService;
 import com.paulsen.wedding.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +70,14 @@ import java.util.Map;
         metadataService.changeImageOrder(changeImageOrderDto.getMovingImageId(),
                                          changeImageOrderDto.getPreviousImageId(),
                                          changeImageOrderDto.getFollowingImageId());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteRsvp(@RequestBody ImageDeleteDto imageId) {
+        metadataService.delete(imageId.getImageId());
+        s3Service.deleteFile(imageId.getImageId());
 
         return ResponseEntity.ok().build();
     }

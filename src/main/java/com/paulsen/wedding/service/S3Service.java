@@ -24,5 +24,9 @@ import java.util.Date;
                 httpMethod).withExpiration(expiration);
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
+
+    public void deleteFile(String key) {
+        s3Client.deleteObject(BUCKET_NAME, key);
+    }
 }
 

@@ -75,5 +75,9 @@ import java.util.List;
             currentOrderValue += SEPARATION_VALUE;
         }
     }
+
+    public void delete(String imageId) {
+        imageMetadataRepository.getImageMetadataByImageId(imageId).ifPresent(imageMetadataRepository::delete);
+    }
 }
 
