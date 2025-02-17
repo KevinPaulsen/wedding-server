@@ -141,3 +141,18 @@ export const getPhotoMetadata = () => {
         }, credentials: 'include',
     });
 }
+
+export const postChangeImageOrder = (movingImageId, previousImageId, followingImageId) => {
+    return request('/gallery/change-image-order', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+                                 movingImageId: movingImageId,
+                                 previousImageId: previousImageId,
+                                 followingImageId: followingImageId
+        }),
+    })
+}

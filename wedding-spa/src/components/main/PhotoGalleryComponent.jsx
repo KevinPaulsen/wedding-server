@@ -1,6 +1,6 @@
 // PhotoGalleryComponent.jsx
-import React, { useState } from "react";
-import { RowsPhotoAlbum } from "react-photo-album";
+import React, {useState} from "react";
+import {RowsPhotoAlbum} from "react-photo-album";
 import "react-photo-album/rows.css";
 
 import Lightbox from "yet-another-react-lightbox";
@@ -10,7 +10,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 import useGetPhotoMetadata from "../../hooks/useGetPhotoMetadata";
-import { Container, Row } from "react-bootstrap";
+import {Container, Row} from "react-bootstrap";
 
 const PhotoGalleryComponent = () => {
     const [index, setIndex] = useState(-1);
@@ -31,8 +31,8 @@ const PhotoGalleryComponent = () => {
                                 componentsProps={() => ({
                                     image: {
                                         style: {
-                                            border: "3px solid var(--main-dark)", // set your border style here
-                                            padding: "1px",           // optional: inner spacing
+                                            border: "3px solid var(--main-dark)",
+                                            padding: "1px",
                                         },
                                     },
                                 })}

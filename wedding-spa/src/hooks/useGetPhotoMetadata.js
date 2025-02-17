@@ -19,6 +19,7 @@ const useGetPhotoMetadata = () => {
                         src: item.imageUrl,
                         width: item.width,
                         height: item.height,
+                        imageId: item.imageId,
                     })));
                 }
             } catch (err) {
@@ -35,7 +36,7 @@ const useGetPhotoMetadata = () => {
         };
     }, []);
 
-    return {data, loading, error};
+    return {data, setData, loading, error};
 };
 
 export default useGetPhotoMetadata;

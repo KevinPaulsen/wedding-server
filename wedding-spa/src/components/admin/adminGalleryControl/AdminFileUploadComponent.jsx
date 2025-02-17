@@ -1,7 +1,7 @@
 // AdminFileUploadComponent.jsx
 import React, { useState } from 'react';
 import { Container, Button, Form, Alert, Spinner, Row, Col } from 'react-bootstrap';
-import { useUploadPhoto } from '../../hooks/useUploadPhoto'; // adjust the path as needed
+import { useUploadPhoto } from '../../../hooks/useUploadPhoto'; // adjust the path as needed
 
 const AdminFileUploadComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -34,7 +34,7 @@ const AdminFileUploadComponent = () => {
     };
 
     return (
-            <Container className="d-flex flex-column align-items-center">
+            <Container className="d-flex flex-column align-items-center mb-3">
                 <Row className="w-100">
                     <Col xs={12} md={6} className="mx-auto text-center">
                         <h2 className="text-center mb-4">Upload Multiple Images</h2>
