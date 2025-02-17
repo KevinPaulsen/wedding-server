@@ -156,3 +156,16 @@ export const postChangeImageOrder = (movingImageId, previousImageId, followingIm
         }),
     })
 }
+
+export const deleteImageRequest = (imageId) => {
+    return request(`/gallery/delete`, {
+        method: 'DELETE', headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            imageId: imageId
+        }),
+    });
+}

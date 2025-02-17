@@ -1,7 +1,6 @@
 // PhotoGalleryComponent.jsx
 import React, {useState} from "react";
 import {RowsPhotoAlbum} from "react-photo-album";
-import {ColumnsPhotoAlbum} from "react-photo-album";
 import "react-photo-album/rows.css";
 
 import Lightbox from "yet-another-react-lightbox";
@@ -15,10 +14,12 @@ import {Container, Row} from "react-bootstrap";
 import SortableGallery from "../SortableGallery/SortableGallery";
 import {arrayMove} from "@dnd-kit/sortable";
 import {useChangeImageOrder} from "../../hooks/useChangeImageOrder";
+import {useDeleteImage} from "../../hooks/useDeleteImage";
 
 const PhotoGalleryComponent = ({ makeDraggable = false }) => {
     const [index, setIndex] = useState(-1);
     const { data, setData, loading, error } = useGetPhotoMetadata();
+    const { deleteImage } = useDeleteImage();
     const { changeImageOrder } = useChangeImageOrder();
 
     if (loading) return <div>Loading...</div>;
@@ -59,6 +60,16 @@ const PhotoGalleryComponent = ({ makeDraggable = false }) => {
         },
     });
 
+    // Factor out the onClick method for the extra button
+    const handleDelete = (photo, event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        deleteImage(photo.imageId);
+
+        setData(prevData => prevData.filter(item => item.imageId !== photo.imageId));
+    };
+
     return (
             <Container>
                 <Row className="justify-content-center mb-5">
@@ -68,6 +79,7 @@ const PhotoGalleryComponent = ({ makeDraggable = false }) => {
                                 gallery={RowsPhotoAlbum}
                                 photos={data}
                                 movePhoto={handleMovePhoto}
+                                handleDelete={handleDelete}
                                 componentsProps={commonComponentsProps}
                                 targetRowHeight={300}
                         />

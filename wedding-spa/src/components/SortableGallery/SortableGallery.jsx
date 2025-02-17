@@ -11,11 +11,12 @@ import Overlay from "./Overlay";
 import classes from "./SortableGallery.module.css";
 
 export default function SortableGallery({
-  gallery: Gallery,
-  photos: photoSet,
-  movePhoto,
-  render,
-  ...rest
+    gallery: Gallery,
+    photos: photoSet,
+    movePhoto,
+    handleDelete,
+    render,
+    ...rest
 }) {
   const ref = useRef(null);
   const [activePhoto, setActivePhoto] = useState();
@@ -56,14 +57,6 @@ export default function SortableGallery({
           </Sortable>
   );
 
-  // Factor out the onClick method for the extra button
-  const handleExtraButtonClick = (photo, event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    console.log("Button clicked for photo:", photo);
-    // Add additional logic here (e.g., call a deletion function)
-  };
-
   return (
           <DndContext
                   sensors={sensors}
@@ -85,7 +78,8 @@ export default function SortableGallery({
                           extras: (props, { index, photo }) => (
                                   <button
                                           className={classes.extraButton}
-                                          onClick={(event) => handleExtraButtonClick(photo, event)}
+                                          onClick={(event) => handleDelete(photo, event)}
+                                          style={{color: "var(--accent-text)"}}
                                   >
                                     X
                                   </button>
