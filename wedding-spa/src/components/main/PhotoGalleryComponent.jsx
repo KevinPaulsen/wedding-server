@@ -22,7 +22,7 @@ const PhotoGalleryComponent = () => {
 
     return (
             <Container>
-                <Row className="justify-content-center">
+                <Row className="justify-content-center mb-5">
                     <div className="col-12 col-md-10 col-lg-8">
                         <RowsPhotoAlbum
                                 photos={data}
