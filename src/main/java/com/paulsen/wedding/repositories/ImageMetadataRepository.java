@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository @EnableScan public interface ImageMetadataRepository
         extends CrudRepository<ImageMetadata, ImageMetadataKey> {
-    // This method will use the GSI to query items with orderGroup="PHOTO" and sort by orderValue descending.
+    Optional<ImageMetadata> getImageMetadataByImageId(String imageId);
     Optional<ImageMetadata> findFirstByPartitionOrderByOrderValueDesc(String orderGroup);
 
     List<ImageMetadata> findAllByPartitionOrderByOrderValueAsc(String orderGroup);

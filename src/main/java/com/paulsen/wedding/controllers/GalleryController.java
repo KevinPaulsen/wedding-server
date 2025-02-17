@@ -1,6 +1,7 @@
 package com.paulsen.wedding.controllers;
 
 import com.amazonaws.HttpMethod;
+import com.paulsen.wedding.model.ChangeImageOrderDto;
 import com.paulsen.wedding.model.ImageMetadata;
 import com.paulsen.wedding.model.ImageMetadataDto;
 import com.paulsen.wedding.service.GalleryMetadataService;
@@ -62,4 +63,12 @@ import java.util.Map;
         return ResponseEntity.ok(metadataService.allMetadata());
     }
 
+    @PostMapping("/change-image-order")
+    public ResponseEntity<Void> changeImageOrder(@RequestBody ChangeImageOrderDto changeImageOrderDto) {
+        metadataService.changeImageOrder(changeImageOrderDto.getMovingImageId(),
+                                         changeImageOrderDto.getPreviousImageId(),
+                                         changeImageOrderDto.getFollowingImageId());
+
+        return ResponseEntity.ok().build();
+    }
 }

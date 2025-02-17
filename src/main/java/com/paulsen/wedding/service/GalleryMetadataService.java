@@ -36,5 +36,44 @@ import java.util.List;
 
         return imageMetadataRepository.save(imageMetadata);
     }
+
+    @Transactional public void changeImageOrder(String movingImageId, String previousImageId, String followingImageId) {
+        ImageMetadata moving = movingImageId == null || movingImageId.isEmpty() ? null :
+                               imageMetadataRepository.getImageMetadataByImageId(movingImageId).orElse(null);
+        ImageMetadata previous = previousImageId == null || previousImageId.isEmpty() ? null :
+                                 imageMetadataRepository.getImageMetadataByImageId(previousImageId).orElse(null);
+        ImageMetadata next = followingImageId == null || followingImageId.isEmpty() ? null :
+                             imageMetadataRepository.getImageMetadataByImageId(followingImageId).orElse(null);
+
+        long previousValue = previous == null ? 0 : previous.getOrderValue();
+        long nextValue = next == null ? previousValue + 2 * SEPARATION_VALUE : next.getOrderValue();
+
+        if (moving == null || (previous == null && next == null)) {
+            return;
+        }
+
+        long moveTo = (previousValue + nextValue) / 2;
+
+        if (previousValue == moveTo || nextValue == moveTo) {
+            resetOrderValues();
+            changeImageOrder(movingImageId, previousImageId, followingImageId);
+        } else {
+            moving.setOrderValue(moveTo);
+            imageMetadataRepository.save(moving);
+        }
+    }
+
+    private void resetOrderValues() {
+        List<ImageMetadata> allImageData
+                = imageMetadataRepository.findAllByPartitionOrderByOrderValueAsc(ImageMetadata.PARTITION);
+
+        long currentOrderValue = SEPARATION_VALUE;
+
+        for (ImageMetadata image : allImageData) {
+            image.setOrderValue(currentOrderValue);
+            imageMetadataRepository.save(image);
+            currentOrderValue += SEPARATION_VALUE;
+        }
+    }
 }
 

@@ -4,14 +4,16 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import org.springframework.data.annotation.Id;
 
-@DynamoDBTable(tableName="photo_gallery_metadata") public class ImageMetadata {
+@DynamoDBTable(tableName="WeddingGalleryMetadata") public class ImageMetadata {
 
     public static final String PARTITION = "PHOTO";
-    @Id private ImageMetadataKey metadataKey = new ImageMetadataKey();
+
+    @DynamoDBHashKey private String imageId;
+
+    @DynamoDBAttribute(attributeName="orderValue")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName="partition-orderValue-index") private Long orderValue;
 
     @DynamoDBAttribute(attributeName="imageUrl") private String imageUrl;
     @DynamoDBAttribute(attributeName="width") private Integer width;
@@ -21,21 +23,20 @@ import org.springframework.data.annotation.Id;
     @DynamoDBAttribute(attributeName="uploadTimestamp") private long uploadTimestamp;
 
     // Getters and setters
-    @DynamoDBHashKey public String getImageId() {
-        return metadataKey.getImageId();
+    public String getImageId() {
+        return imageId;
     }
 
     public void setImageId(String imageId) {
-        metadataKey.setImageId(imageId);
+        this.imageId = imageId;
     }
 
-    @DynamoDBRangeKey(attributeName="orderValue")
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName="partition-orderValue-index") public Long getOrderValue() {
-        return metadataKey.getOrderValue();
+    public Long getOrderValue() {
+        return orderValue;
     }
 
     public void setOrderValue(Long orderValue) {
-        metadataKey.setOrderValue(orderValue);
+        this.orderValue = orderValue;
     }
 
     @DynamoDBAttribute(attributeName="partition")
