@@ -1,15 +1,9 @@
-import { useRef, useState } from "react";
+// SortableGallery.jsx
+import React, {useRef, useState} from "react";
 import {
-  closestCenter,
-  DndContext,
-  DragOverlay,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
+  closestCenter, DndContext, DragOverlay, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors,
 } from "@dnd-kit/core";
-import { SortableContext, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import {SortableContext, sortableKeyboardCoordinates} from "@dnd-kit/sortable";
 
 import Sortable from "./Sortable";
 import Overlay from "./Overlay";
@@ -62,6 +56,14 @@ export default function SortableGallery({
           </Sortable>
   );
 
+  // Factor out the onClick method for the extra button
+  const handleExtraButtonClick = (photo, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log("Button clicked for photo:", photo);
+    // Add additional logic here (e.g., call a deletion function)
+  };
+
   return (
           <DndContext
                   sensors={sensors}
@@ -76,9 +78,18 @@ export default function SortableGallery({
                         photos={photos}
                         render={{
                           ...render,
-                          link: (props, { index, photo }) => renderSortable("a", index, photo, props),
-                          wrapper: (props, { index, photo }) => renderSortable("div", index, photo, props),
-                          button: (props, { index, photo }) => renderSortable("button", index, photo, props),
+                          // Wrap each photo in a sortable div as before:
+                          wrapper: (props, { index, photo }) =>
+                                  renderSortable("div", index, photo, props),
+                          // Add an 'extras' render function to overlay a button:
+                          extras: (props, { index, photo }) => (
+                                  <button
+                                          className={classes.extraButton}
+                                          onClick={(event) => handleExtraButtonClick(photo, event)}
+                                  >
+                                    X
+                                  </button>
+                          ),
                         }}
                         {...rest}
                 />
@@ -88,6 +99,5 @@ export default function SortableGallery({
             <DragOverlay>
               {activePhoto && <Overlay className={classes.overlay} {...activePhoto} />}
             </DragOverlay>
-          </DndContext>
-  );
+          </DndContext>);
 }
