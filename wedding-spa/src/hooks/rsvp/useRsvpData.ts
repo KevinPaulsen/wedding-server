@@ -19,7 +19,6 @@ export function useRsvpData() {
             await execute(); // calls getRsvps
         })();
         // we don't include `execute` in dependencies if we only want to run once
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Sync API's `data` into localData whenever it changes

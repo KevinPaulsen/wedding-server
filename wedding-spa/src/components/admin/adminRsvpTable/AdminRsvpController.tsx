@@ -1,14 +1,14 @@
 // AdminRsvpController.tsx
-import React, { useState } from 'react';
-import { Container } from "react-bootstrap";
+import React, {useState} from 'react';
+import {Container} from "react-bootstrap";
 import RsvpTable from './RsvpTable';
 import FilterControls from './FilterControls';
-import { useRsvpData } from "../../../hooks/rsvp/useRsvpData";
-import { useDeleteRsvp } from "../../../hooks/rsvp/useDeleteRsvp";
+import {useRsvpData} from "../../../hooks/rsvp/useRsvpData";
+import {useDeleteRsvp} from "../../../hooks/rsvp/useDeleteRsvp";
 
 const AdminRsvpController: React.FC = () => {
     // useRsvpData now returns { data, loading, error, removeRsvp }
-    const { data, error, removeRsvp } = useRsvpData();
+    const { data, removeRsvp } = useRsvpData();
     // useDeleteRsvp now returns { execute, error } (renamed execute to deleteRsvp)
     const { execute: deleteRsvp, error: deleteError } = useDeleteRsvp();
 

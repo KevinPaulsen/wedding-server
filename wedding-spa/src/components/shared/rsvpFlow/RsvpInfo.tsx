@@ -18,7 +18,7 @@ interface Validateable {
 }
 
 const RsvpInfo: React.FC<RsvpInfoProps> = ({ changePage }) => {
-    const { formData, setFormData, updatePreferredContactField } = useFlow();
+    const { formData, setFormData } = useFlow();
     const { data: rsvp, loading, error, execute: getRsvp } = useGetRsvp();
 
     const rsvpCodeInputRef = useRef<Validateable>(null);

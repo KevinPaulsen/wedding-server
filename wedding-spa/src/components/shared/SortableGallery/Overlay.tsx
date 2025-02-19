@@ -8,16 +8,20 @@ interface ImageProps {
 }
 
 interface OverlayProps extends ImageProps {
+    photo: {
+        src: string;
+        alt: string;
+        srcSet?: { src: string; width: number }[];
+    }
     width: number;
     height: number;
     padding?: string;
     style?: React.CSSProperties;
-    [key: string]: any;
 }
 
-const Overlay: React.FC<OverlayProps> = ({ photo: { src, alt, srcSet }, width, height, padding, style, ...rest }) => {
+const Overlay: React.FC<OverlayProps> = ({ photo: { src, alt, srcSet }, width, height, padding, style }) => {
     return (
-        <div style={{ padding, ...style }} {...rest}>
+        <div style={{ padding, ...style }}>
             <img
                 src={src}
                 alt={alt}

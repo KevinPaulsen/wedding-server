@@ -1,6 +1,6 @@
 // FilterControls.tsx
 import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import {Col, Form, Row} from 'react-bootstrap';
 
 interface FilterControlsProps {
     filters: {
@@ -15,13 +15,6 @@ const FilterControls: React.FC<FilterControlsProps> = ({ filters, onFilterChange
         onFilterChange({
             ...filters,
             status: event.target.value,
-        });
-    };
-
-    const handleSortByChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        onFilterChange({
-            ...filters,
-            sortBy: event.target.value,
         });
     };
 

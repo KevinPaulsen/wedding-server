@@ -13,7 +13,7 @@ import { useUploadPhoto } from '../../../hooks/gallery/useUploadPhoto';
 
 const AdminFileUploadComponent: React.FC = () => {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-    const [uploadStatus, setUploadStatus] = useState<
+    const [, setUploadStatus] = useState<
         { fileName: string; status: string }[]
     >([]);
     const [completedCount, setCompletedCount] = useState<number>(0);

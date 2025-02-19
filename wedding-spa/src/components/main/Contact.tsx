@@ -8,7 +8,7 @@ const Contact: React.FC = () => {
         <Container fluid className="text-center">
             <h1 className="text-center mb-3">Contact</h1>
             <div className="story text-center mb-3">
-                Plz Don't...
+                Plz Don&apos;t...
             </div>
         </Container>
     );

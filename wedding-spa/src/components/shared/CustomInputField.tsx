@@ -36,8 +36,7 @@ const CustomInputField = forwardRef(
         }: CustomInputFieldProps,
         ref: ForwardedRef<CustomInputFieldRef>
     ) => {
-        // We don't use the touched value directly, so we can ignore it.
-        const [_, setIsTouched] = useState<boolean>(false);
+        const [, setIsTouched] = useState<boolean>(false);
         const [hasError, setHasError] = useState<boolean>(false);
 
         const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,5 +96,7 @@ const CustomInputField = forwardRef(
         );
     }
 );
+
+CustomInputField.displayName = "CustomInputField";
 
 export default CustomInputField;

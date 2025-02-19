@@ -1,12 +1,11 @@
 // RsvpRow.tsx
-import React, { useState } from 'react';
-import { Badge, Col, Row, Spinner } from 'react-bootstrap';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import React, {useState} from 'react';
+import {Badge, Col, Row, Spinner} from 'react-bootstrap';
+import {FaEdit, FaTrash} from 'react-icons/fa';
 import GuestDetails from './GuestDetails';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import "../../../styles/Table.css";
-import { useFlow } from "../../../context/FlowProvider";
-import { transformGuestDetails } from "../../../services/DataTransformService";
+import {useFlow} from "../../../context/FlowProvider";
 import {Rsvp} from "../../../types/rsvp";
 
 interface RsvpRowProps {
@@ -15,7 +14,7 @@ interface RsvpRowProps {
 }
 
 const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
-    const { setFormData, updatePreferredContactField } = useFlow();
+    const { setFormData } = useFlow();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
     const navigate = useNavigate();

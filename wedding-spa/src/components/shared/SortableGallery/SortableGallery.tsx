@@ -79,15 +79,6 @@ export default function SortableGallery({
         </Sortable>
     );
 
-    const commonComponentsProps = () => ({
-        image: {
-            style: {
-                border: "3px solid var(--main-dark)",
-                padding: "1px",
-            },
-        },
-    });
-
     return (
         <DndContext
             sensors={sensors}
@@ -104,7 +95,7 @@ export default function SortableGallery({
                             ...render,
                             wrapper: (props: any, { index, photo }: any) =>
                                 renderSortable("div", index, photo, props),
-                            extras: (props: any, { index, photo }: any) => (
+                            extras: (props: any, { photo }: any) => (
                                 <button
                                     className={classes.extraButton}
                                     onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleDelete(photo, event)}
