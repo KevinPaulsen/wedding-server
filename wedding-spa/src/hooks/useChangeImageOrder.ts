@@ -7,8 +7,8 @@ export const useChangeImageOrder = () => {
 
     const changeImageOrder = async (
         movingImageId: string,
-        previousImageId: string,
-        followingImageId: string
+        previousImageId: string | null,
+        followingImageId: string | null
     ): Promise<void> => {
         setLoading(true);
         setError(null);

@@ -1,14 +1,14 @@
 // Countdown.js
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import InfoContainer from "./InfoContainer";
 
-const Countdown = () => {
+const Countdown: React.FC = () => {
     const calculateTimeLeft = () => {
         const weddingDate = new Date('2025-09-13T10:00:00');
         const now = new Date();
-        const difference = weddingDate - now;
+        const difference = weddingDate.getTime() - now.getTime();
 
-        let timeLeft = {};
+        let timeLeft: { days?: number; hours?: number; minutes?: number; seconds?: number } = {};
         if (difference > 0) {
             timeLeft = {
                 days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -17,7 +17,6 @@ const Countdown = () => {
                 seconds: Math.floor((difference / 1000) % 60),
             };
         }
-
         return timeLeft;
     };
 
@@ -27,21 +26,21 @@ const Countdown = () => {
         const timer = setTimeout(() => {
             setTimeLeft(calculateTimeLeft());
         }, 1000);
-
         return () => clearTimeout(timer);
     });
 
     const schedule = [
-        {header: timeLeft.days, body: 'Days'},
-        {header: timeLeft.hours, body: 'Hours'},
-        {header: timeLeft.minutes, body: 'Minutes'},
-        {header: timeLeft.seconds, body: 'Seconds'},
+        { header: timeLeft.days ?? 0, body: 'Days' },
+        { header: timeLeft.hours ?? 0, body: 'Hours' },
+        { header: timeLeft.minutes ?? 0, body: 'Minutes' },
+        { header: timeLeft.seconds ?? 0, body: 'Seconds' },
     ];
 
-    return (<div className="bg-dark text-white py-4">
-                <InfoContainer title={"Countdown"} elements={schedule}/>
-            </div>);
+    return (
+        <div className="bg-dark text-white py-4">
+            <InfoContainer title="Countdown" elements={schedule} />
+        </div>
+    );
 };
 
 export default Countdown;
-
