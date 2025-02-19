@@ -3,9 +3,10 @@ import React from 'react';
 import { Container, Table } from 'react-bootstrap';
 import RsvpRow from './RsvpRow';
 import "../../../styles/Table.css";
+import {Rsvp} from "../../../types/rsvp";
 
 interface RsvpTableProps {
-    rsvpData: any[];
+    rsvpData: Rsvp[];
     deleteRsvp: (rsvpCode: string) => Promise<void>;
     error: string | null;
 }
