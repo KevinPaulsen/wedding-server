@@ -1,4 +1,4 @@
-// AdminLogin.js
+// AdminLogin.tsx
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
