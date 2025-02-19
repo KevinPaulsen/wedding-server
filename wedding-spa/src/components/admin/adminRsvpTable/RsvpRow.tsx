@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import GuestDetails from './GuestDetails';
 import { useNavigate } from 'react-router-dom';
 import "../../../styles/Table.css";
-import { useFlow } from "../../../FlowProvider";
+import { useFlow } from "../../../context/FlowProvider";
 import { transformGuestDetails } from "../../../services/DataTransformService";
 
 interface RsvpEntry {

@@ -1,7 +1,7 @@
 // FullScreenMenu.tsx
 import React, { useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
-import '../../styles/FullScreenMenu.css';
+import '../../../styles/FullScreenMenu.css';
 import { Link } from 'react-router-dom';
 import Title from "./Title";
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';
 import { Button, Container, Form, Row } from "react-bootstrap";
-import CustomInputField, { CustomInputFieldRef } from "../CustomInputField";
+import CustomInputField, { CustomInputFieldRef } from "../shared/CustomInputField";
 import '../../styles/rsvp/RsvpButtons.css';
 import { useAddRsvp } from "../../hooks/useAddRsvp";
 

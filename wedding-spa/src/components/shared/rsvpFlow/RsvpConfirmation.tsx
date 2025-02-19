@@ -1,10 +1,10 @@
 // RsvpConfirmation.tsx
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/Transitions.css';
-import '../../styles/rsvp/RsvpButtons.css';
+import '../../../styles/Transitions.css';
+import '../../../styles/rsvp/RsvpButtons.css';
 import { Button } from 'react-bootstrap';
-import { useFlow } from '../../FlowProvider';
+import { useFlow } from '../../../context/FlowProvider';
 import { useNavigate } from 'react-router-dom';
 
 const RsvpConfirmation: React.FC = () => {

@@ -1,21 +1,21 @@
 // App.tsx
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AdminLogin from "./components/admin/AdminLogin";
-import PrivateRoute from "./auth/PrivateRoute";
-import NotFound from "./components/NotFound";
-import HomePage from "./pages/home/HomePage";
-import './styles/App.css';
-import Story from "./pages/home/StoryPage";
-import Contact from "./pages/home/ContactPage";
-import Details from "./pages/home/Details";
-import Gallery from "./pages/home/GalleryPage";
-import AdminMain from "./pages/admin/AdminRsvpInfoPage";
-import GuestListPage from "./pages/admin/GuestListPage";
-import AddRsvpPage from "./pages/admin/AddRsvpPage";
-import RsvpFlowPage from "./pages/rsvp/RsvpFlowPage";
-import AdminRsvpFlow from "./pages/admin/AdminRsvpFlow";
-import UploadPhotoPage from "./pages/admin/UploadToPhotoGallery";
+import AdminLogin from "../components/admin/AdminLogin";
+import PrivateRoute from "../routes/PrivateRoute";
+import NotFound from "../components/shared/NotFound";
+import HomePage from "../pages/home/HomePage";
+import '../styles/App.css';
+import Story from "../pages/home/StoryPage";
+import Contact from "../pages/home/ContactPage";
+import Details from "../pages/home/Details";
+import Gallery from "../pages/home/GalleryPage";
+import AdminMain from "../pages/admin/AdminRsvpInfoPage";
+import GuestListPage from "../pages/admin/GuestListPage";
+import AddRsvpPage from "../pages/admin/AddRsvpPage";
+import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
+import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
+import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
 
 const App: React.FC = () => {
     return (

@@ -1,9 +1,9 @@
 // AdminLogin.tsx
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../auth/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import useAuthRedirect from "../../hooks/useAuthRedirect";
-import FormInput from "../FormInput";
+import FormInput from "../shared/FormInput";
 import { Button, Form } from "react-bootstrap";
 import { adminLogin } from "../../services/ApiService";
 

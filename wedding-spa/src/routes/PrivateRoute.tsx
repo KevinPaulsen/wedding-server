@@ -1,7 +1,7 @@
 // PrivateRoute.tsx
 import React, { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import useTokenVerification from '../hooks/useTokenVerification';
 import { Spinner } from 'react-bootstrap';
 import AdminLayout from '../components/admin/AdminLayout';

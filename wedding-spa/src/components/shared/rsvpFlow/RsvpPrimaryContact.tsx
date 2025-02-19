@@ -1,9 +1,9 @@
 // RsvpPrimaryContact.tsx
 import React, { useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/Transitions.css';
-import '../../styles/rsvp/RsvpButtons.css';
-import { useFlow } from '../../FlowProvider';
+import '../../../styles/Transitions.css';
+import '../../../styles/rsvp/RsvpButtons.css';
+import { useFlow } from '../../../context/FlowProvider';
 import { Button, Form } from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
 import { RSVP_GUESTS_PAGE } from './RsvpGuests';

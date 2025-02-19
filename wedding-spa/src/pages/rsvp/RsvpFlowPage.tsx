@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { CSSTransition } from 'react-transition-group';
-import Title from "../../components/headerComponents/Title";
-import CancelButton from "../../components/rsvpFlow/CancelButton";
-import RSVPFormStep from "../../components/rsvpFlow/RsvpFormStep";
+import Title from "../../components/main/headerComponents/Title";
+import CancelButton from "../../components/shared/rsvpFlow/CancelButton";
+import RSVPFormStep from "../../components/shared/rsvpFlow/RsvpFormStep";
 import '../../styles/RsvpFlow.css';
-import { RSVP_INFO_STEP } from "../../components/rsvpFlow/RsvpInfo";
-import { RSVP_CONFIRMATION_STEP } from "../../components/rsvpFlow/RsvpConfirmation";
+import { RSVP_INFO_STEP } from "../../components/shared/rsvpFlow/RsvpInfo";
+import { RSVP_CONFIRMATION_STEP } from "../../components/shared/rsvpFlow/RsvpConfirmation";
 
 const RsvpFlowPage: React.FC = () => {
     const [currentStep, setCurrentStep] = useState<number>(RSVP_INFO_STEP);

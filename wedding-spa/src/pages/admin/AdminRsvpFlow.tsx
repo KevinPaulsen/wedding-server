@@ -1,12 +1,12 @@
 // AdminRsvpFlow.tsx
 import React, { useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import Title from "../../components/headerComponents/Title";
-import CancelButton from "../../components/rsvpFlow/CancelButton";
-import RSVPFormStep from "../../components/rsvpFlow/RsvpFormStep";
+import Title from "../../components/main/headerComponents/Title";
+import CancelButton from "../../components/shared/rsvpFlow/CancelButton";
+import RSVPFormStep from "../../components/shared/rsvpFlow/RsvpFormStep";
 import '../../styles/RsvpFlow.css';
-import { RSVP_CONFIRMATION_STEP } from "../../components/rsvpFlow/RsvpConfirmation";
-import { RSVP_STATUS_STEP } from "../../components/rsvpFlow/RsvpStatusSelector";
+import { RSVP_CONFIRMATION_STEP } from "../../components/shared/rsvpFlow/RsvpConfirmation";
+import { RSVP_STATUS_STEP } from "../../components/shared/rsvpFlow/RsvpStatusSelector";
 
 const AdminRsvpFlow: React.FC = () => {
     // Adjust the type as needed if these steps are not numbers.

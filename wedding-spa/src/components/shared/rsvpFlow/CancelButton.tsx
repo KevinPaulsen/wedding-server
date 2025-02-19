@@ -1,9 +1,9 @@
 // CancelButton.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFlow } from '../../FlowProvider';
+import { useFlow } from '../../../context/FlowProvider';
 import { Button } from 'react-bootstrap';
-import '../../styles/rsvp/RsvpButtons.css';
+import '../../../styles/rsvp/RsvpButtons.css';
 
 interface CancelButtonProps {
     route: string;

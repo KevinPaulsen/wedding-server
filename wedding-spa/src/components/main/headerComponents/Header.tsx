@@ -1,7 +1,7 @@
 // Header.tsx
 import React from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-import '../../styles/Header.css';
+import '../../../styles/Header.css';
 import { Link } from 'react-router-dom';
 import FullScreenMenu from "./FullScreenMenu";
 import Title from "./Title";

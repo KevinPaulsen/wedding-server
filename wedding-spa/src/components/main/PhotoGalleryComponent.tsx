@@ -9,7 +9,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import useGetPhotoMetadata from "../../hooks/useGetPhotoMetadata";
 import { Container, Row } from "react-bootstrap";
-import SortableGallery from "../SortableGallery/SortableGallery";
+import SortableGallery from "../shared/SortableGallery/SortableGallery";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useChangeImageOrder } from "../../hooks/useChangeImageOrder";
 import { useDeleteImage } from "../../hooks/useDeleteImage";
