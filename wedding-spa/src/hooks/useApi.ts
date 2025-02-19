@@ -1,4 +1,3 @@
-// hooks/useApi.ts
 import { useState, useCallback } from 'react';
 import { ApiResponse } from '../services/ApiService';
 
@@ -8,7 +7,7 @@ import { ApiResponse } from '../services/ApiService';
  * @template T   The data type returned on success (e.g. Rsvp, Rsvp[], etc.)
  * @template A   A tuple for the function args (e.g. [string], [Partial<Rsvp>], etc.)
  */
-export function useApi<T, A extends any[]>(
+export function useApi<T, A extends unknown[]>(
     serviceFn: (...args: A) => Promise<ApiResponse<T>>
 ) {
     const [data, setData] = useState<T | null>(null);
@@ -28,9 +27,12 @@ export function useApi<T, A extends any[]>(
             } else {
                 setData(response.data ?? null);
             }
-        } catch (e: any) {
-            // Catch any exceptions (e.g., network errors)
-            setError(e.message || 'Unexpected error occurred');
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message || 'Unexpected error occurred');
+            } else {
+                setError('Unexpected error occurred');
+            }
         } finally {
             setLoading(false);
         }
