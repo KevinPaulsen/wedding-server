@@ -183,8 +183,8 @@ export const getPhotoMetadata = (): Promise<any> => {
 
 export const postChangeImageOrder = (
                 movingImageId: string,
-        previousImageId: string,
-        followingImageId: string
+        previousImageId: string | null,
+        followingImageId: string | null
 ): Promise<any> => {
     return request<any>("/gallery/change-image-order", {
         method: "POST",
