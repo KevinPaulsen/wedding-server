@@ -22,7 +22,7 @@ export const API_URL = "https://api.KevinLovesOlivia.com";
  * A generic request function returning ApiResponse<T>.
  * It handles fetch, checks response.ok, and parses JSON if present.
  */
-async function request<T = any>(
+async function request<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
@@ -55,10 +55,13 @@ async function request<T = any>(
 
         const data: T = JSON.parse(text);
         return { success: true, data };
-    } catch (error: any) {
+    } catch (error: unknown) {
         // 4. Network or fetch-level error
         console.error("API Request Error:", error);
-        return { success: false, error: error.message || "Request failed" };
+        if (error instanceof Error) {
+            return {success: false, error: error.message || "Request failed"};
+        }
+        return {success: false, error: "Request failed"};
     }
 }
 
@@ -93,7 +96,7 @@ export async function deleteRsvpRequest(rsvpCode: string): Promise<ApiResponse<n
 }
 
 /** Update an existing RSVP. Returns the updated Rsvp. */
-export async function updateRsvp(rsvpData: any): Promise<ApiResponse<Rsvp>> {
+export async function updateRsvp(rsvpData: Partial<Rsvp>): Promise<ApiResponse<Rsvp>> {
     return request<Rsvp>("/rsvp/update", {
         method: "PUT",
         headers: {
