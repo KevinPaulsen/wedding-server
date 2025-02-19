@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 
 const useAuthRedirect = (): void => {
-    const { authToken } = useContext(AuthContext);
+    const { authToken } = useContext(AuthContext)!;
     const navigate = useNavigate();
 
     useEffect(() => {
