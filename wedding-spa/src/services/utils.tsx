@@ -1,9 +1,11 @@
-// utils.js
-export const getImageDimensions = (file) => {
+// utils.tsx
+
+export const getImageDimensions = (
+    file: File
+): Promise<{ width: number; height: number }> => {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
-            // Once loaded, resolve with the image dimensions
             resolve({ width: img.naturalWidth, height: img.naturalHeight });
             // Clean up the object URL after usage
             URL.revokeObjectURL(img.src);
