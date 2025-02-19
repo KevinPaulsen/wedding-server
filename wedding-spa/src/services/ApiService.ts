@@ -1,47 +1,74 @@
-// ApiService.tsx
+// ApiService.ts
+
 import { getImageDimensions } from "./utils";
+import { Rsvp } from "../types/rsvp";            // your Rsvp/Guest interfaces
+import { ImageMetadata } from "../types/gallery";
 
-export const API_URL: string = "https://api.KevinLovesOlivia.com";
+/**
+ * A standardized response type for all API calls:
+ * - success: indicates if the request was successful
+ * - data?: payload if success is true
+ * - error?: error message if success is false
+ */
+export interface ApiResponse<T> {
+    success: boolean;
+    data?: T;
+    error?: string;
+}
 
-// A generic request function that returns a Promise of type T
-const request = async <T = any>(
+export const API_URL = "https://api.KevinLovesOlivia.com";
+
+/**
+ * A generic request function returning ApiResponse<T>.
+ * It handles fetch, checks response.ok, and parses JSON if present.
+ */
+async function request<T = any>(
     endpoint: string,
     options: RequestInit = {}
-): Promise<T> => {
+): Promise<ApiResponse<T>> {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, options);
 
+        // 1. If response not OK, parse an error
         if (!response.ok) {
             let errorMessage = "An unknown error occurred";
             try {
                 const errorData = await response.json();
-                errorMessage = errorData.detail || errorMessage;
-            } catch (jsonError) {
-                console.error("Error parsing error response JSON:", jsonError);
+                // Adjust if your server uses a different field for errors
+                errorMessage = errorData?.detail || errorData?.message || errorMessage;
+            } catch {
+                // If we can't parse JSON, keep default errorMessage
             }
-            throw new Error(errorMessage);
+            return { success: false, error: errorMessage };
         }
 
-        // If response status is 204 or if there's no content, return undefined
+        // 2. If 204 or no content, just return success
         if (response.status === 204) {
-            return undefined as unknown as T;
+            return { success: true };
         }
 
-        // Instead of directly calling response.json(), first read text
+        // 3. Parse response text
         const text = await response.text();
         if (!text) {
-            return undefined as unknown as T;
+            return { success: true };
         }
-        return JSON.parse(text) as T;
-    } catch (error) {
+
+        const data: T = JSON.parse(text);
+        return { success: true, data };
+    } catch (error: any) {
+        // 4. Network or fetch-level error
         console.error("API Request Error:", error);
-        throw error;
+        return { success: false, error: error.message || "Request failed" };
     }
-};
+}
 
+/** =======================
+ RSVP-related methods
+ ======================= */
 
-export const createRsvp = (rsvpData: any): Promise<any> => {
-    return request<any>("/rsvp/create", {
+/** Create a new RSVP. Returns the newly created Rsvp. */
+export async function createRsvp(rsvpData: Partial<Rsvp>): Promise<ApiResponse<Rsvp>> {
+    return request<Rsvp>("/rsvp/create", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
@@ -50,11 +77,12 @@ export const createRsvp = (rsvpData: any): Promise<any> => {
         credentials: "include",
         body: JSON.stringify(rsvpData),
     });
-};
+}
 
-export const deleteRsvpRequest = (rsvpCode: string): Promise<any> => {
+/** Delete an RSVP by code. Returns no data. */
+export async function deleteRsvpRequest(rsvpCode: string): Promise<ApiResponse<null>> {
     const params = new URLSearchParams({ rsvpCode });
-    return request<any>(`/rsvp/delete?${params.toString()}`, {
+    return request<null>(`/rsvp/delete?${params.toString()}`, {
         method: "DELETE",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
@@ -62,58 +90,63 @@ export const deleteRsvpRequest = (rsvpCode: string): Promise<any> => {
         },
         credentials: "include",
     });
-};
+}
 
-export const updateRsvp = (updateData: any): Promise<any> => {
-    return request<any>("/rsvp/update", {
+/** Update an existing RSVP. Returns the updated Rsvp. */
+export async function updateRsvp(rsvpData: any): Promise<ApiResponse<Rsvp>> {
+    return request<Rsvp>("/rsvp/update", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(rsvpData),
     });
-};
+}
 
-export const verifyToken = (authToken: string): Promise<any> => {
-    return request<any>("/auth/verify-token", {
+/** Verify a token. Returns a boolean in `data`. */
+export async function verifyToken(authToken: string): Promise<ApiResponse<boolean>> {
+    return request<boolean>("/auth/verify-token", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
         },
     });
-};
+}
 
-export const getRsvpRequest = (
-                rsvpCode: string,
-        lastname: string
-): Promise<any> => {
+/** Fetch a single RSVP by code & last name. */
+export async function getRsvpRequest(
+    rsvpCode: string,
+    lastname: string
+): Promise<ApiResponse<Rsvp>> {
     const params = new URLSearchParams({ rsvpCode, lastname });
-    return request<any>(`/rsvp/get?${params.toString()}`, {
+    return request<Rsvp>(`/rsvp/get?${params.toString()}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
         credentials: "include",
     });
-};
+}
 
-export const getRsvps = (): Promise<any> => {
-    return request<any>("/rsvp/all", {
+/** Get all RSVPs. Returns an array of Rsvp. */
+export async function getRsvps(): Promise<ApiResponse<Rsvp[]>> {
+    return request<Rsvp[]>("/rsvp/all", {
         method: "GET",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
         credentials: "include",
     });
-};
+}
 
-export const adminLogin = (
-                username: string,
-        password: string
-): Promise<any> => {
-    return request<any>("/auth/login", {
+/** Admin login. Returns { token: string, expiresIn: number } or similar. */
+export async function adminLogin(
+    username: string,
+    password: string
+): Promise<ApiResponse<{ token: string; expiresIn: number }>> {
+    return request<{ token: string; expiresIn: number }>("/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -121,40 +154,57 @@ export const adminLogin = (
         credentials: "include",
         body: JSON.stringify({ username, password }),
     });
-};
+}
 
-export const uploadPhoto = async (file: File): Promise<any> => {
+/** ============================
+ GALLERY-related methods
+ ============================ */
+
+/**
+ * Upload a photo:
+ * 1. Get image dimensions
+ * 2. Generate presigned URL
+ * 3. PUT to S3
+ * 4. Save metadata on your server
+ * Returns the new ImageMetadata with final info
+ */
+export async function uploadPhoto(file: File): Promise<ApiResponse<ImageMetadata>> {
     // 1. Get the image dimensions from the file
     const { width, height } = await getImageDimensions(file);
 
-    // 2. Request a pre-signed URL from your backend
-    const presignedResponse = await request<{
-        url: string;
-        key: string;
-    }>("/gallery/generate-presigned-url", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fileName: file.name }),
-    });
+    // 2. Request a pre-signed URL
+    const presigned = await request<{ url: string; key: string }>(
+        "/gallery/generate-presigned-url",
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fileName: file.name }),
+        }
+    );
 
-    const { url, key } = presignedResponse;
+    if (!presigned.success || !presigned.data) {
+        return { success: false, error: presigned.error ?? "Failed to generate presigned URL" };
+    }
 
-    // 3. Upload the file directly to S3 using the pre-signed URL
+    const { url, key } = presigned.data;
+
+    // 3. Upload directly to S3
     const s3Response = await fetch(url, {
         method: "PUT",
         headers: { "Content-Type": file.type },
         body: file,
     });
-
     if (!s3Response.ok) {
-        throw new Error(`S3 upload failed for ${file.name}`);
+        return { success: false, error: `S3 upload failed for ${file.name}` };
     }
 
-    // 4. Remove any query parameters from the URL to get the actual public URL (if applicable)
+    // 4. Remove query params to get the final image URL
     const imageUrl = url.split("?")[0];
+
+    // 5. Save metadata in your backend
     const metadataPayload = {
         imageId: key,
         imageUrl,
@@ -162,8 +212,7 @@ export const uploadPhoto = async (file: File): Promise<any> => {
         height,
     };
 
-    // 5. Save metadata in your backend
-    return await request<any>("/gallery/metadata", {
+    return request<ImageMetadata>("/gallery/metadata", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
@@ -171,45 +220,46 @@ export const uploadPhoto = async (file: File): Promise<any> => {
         },
         body: JSON.stringify(metadataPayload),
     });
-};
+}
 
-export const getPhotoMetadata = (): Promise<any> => {
-    return request<any>("/gallery/all", {
+/** Get all photo metadata. Returns an array of ImageMetadata. */
+export async function getPhotoMetadata(): Promise<ApiResponse<ImageMetadata[]>> {
+    return request<ImageMetadata[]>("/gallery/all", {
         method: "GET",
         headers: {},
         credentials: "include",
     });
-};
+}
 
-export const postChangeImageOrder = (
-                movingImageId: string,
-        previousImageId: string | null,
-        followingImageId: string | null
-): Promise<any> => {
-    return request<any>("/gallery/change-image-order", {
+/** Change the order of images. Returns no data (null). */
+export async function postChangeImageOrder(
+    movingImageId: string,
+    previousImageId: string | null,
+    followingImageId: string | null
+): Promise<ApiResponse<null>> {
+    return request<null>("/gallery/change-image-order", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-                                 movingImageId,
-                                 previousImageId,
-                                 followingImageId,
-                             }),
+            movingImageId,
+            previousImageId,
+            followingImageId,
+        }),
     });
-};
+}
 
-export const deleteImageRequest = (imageId: string): Promise<any> => {
-    return request<any>(`/gallery/delete`, {
+/** Delete an image by ID. Returns no data (null). */
+export async function deleteImageRequest(imageId: string): Promise<ApiResponse<null>> {
+    return request<null>(`/gallery/delete`, {
         method: "DELETE",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
             "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({
-                                 imageId,
-                             }),
+        body: JSON.stringify({ imageId }),
     });
-};
+}

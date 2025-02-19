@@ -10,7 +10,7 @@ import { RSVP_CONFIRMATION_STEP } from './RsvpConfirmation';
 import { RSVP_ADD_GUEST_STEP } from './RsvpAddGuest';
 import { RSVP_PRIMARY_CONTACT_STEP } from './RsvpPrimaryContact';
 import { useNavigate } from 'react-router-dom';
-import { usePutRsvp } from '../../../hooks/usePutRsvp';
+import { usePutRsvp } from '../../../hooks/rsvp/usePutRsvp';
 
 interface RsvpGuestsProps {
     changePage: (step: number) => void;
@@ -18,12 +18,16 @@ interface RsvpGuestsProps {
 }
 
 const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
-    const { putRsvp, error, loading } = usePutRsvp();
+    // usePutRsvp returns { execute, error, loading, data }
+    const { execute: putRsvp, error, loading } = usePutRsvp();
+
+    // Get Flow context values (formData is typed as Rsvp from your types/rsvp.ts)
     const { formData, setEditingGuest, resetFormData, resetStepState, deleteGuest } = useFlow();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!formData.guests || formData.guests.length === 0) {
+        // If there are no guests, force the user to add one.
+        if (!formData.rsvpGuestDetails || formData.rsvpGuestDetails.length === 0) {
             changePage(RSVP_ADD_GUEST_STEP);
         }
     }, [formData, changePage]);
@@ -33,26 +37,29 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
     };
 
     const handleNext = async () => {
+        // Build the update object.
+        // Note: formData.lastnames is an array; we join it into a string if the API expects a single string.
         const putRsvpDto = {
             rsvpCode: formData.rsvpCode,
-            lastName: formData.lastname,
+            lastName: formData.lastnames.join(','), // joining the array into a single string
             rsvpStatus: formData.rsvpStatus,
             primaryContact: {
-                name: formData.preferredContact.name,
-                email: formData.preferredContact.email,
-                phoneNumber: formData.preferredContact.phone,
+                name: formData.primaryContact.name,
+                email: formData.primaryContact.email,
+                phoneNumber: formData.primaryContact.phoneNumber, // mapping "phone" to "phoneNumber"
             },
-            rsvpGuestDetails: formData.guests.map((guest: any) => ({
+            rsvpGuestDetails: formData.rsvpGuestDetails.map(guest => ({
                 name: guest.name,
                 dietaryRestrictions: guest.dietaryRestrictions,
                 other: guest.other,
             })),
         };
-        const data = await putRsvp(putRsvpDto);
 
-        if ((!error || error === '') && data) {
+        await putRsvp(putRsvpDto);
+
+        // If there is no error and updated data was returned, proceed.
+        if (!error && !loading) {
             resetFormData();
-
             if (!returnPage) {
                 changePage(RSVP_CONFIRMATION_STEP);
             } else {
@@ -68,11 +75,13 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
     };
 
     const handleEditGuest = (index: number) => {
-        setEditingGuest({ ...formData.guests[index], index });
+        // Set the editing guest along with its index for editing.
+        setEditingGuest({ ...formData.rsvpGuestDetails[index], index });
         changePage(RSVP_ADD_GUEST_STEP);
     };
 
     const handleDeleteGuest = (index: number) => {
+        // Directly remove the guest from the local FlowProvider state.
         deleteGuest(index);
     };
 
@@ -80,7 +89,7 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
         <Container style={{ maxWidth: '900px' }}>
             {error && <div className="alert alert-danger">{error}</div>}
             <Row className="mb-4">
-                {formData.guests.length === 0 ? (
+                {formData.rsvpGuestDetails.length === 0 ? (
                     ''
                 ) : (
                     <Table hover className="custom-table">
@@ -88,44 +97,47 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
                         <tr>
                             <th>Name</th>
                             <th>Dietary Restrictions</th>
-                            <th>{formData.guests.some((guest: any) => guest.other && guest.other.trim() !== '') && 'Other'}</th>
+                            <th>
+                                {formData.rsvpGuestDetails.some(
+                                    guest => guest.other && guest.other.trim() !== ''
+                                ) && 'Other'}
+                            </th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        {formData.guests &&
-                            formData.guests.map((guest: any, index: number) => (
-                                <tr
-                                    key={index}
-                                    onClick={() => handleEditGuest(index)}
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <td className="align-middle">{guest.name}</td>
-                                    <td className="align-middle">
-                                        {guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
-                                            ? guest.dietaryRestrictions.map((restriction: string, idx: number) => (
-                                                <span key={idx}>
-                              {restriction}
-                                                    <br />
-                            </span>
-                                            ))
-                                            : 'None'}
-                                    </td>
-                                    <td className="align-middle">{guest.other}</td>
-                                    <td className="align-middle">
-                                        <Button
-                                            variant="link"
-                                            className="p-0"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeleteGuest(index);
-                                            }}
-                                        >
-                                            <FaTrash size={20} color="var(--main-dark)" />
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {formData.rsvpGuestDetails.map((guest, index) => (
+                            <tr
+                                key={index}
+                                onClick={() => handleEditGuest(index)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <td className="align-middle">{guest.name}</td>
+                                <td className="align-middle">
+                                    {guest.dietaryRestrictions && guest.dietaryRestrictions.length > 0
+                                        ? guest.dietaryRestrictions.map((restriction, idx) => (
+                                            <span key={idx}>
+                            {restriction}
+                                                <br />
+                          </span>
+                                        ))
+                                        : 'None'}
+                                </td>
+                                <td className="align-middle">{guest.other}</td>
+                                <td className="align-middle">
+                                    <Button
+                                        variant="link"
+                                        className="p-0"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteGuest(index);
+                                        }}
+                                    >
+                                        <FaTrash size={20} color="var(--main-dark)" />
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 )}
@@ -135,7 +147,7 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
                     Back
                 </Button>
                 <Col className="col-auto">
-                    {formData.allowedGuestCount > formData.guests.length && (
+                    {formData.allowedGuestCount > formData.rsvpGuestDetails.length && (
                         <Row className="justify-content-center">
                             <Button className="rsvp-button dark hover width-auto" onClick={handleNewGuest}>
                                 Add Guest
@@ -145,9 +157,9 @@ const RsvpGuests: React.FC<RsvpGuestsProps> = ({ changePage, returnPage }) => {
                     <Row className="pt-2 justify-content-center">
                         <div>
                             Remaining Guests:{' '}
-                            {formData.allowedGuestCount < formData.guests.length
+                            {formData.allowedGuestCount < formData.rsvpGuestDetails.length
                                 ? 0
-                                : formData.allowedGuestCount - formData.guests.length}
+                                : formData.allowedGuestCount - formData.rsvpGuestDetails.length}
                         </div>
                     </Row>
                 </Col>

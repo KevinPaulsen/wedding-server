@@ -1,4 +1,4 @@
-// utils.tsx
+// utils.ts
 
 export const getImageDimensions = (
     file: File

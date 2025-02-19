@@ -1,5 +1,6 @@
 // FlowProvider.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import {Rsvp} from "../types/rsvp";
 
 // ===== Type Definitions =====
 
@@ -10,19 +11,7 @@ interface FlowState {
         rsvpStatusCompleted: boolean;
         guestInfoCompleted: boolean;
     };
-    formData: {
-        rsvpCode: string | null;
-        lastname: string | null;
-        rsvpStatus: string | null;
-        preferredContact: {
-            name: string | null;
-            phone: string | null;
-            email: string | null;
-            address: string | null;
-        };
-        allowedGuestCount: number;
-        guests: any[]; // You might replace `any` with a more specific type later
-    };
+    formData: Rsvp;
     editingGuest: any | null;
 }
 
@@ -34,17 +23,17 @@ const initialState: FlowState = {
         guestInfoCompleted: false,
     },
     formData: {
-        rsvpCode: null,
-        lastname: null,
-        rsvpStatus: null,
-        preferredContact: {
-            name: null,
-            phone: null,
-            email: null,
-            address: null,
+        rsvpCode: "",
+        lastnames: [""],
+        rsvpStatus: "PENDING",
+        primaryContact: {
+            name: "",
+            phoneNumber: "",
+            email: "",
+            address: "",
         },
         allowedGuestCount: 0,
-        guests: [],
+        rsvpGuestDetails: [],
     },
     editingGuest: null,
 };
@@ -101,7 +90,7 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    guests: [...state.formData.guests, action.payload],
+                    rsvpGuestDetails: [...state.formData.rsvpGuestDetails, action.payload],
                 },
             };
         case actionTypes.DELETE_GUEST:
@@ -109,7 +98,7 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    guests: state.formData.guests.filter((_, i) => i !== action.payload),
+                    rsvpGuestDetails: state.formData.rsvpGuestDetails.filter((_, i) => i !== action.payload),
                 },
             };
         case actionTypes.SET_EDITING_GUEST:
@@ -119,7 +108,7 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    guests: state.formData.guests.map((guest, idx) =>
+                    rsvpGuestDetails: state.formData.rsvpGuestDetails.map((guest, idx) =>
                         idx === action.payload.index ? action.payload.guest : guest
                     ),
                 },
@@ -129,8 +118,8 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    preferredContact: {
-                        ...state.formData.preferredContact,
+                    primaryContact: {
+                        ...state.formData.primaryContact,
                         [action.payload.field]: action.payload.value,
                     },
                 },

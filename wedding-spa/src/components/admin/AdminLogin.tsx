@@ -1,36 +1,36 @@
 // AdminLogin.tsx
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import useAuthRedirect from "../../hooks/useAuthRedirect";
+import useAuthRedirect from "../../hooks/auth/useAuthRedirect";
 import FormInput from "../shared/FormInput";
 import { Button, Form } from "react-bootstrap";
-import { adminLogin } from "../../services/ApiService";
+import { useAdminLogin } from "../../hooks/auth/useAdminLogin";
 
 const AdminLogin: React.FC = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(false);
     const { login } = useContext(AuthContext)!;
     const navigate = useNavigate();
 
+    // Redirect if already logged in.
     useAuthRedirect();
+
+    // Use our specialized hook that wraps the adminLogin API call.
+    const { execute: doAdminLogin, error, loading, data } = useAdminLogin();
+
+    // When the API call returns data (i.e. a token), log in and navigate.
+    useEffect(() => {
+        if (data && data.token) {
+            login(data.token);
+            navigate('/admin/dashboard');
+        }
+    }, [data, login, navigate]);
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError('');
-        setLoading(true);
-
-        try {
-            const data = await adminLogin(username, password);
-            login(data.token);
-            navigate('/admin/dashboard');
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+        // Call the hook's execute function with username and password.
+        await doAdminLogin(username, password);
     };
 
     return (

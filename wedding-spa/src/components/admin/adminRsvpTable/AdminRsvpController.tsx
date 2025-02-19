@@ -1,14 +1,17 @@
 // AdminRsvpController.tsx
 import React, { useState } from 'react';
+import { Container } from "react-bootstrap";
 import RsvpTable from './RsvpTable';
 import FilterControls from './FilterControls';
-import { Container } from "react-bootstrap";
-import useRsvpData from "../../../hooks/useRsvpData";
-import { useDeleteRsvp } from "../../../hooks/useDeleteRsvp";
+import { useRsvpData } from "../../../hooks/rsvp/useRsvpData";
+import { useDeleteRsvp } from "../../../hooks/rsvp/useDeleteRsvp";
 
 const AdminRsvpController: React.FC = () => {
-    const { removeRsvp, data, error } = useRsvpData();
-    const { deleteRsvp, deleteError } = useDeleteRsvp();
+    // useRsvpData now returns { data, loading, error, removeRsvp }
+    const { data, error, removeRsvp } = useRsvpData();
+    // useDeleteRsvp now returns { execute, error } (renamed execute to deleteRsvp)
+    const { execute: deleteRsvp, error: deleteError } = useDeleteRsvp();
+
     const [filters, setFilters] = useState({
         status: '',
         sortBy: '',
@@ -32,7 +35,7 @@ const AdminRsvpController: React.FC = () => {
 
     const handleDelete = async (rsvpCode: string) => {
         await deleteRsvp(rsvpCode);
-        if (!error) {
+        if (!deleteError) {
             removeRsvp(rsvpCode);
         }
     };

@@ -7,23 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import "../../../styles/Table.css";
 import { useFlow } from "../../../context/FlowProvider";
 import { transformGuestDetails } from "../../../services/DataTransformService";
-
-interface RsvpEntry {
-    rsvpCode: string;
-    primaryContact: {
-        name: string;
-        phoneNumber?: string;
-        email?: string;
-        address?: string;
-    };
-    allowedGuestCount: number;
-    rsvpStatus: string;
-    lastnames: string[];
-    rsvpGuestDetails: any[];
-}
+import {Rsvp} from "../../../types/rsvp";
 
 interface RsvpRowProps {
-    rsvpEntry: RsvpEntry;
+    rsvpEntry: Rsvp;
     deleteRsvp: (rsvpCode: string) => Promise<void>;
 }
 
@@ -39,16 +26,7 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setFormData({ rsvpCode: rsvpEntry.rsvpCode });
-        setFormData({ lastname: (rsvpEntry.lastnames && rsvpEntry.lastnames.find(str => str != null && str.trim() !== '') || '') });
-        setFormData({ rsvpStatus: rsvpEntry.rsvpStatus });
-        setFormData({ allowedGuestCount: rsvpEntry.allowedGuestCount });
-        updatePreferredContactField("name", rsvpEntry.primaryContact.name);
-        updatePreferredContactField("email", rsvpEntry.primaryContact.email);
-        updatePreferredContactField("phone", rsvpEntry.primaryContact.phoneNumber);
-        updatePreferredContactField("address", rsvpEntry.primaryContact.address);
-        setFormData({ guests: transformGuestDetails(rsvpEntry.rsvpGuestDetails) });
-
+        setFormData(rsvpEntry);
         navigate(`/admin/edit-rsvp/`);
     };
 

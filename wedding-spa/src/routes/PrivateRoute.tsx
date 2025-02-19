@@ -1,8 +1,8 @@
 // PrivateRoute.tsx
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import useTokenVerification from '../hooks/useTokenVerification';
+import useTokenVerification from '../hooks/auth/useTokenVerification';
 import { Spinner } from 'react-bootstrap';
 import AdminLayout from '../components/admin/AdminLayout';
 
@@ -18,17 +18,20 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
     const { authToken, logout } = authContext;
     const navigate = useNavigate();
     const location = useLocation();
-    const isValidToken = useTokenVerification(authToken);
 
-    // Redirect to login if the token is invalid
-    if (isValidToken === false) {
-        logout();
-        navigate('/admin/login', { replace: true, state: { from: location } });
-        return null;
-    }
+    // Call the token verification hook.
+    const { isValid, loading, error } = useTokenVerification(authToken);
 
-    // While checking the token, show a loading spinner
-    if (isValidToken === null) {
+    // useEffect to handle redirection when token is invalid or there's an error.
+    useEffect(() => {
+        if (isValid === false || error) {
+            logout();
+            navigate('/admin/login', { replace: true, state: { from: location } });
+        }
+    }, [isValid, error, logout, navigate, location]);
+
+    // While token verification is in progress (or isValid is still null), show a spinner.
+    if (loading || isValid === null) {
         return (
             <AdminLayout>
                 <div className="d-flex justify-content-center">
@@ -40,6 +43,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
         );
     }
 
+    // If token is invalid or an error exists, render nothing (redirection will occur).
+    if (isValid === false || error) {
+        return null;
+    }
+
+    // Otherwise, render the protected component.
     return component;
 };
 

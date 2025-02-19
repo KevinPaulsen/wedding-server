@@ -7,18 +7,22 @@ import "yet-another-react-lightbox/styles.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import useGetPhotoMetadata from "../../hooks/useGetPhotoMetadata";
+import useGetPhotoMetadata from "../../hooks/gallery/useGetPhotoMetadata";
 import { Container, Row } from "react-bootstrap";
 import SortableGallery from "../shared/SortableGallery/SortableGallery";
 import { arrayMove } from "@dnd-kit/sortable";
-import { useChangeImageOrder } from "../../hooks/useChangeImageOrder";
-import { useDeleteImage } from "../../hooks/useDeleteImage";
+import { useChangeImageOrder } from "../../hooks/gallery/useChangeImageOrder";
+import { useDeleteImage } from "../../hooks/gallery/useDeleteImage";
 
 const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDraggable = false }) => {
     const [index, setIndex] = useState<number>(-1);
+
+    // Our generic hook returns { data, setData, loading, error }
     const { data, setData, loading, error } = useGetPhotoMetadata();
-    const { deleteImage } = useDeleteImage();
-    const { changeImageOrder } = useChangeImageOrder();
+
+    // Get the execute functions from the specialized hooks.
+    const { execute: changeImageOrder } = useChangeImageOrder();
+    const { execute: deleteImage } = useDeleteImage();
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -39,8 +43,10 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
             followingImageId = data[newIndex].imageId;
         }
 
+        // Update image order using the generic hook
         changeImageOrder(movingImageId, previousImageId, followingImageId);
 
+        // Locally update the photo order
         const newData = arrayMove(data, oldIndex, newIndex);
         setData(newData);
     };
@@ -58,6 +64,7 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
         event.preventDefault();
         event.stopPropagation();
 
+        // Call the generic deleteImage function
         deleteImage(photo.imageId);
         setData(prevData => prevData.filter((item: any) => item.imageId !== photo.imageId));
     };
@@ -85,7 +92,6 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
                     )}
                 </div>
             </Row>
-
             {!makeDraggable && (
                 <Lightbox
                     slides={data}

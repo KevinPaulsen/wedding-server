@@ -10,7 +10,7 @@ interface TitleProps {
 
 const Title: React.FC<TitleProps> = ({ color, link = true }) => {
     return link ? (
-        <Link to="/wedding-spa/public" style={{ textDecoration: 'none' }}>
+        <Link to="/" style={{ textDecoration: 'none' }}>
             <h1 className="title" style={{ color }}>{'Kevin & Olivia'}</h1>
         </Link>
     ) : (

@@ -75,7 +75,7 @@ const RsvpAddGuest: React.FC<RsvpAddGuestProps> = ({ changePage, requireAnswers 
 
     const handleBack = () => {
         setEditingGuest(null);
-        if (formData.guests && formData.guests.length === 0) {
+        if (formData.rsvpGuestDetails.length === 0) {
             changePage(RSVP_PRIMARY_CONTACT_STEP);
         } else {
             changePage(RSVP_GUESTS_PAGE);

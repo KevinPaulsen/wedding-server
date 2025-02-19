@@ -6,7 +6,7 @@ import '../../../styles/rsvp/RsvpButtons.css';
 import { useFlow } from '../../../context/FlowProvider';
 import { Button, Form, Row } from 'react-bootstrap';
 import { RSVP_PRIMARY_CONTACT_STEP } from './RsvpPrimaryContact';
-import { usePutRsvp } from '../../../hooks/usePutRsvp';
+import { usePutRsvp } from '../../../hooks/rsvp/usePutRsvp';
 import { RSVP_CONFIRMATION_STEP } from './RsvpConfirmation';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,11 +18,12 @@ interface RsvpStatusProps {
 
 const RsvpStatus: React.FC<RsvpStatusProps> = ({ changePage, requireAnswers, returnPage }) => {
     const { formData, setFormData, resetFormData, resetStepState } = useFlow();
-    const [selectedStatus, setSelectedStatus] = useState<string | null>(formData.rsvpStatus);
-    const { putRsvp, error, loading } = usePutRsvp();
+    // Set selectedStatus as a union type to match the Rsvp interface
+    const [selectedStatus, setSelectedStatus] = useState<'ATTENDING' | 'NOT_ATTENDING' | 'PENDING' | null>(formData.rsvpStatus);
+    const { execute: putRsvp, error, loading, data } = usePutRsvp();
     const navigate = useNavigate();
 
-    const handleStatusChange = (status: string) => {
+    const handleStatusChange = (status: 'ATTENDING' | 'NOT_ATTENDING' | 'PENDING') => {
         setSelectedStatus(status);
         setFormData({ rsvpStatus: status });
     };
@@ -34,15 +35,14 @@ const RsvpStatus: React.FC<RsvpStatusProps> = ({ changePage, requireAnswers, ret
             } else {
                 const putRsvpDto = {
                     rsvpCode: formData.rsvpCode,
-                    lastName: formData.lastname,
+                    lastName: formData.lastnames.join(','), // join array into string for API
                     rsvpStatus: formData.rsvpStatus,
                 };
 
-                const data = await putRsvp(putRsvpDto);
+                await putRsvp(putRsvpDto);
 
-                if ((!error || error === '') && data) {
+                if (!error && data) {
                     resetFormData();
-
                     if (!returnPage) {
                         changePage(RSVP_CONFIRMATION_STEP);
                     } else {
@@ -74,8 +74,8 @@ const RsvpStatus: React.FC<RsvpStatusProps> = ({ changePage, requireAnswers, ret
                 </Button>
             </Row>
             <Row className="d-flex justify-content-center pt-4">
-                <Button className='rsvp-button dark hover' onClick={handleNext} disabled={!selectedStatus}>
-                    Next
+                <Button className="rsvp-button dark hover" onClick={handleNext} disabled={!selectedStatus || loading}>
+                    {loading ? 'Processing...' : 'Next'}
                 </Button>
             </Row>
         </Form>

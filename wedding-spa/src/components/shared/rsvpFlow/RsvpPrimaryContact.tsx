@@ -40,13 +40,8 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
         const isPhoneValid = prefPhoneRef.current!.validate();
 
         if (isNameValid && isEmailValid && isPhoneValid) {
-            if (formData.guests && formData.guests.length === 0) {
-                setEditingGuest({
-                    name: formData.preferredContact.name,
-                    foodOption: "",
-                    dietaryRestrictions: [],
-                    other: "",
-                });
+            if (formData.rsvpGuestDetails.length === 0) {
+                setEditingGuest(formData.primaryContact);
                 changePage(RSVP_ADD_GUEST_STEP);
             } else {
                 changePage(RSVP_GUESTS_PAGE);
@@ -61,7 +56,7 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
                 name="name"
                 type="text"
                 placeholder="Preferred Name"
-                value={formData.preferredContact.name || ''}
+                value={formData.primaryContact.name}
                 onChange={handleChange}
                 required={requireAnswers}
             />
@@ -70,7 +65,7 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
                 name="email"
                 type="text"
                 placeholder="Preferred Email"
-                value={formData.preferredContact.email || ''}
+                value={formData.primaryContact.email || ''}
                 onChange={handleChange}
                 required={requireAnswers}
             />
@@ -79,7 +74,7 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
                 name="phone"
                 type="text"
                 placeholder="Preferred Phone Number"
-                value={formData.preferredContact.phone || ''}
+                value={formData.primaryContact.phoneNumber || ''}
                 onChange={handleChange}
                 required={requireAnswers}
             />

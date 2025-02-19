@@ -2,11 +2,11 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Container, Form, Row } from 'react-bootstrap';
 import '../../styles/Transitions.css';
-import { Button, Container, Form, Row } from "react-bootstrap";
-import CustomInputField, { CustomInputFieldRef } from "../shared/CustomInputField";
 import '../../styles/rsvp/RsvpButtons.css';
-import { useAddRsvp } from "../../hooks/useAddRsvp";
+import CustomInputField, { CustomInputFieldRef } from '../shared/CustomInputField';
+import { useAddRsvp } from '../../hooks/rsvp/useAddRsvp';
 
 interface RsvpData {
     name: string;
@@ -16,18 +16,21 @@ interface RsvpData {
 
 const AddRsvp: React.FC = () => {
     const navigate = useNavigate();
-    const { addRsvp, loading, error } = useAddRsvp();
+    // The new approach
+    const { execute: addRsvp, loading, error } = useAddRsvp();
+
+    // Refs for validating input fields
     const nameRef = useRef<CustomInputFieldRef>(null);
     const allowedGuestsRef = useRef<CustomInputFieldRef>(null);
 
     const [rsvp, setRsvp] = useState<RsvpData>({
-        name: "",
-        lastnames: "",
+        name: '',
+        lastnames: '',
         allowedGuestCount: 0,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRsvp(prev => ({
+        setRsvp((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
@@ -38,20 +41,19 @@ const AddRsvp: React.FC = () => {
         const guestCountValid = allowedGuestsRef.current?.validate() ?? false;
 
         if (nameValid && guestCountValid) {
-            try {
-                const formattedRsvpData = {
-                    rsvpCode: "",
-                    primaryContact: {
-                        name: rsvp.name.trim(),
-                    },
-                    lastnames: rsvp.lastnames.trim().split(','),
-                    allowedGuestCount: rsvp.allowedGuestCount,
-                };
+            const formattedRsvpData = {
+                rsvpCode: '',
+                primaryContact: {
+                    name: rsvp.name.trim(),
+                },
+                lastnames: rsvp.lastnames.trim().split(','),
+                allowedGuestCount: rsvp.allowedGuestCount,
+            };
 
-                await addRsvp(formattedRsvpData);
+            await addRsvp(formattedRsvpData);
+            if (!error) {
+                // If there's no error from the API call, navigate away
                 navigate('/admin/dashboard');
-            } catch (error) {
-                console.error('Failed to add RSVP:', error);
             }
         }
     };
@@ -76,7 +78,7 @@ const AddRsvp: React.FC = () => {
                         placeholder="Additional Last Names (comma separated)"
                         style={{ width: '300px', outline: '2px solid var(--main-dark)' }}
                     />
-                    <div style={{ height: "28px" }}></div>
+                    <div style={{ height: '28px' }}></div>
                 </Form.Group>
                 <CustomInputField
                     ref={allowedGuestsRef}
@@ -92,6 +94,7 @@ const AddRsvp: React.FC = () => {
                         {loading ? 'Adding RSVP...' : 'Add RSVP'}
                     </Button>
                 </Row>
+                {/* If the API returned an error, display it */}
                 {error && <p className="text-danger">Failed to add RSVP: {error}</p>}
             </Form>
         </Container>

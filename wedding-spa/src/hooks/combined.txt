@@ -1,0 +1,290 @@
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+const useAuthRedirect = (): void => {
+    const { authToken } = useContext(AuthContext)!;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authToken) {
+            navigate('/admin/dashboard');
+        }
+    }, [authToken, navigate]);
+};
+
+export default useAuthRedirect;
+import { useEffect, useState } from 'react';
+import { verifyToken } from "../services/ApiService";
+
+const useTokenVerification = (authToken: string | null): boolean | null => {
+    const [isValidToken, setIsValidToken] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const checkTokenValidity = async () => {
+            if (!authToken) {
+                setIsValidToken(false);
+                return;
+            }
+            try {
+                const isValid = await verifyToken(authToken);
+                setIsValidToken(isValid === true);
+            } catch (err) {
+                setIsValidToken(false);
+            }
+        };
+
+        checkTokenValidity();
+    }, [authToken]);
+
+    return isValidToken;
+};
+
+export default useTokenVerification;
+import { useState } from 'react';
+import { uploadPhoto } from '../services/ApiService';
+
+export const useUploadPhoto = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const upload = async (file: File): Promise<any> => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await uploadPhoto(file);
+            setLoading(false);
+            return response;
+        } catch (err: any) {
+            setError(err.message);
+            setLoading(false);
+            throw err;
+        }
+    };
+
+    return { upload, loading, error };
+};
+import { useEffect, useState } from 'react';
+import { getRsvps } from "../services/ApiService";
+
+export const useRsvpData = () => {
+    const [data, setData] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchRsvpData = async () => {
+            try {
+                const rsvps = await getRsvps();
+                if (isMounted) {
+                    setData(rsvps);
+                }
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRsvpData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const removeRsvp = (rsvpCode: string) => {
+        setData(prevData => prevData.filter(rsvp => rsvp.rsvpCode !== rsvpCode));
+    };
+
+    return { removeRsvp, data, loading, error };
+};
+
+export default useRsvpData;
+import { useState } from 'react';
+import { updateRsvp } from "../services/ApiService";
+
+export const usePutRsvp = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+
+    const putRsvp = async (rsvpData: any): Promise<any> => {
+        setLoading(true);
+        setError('');
+        let data: any = null;
+        try {
+            data = await updateRsvp(rsvpData);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+        return data;
+    };
+
+    return { putRsvp, loading, error };
+};
+import { useEffect, useState } from 'react';
+import { getPhotoMetadata } from "../services/ApiService";
+
+export interface PhotoMetadata {
+    src: string;
+    width: number;
+    height: number;
+    imageId: string;
+}
+
+const useGetPhotoMetadata = () => {
+    const [data, setData] = useState<PhotoMetadata[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchPhotoMetadata = async () => {
+            try {
+                const metadata = await getPhotoMetadata();
+                if (isMounted) {
+                    const photos: PhotoMetadata[] = metadata.map((item: any) => ({
+                        src: item.imageUrl,
+                        width: item.width,
+                        height: item.height,
+                        imageId: item.imageId,
+                    }));
+                    setData(photos);
+                }
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPhotoMetadata();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    return { data, setData, loading, error };
+};
+
+export default useGetPhotoMetadata;
+import { useState } from 'react';
+import { createRsvp } from "../services/ApiService";
+
+export const useAddRsvp = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const addRsvp = async (rsvpData: any): Promise<any> => {
+        setLoading(true);
+        setError(null);
+        let data: any = null;
+        try {
+            data = await createRsvp(rsvpData);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+        return data;
+    };
+
+    return { addRsvp, loading, error };
+};
+import { useState } from 'react';
+import { deleteImageRequest } from "../services/ApiService";
+
+export const useDeleteImage = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const deleteImage = async (imageId: string): Promise<void> => {
+        setLoading(true);
+        setError(null);
+        try {
+            await deleteImageRequest(imageId);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { deleteImage, loading, error };
+};
+import { useState } from 'react';
+import { postChangeImageOrder } from "../services/ApiService";
+
+export const useChangeImageOrder = () => {
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const changeImageOrder = async (
+        movingImageId: string,
+        previousImageId: string | null,
+        followingImageId: string | null
+    ): Promise<void> => {
+        setLoading(true);
+        setError(null);
+        try {
+            await postChangeImageOrder(movingImageId, previousImageId, followingImageId);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { changeImageOrder, loading, error };
+};
+import { useState } from 'react';
+import { deleteRsvpRequest } from "../services/ApiService";
+
+export const useDeleteRsvp = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+
+    const deleteRsvp = async (rsvpCode: string): Promise<void> => {
+        setLoading(true);
+        setDeleteError(null);
+        try {
+            await deleteRsvpRequest(rsvpCode);
+        } catch (err: any) {
+            setDeleteError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { deleteRsvp, loading, deleteError };
+};
+import { useState } from 'react';
+import { getRsvpRequest } from "../services/ApiService";
+
+export const useGetRsvp = () => {
+    const [rsvp, setRsvp] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
+
+    const getRsvp = async (rsvpCode: string, lastname: string): Promise<any> => {
+        setLoading(true);
+        setError('');
+        try {
+            const result = await getRsvpRequest(rsvpCode, lastname);
+            setRsvp(result);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+        return rsvp;
+    };
+
+    return { getRsvp, rsvp, loading, error };
+};
