@@ -1,3 +1,4 @@
+// UploadToPhotoGallery.jsx
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminFileUploadComponent from "../../components/admin/adminGalleryControl/AdminFileUploadComponent";

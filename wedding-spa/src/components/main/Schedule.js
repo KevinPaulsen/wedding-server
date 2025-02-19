@@ -1,3 +1,4 @@
+// Schedule.js
 import React from 'react';
 import InfoContainer from "./InfoContainer";
 

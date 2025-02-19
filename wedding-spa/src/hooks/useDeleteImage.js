@@ -1,3 +1,4 @@
+// useDeleteImage.js
 import {useState} from 'react';
 import {deleteImageRequest} from "../services/ApiService";
 

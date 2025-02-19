@@ -1,3 +1,4 @@
+// Overlay.jsx
 export default function Overlay({ photo: { src, alt, srcSet }, width, height, padding, style, ...rest }) {
     return (
             <div style={{ padding, ...style }} {...rest}>

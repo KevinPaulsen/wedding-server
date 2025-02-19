@@ -1,3 +1,4 @@
+// Story.js
 import React from 'react';
 import {Container, Image} from 'react-bootstrap';
 import '../../styles/StoryContent.css'

@@ -1,3 +1,4 @@
+// GalleryPage.js
 import React from 'react';
 import BaseLayout from "../../components/main/BaseLayout";
 import PhotoGalleryComponent from "../../components/main/PhotoGalleryComponent";

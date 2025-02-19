@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import AdminLogin from "./components/admin/AdminLogin";

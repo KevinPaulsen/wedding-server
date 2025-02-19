@@ -1,3 +1,4 @@
+// RsvpInfo.js
 import React, {useEffect, useRef} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/Transitions.css';

@@ -1,3 +1,4 @@
+// RsvpFormStep.js
 import React from "react";
 import RsvpInfo, {RSVP_INFO_STEP} from "./RsvpInfo";
 import RsvpPrimaryContact, {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";

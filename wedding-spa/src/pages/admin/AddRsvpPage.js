@@ -1,3 +1,4 @@
+// AddRsvpPage.js
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
 import AddRsvp from "../../components/admin/AddRsvp";

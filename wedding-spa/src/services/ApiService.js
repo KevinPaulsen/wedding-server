@@ -1,3 +1,4 @@
+// ApiService.js
 import {getImageDimensions} from './utils';
 
 export const API_URL = 'https://api.KevinLovesOlivia.com';

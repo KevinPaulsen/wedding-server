@@ -1,3 +1,4 @@
+// AdminRsvpInfoPage.js
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminRsvpController from "../../components/admin/adminRsvpTable/AdminRsvpController";
