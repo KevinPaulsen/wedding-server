@@ -1,34 +1,39 @@
-// Overlay.jsx
 import React from "react";
 
-interface ImageProps {
+interface Photo {
     src: string;
     alt?: string;
-    srcSet?: { src: string; width: number }[];
+    srcSet?: Array<{ src: string; width: number }>;
 }
 
-interface OverlayProps extends ImageProps {
-    photo: {
-        src: string;
-        alt: string;
-        srcSet?: { src: string; width: number }[];
-    }
+interface OverlayProps {
+    photo: Photo;
     width: number;
     height: number;
     padding?: string;
     style?: React.CSSProperties;
+    className?: string;
 }
 
-const Overlay: React.FC<OverlayProps> = ({ photo: { src, alt, srcSet }, width, height, padding, style }) => {
+const Overlay: React.FC<OverlayProps> = ({
+                                             photo: { src, alt, srcSet },
+                                             width,
+                                             height,
+                                             padding,
+                                             style,
+                                             className,
+                                         }) => {
     return (
-        <div style={{ padding, ...style }}>
+        <div style={{ padding, ...style }} className={className}>
             <img
                 src={src}
                 alt={alt}
                 width={width}
                 height={height}
                 sizes={`${width}px`}
-                srcSet={srcSet?.map((image: { src: string; width: number; }) => `${image.src} ${image.width}w`).join(", ")}
+                srcSet={srcSet
+                    ?.map((image) => `${image.src} ${image.width}w`)
+                    .join(", ")}
             />
         </div>
     );

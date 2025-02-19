@@ -1,4 +1,3 @@
-// PhotoGalleryComponent.jsx
 import React, { useState } from "react";
 import { RowsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/rows.css";
@@ -7,7 +6,7 @@ import "yet-another-react-lightbox/styles.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import useGetPhotoMetadata from "../../hooks/gallery/useGetPhotoMetadata";
+import useGetPhotoMetadata, {PhotoMetadata} from "../../hooks/gallery/useGetPhotoMetadata";
 import { Container, Row } from "react-bootstrap";
 import SortableGallery from "../shared/SortableGallery/SortableGallery";
 import { arrayMove } from "@dnd-kit/sortable";
@@ -60,13 +59,13 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
         },
     });
 
-    const handleDelete = (photo: any, event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleDelete = (photo: PhotoMetadata, event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
 
         // Call the generic deleteImage function
         deleteImage(photo.imageId);
-        setData(prevData => prevData.filter((item: any) => item.imageId !== photo.imageId));
+        setData(prevData => prevData.filter((item: PhotoMetadata) => item.imageId !== photo.imageId));
     };
 
     return (
