@@ -1,4 +1,4 @@
-// MainPhoto.js
+// MainPhoto.tsx
 import React from 'react';
 import { Container, Image } from 'react-bootstrap';
 import '../../styles/MainPhoto.css';

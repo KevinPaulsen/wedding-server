@@ -1,4 +1,4 @@
-// AdminRsvpController.js
+// AdminRsvpController.tsx
 import React, { useState } from 'react';
 import RsvpTable from './RsvpTable';
 import FilterControls from './FilterControls';

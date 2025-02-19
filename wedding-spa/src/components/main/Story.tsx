@@ -1,4 +1,4 @@
-// Story.js
+// Story.tsx
 import React from 'react';
 import { Container, Image } from 'react-bootstrap';
 import '../../styles/StoryContent.css';

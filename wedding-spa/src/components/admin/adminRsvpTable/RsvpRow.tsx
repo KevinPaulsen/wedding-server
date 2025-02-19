@@ -1,4 +1,4 @@
-// RsvpRow.js
+// RsvpRow.tsx
 import React, { useState } from 'react';
 import { Badge, Col, Row, Spinner } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';

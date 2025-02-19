@@ -1,4 +1,4 @@
-// Contact.js
+// Contact.tsx
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import '../../styles/StoryContent.css';

@@ -1,4 +1,4 @@
-// Schedule.js
+// Schedule.tsx
 import React from 'react';
 import InfoContainer from "./InfoContainer";
 

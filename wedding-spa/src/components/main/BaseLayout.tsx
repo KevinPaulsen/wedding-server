@@ -1,4 +1,4 @@
-// BaseLayout.js
+// BaseLayout.tsx
 import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import Header from "../headerComponents/Header";

@@ -1,4 +1,4 @@
-// PrivateRoute.js
+// PrivateRoute.tsx
 import React, { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';

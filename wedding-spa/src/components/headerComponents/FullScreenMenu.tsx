@@ -1,4 +1,4 @@
-// FullScreenMenu.js
+// FullScreenMenu.tsx
 import React, { useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import '../../styles/FullScreenMenu.css';

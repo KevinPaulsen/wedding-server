@@ -1,4 +1,4 @@
-// AddRsvp.js
+// AddRsvp.tsx
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';

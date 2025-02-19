@@ -1,4 +1,4 @@
-// GuestDetails.js
+// GuestDetails.tsx
 import React from 'react';
 import { Card, Table, Row, Col } from 'react-bootstrap';
 import '../../../styles/DarkTable.css';
