@@ -12,7 +12,7 @@ const AdminLogin: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const { login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext)!;
     const navigate = useNavigate();
 
     useAuthRedirect();
