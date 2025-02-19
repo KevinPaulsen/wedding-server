@@ -1,25 +1,17 @@
 // RsvpAddGuest.tsx
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../../styles/Transitions.css';
 import '../../../styles/rsvp/RsvpButtons.css';
-import { useFlow } from '../../../context/FlowProvider';
-import { Button, Form, Row } from 'react-bootstrap';
+import {RsvpGuestDetailWithIndex, useFlow} from '../../../context/FlowProvider';
+import {Button, Form, Row} from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
-import { RSVP_GUESTS_PAGE } from './RsvpGuests';
-import { RSVP_PRIMARY_CONTACT_STEP } from "./RsvpPrimaryContact";
+import {RSVP_GUESTS_PAGE} from './RsvpGuests';
+import {RSVP_PRIMARY_CONTACT_STEP} from "./RsvpPrimaryContact";
 
 interface RsvpAddGuestProps {
     changePage: (step: number) => void;
     requireAnswers: boolean;
-}
-
-interface Guest {
-    name: string;
-    foodOption: string;
-    dietaryRestrictions: string[];
-    other: string;
-    index?: number;
 }
 
 interface Validateable {
@@ -31,7 +23,7 @@ const RsvpAddGuest: React.FC<RsvpAddGuestProps> = ({ changePage, requireAnswers 
     const guestName = useRef<Validateable>(null);
     const otherRef = useRef<Validateable>(null);
 
-    const [newGuest, setNewGuest] = useState<Guest>({
+    const [newGuest, setNewGuest] = useState<RsvpGuestDetailWithIndex>({
         name: '',
         foodOption: '',
         dietaryRestrictions: [],
@@ -125,7 +117,7 @@ const RsvpAddGuest: React.FC<RsvpAddGuestProps> = ({ changePage, requireAnswers 
                         name="other"
                         type="text"
                         placeholder="Other Restrictions"
-                        value={newGuest.other}
+                        value={newGuest.other || ''}
                         onChange={handleChange}
                         required={requireAnswers}
                     />

@@ -27,7 +27,7 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
     const prefPhoneRef = useRef<Validateable>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        updatePreferredContactField(e.target.name, e.target.value);
+        updatePreferredContactField(e.target.name as keyof typeof formData.primaryContact, e.target.value);
     };
 
     const handleBack = () => {
@@ -41,7 +41,12 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
 
         if (isNameValid && isEmailValid && isPhoneValid) {
             if (formData.rsvpGuestDetails.length === 0) {
-                setEditingGuest(formData.primaryContact);
+                setEditingGuest({
+                    ...formData.primaryContact,
+                    foodOption: '',
+                    dietaryRestrictions: [],
+                    other: '',
+                });
                 changePage(RSVP_ADD_GUEST_STEP);
             } else {
                 changePage(RSVP_GUESTS_PAGE);
@@ -71,7 +76,7 @@ const RsvpPrimaryContact: React.FC<RsvpPrimaryContactProps> = ({ changePage, req
             />
             <CustomInputField
                 ref={prefPhoneRef}
-                name="phone"
+                name="phoneNumber"
                 type="text"
                 placeholder="Preferred Phone Number"
                 value={formData.primaryContact.phoneNumber || ''}
