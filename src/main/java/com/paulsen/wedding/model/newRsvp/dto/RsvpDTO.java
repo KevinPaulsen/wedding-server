@@ -5,13 +5,16 @@ import com.paulsen.wedding.model.newRsvp.GuestInfo;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class RsvpDTO {
     private String rsvp_id;
     private boolean is_submitted;
     private GuestInfoDTO primary_contact;
-    private List<RsvpGuestDetailsDTO> guest_list;
+    private Map<String, RsvpGuestDetailsDTO> guest_list;
     private EventDTO roce;
     private EventDTO rehearsal;
     private EventDTO ceremony;
@@ -20,21 +23,30 @@ public class RsvpDTO {
     public RsvpDTO() {
     }
 
+    // Constructs a deep copy from a domain Rsvp object.
     public RsvpDTO(Rsvp rsvp) {
         if (rsvp == null) {
             return;
         }
         this.rsvp_id = rsvp.getRsvpId();
         this.is_submitted = rsvp.isSubmitted();
-        this.primary_contact = rsvp.getPrimaryContact() == null ? null : new GuestInfoDTO(rsvp.getPrimaryContact());
-        this.guest_list = rsvp.getGuestList() == null ? null : rsvp.getGuestList()
-                                                                        .stream()
-                                                                        .map(RsvpGuestDetailsDTO::new)
-                                                                        .toList();
-        this.roce = rsvp.getRoce() == null ? null : new EventDTO(rsvp.getRoce());
-        this.rehearsal = rsvp.getRehearsal() == null ? null : new EventDTO(rsvp.getRehearsal());
-        this.ceremony = rsvp.getCeremony() == null ? null : new EventDTO(rsvp.getCeremony());
-        this.reception = rsvp.getReception() == null ? null : new EventDTO(rsvp.getReception());
+        this.primary_contact = (rsvp.getPrimaryContact() == null)
+                               ? null
+                               : new GuestInfoDTO(rsvp.getPrimaryContact());
+        // Convert the guest list map to a deep-copy map.
+        if (rsvp.getGuestList() != null) {
+            this.guest_list = rsvp.getGuestList().entrySet().stream()
+                                  .collect(Collectors.toMap(
+                                          Map.Entry::getKey,
+                                          entry -> new RsvpGuestDetailsDTO(entry.getValue())
+                                  ));
+        } else {
+            this.guest_list = new HashMap<>();
+        }
+        this.roce = (rsvp.getRoce() == null) ? null : new EventDTO(rsvp.getRoce());
+        this.rehearsal = (rsvp.getRehearsal() == null) ? null : new EventDTO(rsvp.getRehearsal());
+        this.ceremony = (rsvp.getCeremony() == null) ? null : new EventDTO(rsvp.getCeremony());
+        this.reception = (rsvp.getReception() == null) ? null : new EventDTO(rsvp.getReception());
     }
 
     public String getRsvp_id() {
@@ -54,22 +66,28 @@ public class RsvpDTO {
     }
 
     public GuestInfo getPrimary_contact() {
-        if (primary_contact == null) return null;
-        return new GuestInfo(primary_contact);
+        return primary_contact == null ? null : new GuestInfo(primary_contact);
     }
 
     public void setPrimary_contact(GuestInfo primary_contact) {
-        this.primary_contact = new GuestInfoDTO(primary_contact);
+        this.primary_contact = primary_contact == null ? null : new GuestInfoDTO(primary_contact);
     }
 
-    public List<RsvpGuestDetails> getGuest_list() {
-        return guest_list == null ? null : guest_list.stream()
-                         .map(dto -> new RsvpGuestDetails(dto.getName(), dto.getDietary_Restrictions(), dto.getOther()))
-                         .toList();
+    // Return a deep copy of the guest_list map.
+    public Map<String, RsvpGuestDetails> getGuest_list() {
+        if (guest_list == null) {
+            return new HashMap<>();
+        }
+        return guest_list.entrySet().stream()
+                         .collect(Collectors.toMap(
+                                 Map.Entry::getKey,
+                                 entry -> new RsvpGuestDetails(entry.getValue())
+                         ));
     }
 
-    public void setGuest_list(List<RsvpGuestDetailsDTO> guest_list) {
-        this.guest_list = guest_list;
+    // Sets the guest_list map by deep copying the passed map.
+    public void setGuest_list(Map<String, RsvpGuestDetailsDTO> guest_list) {
+        this.guest_list = Objects.requireNonNullElseGet(guest_list, HashMap::new);
     }
 
     public Event getRoce() {

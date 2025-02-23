@@ -7,9 +7,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.paulsen.wedding.model.newRsvp.converters.EventConverter;
 import com.paulsen.wedding.model.newRsvp.converters.GuestInfoConverter;
-import com.paulsen.wedding.model.newRsvp.converters.RsvpGuestDetailsConverter;
+import com.paulsen.wedding.model.newRsvp.converters.RsvpGuestDetailsMapConverter;
 
-import java.util.List;
+import java.util.Map;
 
 @DynamoDBTable(tableName="wedding_rsvp_table") public class Rsvp {
 
@@ -23,8 +23,8 @@ import java.util.List;
     @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
     private GuestInfo primaryContact;
 
-    @DynamoDBAttribute(attributeName="guest_list") @DynamoDBTypeConverted(converter=RsvpGuestDetailsConverter.class)
-    private List<RsvpGuestDetails> guestList;
+    @DynamoDBAttribute(attributeName="guest_list") @DynamoDBTypeConverted(converter=RsvpGuestDetailsMapConverter.class)
+    private Map<String, RsvpGuestDetails> guestList;
 
     @DynamoDBAttribute(attributeName="roce") @DynamoDBTypeConverted(converter=EventConverter.class)
     private Event roce;
@@ -62,11 +62,11 @@ import java.util.List;
         this.primaryContact = primaryContact;
     }
 
-    public List<RsvpGuestDetails> getGuestList() {
+    public Map<String, RsvpGuestDetails> getGuestList() {
         return guestList;
     }
 
-    public void setGuestList(List<RsvpGuestDetails> guestList) {
+    public void setGuestList(Map<String, RsvpGuestDetails> guestList) {
         this.guestList = guestList;
     }
 

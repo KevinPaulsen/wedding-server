@@ -23,7 +23,7 @@ public class NewRsvpServiceTest {
         RsvpDTO dto = new RsvpDTO();
         GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
         dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyList());
+        dto.setGuest_list(Collections.emptyMap());
 
         EventDTO event = new EventDTO();
         event.setAllowed_guests(3);
@@ -37,7 +37,7 @@ public class NewRsvpServiceTest {
         savedRsvp.setRsvpId("67890");
         Mockito.when(rsvpRepository.save(Mockito.any(Rsvp.class))).thenReturn(savedRsvp);
 
-        Rsvp result = rsvpService.createRsvp(dto);
+        Rsvp result = rsvpService.saveRsvp(dto);
         Assertions.assertNotNull(result);
         Assertions.assertEquals("67890", result.getRsvpId());
     }
@@ -47,7 +47,7 @@ public class NewRsvpServiceTest {
     public void testCreateRsvp_MissingPrimaryContact() {
         RsvpDTO dto = new RsvpDTO();
         // Primary contact is not set
-        dto.setGuest_list(Collections.emptyList());
+        dto.setGuest_list(Collections.emptyMap());
         EventDTO event = new EventDTO();
         event.setAllowed_guests(3);
         event.setGuests_attending(Collections.emptyList());
@@ -57,7 +57,7 @@ public class NewRsvpServiceTest {
         dto.setReception(event);
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.createRsvp(dto);
+            rsvpService.saveRsvp(dto);
         });
         Assertions.assertEquals("Primary contact and name are required.", exception.getMessage());
     }
@@ -69,7 +69,7 @@ public class NewRsvpServiceTest {
         dto.setRsvp_id("12345");
         GuestInfo updatedPrimary = new GuestInfo("Updated Name", "update@example.com", "1112223333", "789 New St");
         dto.setPrimary_contact(updatedPrimary);
-        dto.setGuest_list(Collections.emptyList());
+        dto.setGuest_list(Collections.emptyMap());
 
         EventDTO event = new EventDTO();
         event.setAllowed_guests(5);
@@ -85,7 +85,7 @@ public class NewRsvpServiceTest {
         Mockito.when(rsvpRepository.findById("12345")).thenReturn(Optional.of(existingRsvp));
         Mockito.when(rsvpRepository.save(Mockito.any(Rsvp.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Rsvp result = rsvpService.updateRsvp(dto);
+        Rsvp result = rsvpService.saveRsvp(dto);
         Assertions.assertNotNull(result);
         Assertions.assertEquals("Updated Name", result.getPrimaryContact().name());
         Assertions.assertEquals("update@example.com", result.getPrimaryContact().email());
@@ -98,7 +98,7 @@ public class NewRsvpServiceTest {
         // rsvp_id is not set
         GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
         dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyList());
+        dto.setGuest_list(Collections.emptyMap());
         EventDTO event = new EventDTO();
         event.setAllowed_guests(2);
         event.setGuests_attending(Collections.emptyList());
@@ -108,7 +108,7 @@ public class NewRsvpServiceTest {
         dto.setReception(event);
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.updateRsvp(dto);
+            rsvpService.saveRsvp(dto);
         });
         Assertions.assertEquals("RSVP id is required for update.", exception.getMessage());
     }
@@ -120,7 +120,7 @@ public class NewRsvpServiceTest {
         dto.setRsvp_id("nonexistent");
         GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
         dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyList());
+        dto.setGuest_list(Collections.emptyMap());
         EventDTO event = new EventDTO();
         event.setAllowed_guests(2);
         event.setGuests_attending(Collections.emptyList());
@@ -132,7 +132,7 @@ public class NewRsvpServiceTest {
         Mockito.when(rsvpRepository.findById("nonexistent")).thenReturn(Optional.empty());
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.updateRsvp(dto);
+            rsvpService.saveRsvp(dto);
         });
         Assertions.assertEquals("RSVP object not found.", exception.getMessage());
     }

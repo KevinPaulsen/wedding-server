@@ -1,6 +1,6 @@
 package com.paulsen.wedding.service;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
+import com.paulsen.wedding.model.newRsvp.DietaryRestriction;
 import com.paulsen.wedding.model.newRsvp.Event;
 import com.paulsen.wedding.model.newRsvp.GuestInfo;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
@@ -11,10 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-@Service public class NewRsvpService {
+@Service
+public class NewRsvpService {
 
     private final NewRsvpRepository rsvpRepository;
 
@@ -28,124 +31,92 @@ import java.util.Objects;
         return rsvps;
     }
 
-    @Transactional public Rsvp createRsvp(RsvpDTO input) {
-        // Validate primary_contact (must not be null and must have a non-empty name)
-        if (input.getPrimary_contact() == null || input.getPrimary_contact().name() == null ||
-            input.getPrimary_contact().name().trim().isEmpty()) {
-            throw new IllegalArgumentException("Primary contact and name are required.");
-        }
-        GuestInfo primary = input.getPrimary_contact();
-        String name = primary.name();
-        String email = Objects.requireNonNullElse(primary.email(), "").trim();
-        String phone = Objects.requireNonNullElse(primary.phoneNumber(), "").trim();
-        String address = Objects.requireNonNullElse(primary.address(), "").trim();
+    /**
+     * Saves (creates or updates) an RSVP by merging the provided input with the stored values.
+     *
+     * <p>The merge rules are:
+     * <ul>
+     *   <li>If the input attribute is non-null, use it.</li>
+     *   <li>If the input attribute is null and the stored attribute is null, use a default value.</li>
+     *   <li>If the input attribute is null but the stored attribute is non-null, leave the stored value.</li>
+     * </ul>
+     * For nested objects (primary_contact, guest_list, events), merging is done per sub-field.
+     * An exception is thrown if the final primary contact name is empty, or if any guest’s name is empty.
+     * </p>
+     */
+    @Transactional
+    public Rsvp saveRsvp(RsvpDTO input) {
+        // Obtain the stored object; if no ID, create a new one.
+        Rsvp stored = (input.getRsvp_id() == null || input.getRsvp_id().trim().isEmpty())
+                      ? new Rsvp()
+                      : rsvpRepository.findById(input.getRsvp_id())
+                                      .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
 
-        // Validate guest_list; if null, default to empty list.
-        List<RsvpGuestDetails> guestList = new ArrayList<>();
-        if (input.getGuest_list() != null) {
-            for (RsvpGuestDetails guest : input.getGuest_list()) {
-                if (guest.name() == null || guest.name().trim().isEmpty()) {
-                    throw new IllegalArgumentException("Each guest must have a non-empty name.");
-                }
+        // For booleans (submitted), always override.
+        stored.setSubmitted(input.isIs_submitted());
 
-                guestList.add(guest);
-            }
-        }
+        // Merge primary_contact.
+        GuestInfo mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimary_contact());
+        stored.setPrimaryContact(mergedPrimary);
 
-        Rsvp rsvp = new Rsvp();
-        rsvp.setSubmitted(input.isIs_submitted());
-        rsvp.setPrimaryContact(new GuestInfo(name, email, phone, address));
-        rsvp.setGuestList(guestList);
+        // Merge guest_list.
+        Map<String, RsvpGuestDetails> mergedGuestList = mergeGuestList(stored.getGuestList(), input.getGuest_list());
+        stored.setGuestList(mergedGuestList);
 
-        if (input.getRoce() == null) {
-            rsvp.setRoce(new Event(0, List.of()));
-        } else {
-            rsvp.setRoce(new Event(Math.max(input.getRoce().allowedGuests(), 0),
-                                   Objects.requireNonNullElse(input.getRoce().guestsAttending(), List.of())));
-        }
-        if (input.getRehearsal() == null) {
-            rsvp.setRehearsal(new Event(0, List.of()));
-        } else {
-            rsvp.setRehearsal(new Event(Math.max(input.getRehearsal().allowedGuests(), 0),
-                                        Objects.requireNonNullElse(input.getRehearsal().guestsAttending(), List.of())));
-        }
-        if (input.getCeremony() == null) {
-            rsvp.setCeremony(new Event(0, List.of()));
-        } else {
-            rsvp.setCeremony(new Event(Math.max(input.getCeremony().allowedGuests(), 0),
-                                   Objects.requireNonNullElse(input.getCeremony().guestsAttending(), List.of())));
-        }
-        if (input.getReception() == null) {
-            rsvp.setReception(new Event(0, List.of()));
-        } else {
-            rsvp.setReception(new Event(Math.max(input.getReception().allowedGuests(), 0),
-                                   Objects.requireNonNullElse(input.getReception().guestsAttending(), List.of())));
-        }
+        // Merge events.
+        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce()));
+        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal()));
+        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony()));
+        stored.setReception(mergeEvent(stored.getReception(), input.getReception()));
 
-        return rsvpRepository.save(rsvp);
+        return rsvpRepository.save(stored);
     }
 
-    @Transactional public Rsvp updateRsvp(RsvpDTO input) {
-        // Ensure the rsvp_id is provided
-        if (input.getRsvp_id() == null || input.getRsvp_id().trim().isEmpty()) {
-            throw new IllegalArgumentException("RSVP id is required for update.");
+    private GuestInfo mergeGuestInfo(GuestInfo stored, GuestInfo input) {
+        String name = (input != null && input.name() != null)
+                      ? input.name().trim()
+                      : (stored != null && stored.name() != null ? stored.name().trim() : "");
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Primary contact name must not be null or empty.");
         }
-        Rsvp existingRsvp = rsvpRepository.findById(input.getRsvp_id())
-                                          .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
-
-        existingRsvp.setSubmitted(input.isIs_submitted());
-
-        // Update primary_contact if provided
-        if (input.getPrimary_contact() != null) {
-            GuestInfo current = existingRsvp.getPrimaryContact();
-            GuestInfo newContact = input.getPrimary_contact();
-
-            String updatedName = Objects.requireNonNullElse(newContact.name(), current.name()).trim();
-            if (updatedName.isEmpty()) {
-                throw new IllegalArgumentException("Primary contact name must not be null or empty.");
-            }
-
-            String updatedEmail = Objects.requireNonNullElse(newContact.email(), current.email()).trim();
-            String updatedPhone = Objects.requireNonNullElse(newContact.phoneNumber(), current.phoneNumber()).trim();
-            String updatedAddress = Objects.requireNonNullElse(newContact.address(), current.address()).trim();
-
-            existingRsvp.setPrimaryContact(new GuestInfo(updatedName, updatedEmail, updatedPhone, updatedAddress));
-        }
-
-        // Update guest_list if provided (assumes the entire list is replaced)
-        if (input.getGuest_list() != null) {
-            List<RsvpGuestDetails> updatedGuestList = new ArrayList<>();
-            for (RsvpGuestDetails guest : input.getGuest_list()) {
-                if (guest.name() == null || guest.name().trim().isEmpty()) {
-                    throw new IllegalArgumentException("Each guest must have a non-empty name.");
-                }
-
-                updatedGuestList.add(new RsvpGuestDetails(guest.name(),
-                                                          Objects.requireNonNullElse(guest.dietaryRestrictions(),
-                                                                                     new ArrayList<>()),
-                                                          Objects.requireNonNullElse(guest.other(), "")));
-            }
-            existingRsvp.setGuestList(updatedGuestList);
-        }
-
-        // Update event objects if provided
-        if (input.getRoce() != null) {
-            existingRsvp.setRoce(input.getRoce());
-        }
-        if (input.getRehearsal() != null) {
-            existingRsvp.setRehearsal(input.getRehearsal());
-        }
-        if (input.getCeremony() != null) {
-            existingRsvp.setCeremony(input.getRehearsal());
-        }
-        if (input.getReception() != null) {
-            existingRsvp.setReception(input.getReception());
-        }
-
-        return rsvpRepository.save(existingRsvp);
+        String email = (input != null && input.email() != null)
+                       ? input.email().trim()
+                       : (stored != null && stored.email() != null ? stored.email().trim() : "");
+        String phone = (input != null && input.phoneNumber() != null)
+                       ? input.phoneNumber().trim()
+                       : (stored != null && stored.phoneNumber() != null ? stored.phoneNumber().trim() : "");
+        String address = (input != null && input.address() != null)
+                         ? input.address().trim()
+                         : (stored != null && stored.address() != null ? stored.address().trim() : "");
+        return new GuestInfo(name, email, phone, address);
     }
 
-    @Transactional public void delete(String rsvpId) {
+    private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored, Map<String, RsvpGuestDetails> input) {
+        return Objects.requireNonNullElseGet(input, () -> Objects.requireNonNullElseGet(stored, HashMap::new));
+    }
+
+    private Event mergeEvent(Event stored, Event input) {
+        int allowed = 0;
+        if (input == null && stored != null) {
+            allowed = Math.max(stored.allowedGuests(), 0);
+        } else if (stored == null && input != null) {
+            allowed = Math.max(input.allowedGuests(), 0);
+        }
+
+        List<String> guests;
+        if (input != null && input.guestsAttending() != null) {
+            guests = input.guestsAttending();
+        } else if (stored != null && stored.guestsAttending() != null) {
+            guests = stored.guestsAttending();
+        } else {
+            guests = List.of();
+        }
+
+        return new Event(allowed, guests);
+    }
+
+    @Transactional
+    public void delete(String rsvpId) {
         if (rsvpId == null || rsvpId.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid RSVP ID provided.");
         }
@@ -153,5 +124,21 @@ import java.util.Objects;
             throw new IllegalArgumentException("RSVP object not found.");
         }
         rsvpRepository.deleteById(rsvpId);
+    }
+
+    public Rsvp findRsvpById(String id) {
+        return rsvpRepository.findById(id)
+                             .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
+    }
+
+    /**
+     * Helper method that normalizes a name.
+     */
+    private String formatName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name must not be null or empty.");
+        }
+        // Normalize whitespace and convert to lowercase.
+        return String.join(" ", name.split("\\s+")).toLowerCase();
     }
 }

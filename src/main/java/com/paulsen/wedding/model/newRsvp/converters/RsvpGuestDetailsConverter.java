@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model.newRsvp.converters;
+/*package com.paulsen.wedding.model.newRsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -108,3 +108,4 @@ public class RsvpGuestDetailsConverter extends ConverterBase implements DynamoDB
         }).collect(Collectors.toList());
     }
 }
+*/

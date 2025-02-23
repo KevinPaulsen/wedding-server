@@ -2,7 +2,11 @@ package com.paulsen.wedding.controllers;
 
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.newRsvp.dto.RsvpDTO;
+import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
+import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
+import com.paulsen.wedding.model.weddingGuest.dto.LookupDTO;
 import com.paulsen.wedding.service.NewRsvpService;
+import com.paulsen.wedding.service.WeddingGuestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,15 +26,17 @@ import java.util.Map;
 public class NewRsvpController {
 
     private final NewRsvpService rsvpService;
+    private final WeddingGuestService guestService;
 
-    public NewRsvpController(NewRsvpService rsvpService) {
+    public NewRsvpController(NewRsvpService rsvpService, WeddingGuestService guestService) {
         this.rsvpService = rsvpService;
+        this.guestService = guestService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> register(@RequestBody RsvpDTO rsvpDTO) {
         try {
-            Rsvp createdRsvp = rsvpService.createRsvp(rsvpDTO);
+            Rsvp createdRsvp = rsvpService.saveRsvp(rsvpDTO);
             return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
                                                "rsvp_id", createdRsvp.getRsvpId()), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -44,7 +50,7 @@ public class NewRsvpController {
     @PutMapping("/edit")
     public ResponseEntity<Map<String, String>> editRsvp(@RequestBody RsvpDTO rsvpDTO) {
         try {
-            rsvpService.updateRsvp(rsvpDTO);
+            rsvpService.saveRsvp(rsvpDTO);
             return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -65,6 +71,25 @@ public class NewRsvpController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body(Map.of("error", "An error occurred while deleting the RSVP object."));
         }
+    }
+
+    @PostMapping("/lookup") public ResponseEntity<List<RsvpDTO>> lookup(@RequestBody LookupDTO guestDto) {
+        WeddingGuest guest = guestService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name());
+        return ResponseEntity.ok(guest.getRsvpIds().stream().map(rsvpService::findRsvpById).map(RsvpDTO::new).toList());
+    }
+
+    @PostMapping("/guest/add")
+    public ResponseEntity<Map<String, String>> addGuest(@RequestBody AddGuestDTO addGuestDTO) {
+        guestService.addGuest(addGuestDTO.getFirst_name(), addGuestDTO.getLast_name(), addGuestDTO.getRsvp_id());
+
+        return ResponseEntity.ok(Map.of("message", "RSVP association added successfully."));
+    }
+
+    @PostMapping("/guest/remove")
+    public ResponseEntity<Map<String, String>> removeGuest(@RequestBody AddGuestDTO guestDto) {
+        guestService.removeGuest(guestDto.getFirst_name(), guestDto.getLast_name(), guestDto.getRsvp_id());
+
+        return ResponseEntity.ok(Map.of("message", "RSVP association removed successfully."));
     }
 
     @GetMapping("/all")
