@@ -9,7 +9,8 @@ import java.util.List;
 
 public class RsvpDTO {
     private String rsvp_id;
-    private GuestInfo primary_contact;
+    private boolean is_submitted;
+    private GuestInfoDTO primary_contact;
     private List<RsvpGuestDetailsDTO> guest_list;
     private EventDTO roce;
     private EventDTO rehearsal;
@@ -24,15 +25,16 @@ public class RsvpDTO {
             return;
         }
         this.rsvp_id = rsvp.getRsvpId();
-        this.primary_contact = rsvp.getPrimaryContact();
-        this.guest_list = rsvp.getGuestList() == null ? List.of() : rsvp.getGuestList()
+        this.is_submitted = rsvp.isSubmitted();
+        this.primary_contact = rsvp.getPrimaryContact() == null ? null : new GuestInfoDTO(rsvp.getPrimaryContact());
+        this.guest_list = rsvp.getGuestList() == null ? null : rsvp.getGuestList()
                                                                         .stream()
                                                                         .map(RsvpGuestDetailsDTO::new)
                                                                         .toList();
-        this.roce = new EventDTO(rsvp.getRoce());
-        this.rehearsal = new EventDTO(rsvp.getRehearsal());
-        this.ceremony = new EventDTO(rsvp.getCeremony());
-        this.reception = new EventDTO(rsvp.getReception());
+        this.roce = rsvp.getRoce() == null ? null : new EventDTO(rsvp.getRoce());
+        this.rehearsal = rsvp.getRehearsal() == null ? null : new EventDTO(rsvp.getRehearsal());
+        this.ceremony = rsvp.getCeremony() == null ? null : new EventDTO(rsvp.getCeremony());
+        this.reception = rsvp.getReception() == null ? null : new EventDTO(rsvp.getReception());
     }
 
     public String getRsvp_id() {
@@ -43,16 +45,25 @@ public class RsvpDTO {
         this.rsvp_id = rsvp_id;
     }
 
+    public boolean isIs_submitted() {
+        return is_submitted;
+    }
+
+    public void setIs_submitted(boolean is_submitted) {
+        this.is_submitted = is_submitted;
+    }
+
     public GuestInfo getPrimary_contact() {
-        return primary_contact;
+        if (primary_contact == null) return null;
+        return new GuestInfo(primary_contact);
     }
 
     public void setPrimary_contact(GuestInfo primary_contact) {
-        this.primary_contact = primary_contact;
+        this.primary_contact = new GuestInfoDTO(primary_contact);
     }
 
     public List<RsvpGuestDetails> getGuest_list() {
-        return guest_list.stream()
+        return guest_list == null ? null : guest_list.stream()
                          .map(dto -> new RsvpGuestDetails(dto.getName(), dto.getDietary_Restrictions(), dto.getOther()))
                          .toList();
     }
@@ -62,7 +73,7 @@ public class RsvpDTO {
     }
 
     public Event getRoce() {
-        return new Event(roce.getAllowed_guests(), roce.getGuests_attending());
+        return roce == null ? null : new Event(roce);
     }
 
     public void setRoce(EventDTO roce) {
@@ -70,7 +81,7 @@ public class RsvpDTO {
     }
 
     public Event getRehearsal() {
-        return new Event(rehearsal.getAllowed_guests(), rehearsal.getGuests_attending());
+        return rehearsal == null ? null : new Event(rehearsal);
     }
 
     public void setRehearsal(EventDTO rehearsal) {
@@ -78,7 +89,7 @@ public class RsvpDTO {
     }
 
     public Event getCeremony() {
-        return new Event(ceremony.getAllowed_guests(), ceremony.getGuests_attending());
+        return ceremony == null ? null : new Event(ceremony);
     }
 
     public void setCeremony(EventDTO ceremony) {
@@ -86,7 +97,7 @@ public class RsvpDTO {
     }
 
     public Event getReception() {
-        return new Event(reception.getAllowed_guests(), reception.getGuests_attending());
+        return reception == null ? null : new Event(reception);
     }
 
     public void setReception(EventDTO reception) {

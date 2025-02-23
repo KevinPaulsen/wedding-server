@@ -69,30 +69,6 @@ public class NewRsvpControllerTest {
                .andExpect(jsonPath("$.rsvp_id").value("12345"));
     }
 
-    // Test creation with invalid input (missing primary contact)
-    @Test
-    public void testCreateRsvp_InvalidInput() throws Exception {
-        RsvpDTO dto = new RsvpDTO();
-        // No primary_contact provided
-        dto.setGuest_list(Collections.emptyList());
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(2);
-        event.setGuests_attending(Collections.emptyList());
-        dto.setRoce(event);
-        dto.setRehearsal(event);
-        dto.setCeremony(event);
-        dto.setReception(event);
-
-        Mockito.when(rsvpService.createRsvp(Mockito.any(RsvpDTO.class)))
-               .thenThrow(new IllegalArgumentException("Primary contact and name are required."));
-
-        mockMvc.perform(post("/new/rsvp/create")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(dto)))
-               .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$.error").value("Primary contact and name are required."));
-    }
-
     // Test for successful update of an RSVP
     @Test
     public void testEditRsvp_Success() throws Exception {

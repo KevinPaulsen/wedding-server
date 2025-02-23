@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
+public class RsvpGuestDetailsConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
 
     @Override public AttributeValue convert(List<RsvpGuestDetails> allGuestDetails) {
         allGuestDetails = Objects.requireNonNullElse(allGuestDetails, Collections.emptyList());
@@ -75,17 +75,6 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
         }
 
         return rsvpGuestDetails;
-    }
-
-    private String getStringValue(Map<String, AttributeValue> map, String key, boolean required) {
-        AttributeValue value = map.get(key);
-        if (value == null || value.getS() == null) {
-            if (required) {
-                throw new IllegalArgumentException("Missing required string value for key: " + key);
-            }
-            return null;
-        }
-        return value.getS();
     }
 
     private FoodOption getFoodOption(Map<String, AttributeValue> map) {

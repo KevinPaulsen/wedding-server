@@ -6,7 +6,7 @@ import java.util.List;
 
 public class EventDTO {
     private int allowed_guests;
-    public List<String> guests_attending;
+    private List<String> guests_attending;
 
     public EventDTO() {
     }
