@@ -1,7 +1,10 @@
-package com.paulsen.wedding.model.rsvp;
+package com.paulsen.wedding.model.newRsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.paulsen.wedding.model.newRsvp.DietaryRestriction;
+import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
+import com.paulsen.wedding.model.rsvp.FoodOption;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +30,6 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
 
     private AttributeValue convertGuestDetailsToAttributeValue(RsvpGuestDetails guestDetails) {
         var name = new AttributeValue(Objects.requireNonNullElse(guestDetails.name(), ""));
-        var food = guestDetails.foodOption() == null ? new AttributeValue().withNULL(true)
-                                                     : new AttributeValue(guestDetails.name());
         var diets = new AttributeValue().withL(Objects.requireNonNullElse(guestDetails.dietaryRestrictions(),
                                                                           new ArrayList<DietaryRestriction>())
                                                       .stream()
@@ -37,7 +38,7 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
         var other = new AttributeValue(Objects.requireNonNullElse(guestDetails.other(), ""));
 
         // Create a map with guest details as AttributeValue
-        var detailsMap = Map.of("name", name, "foodOption", food, "dietaryRestrictions", diets, "other", other);
+        var detailsMap = Map.of("name", name, "dietary_restrictions", diets, "other", other);
 
         return new AttributeValue().withM(detailsMap);
     }
@@ -62,12 +63,11 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
             try {
                 // Null-safe retrieval of values with error handling
                 String name = getStringValue(rsvpEntries, "name", true);
-                FoodOption foodOption = getFoodOption(rsvpEntries);
                 List<DietaryRestriction> dietaryRestrictions = getDietaryRestrictionsList(rsvpEntries);
                 String other = getStringValue(rsvpEntries, "other", false);
 
                 // Add the guest details to the list
-                rsvpGuestDetails.add(new RsvpGuestDetails(name, foodOption, dietaryRestrictions, other));
+                rsvpGuestDetails.add(new RsvpGuestDetails(name, dietaryRestrictions, other));
 
             } catch (Exception e) {
                 throw new IllegalArgumentException("Error while parsing RSVP details: " + e.getMessage(), e);
@@ -103,18 +103,18 @@ public class RsvpGuestDetailsConverter implements DynamoDBTypeConverter<Attribut
     }
 
     private List<DietaryRestriction> getDietaryRestrictionsList(Map<String, AttributeValue> map) {
-        AttributeValue listValue = map.get("dietaryRestrictions");
+        AttributeValue listValue = map.get("dietary_restrictions");
         if (listValue == null || listValue.getL() == null) {
             return Collections.emptyList(); // Return an empty list if the value is missing
         }
         return listValue.getL().stream().map(attribute -> {
             if (attribute.getS() == null) {
-                throw new IllegalArgumentException("Invalid value in list for key: " + "dietaryRestrictions");
+                throw new IllegalArgumentException("Invalid value in list for key: " + "dietary_restrictions");
             }
             try {
                 return Enum.valueOf(DietaryRestriction.class, attribute.getS());
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid enum value in list for key: " + "dietaryRestrictions");
+                throw new IllegalArgumentException("Invalid enum value in list for key: " + "dietary_restrictions");
             }
         }).collect(Collectors.toList());
     }

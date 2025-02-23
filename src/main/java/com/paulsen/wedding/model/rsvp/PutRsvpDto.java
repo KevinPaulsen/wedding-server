@@ -1,5 +1,8 @@
 package com.paulsen.wedding.model.rsvp;
 
+import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
+
 import java.util.List;
 
 public class PutRsvpDto {

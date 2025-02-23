@@ -7,6 +7,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
+import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.converters.GuestInfoConverter;
+import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
+import com.paulsen.wedding.model.newRsvp.converters.RsvpGuestDetailsConverter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
