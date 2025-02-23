@@ -2,34 +2,9 @@
 import React from 'react';
 import { Card, Table, Row, Col } from 'react-bootstrap';
 import '../../../styles/DarkTable.css';
+import {Rsvp} from "../../../types/rsvp";
 
-interface GuestDetail {
-    name: string;
-    foodOption?: string;
-    dietaryRestrictions: string[];
-    other?: string;
-}
-
-interface PrimaryContact {
-    name: string;
-    phoneNumber?: string;
-    email?: string;
-    address?: string;
-}
-
-interface RsvpEntry {
-    primaryContact: PrimaryContact;
-    lastnames: string[];
-    rsvpGuestDetails: GuestDetail[];
-}
-
-interface GuestDetailsProps {
-    rsvpEntry: RsvpEntry;
-}
-
-const GuestDetails: React.FC<GuestDetailsProps> = ({ rsvpEntry }) => {
-    const { primaryContact, lastnames, rsvpGuestDetails } = rsvpEntry;
-
+const GuestDetails: React.FC<Rsvp> = ({ primaryContact, lastnames, rsvpGuestDetails }) => {
     const hasFoodOption = rsvpGuestDetails.some(detail => detail.foodOption);
     const hasOther = rsvpGuestDetails.some(detail => detail.other);
 

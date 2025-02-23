@@ -1,8 +1,7 @@
 // src/types/gallery.ts
 
 /**
- * Matches your Java ImageMetadata class fields.
- * Adjust nullable fields if needed.
+ * Represents the raw image metadata from the backend API.
  */
 export interface ImageMetadata {
     imageId: string;
@@ -10,6 +9,17 @@ export interface ImageMetadata {
     imageUrl?: string;
     width?: number;
     height?: number;
-    uploadTimestamp?: number;
-    // partition?: string; // The server sets this to "PHOTO" but you may not need to store it in TS
+    // Add additional fields if necessary.
+}
+
+/**
+ * Represents a photo in the client-side gallery.
+ */
+export interface Photo {
+    src: string;
+    width: number;
+    height: number;
+    imageId: string;
+    key?: string;
+    srcSet?: Array<{ src: string; width: number }>;
 }

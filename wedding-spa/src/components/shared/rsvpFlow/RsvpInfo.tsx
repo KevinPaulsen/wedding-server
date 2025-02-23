@@ -57,7 +57,7 @@ const RsvpInfo: React.FC<RsvpInfoProps> = ({ changePage }) => {
             />
             <CustomInputField
                 ref={lastNameInputRef}
-                name="lastname"
+                name="lastnames"
                 type="text"
                 placeholder="Enter your Last Name"
                 value={formData.lastnames[0]}

@@ -27,7 +27,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error }) =>
                 </thead>
                 <tbody>
                 {rsvpData.map((entry, index) => (
-                    <RsvpRow key={index} rsvpEntry={entry} deleteRsvp={deleteRsvp} />
+                    <RsvpRow key={index} rsvp={entry} deleteRsvp={deleteRsvp} />
                 ))}
                 </tbody>
             </Table>

@@ -1,14 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { Rsvp, GuestDetail } from '../types/rsvp';
+import {Rsvp, GuestDetail, PrimaryContact} from '../types/rsvp';
 
 // ===== Type Definitions =====
-
-interface PrimaryContact {
-    name: string;
-    phoneNumber: string;
-    email: string;
-    address: string;
-}
 
 // Guest with an optional index for editing
 export interface RsvpGuestDetailWithIndex extends GuestDetail {

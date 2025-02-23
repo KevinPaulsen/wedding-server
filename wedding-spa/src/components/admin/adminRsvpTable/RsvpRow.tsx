@@ -9,11 +9,11 @@ import {useFlow} from "../../../context/FlowProvider";
 import {Rsvp} from "../../../types/rsvp";
 
 interface RsvpRowProps {
-    rsvpEntry: Rsvp;
+    rsvp: Rsvp;
     deleteRsvp: (rsvpCode: string) => Promise<void>;
 }
 
-const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
+const RsvpRow: React.FC<RsvpRowProps> = ({ rsvp, deleteRsvp }) => {
     const { setFormData } = useFlow();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -25,14 +25,14 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setFormData(rsvpEntry);
+        setFormData(rsvp);
         navigate(`/admin/edit-rsvp/`);
     };
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsDeleting(true);
-        await deleteRsvp(rsvpEntry.rsvpCode);
+        await deleteRsvp(rsvp.rsvpCode);
         setIsDeleting(false);
     };
 
@@ -52,12 +52,12 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
     return (
         <>
             <tr onClick={handleRowClick} style={{ cursor: 'pointer' }}>
-                <td>{rsvpEntry.rsvpCode}</td>
-                <td>{rsvpEntry.primaryContact.name}</td>
-                <td className="d-none d-md-table-cell">{rsvpEntry.allowedGuestCount}</td>
+                <td>{rsvp.rsvpCode}</td>
+                <td>{rsvp.primaryContact.name}</td>
+                <td className="d-none d-md-table-cell">{rsvp.allowedGuestCount}</td>
                 <td>
-                    <Badge className={getStatusVariant(rsvpEntry.rsvpStatus)}>
-                        {rsvpEntry.rsvpStatus.replace('_', ' ')}
+                    <Badge className={getStatusVariant(rsvp.rsvpStatus)}>
+                        {rsvp.rsvpStatus.replace('_', ' ')}
                     </Badge>
                 </td>
                 <td>
@@ -93,7 +93,7 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvpEntry, deleteRsvp }) => {
             {isExpanded && (
                 <tr>
                     <td colSpan={100}>
-                        <GuestDetails rsvpEntry={rsvpEntry} />
+                        <GuestDetails {...rsvp} />
                     </td>
                 </tr>
             )}
