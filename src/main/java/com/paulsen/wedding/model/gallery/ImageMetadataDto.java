@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model;
+package com.paulsen.wedding.model.gallery;
 
 import java.util.Objects;
 

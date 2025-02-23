@@ -1,10 +1,10 @@
 package com.paulsen.wedding.controllers;
 
 import com.amazonaws.HttpMethod;
-import com.paulsen.wedding.model.ChangeImageOrderDto;
-import com.paulsen.wedding.model.ImageDeleteDto;
-import com.paulsen.wedding.model.ImageMetadata;
-import com.paulsen.wedding.model.ImageMetadataDto;
+import com.paulsen.wedding.model.gallery.ChangeImageOrderDto;
+import com.paulsen.wedding.model.gallery.ImageDeleteDto;
+import com.paulsen.wedding.model.gallery.ImageMetadata;
+import com.paulsen.wedding.model.gallery.ImageMetadataDto;
 import com.paulsen.wedding.service.GalleryMetadataService;
 import com.paulsen.wedding.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;

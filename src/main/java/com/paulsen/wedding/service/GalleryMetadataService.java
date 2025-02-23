@@ -1,6 +1,6 @@
 package com.paulsen.wedding.service;
 
-import com.paulsen.wedding.model.ImageMetadata;
+import com.paulsen.wedding.model.gallery.ImageMetadata;
 import com.paulsen.wedding.repositories.ImageMetadataRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

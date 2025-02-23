@@ -1,7 +1,7 @@
 package com.paulsen.wedding.repositories;
 
-import com.paulsen.wedding.model.ImageMetadata;
-import com.paulsen.wedding.model.ImageMetadataKey;
+import com.paulsen.wedding.model.gallery.ImageMetadata;
+import com.paulsen.wedding.model.gallery.ImageMetadataKey;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

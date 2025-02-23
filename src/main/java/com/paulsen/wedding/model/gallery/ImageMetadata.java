@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model;
+package com.paulsen.wedding.model.gallery;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
