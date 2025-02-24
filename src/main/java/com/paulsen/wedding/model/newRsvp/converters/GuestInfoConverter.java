@@ -10,10 +10,10 @@ import java.util.Objects;
 public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, GuestInfo> {
 
     @Override public AttributeValue convert(GuestInfo guestInfo) {
-        AttributeValue name = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.name(), ""));
-        AttributeValue phone = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.phoneNumber(), ""));
-        AttributeValue email = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.email(), ""));
-        AttributeValue address = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.address(), ""));
+        AttributeValue name = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getName(), ""));
+        AttributeValue phone = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getPhoneNumber(), ""));
+        AttributeValue email = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getEmail(), ""));
+        AttributeValue address = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getAddress(), ""));
         return new AttributeValue().withM(Map.of("name",
                                                  name,
                                                  "email",

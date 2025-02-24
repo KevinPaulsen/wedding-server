@@ -1,11 +1,41 @@
 package com.paulsen.wedding.model.newRsvp;
 
-import com.paulsen.wedding.model.newRsvp.dto.EventDTO;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record Event(int allowedGuests, List<String> guestsAttending) {
-    public Event(EventDTO dto) {
-        this(dto.getAllowed_guests(), dto.getGuests_attending());
+public class Event {
+    @DynamoDBAttribute(attributeName="allowed_guests")
+    private int allowedGuests;
+    @DynamoDBAttribute(attributeName="guests_attending")
+    private List<String> guestsAttending;
+
+    public Event() {
+    }
+
+    public Event(int allowedGuests, List<String> guestsAttending) {
+        this.allowedGuests = allowedGuests;
+        this.guestsAttending = guestsAttending;
+    }
+
+    @JsonProperty("allowed_guests")
+    public int getAllowedGuests() {
+        return allowedGuests;
+    }
+
+    @JsonProperty("allowed_guests")
+    public void setAllowedGuests(int allowedGuests) {
+        this.allowedGuests = allowedGuests;
+    }
+
+    @JsonProperty("guests_attending")
+    public List<String> getGuestsAttending() {
+        return guestsAttending;
+    }
+
+    @JsonProperty("guests_attending")
+    public void setGuestsAttending(List<String> guestsAttending) {
+        this.guestsAttending = guestsAttending;
     }
 }

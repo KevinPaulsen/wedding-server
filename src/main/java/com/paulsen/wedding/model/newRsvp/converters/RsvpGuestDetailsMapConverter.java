@@ -27,7 +27,7 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
 
             // Convert dietary_restrictions.
             List<AttributeValue> diets;
-            List<DietaryRestriction> restrictions = details.dietaryRestrictions();
+            List<DietaryRestriction> restrictions = details.getDietaryRestrictions();
             if (restrictions == null || restrictions.isEmpty()) {
                 diets = Collections.emptyList();
             } else {
@@ -36,7 +36,7 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
                                     .collect(Collectors.toList());
             }
             // Convert "other". Default to an empty string if null.
-            String other = details.other() != null ? details.other() : "";
+            String other = details.getOther() != null ? details.getOther() : "";
 
             // Build a map for the guest details.
             Map<String, AttributeValue> detailsMap = new HashMap<>();

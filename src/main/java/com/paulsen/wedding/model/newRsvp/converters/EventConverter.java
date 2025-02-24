@@ -21,13 +21,13 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
         Map<String, AttributeValue> map = new HashMap<>();
 
         // Convert allowedGuests (as a number)
-        map.put("allowed_guests", new AttributeValue().withN(String.valueOf(event.allowedGuests())));
+        map.put("allowed_guests", new AttributeValue().withN(String.valueOf(event.getAllowedGuests())));
 
         // Convert guestsAttending (as a list of string values)
-        if (event.guestsAttending() == null) {
+        if (event.getGuestsAttending() == null) {
             map.put("guests_attending", new AttributeValue().withNULL(true));
         } else {
-            List<AttributeValue> guestList = event.guestsAttending()
+            List<AttributeValue> guestList = event.getGuestsAttending()
                                                   .stream()
                                                   .map(guest -> new AttributeValue().withS(guest))
                                                   .collect(Collectors.toList());

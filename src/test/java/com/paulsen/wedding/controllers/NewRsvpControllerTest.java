@@ -1,10 +1,9 @@
 package com.paulsen.wedding.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paulsen.wedding.model.newRsvp.Event;
 import com.paulsen.wedding.model.newRsvp.GuestInfo;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
-import com.paulsen.wedding.model.newRsvp.dto.EventDTO;
-import com.paulsen.wedding.model.newRsvp.dto.RsvpDTO;
 import com.paulsen.wedding.service.JwtService;
 import com.paulsen.wedding.service.NewRsvpService;
 import org.junit.jupiter.api.Test;
@@ -43,14 +42,14 @@ public class NewRsvpControllerTest {
     // Test for successful creation of an RSVP
     @Test
     public void testCreateRsvp_Success() throws Exception {
-        RsvpDTO dto = new RsvpDTO();
+        Rsvp dto = new Rsvp();
         GuestInfo primary = new GuestInfo("John Doe", "john@example.com", "1234567890", "123 Main St");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
 
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(2);
-        event.setGuests_attending(Collections.emptyList());
+        Event event = new Event();
+        event.setAllowedGuests(2);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -59,7 +58,7 @@ public class NewRsvpControllerTest {
         Rsvp createdRsvp = new Rsvp();
         createdRsvp.setRsvpId("12345");
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(RsvpDTO.class))).thenReturn(createdRsvp);
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class))).thenReturn(createdRsvp);
 
         mockMvc.perform(post("/new/rsvp/create")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,15 +71,15 @@ public class NewRsvpControllerTest {
     // Test for successful update of an RSVP
     @Test
     public void testEditRsvp_Success() throws Exception {
-        RsvpDTO dto = new RsvpDTO();
-        dto.setRsvp_id("12345");
+        Rsvp dto = new Rsvp();
+        dto.setRsvpId("12345");
         GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
 
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(3);
-        event.setGuests_attending(Collections.emptyList());
+        Event event = new Event();
+        event.setAllowedGuests(3);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -89,7 +88,7 @@ public class NewRsvpControllerTest {
         Rsvp updatedRsvp = new Rsvp();
         updatedRsvp.setRsvpId("12345");
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(RsvpDTO.class))).thenReturn(updatedRsvp);
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class))).thenReturn(updatedRsvp);
 
         mockMvc.perform(put("/new/rsvp/edit")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -101,20 +100,20 @@ public class NewRsvpControllerTest {
     // Test update with invalid input (missing RSVP id)
     @Test
     public void testEditRsvp_InvalidInput() throws Exception {
-        RsvpDTO dto = new RsvpDTO();
+        Rsvp dto = new Rsvp();
         // Missing rsvp_id
         GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(3);
-        event.setGuests_attending(Collections.emptyList());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
+        Event event = new Event();
+        event.setAllowedGuests(3);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
         dto.setReception(event);
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(RsvpDTO.class)))
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class)))
                .thenThrow(new IllegalArgumentException("RSVP id is required for update."));
 
         mockMvc.perform(put("/new/rsvp/edit")

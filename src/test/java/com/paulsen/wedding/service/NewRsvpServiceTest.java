@@ -1,9 +1,8 @@
 package com.paulsen.wedding.service;
 
+import com.paulsen.wedding.model.newRsvp.Event;
 import com.paulsen.wedding.model.newRsvp.GuestInfo;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
-import com.paulsen.wedding.model.newRsvp.dto.EventDTO;
-import com.paulsen.wedding.model.newRsvp.dto.RsvpDTO;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,8 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 import java.util.Optional;
+
+;
 
 public class NewRsvpServiceTest {
 
@@ -20,14 +21,14 @@ public class NewRsvpServiceTest {
     // Test successful creation with valid data
     @Test
     public void testCreateRsvp_Success() {
-        RsvpDTO dto = new RsvpDTO();
+        Rsvp dto = new Rsvp();
         GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
 
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(3);
-        event.setGuests_attending(Collections.emptyList());
+        Event event = new Event();
+        event.setAllowedGuests(3);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -45,12 +46,12 @@ public class NewRsvpServiceTest {
     // Test creation failure when primary contact is missing
     @Test
     public void testCreateRsvp_MissingPrimaryContact() {
-        RsvpDTO dto = new RsvpDTO();
+        Rsvp dto = new Rsvp();
         // Primary contact is not set
-        dto.setGuest_list(Collections.emptyMap());
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(3);
-        event.setGuests_attending(Collections.emptyList());
+        dto.setGuestList(Collections.emptyMap());
+        Event event = new Event();
+        event.setAllowedGuests(3);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -65,15 +66,15 @@ public class NewRsvpServiceTest {
     // Test successful update with valid input
     @Test
     public void testUpdateRsvp_Success() {
-        RsvpDTO dto = new RsvpDTO();
-        dto.setRsvp_id("12345");
+        Rsvp dto = new Rsvp();
+        dto.setRsvpId("12345");
         GuestInfo updatedPrimary = new GuestInfo("Updated Name", "update@example.com", "1112223333", "789 New St");
-        dto.setPrimary_contact(updatedPrimary);
-        dto.setGuest_list(Collections.emptyMap());
+        dto.setPrimaryContact(updatedPrimary);
+        dto.setGuestList(Collections.emptyMap());
 
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(5);
-        event.setGuests_attending(Collections.emptyList());
+        Event event = new Event();
+        event.setAllowedGuests(5);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -87,21 +88,21 @@ public class NewRsvpServiceTest {
 
         Rsvp result = rsvpService.saveRsvp(dto);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("Updated Name", result.getPrimaryContact().name());
-        Assertions.assertEquals("update@example.com", result.getPrimaryContact().email());
+        Assertions.assertEquals("Updated Name", result.getPrimaryContact().getName());
+        Assertions.assertEquals("update@example.com", result.getPrimaryContact().getEmail());
     }
 
     // Test update failure when RSVP id is missing
     @Test
     public void testUpdateRsvp_MissingRsvpId() {
-        RsvpDTO dto = new RsvpDTO();
+        Rsvp dto = new Rsvp();
         // rsvp_id is not set
         GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(2);
-        event.setGuests_attending(Collections.emptyList());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
+        Event event = new Event();
+        event.setAllowedGuests(2);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);
@@ -116,14 +117,14 @@ public class NewRsvpServiceTest {
     // Test update failure when the RSVP does not exist
     @Test
     public void testUpdateRsvp_NonExistentRsvp() {
-        RsvpDTO dto = new RsvpDTO();
-        dto.setRsvp_id("nonexistent");
+        Rsvp dto = new Rsvp();
+        dto.setRsvpId("nonexistent");
         GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
-        dto.setPrimary_contact(primary);
-        dto.setGuest_list(Collections.emptyMap());
-        EventDTO event = new EventDTO();
-        event.setAllowed_guests(2);
-        event.setGuests_attending(Collections.emptyList());
+        dto.setPrimaryContact(primary);
+        dto.setGuestList(Collections.emptyMap());
+        Event event = new Event();
+        event.setAllowedGuests(2);
+        event.setGuestsAttending(Collections.emptyList());
         dto.setRoce(event);
         dto.setRehearsal(event);
         dto.setCeremony(event);

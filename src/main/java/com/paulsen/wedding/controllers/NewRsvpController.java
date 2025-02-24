@@ -1,7 +1,6 @@
 package com.paulsen.wedding.controllers;
 
 import com.paulsen.wedding.model.newRsvp.Rsvp;
-import com.paulsen.wedding.model.newRsvp.dto.RsvpDTO;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
 import com.paulsen.wedding.model.weddingGuest.dto.LookupDTO;
@@ -34,7 +33,7 @@ public class NewRsvpController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RsvpDTO rsvpDTO) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody Rsvp rsvpDTO) {
         try {
             Rsvp createdRsvp = rsvpService.saveRsvp(rsvpDTO);
             return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
@@ -48,7 +47,7 @@ public class NewRsvpController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Map<String, String>> editRsvp(@RequestBody RsvpDTO rsvpDTO) {
+    public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
         try {
             rsvpService.saveRsvp(rsvpDTO);
             return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
@@ -73,9 +72,9 @@ public class NewRsvpController {
         }
     }
 
-    @PostMapping("/lookup") public ResponseEntity<List<RsvpDTO>> lookup(@RequestBody LookupDTO guestDto) {
+    @PostMapping("/lookup") public ResponseEntity<List<Rsvp>> lookup(@RequestBody LookupDTO guestDto) {
         WeddingGuest guest = guestService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name());
-        return ResponseEntity.ok(guest.getRsvpIds().stream().map(rsvpService::findRsvpById).map(RsvpDTO::new).toList());
+        return ResponseEntity.ok(guest.getRsvpIds().stream().map(rsvpService::findRsvpById).toList());
     }
 
     @PostMapping("/guest/add")
@@ -93,9 +92,9 @@ public class NewRsvpController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<RsvpDTO>> getAllRsvps() {
+    public ResponseEntity<List<Rsvp>> getAllRsvps() {
         try {
-            return ResponseEntity.ok(rsvpService.allRsvps().stream().map(RsvpDTO::new).toList());
+            return ResponseEntity.ok(rsvpService.allRsvps().stream().toList());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
