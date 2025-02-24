@@ -1,7 +1,7 @@
 package com.paulsen.wedding.service;
 
 import com.paulsen.wedding.model.newRsvp.Event;
-import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ public class NewRsvpServiceTest {
     @Test
     public void testCreateRsvp_Success() {
         Rsvp dto = new Rsvp();
-        GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
 
@@ -68,7 +68,7 @@ public class NewRsvpServiceTest {
     public void testUpdateRsvp_Success() {
         Rsvp dto = new Rsvp();
         dto.setRsvpId("12345");
-        GuestInfo updatedPrimary = new GuestInfo("Updated Name", "update@example.com", "1112223333", "789 New St");
+        WeddingPrimaryContact updatedPrimary = new WeddingPrimaryContact("Updated Name", "update@example.com", "1112223333", "789 New St");
         dto.setPrimaryContact(updatedPrimary);
         dto.setGuestList(Collections.emptyMap());
 
@@ -82,7 +82,7 @@ public class NewRsvpServiceTest {
 
         Rsvp existingRsvp = new Rsvp();
         existingRsvp.setRsvpId("12345");
-        existingRsvp.setPrimaryContact(new GuestInfo("Old Name", "old@example.com", "0000000000", "Old Address"));
+        existingRsvp.setPrimaryContact(new WeddingPrimaryContact("Old Name", "old@example.com", "0000000000", "Old Address"));
         Mockito.when(rsvpRepository.findById("12345")).thenReturn(Optional.of(existingRsvp));
         Mockito.when(rsvpRepository.save(Mockito.any(Rsvp.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -97,7 +97,7 @@ public class NewRsvpServiceTest {
     public void testUpdateRsvp_MissingRsvpId() {
         Rsvp dto = new Rsvp();
         // rsvp_id is not set
-        GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("Test", "test@example.com", "123", "Test Address");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
         Event event = new Event();
@@ -119,7 +119,7 @@ public class NewRsvpServiceTest {
     public void testUpdateRsvp_NonExistentRsvp() {
         Rsvp dto = new Rsvp();
         dto.setRsvpId("nonexistent");
-        GuestInfo primary = new GuestInfo("Test", "test@example.com", "123", "Test Address");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("Test", "test@example.com", "123", "Test Address");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
         Event event = new Event();

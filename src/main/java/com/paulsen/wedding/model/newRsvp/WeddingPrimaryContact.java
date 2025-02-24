@@ -3,7 +3,7 @@ package com.paulsen.wedding.model.newRsvp;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GuestInfo {
+public class WeddingPrimaryContact {
 
     @DynamoDBAttribute(attributeName="name")
     private String name;
@@ -14,10 +14,10 @@ public class GuestInfo {
     @DynamoDBAttribute(attributeName="address")
     private String address;
 
-    public GuestInfo() {
+    public WeddingPrimaryContact() {
     }
 
-    public GuestInfo(String name, String email, String phoneNumber, String address) {
+    public WeddingPrimaryContact(String name, String email, String phoneNumber, String address) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;

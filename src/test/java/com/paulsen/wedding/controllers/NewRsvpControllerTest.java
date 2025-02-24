@@ -2,7 +2,7 @@ package com.paulsen.wedding.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paulsen.wedding.model.newRsvp.Event;
-import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.service.JwtService;
 import com.paulsen.wedding.service.NewRsvpService;
@@ -43,7 +43,7 @@ public class NewRsvpControllerTest {
     @Test
     public void testCreateRsvp_Success() throws Exception {
         Rsvp dto = new Rsvp();
-        GuestInfo primary = new GuestInfo("John Doe", "john@example.com", "1234567890", "123 Main St");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("John Doe", "john@example.com", "1234567890", "123 Main St");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
 
@@ -73,7 +73,7 @@ public class NewRsvpControllerTest {
     public void testEditRsvp_Success() throws Exception {
         Rsvp dto = new Rsvp();
         dto.setRsvpId("12345");
-        GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
 
@@ -102,7 +102,7 @@ public class NewRsvpControllerTest {
     public void testEditRsvp_InvalidInput() throws Exception {
         Rsvp dto = new Rsvp();
         // Missing rsvp_id
-        GuestInfo primary = new GuestInfo("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
+        WeddingPrimaryContact primary = new WeddingPrimaryContact("Jane Doe", "jane@example.com", "0987654321", "456 Park Ave");
         dto.setPrimaryContact(primary);
         dto.setGuestList(Collections.emptyMap());
         Event event = new Event();

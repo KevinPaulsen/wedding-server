@@ -2,14 +2,14 @@ package com.paulsen.wedding.model.newRsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, GuestInfo> {
+public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, WeddingPrimaryContact> {
 
-    @Override public AttributeValue convert(GuestInfo guestInfo) {
+    @Override public AttributeValue convert(WeddingPrimaryContact guestInfo) {
         AttributeValue name = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getName(), ""));
         AttributeValue phone = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getPhoneNumber(), ""));
         AttributeValue email = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getEmail(), ""));
@@ -24,8 +24,8 @@ public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeCon
                                                  address));
     }
 
-    @Override public GuestInfo unconvert(AttributeValue object) {
-        GuestInfo unconverted;
+    @Override public WeddingPrimaryContact unconvert(AttributeValue object) {
+        WeddingPrimaryContact unconverted;
         Map<String, AttributeValue> guestInfo = object.getM();
 
         if (guestInfo == null) {
@@ -40,7 +40,7 @@ public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeCon
             String address = getStringValue(guestInfo, "address", false);
 
             // Add the guest details to the list
-            unconverted = new GuestInfo(name, email, phone, address);
+            unconverted = new WeddingPrimaryContact(name, email, phone, address);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while parsing RSVP details: " + e.getMessage(), e);
         }

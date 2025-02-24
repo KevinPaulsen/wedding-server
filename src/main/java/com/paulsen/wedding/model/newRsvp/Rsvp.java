@@ -22,7 +22,7 @@ import java.util.Map;
     private boolean isSubmitted;
 
     @DynamoDBAttribute(attributeName="primary_contact") @DynamoDBTypeConverted(converter=GuestInfoConverter.class)
-    private GuestInfo primaryContact;
+    private WeddingPrimaryContact primaryContact;
 
     @DynamoDBAttribute(attributeName="guest_list") @DynamoDBTypeConverted(converter=RsvpGuestDetailsMapConverter.class)
     private Map<String, RsvpGuestDetails> guestList;
@@ -40,18 +40,6 @@ import java.util.Map;
     private Event reception;
 
     public Rsvp() {
-    }
-
-    public Rsvp(String rsvpId, boolean isSubmitted, GuestInfo primaryContact, Map<String, RsvpGuestDetails> guestList,
-            Event roce, Event rehearsal, Event ceremony, Event reception) {
-        this.rsvpId = rsvpId;
-        this.isSubmitted = isSubmitted;
-        this.primaryContact = primaryContact;
-        this.guestList = guestList;
-        this.roce = roce;
-        this.rehearsal = rehearsal;
-        this.ceremony = ceremony;
-        this.reception = reception;
     }
 
     @JsonProperty("rsvp_id")
@@ -75,12 +63,12 @@ import java.util.Map;
     }
 
     @JsonProperty("primary_contact")
-    public GuestInfo getPrimaryContact() {
+    public WeddingPrimaryContact getPrimaryContact() {
         return primaryContact;
     }
 
     @JsonProperty("primary_contact")
-    public void setPrimaryContact(GuestInfo primaryContact) {
+    public void setPrimaryContact(WeddingPrimaryContact primaryContact) {
         this.primaryContact = primaryContact;
     }
 

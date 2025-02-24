@@ -1,7 +1,7 @@
 package com.paulsen.wedding.service;
 
 import com.paulsen.wedding.model.newRsvp.Event;
-import com.paulsen.wedding.model.newRsvp.GuestInfo;
+import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
@@ -62,7 +62,7 @@ public class NewRsvpService {
         stored.setSubmitted(input.isSubmitted());
 
         // Merge primary_contact.
-        GuestInfo mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact());
+        WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact());
         stored.setPrimaryContact(mergedPrimary);
 
         // Merge guest_list.
@@ -116,7 +116,7 @@ public class NewRsvpService {
         return allNames;
     }
 
-    private GuestInfo mergeGuestInfo(GuestInfo stored, GuestInfo input) {
+    private WeddingPrimaryContact mergeGuestInfo(WeddingPrimaryContact stored, WeddingPrimaryContact input) {
         String name = (input != null && input.getName() != null)
                       ? formatFullName(input.getName())
                       : (stored != null && stored.getName() != null ? formatFullName(stored.getName()) : "");
@@ -132,7 +132,7 @@ public class NewRsvpService {
         String address = (input != null && input.getAddress() != null)
                          ? input.getAddress().trim()
                          : (stored != null && stored.getAddress() != null ? stored.getAddress().trim() : "");
-        return new GuestInfo(name, email, phone, address);
+        return new WeddingPrimaryContact(name, email, phone, address);
     }
 
     private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored, Map<String, RsvpGuestDetails> input) {
