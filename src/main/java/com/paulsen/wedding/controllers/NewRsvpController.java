@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/new/rsvp")
+import static com.paulsen.wedding.util.StringFormatUtil.getFullName;
+
+@RequestMapping("/rsvp")
 @RestController
 public class NewRsvpController {
 
@@ -35,7 +37,7 @@ public class NewRsvpController {
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> register(@RequestBody Rsvp rsvpDTO) {
         try {
-            Rsvp createdRsvp = rsvpService.saveRsvp(rsvpDTO);
+            Rsvp createdRsvp = rsvpService.saveRsvp(rsvpDTO, guestService::addGuest, guestService::removeGuest);
             return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
                                                "rsvp_id", createdRsvp.getRsvpId()), HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -49,7 +51,7 @@ public class NewRsvpController {
     @PutMapping("/edit")
     public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
         try {
-            rsvpService.saveRsvp(rsvpDTO);
+            rsvpService.saveRsvp(rsvpDTO, guestService::addGuest, guestService::removeGuest);
             return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -62,13 +64,22 @@ public class NewRsvpController {
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> delete(@RequestParam String rsvpId) {
         try {
-            rsvpService.delete(rsvpId);
+            rsvpService.delete(rsvpId, guestService::removeGuest);
             return ResponseEntity.ok(Map.of("message", "RSVP object deleted successfully."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body(Map.of("error", "An error occurred while deleting the RSVP object."));
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Rsvp>> getAllRsvps() {
+        try {
+            return ResponseEntity.ok(rsvpService.allRsvps().stream().toList());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -79,24 +90,24 @@ public class NewRsvpController {
 
     @PostMapping("/guest/add")
     public ResponseEntity<Map<String, String>> addGuest(@RequestBody AddGuestDTO addGuestDTO) {
-        guestService.addGuest(addGuestDTO.getFirst_name(), addGuestDTO.getLast_name(), addGuestDTO.getRsvp_id());
+        String fullName = getFullName(addGuestDTO.getFirst_name(), addGuestDTO.getLast_name());
+        rsvpService.addGuest(fullName, addGuestDTO.getRsvp_id());
+        guestService.addGuest(fullName, addGuestDTO.getRsvp_id());
 
         return ResponseEntity.ok(Map.of("message", "RSVP association added successfully."));
     }
 
     @PostMapping("/guest/remove")
     public ResponseEntity<Map<String, String>> removeGuest(@RequestBody AddGuestDTO guestDto) {
-        guestService.removeGuest(guestDto.getFirst_name(), guestDto.getLast_name(), guestDto.getRsvp_id());
+        String fullName = getFullName(guestDto.getFirst_name(), guestDto.getLast_name());
+        rsvpService.removeGuest(fullName, guestDto.getRsvp_id());
+        guestService.removeGuest(fullName, guestDto.getRsvp_id());
 
         return ResponseEntity.ok(Map.of("message", "RSVP association removed successfully."));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Rsvp>> getAllRsvps() {
-        try {
-            return ResponseEntity.ok(rsvpService.allRsvps().stream().toList());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @GetMapping("/guest/all")
+    public ResponseEntity<List<WeddingGuest>> getAllGuests() {
+        return ResponseEntity.ok(guestService.allGuests());
     }
 }

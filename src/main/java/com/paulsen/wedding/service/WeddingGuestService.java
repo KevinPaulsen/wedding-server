@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.paulsen.wedding.util.StringFormatUtil.getFullName;
+
 @Service public class WeddingGuestService {
 
     private final WeddingGuestRepository weddingGuestRepository;
@@ -28,53 +30,41 @@ import java.util.stream.Stream;
         return weddingGuestRepository.findByFullName(fullName).orElseThrow(() -> new IllegalArgumentException("RSVP with name " + fullName + " not found."));
     }
 
-    @Transactional public WeddingGuest addGuest(String firstName, String lastName, String rsvpId) {
+    @Transactional public void addGuest(String name, String rsvpId) {
         // Validate primary_contact (must not be null and must have a non-empty name)
         if (rsvpId == null || rsvpId.isEmpty()) {
             throw new IllegalArgumentException("RsvpID must be non-null and non-empty.");
         }
 
-        String fullName = getFullName(firstName, lastName);
-
-        WeddingGuest existingRsvp = weddingGuestRepository.findByFullName(fullName).orElse(null);
+        WeddingGuest existingRsvp = weddingGuestRepository.findByFullName(name).orElse(null);
         List<String> otherRsvps = existingRsvp == null ? null : existingRsvp.getRsvpIds();
 
         WeddingGuest newWeddingGuest = new WeddingGuest();
-        newWeddingGuest.setFullName(fullName);
+        newWeddingGuest.setFullName(name);
         newWeddingGuest.setRsvpIds(
                 otherRsvps == null ? List.of(rsvpId) : Stream.concat(otherRsvps.stream(), Stream.of(rsvpId)).toList());
 
-        return weddingGuestRepository.save(newWeddingGuest);
+        weddingGuestRepository.save(newWeddingGuest);
     }
 
-    @Transactional public void removeGuest(String fistName, String lastName, String rsvpId) {
+    @Transactional public void removeGuest(String name, String rsvpId) {
         // Validate primary_contact (must not be null and must have a non-empty name)
         if (rsvpId == null || rsvpId.isEmpty()) {
             throw new IllegalArgumentException("RsvpID must be non-null and non-empty.");
         }
 
-        String fullName = getFullName(fistName, lastName);
-
-        WeddingGuest existingRsvp = weddingGuestRepository.findByFullName(fullName).orElse(null);
+        WeddingGuest existingRsvp = weddingGuestRepository.findByFullName(name).orElse(null);
         List<String> otherRsvps = existingRsvp == null ? null : existingRsvp.getRsvpIds();
 
         WeddingGuest newWeddingGuest = new WeddingGuest();
-        newWeddingGuest.setFullName(fullName);
+        newWeddingGuest.setFullName(name);
         newWeddingGuest.setRsvpIds(
                 otherRsvps == null ? List.of() : otherRsvps.stream().filter(id -> !id.equals(rsvpId)).toList());
 
         if (newWeddingGuest.getRsvpIds().isEmpty()) {
-            weddingGuestRepository.deleteById(fullName);
+            weddingGuestRepository.deleteById(name);
         } else {
             weddingGuestRepository.save(newWeddingGuest);
         }
-    }
-
-    private String getFullName(String firstName, String lastName) {
-        if (firstName == null || lastName == null || (firstName.trim().isEmpty() && lastName.trim().isEmpty())) {
-            throw new IllegalArgumentException("First name and last name must be non-null and non-empty.");
-        }
-
-        return (firstName.trim() + " " + lastName.trim()).toLowerCase();
     }
 }

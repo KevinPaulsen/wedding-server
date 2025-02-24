@@ -58,7 +58,7 @@ public class NewRsvpControllerTest {
         Rsvp createdRsvp = new Rsvp();
         createdRsvp.setRsvpId("12345");
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class))).thenReturn(createdRsvp);
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class), null, null)).thenReturn(createdRsvp);
 
         mockMvc.perform(post("/new/rsvp/create")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ public class NewRsvpControllerTest {
         Rsvp updatedRsvp = new Rsvp();
         updatedRsvp.setRsvpId("12345");
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class))).thenReturn(updatedRsvp);
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class), null, null)).thenReturn(updatedRsvp);
 
         mockMvc.perform(put("/new/rsvp/edit")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ public class NewRsvpControllerTest {
         dto.setCeremony(event);
         dto.setReception(event);
 
-        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class)))
+        Mockito.when(rsvpService.saveRsvp(Mockito.any(Rsvp.class), null, null))
                .thenThrow(new IllegalArgumentException("RSVP id is required for update."));
 
         mockMvc.perform(put("/new/rsvp/edit")

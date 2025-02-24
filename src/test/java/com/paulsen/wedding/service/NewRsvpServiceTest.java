@@ -38,7 +38,7 @@ public class NewRsvpServiceTest {
         savedRsvp.setRsvpId("67890");
         Mockito.when(rsvpRepository.save(Mockito.any(Rsvp.class))).thenReturn(savedRsvp);
 
-        Rsvp result = rsvpService.saveRsvp(dto);
+        Rsvp result = rsvpService.saveRsvp(dto, null, null);
         Assertions.assertNotNull(result);
         Assertions.assertEquals("67890", result.getRsvpId());
     }
@@ -58,7 +58,7 @@ public class NewRsvpServiceTest {
         dto.setReception(event);
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.saveRsvp(dto);
+            rsvpService.saveRsvp(dto, null, null);
         });
         Assertions.assertEquals("Primary contact and name are required.", exception.getMessage());
     }
@@ -86,7 +86,7 @@ public class NewRsvpServiceTest {
         Mockito.when(rsvpRepository.findById("12345")).thenReturn(Optional.of(existingRsvp));
         Mockito.when(rsvpRepository.save(Mockito.any(Rsvp.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Rsvp result = rsvpService.saveRsvp(dto);
+        Rsvp result = rsvpService.saveRsvp(dto, null, null);
         Assertions.assertNotNull(result);
         Assertions.assertEquals("Updated Name", result.getPrimaryContact().getName());
         Assertions.assertEquals("update@example.com", result.getPrimaryContact().getEmail());
@@ -109,7 +109,7 @@ public class NewRsvpServiceTest {
         dto.setReception(event);
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.saveRsvp(dto);
+            rsvpService.saveRsvp(dto, null, null);
         });
         Assertions.assertEquals("RSVP id is required for update.", exception.getMessage());
     }
@@ -133,7 +133,7 @@ public class NewRsvpServiceTest {
         Mockito.when(rsvpRepository.findById("nonexistent")).thenReturn(Optional.empty());
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.saveRsvp(dto);
+            rsvpService.saveRsvp(dto, null, null);
         });
         Assertions.assertEquals("RSVP object not found.", exception.getMessage());
     }
