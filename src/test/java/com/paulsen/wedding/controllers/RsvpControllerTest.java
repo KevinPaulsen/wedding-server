@@ -5,7 +5,7 @@ import com.paulsen.wedding.model.newRsvp.Event;
 import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.service.JwtService;
-import com.paulsen.wedding.service.NewRsvpService;
+import com.paulsen.wedding.service.RsvpService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class RsvpControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private NewRsvpService rsvpService;
+    private RsvpService rsvpService;
 
     // Add this to satisfy the JwtAuthenticationFilter dependency:
     @MockBean
@@ -127,7 +127,7 @@ public class RsvpControllerTest {
     @Test
     public void testDeleteRsvp_Success() throws Exception {
         String rsvpId = "12345";
-        Mockito.doNothing().when(rsvpService).delete(rsvpId);
+        Mockito.doNothing().when(rsvpService).delete(rsvpId, null);
 
         mockMvc.perform(delete("/new/rsvp/delete")
                                 .param("rsvpId", rsvpId))
@@ -140,7 +140,7 @@ public class RsvpControllerTest {
     public void testDeleteRsvp_InvalidInput() throws Exception {
         String rsvpId = "";
         Mockito.doThrow(new IllegalArgumentException("Invalid RSVP ID provided."))
-               .when(rsvpService).delete(rsvpId);
+               .when(rsvpService).delete(rsvpId, null);
 
         mockMvc.perform(delete("/new/rsvp/delete")
                                 .param("rsvpId", rsvpId))

@@ -16,10 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
             "/auth/login",
             "/auth/verify-token",
             "/actuator/health",
-            "/rsvp/get",
-            "/rsvp/update",
             "/gallery/all",
-            "/new/rsvp/lookup"
+            "/rsvp/lookup",
+            "/rsvp/submit"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;

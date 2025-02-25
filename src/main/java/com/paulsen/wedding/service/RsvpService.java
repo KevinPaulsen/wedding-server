@@ -1,9 +1,9 @@
 package com.paulsen.wedding.service;
 
 import com.paulsen.wedding.model.newRsvp.Event;
-import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
+import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,11 @@ import static com.paulsen.wedding.util.StringFormatUtil.formatFullName;
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 @Service
-public class NewRsvpService {
+public class RsvpService {
 
     private final NewRsvpRepository rsvpRepository;
 
-    public NewRsvpService(NewRsvpRepository rsvpRepository) {
+    public RsvpService(NewRsvpRepository rsvpRepository) {
         this.rsvpRepository = rsvpRepository;
     }
 
@@ -149,10 +149,10 @@ public class NewRsvpService {
 
     private Event mergeEvent(Event stored, Event input) {
         int allowed = 0;
-        if (input == null && stored != null) {
-            allowed = Math.max(stored.getAllowedGuests(), 0);
-        } else if (stored == null && input != null) {
+        if (input != null && input.getAllowedGuests() != -1) {
             allowed = Math.max(input.getAllowedGuests(), 0);
+        } else if (stored != null) {
+            allowed = Math.max(stored.getAllowedGuests(), 0);
         }
 
         List<String> guests;
@@ -162,6 +162,10 @@ public class NewRsvpService {
             guests = stored.getGuestsAttending().stream().map(StringFormatUtil::formatFullName).toList();
         } else {
             guests = List.of();
+        }
+
+        if (allowed < guests.size()) {
+            throw new IllegalArgumentException("This RSVP cannot have more than " + allowed + " guests.");
         }
 
         return new Event(allowed, guests);
@@ -215,6 +219,23 @@ public class NewRsvpService {
         }
 
         rsvp.getGuestList().remove(fullName);
+
+        if (rsvp.getPrimaryContact() != null && fullName.equals(rsvp.getPrimaryContact().getName())) {
+            // The new contact will be a randomly selected name from guest list. If empty, then "" is new contact
+            rsvp.getPrimaryContact().setName(rsvp.getGuestList().keySet().stream().findAny().orElse(""));
+        }
+
+        // Remove the guest from any event it might be in
+        for (Event event : rsvp.getNonNullEvents()) {
+            if (event.getGuestsAttending() == null) {
+                continue;
+            }
+
+            event.setGuestsAttending(event.getGuestsAttending()
+                                          .stream()
+                                          .filter(name -> !name.equals(fullName))
+                                          .toList());
+        }
 
         rsvpRepository.save(rsvp);
     }

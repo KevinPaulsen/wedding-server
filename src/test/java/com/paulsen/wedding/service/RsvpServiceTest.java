@@ -13,10 +13,10 @@ import java.util.Optional;
 
 ;
 
-public class NewRsvpServiceTest {
+public class RsvpServiceTest {
 
     private final NewRsvpRepository rsvpRepository = Mockito.mock(NewRsvpRepository.class);
-    private final NewRsvpService rsvpService = new NewRsvpService(rsvpRepository);
+    private final RsvpService rsvpService = new RsvpService(rsvpRepository);
 
     // Test successful creation with valid data
     @Test
@@ -144,7 +144,7 @@ public class NewRsvpServiceTest {
         String rsvpId = "12345";
         Mockito.when(rsvpRepository.existsById(rsvpId)).thenReturn(true);
 
-        rsvpService.delete(rsvpId);
+        rsvpService.delete(rsvpId, null);
         Mockito.verify(rsvpRepository, Mockito.times(1)).deleteById(rsvpId);
     }
 
@@ -153,7 +153,7 @@ public class NewRsvpServiceTest {
     public void testDeleteRsvp_InvalidId() {
         String rsvpId = "";
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.delete(rsvpId);
+            rsvpService.delete(rsvpId, null);
         });
         Assertions.assertEquals("Invalid RSVP ID provided.", exception.getMessage());
     }
@@ -165,7 +165,7 @@ public class NewRsvpServiceTest {
         Mockito.when(rsvpRepository.existsById(rsvpId)).thenReturn(false);
 
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            rsvpService.delete(rsvpId);
+            rsvpService.delete(rsvpId, null);
         });
         Assertions.assertEquals("RSVP object not found.", exception.getMessage());
     }

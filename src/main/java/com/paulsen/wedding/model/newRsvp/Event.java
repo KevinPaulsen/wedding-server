@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Event {
     @DynamoDBAttribute(attributeName="allowed_guests")
-    private int allowedGuests;
+    private int allowedGuests = -1;
     @DynamoDBAttribute(attributeName="guests_attending")
     private List<String> guestsAttending;
 
