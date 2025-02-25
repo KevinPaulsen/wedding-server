@@ -5,7 +5,7 @@ public class StringFormatUtil {
     /**
      * Helper method that normalizes a name.
      */
-    public static String formatFullName(String fullName) {
+    public static String formatToIndexName(String fullName) {
         if (fullName == null || fullName.trim().isBlank()) {
             throw new IllegalArgumentException("Name must not be null or empty.");
         }
@@ -23,7 +23,7 @@ public class StringFormatUtil {
             throw new IllegalArgumentException("First and last name must not be null or empty.");
         }
 
-        return formatFullName(firstName + " " + lastName);
+        return formatToIndexName(firstName + " " + lastName);
     }
 
     public static String capitalize(String word) {

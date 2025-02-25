@@ -131,7 +131,7 @@ public class CreateRsvpDTO {
         Map<String, RsvpGuestDetails> rsvpGuestDetailsMap = new HashMap<>();
 
         for (String displayName : allowedGuestDisplayNames) {
-            rsvpGuestDetailsMap.put(StringFormatUtil.formatFullName(displayName), new RsvpGuestDetails(displayName));
+            rsvpGuestDetailsMap.put(StringFormatUtil.formatToIndexName(displayName), new RsvpGuestDetails(displayName));
         }
 
         return rsvpGuestDetailsMap;

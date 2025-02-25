@@ -4,7 +4,9 @@ import com.paulsen.wedding.model.newRsvp.Event;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
 import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
+import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
+import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +19,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.paulsen.wedding.util.StringFormatUtil.formatFullName;
-import static com.paulsen.wedding.util.StringFormatUtil.strip;
+import static com.paulsen.wedding.util.StringFormatUtil.*;
 
 @Service
 public class RsvpService {
 
     private final NewRsvpRepository rsvpRepository;
+    private final WeddingGuestRepository weddingGuestRepository;
 
-    public RsvpService(NewRsvpRepository rsvpRepository) {
+    public RsvpService(NewRsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository) {
         this.rsvpRepository = rsvpRepository;
+        this.weddingGuestRepository = weddingGuestRepository;
     }
 
     public List<Rsvp> allRsvps() {
@@ -49,8 +53,7 @@ public class RsvpService {
      * An exception is thrown if the final primary contact name is empty, or if any guest’s name is empty.
      * </p>
      */
-    @Transactional
-    public Rsvp saveRsvp(Rsvp input, GuestChangeCallback addGuest, GuestChangeCallback removeGuest) {
+    @Transactional public Rsvp saveRsvp(Rsvp input) {
         // Obtain the stored object; if no ID, create a new one.
         Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty())
                       ? new Rsvp()
@@ -84,22 +87,18 @@ public class RsvpService {
 
         stored = rsvpRepository.save(stored);
 
-        if (addGuest == null || removeGuest == null) {
-            return stored;
-        }
-
         // Link any guests that were added
-        for (String name : stored.getGuestList().keySet()) {
-            if (beforeNames.contains(name)) {
-                beforeNames.remove(name);
+        for (String indexName : stored.getGuestList().keySet()) {
+            if (beforeNames.contains(indexName)) {
+                beforeNames.remove(indexName);
             } else {
-                addGuest.callback(name, stored.getRsvpId());
+                linkGuestToRsvp(indexName, stored.getRsvpId());
             }
         }
 
         // Unlink any guests that were removed
-        for (String name : beforeNames) {
-            removeGuest.callback(name, stored.getRsvpId());
+        for (String indexName : beforeNames) {
+            unlinkGuestFromRsvp(indexName, stored.getRsvpId());
         }
 
         return stored;
@@ -118,9 +117,9 @@ public class RsvpService {
     }
 
     private WeddingPrimaryContact mergeGuestInfo(WeddingPrimaryContact stored, WeddingPrimaryContact input) {
-        String name = (input != null && input.getName() != null)
-                      ? formatFullName(input.getName())
-                      : (stored != null && stored.getName() != null ? formatFullName(stored.getName()) : "");
+        String name = (input != null && input.getName() != null) ? formatToIndexName(input.getName())
+                                                                 : (stored != null && stored.getName() != null
+                                                                    ? formatToIndexName(stored.getName()) : "");
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Primary contact name must not be null or empty.");
         }
@@ -157,9 +156,9 @@ public class RsvpService {
 
         List<String> guests;
         if (input != null && input.getGuestsAttending() != null) {
-            guests = input.getGuestsAttending().stream().map(StringFormatUtil::formatFullName).toList();
+            guests = input.getGuestsAttending().stream().map(StringFormatUtil::formatToIndexName).toList();
         } else if (stored != null && stored.getGuestsAttending() != null) {
-            guests = stored.getGuestsAttending().stream().map(StringFormatUtil::formatFullName).toList();
+            guests = stored.getGuestsAttending().stream().map(StringFormatUtil::formatToIndexName).toList();
         } else {
             guests = List.of();
         }
@@ -171,8 +170,7 @@ public class RsvpService {
         return new Event(allowed, guests);
     }
 
-    @Transactional
-    public void delete(String rsvpId, GuestChangeCallback removeGuest) {
+    @Transactional public void delete(String rsvpId) {
         if (rsvpId == null || rsvpId.trim().isEmpty()) {
             throw new IllegalArgumentException("Invalid RSVP ID provided.");
         }
@@ -181,8 +179,8 @@ public class RsvpService {
 
         rsvpRepository.deleteById(rsvpId);
 
-        for (String name : deleted.getGuestList().keySet()) {
-            removeGuest.callback(name, deleted.getRsvpId());
+        for (String indexName : deleted.getGuestList().keySet()) {
+            unlinkGuestFromRsvp(indexName, rsvpId);
         }
     }
 
@@ -196,32 +194,57 @@ public class RsvpService {
             throw new IllegalArgumentException("Name and RsvpId must not be null or empty.");
         }
 
-        Rsvp rsvp = findRsvpById(rsvpId);
+        final String indexName = formatToIndexName(fullName);
 
-        if (rsvp.getGuestList() == null) {
-            throw new IllegalArgumentException("RSVP object has null Guest List.");
-        }
+        // Put the indexName in the rsvp object
+        Rsvp rsvp = addGuestToRsvp(rsvpId, indexName, displayName);
 
-        rsvp.getGuestList().putIfAbsent(fullName, new RsvpGuestDetails(displayName, Collections.emptyList(), ""));
+        // Put the rsvpID in the wedding guest object
+        WeddingGuest weddingGuest = linkGuestToRsvp(indexName, rsvpId);
 
+        // Save the rsvps
         rsvpRepository.save(rsvp);
+        weddingGuestRepository.save(weddingGuest);
     }
 
-    public void removeGuest(String fullName, String rsvpId) {
-        if (rsvpId == null || rsvpId.trim().isEmpty() || fullName == null || fullName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name and RsvpId must not be null or empty.");
-        }
-
+    /**
+     * Assumes that indexName is properly formatted.
+     */
+    private Rsvp addGuestToRsvp(String rsvpId, String indexName, String displayName) {
         Rsvp rsvp = findRsvpById(rsvpId);
 
         if (rsvp.getGuestList() == null) {
-            throw new IllegalArgumentException("RSVP object has null Guest List.");
+            rsvp.setGuestList(new HashMap<>());
         }
 
-        rsvp.getGuestList().remove(fullName);
+        rsvp.getGuestList().putIfAbsent(indexName, new RsvpGuestDetails(displayName, Collections.emptyList(), ""));
 
-        if (rsvp.getPrimaryContact() != null && fullName.equals(rsvp.getPrimaryContact().getName())) {
-            // The new contact will be a randomly selected name from guest list. If empty, then "" is new contact
+        return rsvp;
+    }
+
+    private WeddingGuest linkGuestToRsvp(String indexName, String rsvpId) {
+        WeddingGuest weddingGuest = weddingGuestRepository.findByFullName(indexName).orElse(new WeddingGuest());
+        weddingGuest.setFullName(indexName);
+        if (weddingGuest.getRsvpIds() == null) {
+            weddingGuest.setRsvpIds(List.of(rsvpId));
+        } else {
+            weddingGuest.setRsvpIds(Stream.concat(weddingGuest.getRsvpIds().stream(), Stream.of(rsvpId)).toList());
+        }
+
+        return weddingGuest;
+    }
+
+    private Rsvp removeGuestFromRsvp(String rsvpId, String indexName) {
+        Rsvp rsvp = findRsvpById(rsvpId);
+
+        // Remove indexName from guest list
+        if (rsvp.getGuestList() == null) {
+            rsvp.setGuestList(new HashMap<>());
+        }
+        rsvp.getGuestList().remove(indexName);
+
+        // Remove indexName from primaryContact if present, replace with other name or "" if guestList is empty now
+        if (rsvp.getPrimaryContact() != null && indexName.equals(rsvp.getPrimaryContact().getName())) {
             rsvp.getPrimaryContact().setName(rsvp.getGuestList().keySet().stream().findAny().orElse(""));
         }
 
@@ -232,15 +255,60 @@ public class RsvpService {
             }
 
             event.setGuestsAttending(event.getGuestsAttending()
-                                          .stream()
-                                          .filter(name -> !name.equals(fullName))
+                                          .stream().filter(name -> !name.equals(indexName))
                                           .toList());
         }
 
-        rsvpRepository.save(rsvp);
+        return rsvp;
     }
 
-    public interface GuestChangeCallback {
-        void callback(String name, String rsvpId);
+    private WeddingGuest unlinkGuestFromRsvp(String indexName, String rsvpId) {
+        WeddingGuest weddingGuest = weddingGuestRepository.findByFullName(indexName).orElse(new WeddingGuest());
+
+        // Put the rsvpID in the wedding guest object
+        if (weddingGuest.getRsvpIds() != null) {
+            weddingGuest.setRsvpIds(weddingGuest.getRsvpIds().stream().filter(id -> !id.equals(rsvpId)).toList());
+        }
+
+        return weddingGuest;
+    }
+
+    public void removeGuest(String fullName, String rsvpId) {
+        if (rsvpId == null || rsvpId.trim().isEmpty()) {
+            throw new IllegalArgumentException("RsvpId must not be null or empty.");
+        }
+
+        final String indexName = formatToIndexName(fullName);
+
+        Rsvp rsvp = removeGuestFromRsvp(rsvpId, indexName);
+        WeddingGuest weddingGuest = unlinkGuestFromRsvp(indexName, rsvpId);
+
+        rsvpRepository.save(rsvp);
+        if (weddingGuest.getRsvpIds() == null || weddingGuest.getRsvpIds().isEmpty()) {
+            weddingGuestRepository.deleteById(fullName);
+        } else {
+            weddingGuestRepository.save(weddingGuest);
+        }
+    }
+
+    public List<WeddingGuest> allGuests() {
+        List<WeddingGuest> weddingGuests = new ArrayList<>();
+        weddingGuestRepository.findAll().forEach(weddingGuests::add);
+        return weddingGuests;
+    }
+
+    public WeddingGuest getGuest(String firstName, String lastName) {
+        String fullName = getFullName(firstName, lastName);
+        return weddingGuestRepository.findByFullName(fullName)
+                                     .orElseThrow(() -> new IllegalArgumentException(
+                                             "RSVP with name " + fullName + " not found."));
+    }
+
+    @Transactional public void addGuest(String name, String rsvpId) {
+        // Validate primary_contact (must not be null and must have a non-empty name)
+        if (rsvpId == null || rsvpId.isEmpty()) {
+            throw new IllegalArgumentException("RsvpID must be non-null and non-empty.");
+        }
+
     }
 }
