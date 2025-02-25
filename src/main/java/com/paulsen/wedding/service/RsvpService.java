@@ -57,7 +57,7 @@ public class RsvpService {
         // Obtain the stored object; if no ID, create a new one.
         Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty())
                       ? new Rsvp()
-                      : rsvpRepository.findById(input.getRsvpId())
+                      : rsvpRepository.findByRsvpId(input.getRsvpId())
                                       .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
 
         Set<String> beforeNames = stored.getGuestList() == null ? new HashSet<>() : new HashSet<>(stored.getGuestList().keySet());
@@ -102,6 +102,73 @@ public class RsvpService {
         }
 
         return stored;
+    }
+
+    @Transactional public void delete(String rsvpId) {
+        if (rsvpId == null || rsvpId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid RSVP ID provided.");
+        }
+
+        Rsvp deleted = findRsvpById(rsvpId);
+
+        rsvpRepository.deleteById(rsvpId);
+
+        for (String indexName : deleted.getGuestList().keySet()) {
+            unlinkGuestFromRsvp(indexName, rsvpId);
+        }
+    }
+
+    public Rsvp findRsvpById(String id) {
+        return rsvpRepository.findByRsvpId(id)
+                             .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
+    }
+
+    @Transactional public void addGuest(String displayName, String rsvpId) {
+        if (rsvpId == null || rsvpId.trim().isEmpty() || displayName == null || displayName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name and RsvpId must not be null or empty.");
+        }
+
+        final String indexName = formatToIndexName(displayName);
+
+        // Put the indexName in the rsvp object
+        Rsvp rsvp = addGuestToRsvp(rsvpId, indexName, displayName);
+
+        // Put the rsvpID in the wedding guest repository
+        linkGuestToRsvp(indexName, rsvpId);
+
+        // Save the rsvps
+        rsvpRepository.save(rsvp);
+    }
+
+    @Transactional public void removeGuest(String fullName, String rsvpId) {
+        if (rsvpId == null || rsvpId.trim().isEmpty()) {
+            throw new IllegalArgumentException("RsvpId must not be null or empty.");
+        }
+
+        final String indexName = formatToIndexName(fullName);
+
+        Rsvp rsvp = removeGuestFromRsvp(rsvpId, indexName);
+        WeddingGuest weddingGuest = unlinkGuestFromRsvp(indexName, rsvpId);
+
+        rsvpRepository.save(rsvp);
+        if (weddingGuest.getRsvpIds() == null || weddingGuest.getRsvpIds().isEmpty()) {
+            weddingGuestRepository.deleteById(fullName);
+        } else {
+            weddingGuestRepository.save(weddingGuest);
+        }
+    }
+
+    public List<WeddingGuest> allGuests() {
+        List<WeddingGuest> weddingGuests = new ArrayList<>();
+        weddingGuestRepository.findAll().forEach(weddingGuests::add);
+        return weddingGuests;
+    }
+
+    public WeddingGuest getGuest(String firstName, String lastName) {
+        String fullName = StringFormatUtil.formatToIndexName(firstName, lastName);
+        return weddingGuestRepository.findByFullName(fullName)
+                                     .orElseThrow(() -> new IllegalArgumentException(
+                                             "RSVP with name " + fullName + " not found."));
     }
 
     private List<String> getAllNames(Rsvp rsvp) {
@@ -170,43 +237,6 @@ public class RsvpService {
         return new Event(allowed, guests);
     }
 
-    @Transactional public void delete(String rsvpId) {
-        if (rsvpId == null || rsvpId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Invalid RSVP ID provided.");
-        }
-
-        Rsvp deleted = findRsvpById(rsvpId);
-
-        rsvpRepository.deleteById(rsvpId);
-
-        for (String indexName : deleted.getGuestList().keySet()) {
-            unlinkGuestFromRsvp(indexName, rsvpId);
-        }
-    }
-
-    public Rsvp findRsvpById(String id) {
-        return rsvpRepository.findById(id)
-                             .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
-    }
-
-    public void addGuest(String fullName, String displayName, String rsvpId) {
-        if (rsvpId == null || rsvpId.trim().isEmpty() || fullName == null || fullName.trim().isEmpty() || displayName == null || displayName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name and RsvpId must not be null or empty.");
-        }
-
-        final String indexName = formatToIndexName(fullName);
-
-        // Put the indexName in the rsvp object
-        Rsvp rsvp = addGuestToRsvp(rsvpId, indexName, displayName);
-
-        // Put the rsvpID in the wedding guest object
-        WeddingGuest weddingGuest = linkGuestToRsvp(indexName, rsvpId);
-
-        // Save the rsvps
-        rsvpRepository.save(rsvp);
-        weddingGuestRepository.save(weddingGuest);
-    }
-
     /**
      * Assumes that indexName is properly formatted.
      */
@@ -222,7 +252,7 @@ public class RsvpService {
         return rsvp;
     }
 
-    private WeddingGuest linkGuestToRsvp(String indexName, String rsvpId) {
+    private void linkGuestToRsvp(String indexName, String rsvpId) {
         WeddingGuest weddingGuest = weddingGuestRepository.findByFullName(indexName).orElse(new WeddingGuest());
         weddingGuest.setFullName(indexName);
         if (weddingGuest.getRsvpIds() == null) {
@@ -231,7 +261,7 @@ public class RsvpService {
             weddingGuest.setRsvpIds(Stream.concat(weddingGuest.getRsvpIds().stream(), Stream.of(rsvpId)).toList());
         }
 
-        return weddingGuest;
+        weddingGuestRepository.save(weddingGuest);
     }
 
     private Rsvp removeGuestFromRsvp(String rsvpId, String indexName) {
@@ -271,44 +301,5 @@ public class RsvpService {
         }
 
         return weddingGuest;
-    }
-
-    public void removeGuest(String fullName, String rsvpId) {
-        if (rsvpId == null || rsvpId.trim().isEmpty()) {
-            throw new IllegalArgumentException("RsvpId must not be null or empty.");
-        }
-
-        final String indexName = formatToIndexName(fullName);
-
-        Rsvp rsvp = removeGuestFromRsvp(rsvpId, indexName);
-        WeddingGuest weddingGuest = unlinkGuestFromRsvp(indexName, rsvpId);
-
-        rsvpRepository.save(rsvp);
-        if (weddingGuest.getRsvpIds() == null || weddingGuest.getRsvpIds().isEmpty()) {
-            weddingGuestRepository.deleteById(fullName);
-        } else {
-            weddingGuestRepository.save(weddingGuest);
-        }
-    }
-
-    public List<WeddingGuest> allGuests() {
-        List<WeddingGuest> weddingGuests = new ArrayList<>();
-        weddingGuestRepository.findAll().forEach(weddingGuests::add);
-        return weddingGuests;
-    }
-
-    public WeddingGuest getGuest(String firstName, String lastName) {
-        String fullName = getFullName(firstName, lastName);
-        return weddingGuestRepository.findByFullName(fullName)
-                                     .orElseThrow(() -> new IllegalArgumentException(
-                                             "RSVP with name " + fullName + " not found."));
-    }
-
-    @Transactional public void addGuest(String name, String rsvpId) {
-        // Validate primary_contact (must not be null and must have a non-empty name)
-        if (rsvpId == null || rsvpId.isEmpty()) {
-            throw new IllegalArgumentException("RsvpID must be non-null and non-empty.");
-        }
-
     }
 }

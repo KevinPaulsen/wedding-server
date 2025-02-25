@@ -18,7 +18,7 @@ public class StringFormatUtil {
         return fullName;
     }
 
-    public static String getFullName(String firstName, String lastName) {
+    public static String formatToIndexName(String firstName, String lastName) {
         if (firstName == null || firstName.trim().isBlank() || lastName == null || lastName.trim().isBlank()) {
             throw new IllegalArgumentException("First and last name must not be null or empty.");
         }

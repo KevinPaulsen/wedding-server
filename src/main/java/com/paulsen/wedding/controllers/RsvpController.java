@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.paulsen.wedding.util.StringFormatUtil.getFullName;
+import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
+import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 @RequestMapping("/rsvp")
 @RestController
@@ -69,16 +70,15 @@ public class RsvpController {
 
     @PostMapping("/guest/add")
     public ResponseEntity<Map<String, String>> addGuest(@RequestBody AddGuestDTO addGuestDTO) {
-        String fullName = getFullName(addGuestDTO.getFirst_name(), addGuestDTO.getLast_name());
-        String displayName = addGuestDTO.getFirst_name() + " " + addGuestDTO.getLast_name();
-        rsvpService.addGuest(fullName, displayName, addGuestDTO.getRsvp_id());
+        String displayName = strip(addGuestDTO.getFirst_name() + " " + addGuestDTO.getLast_name());
+        rsvpService.addGuest(displayName, addGuestDTO.getRsvp_id());
 
         return ResponseEntity.ok(Map.of("message", "RSVP association added successfully."));
     }
 
     @PostMapping("/guest/remove")
     public ResponseEntity<Map<String, String>> removeGuest(@RequestBody AddGuestDTO guestDto) {
-        String fullName = getFullName(guestDto.getFirst_name(), guestDto.getLast_name());
+        String fullName = strip(guestDto.getFirst_name() + " " + guestDto.getLast_name());
         rsvpService.removeGuest(fullName, guestDto.getRsvp_id());
 
         return ResponseEntity.ok(Map.of("message", "RSVP association removed successfully."));
