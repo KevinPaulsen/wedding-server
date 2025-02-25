@@ -85,7 +85,8 @@ public class NewRsvpController {
     @PostMapping("/guest/add")
     public ResponseEntity<Map<String, String>> addGuest(@RequestBody AddGuestDTO addGuestDTO) {
         String fullName = getFullName(addGuestDTO.getFirst_name(), addGuestDTO.getLast_name());
-        rsvpService.addGuest(fullName, addGuestDTO.getRsvp_id());
+        String displayName = addGuestDTO.getFirst_name() + " " + addGuestDTO.getLast_name();
+        rsvpService.addGuest(fullName, displayName, addGuestDTO.getRsvp_id());
         guestService.addGuest(fullName, addGuestDTO.getRsvp_id());
 
         return ResponseEntity.ok(Map.of("message", "RSVP association added successfully."));

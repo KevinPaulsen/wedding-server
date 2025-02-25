@@ -187,8 +187,8 @@ public class NewRsvpService {
                              .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
     }
 
-    public void addGuest(String fullName, String rsvpId) {
-        if (rsvpId == null || rsvpId.trim().isEmpty() || fullName == null || fullName.trim().isEmpty()) {
+    public void addGuest(String fullName, String displayName, String rsvpId) {
+        if (rsvpId == null || rsvpId.trim().isEmpty() || fullName == null || fullName.trim().isEmpty() || displayName == null || displayName.trim().isEmpty()) {
             throw new IllegalArgumentException("Name and RsvpId must not be null or empty.");
         }
 
@@ -198,8 +198,7 @@ public class NewRsvpService {
             throw new IllegalArgumentException("RSVP object has null Guest List.");
         }
 
-        // TODO: Update to allow displayName
-        rsvp.getGuestList().putIfAbsent(fullName, new RsvpGuestDetails("", Collections.emptyList(), ""));
+        rsvp.getGuestList().putIfAbsent(fullName, new RsvpGuestDetails(displayName, Collections.emptyList(), ""));
 
         rsvpRepository.save(rsvp);
     }
