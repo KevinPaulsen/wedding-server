@@ -5,7 +5,7 @@ import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
 import com.paulsen.wedding.model.rsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
-import com.paulsen.wedding.repositories.NewRsvpRepository;
+import com.paulsen.wedding.repositories.RsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.*;
 @Service
 public class RsvpService {
 
-    private final NewRsvpRepository rsvpRepository;
+    private final RsvpRepository rsvpRepository;
     private final WeddingGuestRepository weddingGuestRepository;
 
-    public RsvpService(NewRsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository) {
+    public RsvpService(RsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository) {
         this.rsvpRepository = rsvpRepository;
         this.weddingGuestRepository = weddingGuestRepository;
     }

@@ -5,7 +5,7 @@ import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
 import com.paulsen.wedding.model.rsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
-import com.paulsen.wedding.repositories.NewRsvpRepository;
+import com.paulsen.wedding.repositories.RsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 public class RsvpServiceTest {
 
     private static final String PRIMARY_GUEST_KEY = StringFormatUtil.formatToIndexName("John Doe");
-    @Mock private NewRsvpRepository rsvpRepository;
+    @Mock private RsvpRepository rsvpRepository;
     @Mock private WeddingGuestRepository weddingGuestRepository;
     @InjectMocks private RsvpService rsvpService;
 

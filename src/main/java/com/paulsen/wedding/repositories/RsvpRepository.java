@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-@EnableScan public interface rsvpRepository extends CrudRepository<Rsvp, String> {
+@EnableScan public interface RsvpRepository extends CrudRepository<Rsvp, String> {
     Optional<Rsvp> findByRsvpId(String rsvpId);
 }
 
