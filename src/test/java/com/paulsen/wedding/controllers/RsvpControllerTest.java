@@ -22,9 +22,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(NewRsvpController.class)
+@WebMvcTest(RsvpController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class NewRsvpControllerTest {
+public class RsvpControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

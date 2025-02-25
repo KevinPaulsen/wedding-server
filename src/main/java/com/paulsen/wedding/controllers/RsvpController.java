@@ -25,12 +25,12 @@ import static com.paulsen.wedding.util.StringFormatUtil.getFullName;
 
 @RequestMapping("/rsvp")
 @RestController
-public class NewRsvpController {
+public class RsvpController {
 
     private final NewRsvpService rsvpService;
     private final WeddingGuestService guestService;
 
-    public NewRsvpController(NewRsvpService rsvpService, WeddingGuestService guestService) {
+    public RsvpController(NewRsvpService rsvpService, WeddingGuestService guestService) {
         this.rsvpService = rsvpService;
         this.guestService = guestService;
     }
