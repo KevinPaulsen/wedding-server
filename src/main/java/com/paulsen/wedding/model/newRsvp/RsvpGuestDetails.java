@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class RsvpGuestDetails {
+    @DynamoDBAttribute(attributeName = "display_name")
+    private String displayName;
     @DynamoDBAttribute(attributeName="dietary_restrictions")
     private List<DietaryRestriction> dietaryRestrictions;
     @DynamoDBAttribute(attributeName="other")
@@ -13,9 +15,24 @@ public class RsvpGuestDetails {
 
     public RsvpGuestDetails() {}
 
-    public RsvpGuestDetails(List<DietaryRestriction> dietaryRestrictions, String other) {
+    public RsvpGuestDetails(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public RsvpGuestDetails(String displayName, List<DietaryRestriction> dietaryRestrictions, String other) {
+        this.displayName = displayName;
         this.dietaryRestrictions = dietaryRestrictions;
         this.other = other;
+    }
+
+    @JsonProperty("display_name")
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @JsonProperty("display_name")
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @JsonProperty("dietary_restrictions")

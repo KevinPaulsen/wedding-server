@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static com.paulsen.wedding.util.StringFormatUtil.formatFullName;
+import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 @Service
 public class NewRsvpService {
@@ -77,7 +78,7 @@ public class NewRsvpService {
 
         for (String name : getAllNames(stored)) {
             if (!stored.getGuestList().containsKey(name)) {
-                stored.getGuestList().put(name, new RsvpGuestDetails(Collections.emptyList(), ""));
+                throw new IllegalArgumentException("Name " + name + " is not the guest list.");
             }
         }
 
@@ -136,15 +137,11 @@ public class NewRsvpService {
     }
 
     private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored, Map<String, RsvpGuestDetails> input) {
-        Map<String, RsvpGuestDetails> merged = Objects.requireNonNullElseGet(input, () -> Objects.requireNonNullElseGet(stored, HashMap::new));
-        Map<String, RsvpGuestDetails> result = new HashMap<>();
+        Map<String, RsvpGuestDetails> result =  Objects.requireNonNullElseGet(input, () -> Objects.requireNonNullElseGet(stored, HashMap::new));
 
-        for (Map.Entry<String, RsvpGuestDetails> entry : merged.entrySet()) {
-            String key = formatFullName(entry.getKey());
-
-            if (result.containsKey(key)) throw new IllegalArgumentException("Duplicate name (" + key + ") in guest list");
-
-            result.put(formatFullName(key), entry.getValue());
+        for (RsvpGuestDetails details : result.values()) {
+            // Note that strip ensures non-empty &
+            details.setDisplayName(strip(details.getDisplayName()));
         }
 
         return result;
@@ -201,7 +198,8 @@ public class NewRsvpService {
             throw new IllegalArgumentException("RSVP object has null Guest List.");
         }
 
-        rsvp.getGuestList().putIfAbsent(fullName, new RsvpGuestDetails(Collections.emptyList(), ""));
+        // TODO: Update to allow displayName
+        rsvp.getGuestList().putIfAbsent(fullName, new RsvpGuestDetails("", Collections.emptyList(), ""));
 
         rsvpRepository.save(rsvp);
     }

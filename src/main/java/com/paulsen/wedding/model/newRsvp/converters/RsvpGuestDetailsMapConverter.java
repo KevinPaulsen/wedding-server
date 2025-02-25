@@ -16,14 +16,20 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
 
     @Override
     public AttributeValue convert(Map<String, RsvpGuestDetails> guestMap) {
-        // Default to an empty map if null.
         guestMap = Objects.requireNonNullElse(guestMap, Collections.emptyMap());
-        // Create a map to hold the DynamoDB representation.
         Map<String, AttributeValue> attributeMap = new HashMap<>();
-        // For each guest entry...
+
         for (Map.Entry<String, RsvpGuestDetails> entry : guestMap.entrySet()) {
             String guestName = entry.getKey();
             RsvpGuestDetails details = entry.getValue();
+
+            if (details == null) {
+                attributeMap.put(guestName, new AttributeValue().withNULL(true));
+                continue;
+            }
+
+            // Convert "displayName". Default to an empty string if null.
+            String displayName = Objects.requireNonNullElse(details.getDisplayName(), "");
 
             // Convert dietary_restrictions.
             List<AttributeValue> diets;
@@ -35,11 +41,13 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
                                     .map(r -> new AttributeValue().withS(r.name()))
                                     .collect(Collectors.toList());
             }
+
             // Convert "other". Default to an empty string if null.
             String other = details.getOther() != null ? details.getOther() : "";
 
             // Build a map for the guest details.
             Map<String, AttributeValue> detailsMap = new HashMap<>();
+            detailsMap.put("display_name", new AttributeValue().withS(displayName));
             detailsMap.put("dietary_restrictions", new AttributeValue().withL(diets));
             detailsMap.put("other", new AttributeValue().withS(other));
 
@@ -65,6 +73,9 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
             }
             Map<String, AttributeValue> detailsMap = detailsAttr.getM();
 
+            String displayName = detailsMap.get("display_name").getS();
+            if (displayName == null) displayName = "";
+
             // Retrieve dietary_restrictions.
             AttributeValue dietsAttr = detailsMap.get("dietary_restrictions");
             List<DietaryRestriction> restrictions;
@@ -88,7 +99,7 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
             AttributeValue otherAttr = detailsMap.get("other");
             String other = (otherAttr != null && otherAttr.getS() != null) ? otherAttr.getS() : "";
 
-            guestMap.put(guestName, new RsvpGuestDetails(restrictions, other));
+            guestMap.put(guestName, new RsvpGuestDetails(displayName, restrictions, other));
         }
         return guestMap;
     }

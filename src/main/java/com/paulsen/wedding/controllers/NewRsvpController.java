@@ -1,5 +1,6 @@
 package com.paulsen.wedding.controllers;
 
+import com.paulsen.wedding.model.newRsvp.CreateRsvpDTO;
 import com.paulsen.wedding.model.newRsvp.Rsvp;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
@@ -35,17 +36,10 @@ public class NewRsvpController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> register(@RequestBody Rsvp rsvpDTO) {
-        try {
-            Rsvp createdRsvp = rsvpService.saveRsvp(rsvpDTO, guestService::addGuest, guestService::removeGuest);
-            return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
-                                               "rsvp_id", createdRsvp.getRsvpId()), HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body(Map.of("error", "An error occurred while creating the RSVP object."));
-        }
+    public ResponseEntity<Map<String, String>> create(@RequestBody CreateRsvpDTO rsvpDTO) {
+        Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp(), guestService::addGuest, guestService::removeGuest);
+        return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
+                                           "rsvp_id", savedRsvp.getRsvpId()), HttpStatus.CREATED);
     }
 
     @PutMapping("/edit")
