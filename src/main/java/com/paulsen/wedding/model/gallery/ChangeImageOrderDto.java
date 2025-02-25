@@ -13,7 +13,8 @@ public class ChangeImageOrderDto {
         this.followingImageId = followingImageId;
     }
 
-    public ChangeImageOrderDto() {}
+    public ChangeImageOrderDto() {
+    }
 
     public String getMovingImageId() {
         return movingImageId;

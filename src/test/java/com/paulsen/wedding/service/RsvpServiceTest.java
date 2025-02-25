@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class RsvpServiceTest {
+@ExtendWith(MockitoExtension.class) public class RsvpServiceTest {
 
     private static final String PRIMARY_GUEST_KEY = StringFormatUtil.formatToIndexName("John Doe");
     @Mock private RsvpRepository rsvpRepository;

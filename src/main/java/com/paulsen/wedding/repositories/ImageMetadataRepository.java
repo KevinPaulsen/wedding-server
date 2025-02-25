@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository @EnableScan public interface ImageMetadataRepository
         extends CrudRepository<ImageMetadata, ImageMetadataKey> {
     Optional<ImageMetadata> getImageMetadataByImageId(String imageId);
+
     Optional<ImageMetadata> findFirstByPartitionOrderByOrderValueDesc(String orderGroup);
 
     List<ImageMetadata> findAllByPartitionOrderByOrderValueAsc(String orderGroup);

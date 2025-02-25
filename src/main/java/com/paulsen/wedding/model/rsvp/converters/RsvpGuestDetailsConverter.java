@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RsvpGuestDetailsConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, List<RsvpGuestDetails>> {
+public class RsvpGuestDetailsConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue,
+List<RsvpGuestDetails>> {
 
     @Override public AttributeValue convert(List<RsvpGuestDetails> allGuestDetails) {
         allGuestDetails = Objects.requireNonNullElse(allGuestDetails, Collections.emptyList());
@@ -33,7 +34,8 @@ public class RsvpGuestDetailsConverter extends ConverterBase implements DynamoDB
         var diets = new AttributeValue().withL(Objects.requireNonNullElse(guestDetails.dietaryRestrictions(),
                                                                           new ArrayList<DietaryRestriction>())
                                                       .stream()
-                                                      .map(restriction -> new AttributeValue().withS(restriction.name()))
+                                                      .map(restriction -> new AttributeValue().withS(restriction.name
+                                                      ()))
                                                       .toList());
         var other = new AttributeValue(Objects.requireNonNullElse(guestDetails.other(), ""));
 

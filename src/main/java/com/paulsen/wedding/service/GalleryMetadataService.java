@@ -38,12 +38,20 @@ import java.util.List;
     }
 
     @Transactional public void changeImageOrder(String movingImageId, String previousImageId, String followingImageId) {
-        ImageMetadata moving = movingImageId == null || movingImageId.isEmpty() ? null :
-                               imageMetadataRepository.getImageMetadataByImageId(movingImageId).orElse(null);
-        ImageMetadata previous = previousImageId == null || previousImageId.isEmpty() ? null :
-                                 imageMetadataRepository.getImageMetadataByImageId(previousImageId).orElse(null);
-        ImageMetadata next = followingImageId == null || followingImageId.isEmpty() ? null :
-                             imageMetadataRepository.getImageMetadataByImageId(followingImageId).orElse(null);
+        ImageMetadata moving = movingImageId == null || movingImageId.isEmpty() ? null
+                                                                                :
+                               imageMetadataRepository.getImageMetadataByImageId(
+                                                                                        movingImageId).orElse(null);
+        ImageMetadata previous = previousImageId == null || previousImageId.isEmpty() ? null
+                                                                                      :
+                                 imageMetadataRepository.getImageMetadataByImageId(
+                                                                                                                       previousImageId)
+                                                                                                               .orElse(null);
+        ImageMetadata next = followingImageId == null || followingImageId.isEmpty() ? null
+                                                                                    :
+                             imageMetadataRepository.getImageMetadataByImageId(
+                                                                                                                     followingImageId)
+                                                                                                             .orElse(null);
 
         long previousValue = previous == null ? 0 : previous.getOrderValue();
         long nextValue = next == null ? previousValue + 2 * SEPARATION_VALUE : next.getOrderValue();

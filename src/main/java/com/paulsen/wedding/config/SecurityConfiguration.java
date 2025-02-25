@@ -13,12 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration @EnableWebSecurity public class SecurityConfiguration {
     private static final String[] AUTHORIZED_ENDPOINTS = {
-            "/auth/login",
-            "/auth/verify-token",
-            "/actuator/health",
-            "/gallery/all",
-            "/rsvp/lookup",
-            "/rsvp/submit"
+            "/auth/login", "/auth/verify-token", "/actuator/health", "/gallery/all", "/rsvp/lookup", "/rsvp/submit"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;

@@ -2,8 +2,8 @@ package com.paulsen.wedding.model.rsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
 import com.paulsen.wedding.model.rsvp.DietaryRestriction;
+import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<AttributeValue, Map<String, RsvpGuestDetails>> {
+public class RsvpGuestDetailsMapConverter
+        implements DynamoDBTypeConverter<AttributeValue, Map<String, RsvpGuestDetails>> {
 
-    @Override
-    public AttributeValue convert(Map<String, RsvpGuestDetails> guestMap) {
+    @Override public AttributeValue convert(Map<String, RsvpGuestDetails> guestMap) {
         guestMap = Objects.requireNonNullElse(guestMap, Collections.emptyMap());
         Map<String, AttributeValue> attributeMap = new HashMap<>();
 
@@ -57,8 +57,7 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
         return new AttributeValue().withM(attributeMap);
     }
 
-    @Override
-    public Map<String, RsvpGuestDetails> unconvert(AttributeValue object) {
+    @Override public Map<String, RsvpGuestDetails> unconvert(AttributeValue object) {
         if (object == null || object.getM() == null) {
             return Collections.emptyMap();
         }
@@ -74,7 +73,9 @@ public class RsvpGuestDetailsMapConverter implements DynamoDBTypeConverter<Attri
             Map<String, AttributeValue> detailsMap = detailsAttr.getM();
 
             String displayName = detailsMap.get("display_name").getS();
-            if (displayName == null) displayName = "";
+            if (displayName == null) {
+                displayName = "";
+            }
 
             // Retrieve dietary_restrictions.
             AttributeValue dietsAttr = detailsMap.get("dietary_restrictions");

@@ -74,8 +74,7 @@ import java.util.Map;
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteRsvp(@RequestBody ImageDeleteDto imageId) {
+    @DeleteMapping("/delete") public ResponseEntity<Void> deleteRsvp(@RequestBody ImageDeleteDto imageId) {
         metadataService.delete(imageId.getImageId());
         s3Service.deleteFile(imageId.getImageId());
 

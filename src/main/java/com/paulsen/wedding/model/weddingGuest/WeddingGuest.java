@@ -6,14 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.List;
 
-@DynamoDBTable(tableName = "wedding_guest_table")
-public class WeddingGuest {
+@DynamoDBTable(tableName="wedding_guest_table") public class WeddingGuest {
 
-    @DynamoDBHashKey(attributeName="full_name")
-    private String fullName;
+    @DynamoDBHashKey(attributeName="full_name") private String fullName;
 
-    @DynamoDBAttribute(attributeName="rsvp_ids")
-    private List<String> rsvpIds;
+    @DynamoDBAttribute(attributeName="rsvp_ids") private List<String> rsvpIds;
 
     public String getFullName() {
         return fullName;

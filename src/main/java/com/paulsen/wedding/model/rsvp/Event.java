@@ -6,10 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class Event {
-    @DynamoDBAttribute(attributeName="allowed_guests")
-    private int allowedGuests = -1;
-    @DynamoDBAttribute(attributeName="guests_attending")
-    private List<String> guestsAttending;
+    @DynamoDBAttribute(attributeName="allowed_guests") private int allowedGuests = -1;
+    @DynamoDBAttribute(attributeName="guests_attending") private List<String> guestsAttending;
 
     public Event() {
     }
@@ -19,23 +17,19 @@ public class Event {
         this.guestsAttending = guestsAttending;
     }
 
-    @JsonProperty("allowed_guests")
-    public int getAllowedGuests() {
+    @JsonProperty("allowed_guests") public int getAllowedGuests() {
         return allowedGuests;
     }
 
-    @JsonProperty("allowed_guests")
-    public void setAllowedGuests(int allowedGuests) {
+    @JsonProperty("allowed_guests") public void setAllowedGuests(int allowedGuests) {
         this.allowedGuests = allowedGuests;
     }
 
-    @JsonProperty("guests_attending")
-    public List<String> getGuestsAttending() {
+    @JsonProperty("guests_attending") public List<String> getGuestsAttending() {
         return guestsAttending;
     }
 
-    @JsonProperty("guests_attending")
-    public void setGuestsAttending(List<String> guestsAttending) {
+    @JsonProperty("guests_attending") public void setGuestsAttending(List<String> guestsAttending) {
         this.guestsAttending = guestsAttending;
     }
 }

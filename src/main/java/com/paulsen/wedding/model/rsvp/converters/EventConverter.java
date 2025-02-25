@@ -11,8 +11,7 @@ import java.util.stream.Collectors;
 
 public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Event> {
 
-    @Override
-    public AttributeValue convert(Event event) {
+    @Override public AttributeValue convert(Event event) {
         if (event == null) {
             return new AttributeValue().withNULL(true);
         }
@@ -38,8 +37,7 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
         return new AttributeValue().withM(map);
     }
 
-    @Override
-    public Event unconvert(AttributeValue attributeValue) {
+    @Override public Event unconvert(AttributeValue attributeValue) {
         if (attributeValue == null || attributeValue.getM() == null) {
             return null;
         }
@@ -57,9 +55,7 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
         AttributeValue guestsAttendingAttr = map.get("guests_attending");
         List<String> guestsAttending = null;
         if (guestsAttendingAttr != null && guestsAttendingAttr.getL() != null) {
-            guestsAttending = guestsAttendingAttr.getL().stream()
-                                                 .map(AttributeValue::getS)
-                                                 .toList();
+            guestsAttending = guestsAttendingAttr.getL().stream().map(AttributeValue::getS).toList();
         }
 
         return new Event(allowedGuests, guestsAttending);

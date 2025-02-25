@@ -21,10 +21,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.paulsen.wedding.util.StringFormatUtil.*;
+import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
+import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
-@Service
-public class RsvpService {
+@Service public class RsvpService {
 
     private final RsvpRepository rsvpRepository;
     private final WeddingGuestRepository weddingGuestRepository;
@@ -55,12 +55,15 @@ public class RsvpService {
      */
     @Transactional public Rsvp saveRsvp(Rsvp input) {
         // Obtain the stored object; if no ID, create a new one.
-        Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty())
-                      ? new Rsvp()
-                      : rsvpRepository.findByRsvpId(input.getRsvpId())
-                                      .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
+        Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty()) ? new Rsvp()
+                                                                                        : rsvpRepository.findByRsvpId(
+                                                                                                                input.getRsvpId())
+                                                                                                        .orElseThrow(() -> new IllegalArgumentException(
+                                                                                                                "RSVP" +
+                                                                                                                " object not found."));
 
-        Set<String> beforeNames = stored.getGuestList() == null ? new HashSet<>() : new HashSet<>(stored.getGuestList().keySet());
+        Set<String> beforeNames = stored.getGuestList() == null ? new HashSet<>()
+                                                                : new HashSet<>(stored.getGuestList().keySet());
 
         // For booleans (submitted), always override.
         stored.setSubmitted(input.isSubmitted());
@@ -190,20 +193,22 @@ public class RsvpService {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Primary contact name must not be null or empty.");
         }
-        String email = (input != null && input.getEmail() != null)
-                       ? input.getEmail().trim()
-                       : (stored != null && stored.getEmail() != null ? stored.getEmail().trim() : "");
-        String phone = (input != null && input.getPhoneNumber() != null)
-                       ? input.getPhoneNumber().trim()
-                       : (stored != null && stored.getPhoneNumber() != null ? stored.getPhoneNumber().trim() : "");
-        String address = (input != null && input.getAddress() != null)
-                         ? input.getAddress().trim()
-                         : (stored != null && stored.getAddress() != null ? stored.getAddress().trim() : "");
+        String email = (input != null && input.getEmail() != null) ? input.getEmail().trim()
+                                                                   : (stored != null && stored.getEmail() != null
+                                                                      ? stored.getEmail().trim() : "");
+        String phone = (input != null && input.getPhoneNumber() != null) ? input.getPhoneNumber().trim() : (
+                stored != null && stored.getPhoneNumber() != null ? stored.getPhoneNumber().trim() : "");
+        String address = (input != null && input.getAddress() != null) ? input.getAddress().trim()
+                                                                       : (stored != null && stored.getAddress() != null
+                                                                          ? stored.getAddress().trim() : "");
         return new WeddingPrimaryContact(name, email, phone, address);
     }
 
-    private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored, Map<String, RsvpGuestDetails> input) {
-        Map<String, RsvpGuestDetails> result =  Objects.requireNonNullElseGet(input, () -> Objects.requireNonNullElseGet(stored, HashMap::new));
+    private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored,
+            Map<String, RsvpGuestDetails> input) {
+        Map<String, RsvpGuestDetails> result = Objects.requireNonNullElseGet(input,
+                                                                             () -> Objects.requireNonNullElseGet(stored,
+                                                                                                                 HashMap::new));
 
         for (RsvpGuestDetails details : result.values()) {
             // Note that strip ensures non-empty &
@@ -285,7 +290,8 @@ public class RsvpService {
             }
 
             event.setGuestsAttending(event.getGuestsAttending()
-                                          .stream().filter(name -> !name.equals(indexName))
+                                          .stream()
+                                          .filter(name -> !name.equals(indexName))
                                           .toList());
         }
 

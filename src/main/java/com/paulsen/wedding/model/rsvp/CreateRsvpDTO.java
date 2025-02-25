@@ -21,6 +21,20 @@ public class CreateRsvpDTO {
     private int numGuestsAllowedCeremony;
     private int numGuestsAllowedReception;
 
+    private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(Set<String> allowedGuestDisplayNames) {
+        if (allowedGuestDisplayNames == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, RsvpGuestDetails> rsvpGuestDetailsMap = new HashMap<>();
+
+        for (String displayName : allowedGuestDisplayNames) {
+            rsvpGuestDetailsMap.put(StringFormatUtil.formatToIndexName(displayName), new RsvpGuestDetails(displayName));
+        }
+
+        return rsvpGuestDetailsMap;
+    }
+
     public Rsvp toRsvp() {
         Rsvp rsvp = new Rsvp();
 
@@ -35,105 +49,75 @@ public class CreateRsvpDTO {
         return rsvp;
     }
 
-    @JsonProperty("primary_name")
-    public String getPrimaryName() {
+    @JsonProperty("primary_name") public String getPrimaryName() {
         return primaryName;
     }
 
-    @JsonProperty("primary_name")
-    public void setPrimaryName(String primaryName) {
+    @JsonProperty("primary_name") public void setPrimaryName(String primaryName) {
         this.primaryName = primaryName;
     }
 
-    @JsonProperty("phone_number")
-    public String getPhoneNumber() {
+    @JsonProperty("phone_number") public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    @JsonProperty("phone_number")
-    public void setPhoneNumber(String phoneNumber) {
+    @JsonProperty("phone_number") public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    @JsonProperty("email")
-    public String getEmail() {
+    @JsonProperty("email") public String getEmail() {
         return email;
     }
 
-    @JsonProperty("email")
-    public void setEmail(String email) {
+    @JsonProperty("email") public void setEmail(String email) {
         this.email = email;
     }
 
-    @JsonProperty("address")
-    public String getAddress() {
+    @JsonProperty("address") public String getAddress() {
         return address;
     }
 
-    @JsonProperty("address")
-    public void setAddress(String address) {
+    @JsonProperty("address") public void setAddress(String address) {
         this.address = address;
     }
 
-    @JsonProperty("allowed_guests")
-    public Set<String> getAllowedGuestDisplayNames() {
+    @JsonProperty("allowed_guests") public Set<String> getAllowedGuestDisplayNames() {
         return allowedGuestDisplayNames;
     }
 
-    @JsonProperty("allowed_guests")
-    public void setAllowedGuestDisplayNames(Set<String> allowedGuestDisplayNames) {
+    @JsonProperty("allowed_guests") public void setAllowedGuestDisplayNames(Set<String> allowedGuestDisplayNames) {
         this.allowedGuestDisplayNames = allowedGuestDisplayNames;
     }
 
-    @JsonProperty("max_guests_roce")
-    public int getNumGuestsAllowedRoce() {
+    @JsonProperty("max_guests_roce") public int getNumGuestsAllowedRoce() {
         return numGuestsAllowedRoce;
     }
 
-    @JsonProperty("max_guests_roce")
-    public void setNumGuestsAllowedRoce(int numGuestsAllowedRoce) {
+    @JsonProperty("max_guests_roce") public void setNumGuestsAllowedRoce(int numGuestsAllowedRoce) {
         this.numGuestsAllowedRoce = numGuestsAllowedRoce;
     }
 
-    @JsonProperty("max_guests_rehearsal")
-    public int getNumGuestsAllowedRehearsal() {
+    @JsonProperty("max_guests_rehearsal") public int getNumGuestsAllowedRehearsal() {
         return numGuestsAllowedRehearsal;
     }
 
-    @JsonProperty("max_guests_rehearsal")
-    public void setNumGuestsAllowedRehearsal(int numGuestsAllowedRehearsal) {
+    @JsonProperty("max_guests_rehearsal") public void setNumGuestsAllowedRehearsal(int numGuestsAllowedRehearsal) {
         this.numGuestsAllowedRehearsal = numGuestsAllowedRehearsal;
     }
 
-    @JsonProperty("max_guests_ceremony")
-    public int getNumGuestsAllowedCeremony() {
+    @JsonProperty("max_guests_ceremony") public int getNumGuestsAllowedCeremony() {
         return numGuestsAllowedCeremony;
     }
 
-    @JsonProperty("max_guests_ceremony")
-    public void setNumGuestsAllowedCeremony(int numGuestsAllowedCeremony) {
+    @JsonProperty("max_guests_ceremony") public void setNumGuestsAllowedCeremony(int numGuestsAllowedCeremony) {
         this.numGuestsAllowedCeremony = numGuestsAllowedCeremony;
     }
 
-    @JsonProperty("max_guests_reception")
-    public int getNumGuestsAllowedReception() {
+    @JsonProperty("max_guests_reception") public int getNumGuestsAllowedReception() {
         return numGuestsAllowedReception;
     }
 
-    @JsonProperty("max_guests_reception")
-    public void setNumGuestsAllowedReception(int numGuestsAllowedReception) {
+    @JsonProperty("max_guests_reception") public void setNumGuestsAllowedReception(int numGuestsAllowedReception) {
         this.numGuestsAllowedReception = numGuestsAllowedReception;
-    }
-
-    private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(Set<String> allowedGuestDisplayNames) {
-        if (allowedGuestDisplayNames == null) return Collections.emptyMap();
-
-        Map<String, RsvpGuestDetails> rsvpGuestDetailsMap = new HashMap<>();
-
-        for (String displayName : allowedGuestDisplayNames) {
-            rsvpGuestDetailsMap.put(StringFormatUtil.formatToIndexName(displayName), new RsvpGuestDetails(displayName));
-        }
-
-        return rsvpGuestDetailsMap;
     }
 }

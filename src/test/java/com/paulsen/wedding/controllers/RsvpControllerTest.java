@@ -27,26 +27,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(RsvpController.class)
-@AutoConfigureMockMvc(addFilters = false)
-public class RsvpControllerTest {
+@WebMvcTest(RsvpController.class) @AutoConfigureMockMvc(addFilters=false) public class RsvpControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
     // Add this to satisfy the JwtAuthenticationFilter dependency:
-    @MockBean
-    private JwtService jwtService;
+    @MockBean private JwtService jwtService;
 
-    @MockBean
-    private RsvpService rsvpService;
+    @MockBean private RsvpService rsvpService;
 
     /* --- POST /rsvp/create --- */
-    @Test
-    public void testCreateRsvp() throws Exception {
+    @Test public void testCreateRsvp() throws Exception {
         // Create a sample CreateRsvpDTO.
         CreateRsvpDTO createDto = new CreateRsvpDTO();
         // Populate createDto with the minimal fields required (if any)
@@ -58,61 +51,50 @@ public class RsvpControllerTest {
 
         String jsonRequest = objectMapper.writeValueAsString(createDto);
 
-        mockMvc.perform(post("/rsvp/create")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(post("/rsvp/create").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.message").value("RSVP object created successfully."))
                .andExpect(jsonPath("$.rsvp_id").value("test-create-id"));
     }
 
     /* --- PUT /rsvp/edit --- */
-    @Test
-    public void testEditRsvp() throws Exception {
+    @Test public void testEditRsvp() throws Exception {
         Rsvp rsvp = new Rsvp();
         rsvp.setRsvpId("edit-id");
         // Stub service call.
         when(rsvpService.saveRsvp(any(Rsvp.class))).thenReturn(rsvp);
 
         String jsonRequest = objectMapper.writeValueAsString(rsvp);
-        mockMvc.perform(put("/rsvp/edit")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(put("/rsvp/edit").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.message").value("RSVP object updated successfully."));
     }
 
     /* --- DELETE /rsvp/delete --- */
-    @Test
-    public void testDeleteRsvp() throws Exception {
+    @Test public void testDeleteRsvp() throws Exception {
         String rsvpId = "delete-id";
         // No return value needed; verify service call later.
-        mockMvc.perform(delete("/rsvp/delete")
-                                .param("rsvpId", rsvpId))
+        mockMvc.perform(delete("/rsvp/delete").param("rsvpId", rsvpId))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.message").value("RSVP object deleted successfully."));
         verify(rsvpService).delete(rsvpId);
     }
 
     /* --- POST /rsvp/submit --- */
-    @Test
-    public void testSubmitRsvp() throws Exception {
+    @Test public void testSubmitRsvp() throws Exception {
         Rsvp rsvp = new Rsvp();
         rsvp.setRsvpId("submit-id");
         // Note: The controller will clear certain fields before calling saveRsvp.
         when(rsvpService.saveRsvp(any(Rsvp.class))).thenReturn(rsvp);
         String jsonRequest = objectMapper.writeValueAsString(rsvp);
 
-        mockMvc.perform(post("/rsvp/submit")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(post("/rsvp/submit").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.message").value("RSVP object updated successfully."));
     }
 
     /* --- GET /rsvp/all --- */
-    @Test
-    public void testGetAllRsvps() throws Exception {
+    @Test public void testGetAllRsvps() throws Exception {
         Rsvp rsvp1 = new Rsvp();
         rsvp1.setRsvpId("id1");
         Rsvp rsvp2 = new Rsvp();
@@ -127,8 +109,7 @@ public class RsvpControllerTest {
     }
 
     /* --- POST /rsvp/lookup --- */
-    @Test
-    public void testLookup() throws Exception {
+    @Test public void testLookup() throws Exception {
         LookupDTO lookupDTO = new LookupDTO();
         lookupDTO.setFirst_name("John");
         lookupDTO.setLast_name("Doe");
@@ -150,17 +131,14 @@ public class RsvpControllerTest {
         when(rsvpService.findRsvpById("rsvp2")).thenReturn(rsvp2);
 
         String jsonRequest = objectMapper.writeValueAsString(lookupDTO);
-        mockMvc.perform(post("/rsvp/lookup")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(post("/rsvp/lookup").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$[0].rsvp_id").value("rsvp1"))
                .andExpect(jsonPath("$[1].rsvp_id").value("rsvp2"));
     }
 
     /* --- POST /rsvp/guest/add --- */
-    @Test
-    public void testAddGuest() throws Exception {
+    @Test public void testAddGuest() throws Exception {
         AddGuestDTO addGuestDTO = new AddGuestDTO();
         addGuestDTO.setFirst_name("Jane");
         addGuestDTO.setLast_name("Doe");
@@ -171,17 +149,14 @@ public class RsvpControllerTest {
         // assume the stripped value is "Jane Doe" (or use StringFormatUtil.strip() to determine expected value).
         String expectedDisplayName = "Jane Doe";
 
-        mockMvc.perform(post("/rsvp/guest/add")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(post("/rsvp/guest/add").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.message").value("RSVP association added successfully."));
         verify(rsvpService).addGuest(expectedDisplayName, "rsvp-add");
     }
 
     /* --- POST /rsvp/guest/remove --- */
-    @Test
-    public void testRemoveGuest() throws Exception {
+    @Test public void testRemoveGuest() throws Exception {
         AddGuestDTO removeGuestDTO = new AddGuestDTO();
         removeGuestDTO.setFirst_name("Jane");
         removeGuestDTO.setLast_name("Doe");
@@ -190,17 +165,14 @@ public class RsvpControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(removeGuestDTO);
         String expectedFullName = "Jane Doe";
 
-        mockMvc.perform(post("/rsvp/guest/remove")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
+        mockMvc.perform(post("/rsvp/guest/remove").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.message").value("RSVP association removed successfully."));
         verify(rsvpService).removeGuest(expectedFullName, "rsvp-remove");
     }
 
     /* --- GET /rsvp/guest/all --- */
-    @Test
-    public void testGetAllGuests() throws Exception {
+    @Test public void testGetAllGuests() throws Exception {
         WeddingGuest guest1 = new WeddingGuest();
         guest1.setFullName(StringFormatUtil.formatToIndexName("John", "Doe"));
         WeddingGuest guest2 = new WeddingGuest();

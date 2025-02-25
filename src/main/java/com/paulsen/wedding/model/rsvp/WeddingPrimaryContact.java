@@ -5,14 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WeddingPrimaryContact {
 
-    @DynamoDBAttribute(attributeName="name")
-    private String name;
-    @DynamoDBAttribute(attributeName="email")
-    private String email;
-    @DynamoDBAttribute(attributeName="phone_number")
-    private String phoneNumber;
-    @DynamoDBAttribute(attributeName="address")
-    private String address;
+    @DynamoDBAttribute(attributeName="name") private String name;
+    @DynamoDBAttribute(attributeName="email") private String email;
+    @DynamoDBAttribute(attributeName="phone_number") private String phoneNumber;
+    @DynamoDBAttribute(attributeName="address") private String address;
 
     public WeddingPrimaryContact() {
     }
@@ -40,13 +36,11 @@ public class WeddingPrimaryContact {
         this.email = email;
     }
 
-    @JsonProperty("phone_number")
-    public String getPhoneNumber() {
+    @JsonProperty("phone_number") public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    @JsonProperty("phone_number")
-    public void setPhoneNumber(String phoneNumber) {
+    @JsonProperty("phone_number") public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

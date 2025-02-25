@@ -7,7 +7,8 @@ import com.paulsen.wedding.model.rsvp.WeddingPrimaryContact;
 import java.util.Map;
 import java.util.Objects;
 
-public class GuestInfoConverter extends ConverterBase implements DynamoDBTypeConverter<AttributeValue, WeddingPrimaryContact> {
+public class GuestInfoConverter extends ConverterBase
+        implements DynamoDBTypeConverter<AttributeValue, WeddingPrimaryContact> {
 
     @Override public AttributeValue convert(WeddingPrimaryContact guestInfo) {
         AttributeValue name = new AttributeValue().withS(Objects.requireNonNullElse(guestInfo.getName(), ""));

@@ -38,13 +38,17 @@ public class StringFormatUtil {
         StringBuilder builder = new StringBuilder();
 
         for (String name : string.split("\\s+")) {
-            if (name.isBlank()) continue;
+            if (name.isBlank()) {
+                continue;
+            }
 
             builder.append(capitalize(name));
             builder.append(" ");
         }
 
-        if (!builder.isEmpty()) builder.deleteCharAt(builder.length() - 1);
+        if (!builder.isEmpty()) {
+            builder.deleteCharAt(builder.length() - 1);
+        }
 
         return builder.toString();
     }

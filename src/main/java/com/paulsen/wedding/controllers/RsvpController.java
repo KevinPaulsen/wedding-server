@@ -20,12 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
-@RequestMapping("/rsvp")
-@RestController
-public class RsvpController {
+@RequestMapping("/rsvp") @RestController public class RsvpController {
 
     private final RsvpService rsvpService;
 
@@ -33,21 +30,38 @@ public class RsvpController {
         this.rsvpService = rsvpService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> create(@RequestBody CreateRsvpDTO rsvpDTO) {
-        Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp());
-        return new ResponseEntity<>(Map.of("message", "RSVP object created successfully.",
-                                           "rsvp_id", savedRsvp.getRsvpId()), HttpStatus.CREATED);
+    private static void clearRestrictedFields(Rsvp rsvp) {
+        rsvp.setSubmitted(true);
+        rsvp.setGuestList(null);
+
+        if (rsvp.getRoce() != null) {
+            rsvp.getRoce().setAllowedGuests(-1);
+        }
+        if (rsvp.getRehearsal() != null) {
+            rsvp.getRehearsal().setAllowedGuests(-1);
+        }
+        if (rsvp.getCeremony() != null) {
+            rsvp.getCeremony().setAllowedGuests(-1);
+        }
+        if (rsvp.getReception() != null) {
+            rsvp.getReception().setAllowedGuests(-1);
+        }
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
+    @PostMapping("/create") public ResponseEntity<Map<String, String>> create(@RequestBody CreateRsvpDTO rsvpDTO) {
+        Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp());
+        return new ResponseEntity<>(Map.of("message",
+                                           "RSVP object created successfully.",
+                                           "rsvp_id",
+                                           savedRsvp.getRsvpId()), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/edit") public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
         rsvpService.saveRsvp(rsvpDTO);
         return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> delete(@RequestParam String rsvpId) {
+    @DeleteMapping("/delete") public ResponseEntity<Map<String, String>> delete(@RequestParam String rsvpId) {
         rsvpService.delete(rsvpId);
         return ResponseEntity.ok(Map.of("message", "RSVP object deleted successfully."));
     }
@@ -58,8 +72,7 @@ public class RsvpController {
         return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Rsvp>> getAllRsvps() {
+    @GetMapping("/all") public ResponseEntity<List<Rsvp>> getAllRsvps() {
         return ResponseEntity.ok(rsvpService.allRsvps().stream().toList());
     }
 
@@ -84,26 +97,7 @@ public class RsvpController {
         return ResponseEntity.ok(Map.of("message", "RSVP association removed successfully."));
     }
 
-    @GetMapping("/guest/all")
-    public ResponseEntity<List<WeddingGuest>> getAllGuests() {
+    @GetMapping("/guest/all") public ResponseEntity<List<WeddingGuest>> getAllGuests() {
         return ResponseEntity.ok(rsvpService.allGuests());
-    }
-
-    private static void clearRestrictedFields(Rsvp rsvp) {
-        rsvp.setSubmitted(true);
-        rsvp.setGuestList(null);
-
-        if (rsvp.getRoce() != null) {
-            rsvp.getRoce().setAllowedGuests(-1);
-        }
-        if (rsvp.getRehearsal() != null) {
-            rsvp.getRehearsal().setAllowedGuests(-1);
-        }
-        if (rsvp.getCeremony() != null) {
-            rsvp.getCeremony().setAllowedGuests(-1);
-        }
-        if (rsvp.getReception() != null) {
-            rsvp.getReception().setAllowedGuests(-1);
-        }
     }
 }
