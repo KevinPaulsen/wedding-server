@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model.newRsvp;
+package com.paulsen.wedding.model.rsvp;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonProperty;

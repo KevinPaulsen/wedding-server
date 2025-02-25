@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model.newRsvp;
+package com.paulsen.wedding.model.rsvp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.paulsen.wedding.util.StringFormatUtil;

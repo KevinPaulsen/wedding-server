@@ -1,4 +1,4 @@
-package com.paulsen.wedding.model.newRsvp.converters;
+package com.paulsen.wedding.model.rsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 

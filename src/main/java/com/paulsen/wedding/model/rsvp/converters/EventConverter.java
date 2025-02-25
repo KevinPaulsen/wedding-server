@@ -1,8 +1,8 @@
-package com.paulsen.wedding.model.newRsvp.converters;
+package com.paulsen.wedding.model.rsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.paulsen.wedding.model.newRsvp.Event;
+import com.paulsen.wedding.model.rsvp.Event;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.paulsen.wedding.controllers;
 
-import com.paulsen.wedding.model.newRsvp.CreateRsvpDTO;
-import com.paulsen.wedding.model.newRsvp.Rsvp;
+import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
+import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
 import com.paulsen.wedding.model.weddingGuest.dto.LookupDTO;

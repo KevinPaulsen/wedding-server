@@ -1,9 +1,9 @@
 package com.paulsen.wedding.service;
 
-import com.paulsen.wedding.model.newRsvp.Event;
-import com.paulsen.wedding.model.newRsvp.Rsvp;
-import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
-import com.paulsen.wedding.model.newRsvp.WeddingPrimaryContact;
+import com.paulsen.wedding.model.rsvp.Event;
+import com.paulsen.wedding.model.rsvp.Rsvp;
+import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
+import com.paulsen.wedding.model.rsvp.WeddingPrimaryContact;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.repositories.NewRsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;

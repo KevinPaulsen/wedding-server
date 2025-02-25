@@ -1,9 +1,9 @@
-package com.paulsen.wedding.model.newRsvp.converters;
+package com.paulsen.wedding.model.rsvp.converters;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.paulsen.wedding.model.newRsvp.RsvpGuestDetails;
-import com.paulsen.wedding.model.newRsvp.DietaryRestriction;
+import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
+import com.paulsen.wedding.model.rsvp.DietaryRestriction;
 
 import java.util.Collections;
 import java.util.HashMap;
