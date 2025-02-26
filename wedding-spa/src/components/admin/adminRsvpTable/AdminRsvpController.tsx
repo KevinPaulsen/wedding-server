@@ -4,7 +4,7 @@ import {Container} from "react-bootstrap";
 import RsvpTable from './RsvpTable';
 import FilterControls from './FilterControls';
 import {useRsvpData} from "../../../hooks/rsvp/useRsvpData";
-import {useDeleteRsvp} from "../../../hooks/rsvp/useDeleteRsvp";
+import {useDeleteRsvp} from "../../../hooks/rsvp/useDelete";
 
 const AdminRsvpController: React.FC = () => {
     // useRsvpData now returns { data, loading, error, removeRsvp }
@@ -22,12 +22,11 @@ const AdminRsvpController: React.FC = () => {
     };
 
     const filteredData = data
-        .filter(entry => !(filters.status && entry.rsvpStatus !== filters.status))
         .sort((a, b) => {
             if (filters.sortBy === 'lastName') {
-                return a.lastnames[0].localeCompare(b.lastnames[0]);
+                return 1;
             } else if (filters.sortBy === 'rsvpCode') {
-                return a.rsvpCode.localeCompare(b.rsvpCode);
+                return -1;
             } else {
                 return 0;
             }

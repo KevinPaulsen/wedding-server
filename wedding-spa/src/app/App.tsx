@@ -1,6 +1,6 @@
 // App.tsx
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import AdminLogin from "../components/admin/AdminLogin";
 import PrivateRoute from "../routes/PrivateRoute";
 import NotFound from "../components/shared/NotFound";
@@ -13,38 +13,37 @@ import Gallery from "../pages/home/GalleryPage";
 import AdminMain from "../pages/admin/AdminRsvpInfoPage";
 import GuestListPage from "../pages/admin/GuestListPage";
 import AddRsvpPage from "../pages/admin/AddRsvpPage";
-import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
 import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
 import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
+import RsvpFlowRoutes from "../pages/rsvp/RsvpFlowRoutes";
 
 const App: React.FC = () => {
     return (
-        <Routes>
-            {/* Login page/redirects */}
+    <Routes>
+        {/* Login page/redirects */}
         <Route path="/admin/login" element={<AdminLogin />} />
-    <Route path="/login" element={<Navigate to="/admin/login" replace />} />
-    <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/login" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
 
-    {/* Dashboard Page/redirects */}
-    <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain />} />} />
-    <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
+        {/* Dashboard Page/redirects */}
+        <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain />} />} />
+        <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
 
-    <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow />} />} />
+        <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow />} />} />
 
-    <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage />} />} />
-    <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage />} />} />
-    <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage />} />} />
+        <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage />} />} />
+        <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage />} />} />
+        <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage />} />} />
 
-    <Route path="/" element={<HomePage />} />
-    <Route path="/gallery" element={<Gallery />} />
-    <Route path="/details" element={<Details />} />
-    <Route path="/contact" element={<Contact />} />
-    <Route path="/story" element={<Story />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/details" element={<Details />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/story" element={<Story />} />
 
-    {/* RSVP Pages */}
-    <Route path="/rsvp" element={<RsvpFlowPage />} />
+        <Route path="/rsvp/*" element={<RsvpFlowRoutes />} />
 
-    <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
     </Routes>
 );
 };

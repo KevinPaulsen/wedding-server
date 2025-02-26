@@ -1,40 +1,41 @@
 // src/types/rsvp.ts
 
-/**
- * Represents the details of a guest.
- */
-export interface GuestDetail {
-    name: string;
-    foodOption?: string;
-    dietaryRestrictions: string[];
-    other?: string;
+export interface GuestListDetail {
+    display_name: string;
+    dietary_restrictions: string[];
+    other: string;
 }
 
-/**
- * Represents the primary contact details for an RSVP.
- */
+export interface RsvpGuestDetailWithId extends GuestListDetail {
+    id: string;
+}
+
 export interface PrimaryContact {
     name: string;
-    phoneNumber?: string;
-    email?: string;
-    address?: string;
+    email: string;
+    phone_number: string;
+    address: string;
 }
 
-/**
- * Represents an RSVP entry.
- */
 export interface Rsvp {
-    rsvpCode: string;
-    allowedGuestCount: number;
-    rsvpStatus: 'ATTENDING' | 'NOT_ATTENDING' | 'PENDING';
-    lastnames: string[];
-    primaryContact: PrimaryContact;
-    rsvpGuestDetails: GuestDetail[];
-}
-
-/**
- * Extends GuestDetail for contexts where an index is needed (e.g. for editing).
- */
-export interface RsvpGuestDetailWithIndex extends GuestDetail {
-    index?: number;
+    rsvp_id: string;
+    primary_contact: PrimaryContact;
+    guest_list: { [key: string]: GuestListDetail };
+    roce: {
+        allowed_guests: number;
+        guests_attending: string[];
+    };
+    rehearsal: {
+        allowed_guests: number;
+        guests_attending: string[];
+    };
+    ceremony: {
+        allowed_guests: number;
+        guests_attending: string[];
+    };
+    reception: {
+        allowed_guests: number;
+        guests_attending: string[];
+    };
+    submitted: boolean;
 }

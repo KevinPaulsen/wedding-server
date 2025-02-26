@@ -4,9 +4,9 @@ import { Card, Table, Row, Col } from 'react-bootstrap';
 import '../../../styles/DarkTable.css';
 import {Rsvp} from "../../../types/rsvp";
 
-const GuestDetails: React.FC<Rsvp> = ({ primaryContact, lastnames, rsvpGuestDetails }) => {
-    const hasFoodOption = rsvpGuestDetails.some(detail => detail.foodOption);
-    const hasOther = rsvpGuestDetails.some(detail => detail.other);
+const GuestDetails: React.FC<Rsvp> = ({ primary_contact, guest_list }) => {
+    // const hasFoodOption = rsvpGuestDetails.some(detail => detail.foodOption);
+    // const hasOther = rsvpGuestDetails.some(detail => detail.other);
 
     return (
         <Card
@@ -27,19 +27,19 @@ const GuestDetails: React.FC<Rsvp> = ({ primaryContact, lastnames, rsvpGuestDeta
                         <tbody>
                         <tr>
                             <th>Name</th>
-                            <td>{primaryContact.name}</td>
+                            <td>{primary_contact.name}</td>
                         </tr>
                         <tr>
                             <th>Phone</th>
-                            <td>{primaryContact.phoneNumber || 'N/A'}</td>
+                            <td>{primary_contact.phone_number || 'N/A'}</td>
                         </tr>
                         <tr>
                             <th>Email</th>
-                            <td>{primaryContact.email || 'N/A'}</td>
+                            <td>{primary_contact.email || 'N/A'}</td>
                         </tr>
                         <tr>
                             <th>Address</th>
-                            <td>{primaryContact.address || 'N/A'}</td>
+                            <td>{primary_contact.address || 'N/A'}</td>
                         </tr>
                         </tbody>
                     </Table>
@@ -52,42 +52,9 @@ const GuestDetails: React.FC<Rsvp> = ({ primaryContact, lastnames, rsvpGuestDeta
                         </tr>
                         </thead>
                         <tbody>
-                        {lastnames.map((lastname, index) => (
-                            <tr key={index}>
-                                <td>{lastname}</td>
-                            </tr>
-                        ))}
                         </tbody>
                     </Table>
                 </Col>
-                {rsvpGuestDetails && rsvpGuestDetails.length > 0 && (
-                    <Col lg={6} xs={12}>
-                        <Table className="dark-table">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                {hasFoodOption && <th style={{ whiteSpace: "nowrap" }}>Food Option</th>}
-                                <th style={{ whiteSpace: "nowrap" }}>Dietary Restrictions</th>
-                                {hasOther && <th>Other</th>}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {rsvpGuestDetails.map((guest, index) => (
-                                <tr key={index}>
-                                    <td>{guest.name}</td>
-                                    {hasFoodOption && <td>{guest.foodOption || 'None'}</td>}
-                                    <td>
-                                        {guest.dietaryRestrictions.length > 0
-                                            ? guest.dietaryRestrictions.join(', ')
-                                            : 'None'}
-                                    </td>
-                                    {hasOther && <td>{guest.other || 'N/A'}</td>}
-                                </tr>
-                            ))}
-                            </tbody>
-                        </Table>
-                    </Col>
-                )}
             </Row>
         </Card>
     );

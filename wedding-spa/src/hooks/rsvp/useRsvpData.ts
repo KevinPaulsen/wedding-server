@@ -30,7 +30,7 @@ export function useRsvpData() {
 
     // local helper to remove one RSVP from local state
     const removeRsvp = (rsvpCode: string) => {
-        setLocalData(prev => prev.filter(r => r.rsvpCode !== rsvpCode));
+        setLocalData(prev => prev.filter(r => r.rsvp_id !== rsvpCode));
     };
 
     return { data: localData, loading, error, removeRsvp };

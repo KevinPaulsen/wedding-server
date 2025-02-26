@@ -1,13 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import {Rsvp, GuestDetail, PrimaryContact} from '../types/rsvp';
+import { Rsvp, GuestListDetail, PrimaryContact, RsvpGuestDetailWithId } from '../types/rsvp';
 
 // ===== Type Definitions =====
-
-// Guest with an optional index for editing
-export interface RsvpGuestDetailWithIndex extends GuestDetail {
-    index?: number;
-}
-
 interface FlowState {
     step: {
         rsvpCompleted: boolean;
@@ -16,7 +10,7 @@ interface FlowState {
         guestInfoCompleted: boolean;
     };
     formData: Rsvp;
-    editingGuest: RsvpGuestDetailWithIndex | null;
+    editingGuest: RsvpGuestDetailWithId | null;
 }
 
 const initialState: FlowState = {
@@ -27,17 +21,31 @@ const initialState: FlowState = {
         guestInfoCompleted: false,
     },
     formData: {
-        rsvpCode: '',
-        lastnames: [''],
-        rsvpStatus: 'PENDING',
-        primaryContact: {
+        rsvp_id: '',
+        primary_contact: {
             name: '',
-            phoneNumber: '',
             email: '',
             address: '',
+            phone_number: '',
         },
-        allowedGuestCount: 0,
-        rsvpGuestDetails: [],
+        guest_list: {},
+        roce: {
+            allowed_guests: 0,
+            guests_attending: [],
+        },
+        rehearsal: {
+            allowed_guests: 0,
+            guests_attending: [],
+        },
+        ceremony: {
+            allowed_guests: 0,
+            guests_attending: [],
+        },
+        reception: {
+            allowed_guests: 0,
+            guests_attending: [],
+        },
+        submitted: false,
     },
     editingGuest: null,
 };
@@ -54,7 +62,6 @@ const actionTypes = {
     UPDATE_PREFERRED_CONTACT_FIELD: 'UPDATE_PREFERRED_CONTACT_FIELD',
 } as const;
 
-// We define typed action payloads for each action:
 type Action =
     | {
     type: typeof actionTypes.SET_STEP;
@@ -72,26 +79,25 @@ type Action =
 }
     | {
     type: typeof actionTypes.ADD_GUEST;
-    payload: GuestDetail;
+    payload: RsvpGuestDetailWithId;
 }
     | {
     type: typeof actionTypes.DELETE_GUEST;
-    payload: number;
+    payload: string;
 }
     | {
     type: typeof actionTypes.SET_EDITING_GUEST;
-    payload: RsvpGuestDetailWithIndex | null;
+    payload: RsvpGuestDetailWithId | null;
 }
     | {
     type: typeof actionTypes.UPDATE_GUEST;
-    payload: { index: number; guest: GuestDetail };
+    payload: { id: string; guest: GuestListDetail };
 }
     | {
     type: typeof actionTypes.UPDATE_PREFERRED_CONTACT_FIELD;
     payload: { field: keyof PrimaryContact; value: string };
 };
 
-// ===== Reducer =====
 function reducer(state: FlowState, action: Action): FlowState {
     switch (action.type) {
         case actionTypes.SET_STEP:
@@ -119,17 +125,19 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    rsvpGuestDetails: [...state.formData.rsvpGuestDetails, action.payload],
+                    guest_list: {
+                        ...state.formData.guest_list,
+                        [action.payload.id]: action.payload,
+                    },
                 },
             };
         case actionTypes.DELETE_GUEST:
+            const { [action.payload]: _, ...remainingGuests } = state.formData.guest_list;
             return {
                 ...state,
                 formData: {
                     ...state.formData,
-                    rsvpGuestDetails: state.formData.rsvpGuestDetails.filter(
-                        (_, i) => i !== action.payload
-                    ),
+                    guest_list: remainingGuests,
                 },
             };
         case actionTypes.SET_EDITING_GUEST:
@@ -139,9 +147,10 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    rsvpGuestDetails: state.formData.rsvpGuestDetails.map((guest, idx) =>
-                        idx === action.payload.index ? action.payload.guest : guest
-                    ),
+                    guest_list: {
+                        ...state.formData.guest_list,
+                        [action.payload.id]: action.payload.guest,
+                    },
                 },
             };
         case actionTypes.UPDATE_PREFERRED_CONTACT_FIELD:
@@ -149,8 +158,8 @@ function reducer(state: FlowState, action: Action): FlowState {
                 ...state,
                 formData: {
                     ...state.formData,
-                    primaryContact: {
-                        ...state.formData.primaryContact,
+                    primary_contact: {
+                        ...state.formData.primary_contact,
                         [action.payload.field]: action.payload.value,
                     },
                 },
@@ -173,13 +182,13 @@ interface FlowContextType {
     resetFormData: () => void;
 
     // guests
-    addGuest: (guest: GuestDetail) => void;
-    deleteGuest: (index: number) => void;
-    updateGuest: (index: number, guest: GuestDetail) => void;
+    addGuest: (guest: RsvpGuestDetailWithId) => void;
+    deleteGuest: (id: string) => void;
+    updateGuest: (id: string, guest: GuestListDetail) => void;
 
     // editing
-    editingGuest: RsvpGuestDetailWithIndex | null;
-    setEditingGuest: (guest: RsvpGuestDetailWithIndex | null) => void;
+    editingGuest: RsvpGuestDetailWithId | null;
+    setEditingGuest: (guest: RsvpGuestDetailWithId | null) => void;
 
     // contact field update
     updatePreferredContactField: (field: keyof PrimaryContact, value: string) => void;
@@ -203,7 +212,6 @@ interface FlowProviderProps {
 export const FlowProvider: React.FC<FlowProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // Action creators
     const setStep = (stepData: Partial<FlowState['step']>) => {
         dispatch({ type: actionTypes.SET_STEP, payload: stepData });
     };
@@ -220,26 +228,23 @@ export const FlowProvider: React.FC<FlowProviderProps> = ({ children }) => {
         dispatch({ type: actionTypes.RESET_FORM_DATA });
     };
 
-    const addGuest = (guest: GuestDetail) => {
+    const addGuest = (guest: RsvpGuestDetailWithId) => {
         dispatch({ type: actionTypes.ADD_GUEST, payload: guest });
     };
 
-    const deleteGuest = (index: number) => {
-        dispatch({ type: actionTypes.DELETE_GUEST, payload: index });
+    const deleteGuest = (id: string) => {
+        dispatch({ type: actionTypes.DELETE_GUEST, payload: id });
     };
 
-    const setEditingGuest = (guest: RsvpGuestDetailWithIndex | null) => {
+    const setEditingGuest = (guest: RsvpGuestDetailWithId | null) => {
         dispatch({ type: actionTypes.SET_EDITING_GUEST, payload: guest });
     };
 
-    const updateGuest = (index: number, guest: GuestDetail) => {
-        dispatch({ type: actionTypes.UPDATE_GUEST, payload: { index, guest } });
+    const updateGuest = (id: string, guest: GuestListDetail) => {
+        dispatch({ type: actionTypes.UPDATE_GUEST, payload: { id, guest } });
     };
 
-    const updatePreferredContactField = (
-        field: keyof PrimaryContact,
-        value: string
-    ) => {
+    const updatePreferredContactField = (field: keyof PrimaryContact, value: string) => {
         dispatch({
             type: actionTypes.UPDATE_PREFERRED_CONTACT_FIELD,
             payload: { field, value },

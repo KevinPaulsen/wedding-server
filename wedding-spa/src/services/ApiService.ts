@@ -3,6 +3,7 @@
 import { getImageDimensions } from "./utils";
 import { Rsvp } from "../types/rsvp";            // your Rsvp/Guest interfaces
 import { ImageMetadata } from "../types/gallery";
+import {AddGuestDTO, CreateRsvpDTO, LookupDTO, WeddingGuest} from "../types/RsvpDTO";
 
 /**
  * A standardized response type for all API calls:
@@ -16,7 +17,8 @@ export interface ApiResponse<T> {
     error?: string;
 }
 
-export const API_URL = "https://api.KevinLovesOlivia.com";
+// TODO: CHANGE THIS BACK
+export const API_URL = "http://localhost:8080";
 
 /**
  * A generic request function returning ApiResponse<T>.
@@ -65,45 +67,18 @@ async function request<T = unknown>(
     }
 }
 
-/** =======================
- RSVP-related methods
- ======================= */
-
-/** Create a new RSVP. Returns the newly created Rsvp. */
-export async function createRsvp(rsvpData: Partial<Rsvp>): Promise<ApiResponse<Rsvp>> {
-    return request<Rsvp>("/rsvp/create", {
+/** Admin login. Returns { token: string, expiresIn: number } or similar. */
+export async function adminLogin(
+    username: string,
+    password: string
+): Promise<ApiResponse<{ token: string; expiresIn: number }>> {
+    return request<{ token: string; expiresIn: number }>("/auth/login", {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
             "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(rsvpData),
-    });
-}
-
-/** Delete an RSVP by code. Returns no data. */
-export async function deleteRsvpRequest(rsvpCode: string): Promise<ApiResponse<null>> {
-    const params = new URLSearchParams({ rsvpCode });
-    return request<null>(`/rsvp/delete?${params.toString()}`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    });
-}
-
-/** Update an existing RSVP. Returns the updated Rsvp. */
-export async function updateRsvp(rsvpData: Partial<Rsvp>): Promise<ApiResponse<Rsvp>> {
-    return request<Rsvp>("/rsvp/update", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(rsvpData),
+        body: JSON.stringify({ username, password }),
     });
 }
 
@@ -118,22 +93,93 @@ export async function verifyToken(authToken: string): Promise<ApiResponse<boolea
     });
 }
 
-/** Fetch a single RSVP by code & last name. */
-export async function getRsvpRequest(
-    rsvpCode: string,
-    lastname: string
-): Promise<ApiResponse<Rsvp>> {
-    const params = new URLSearchParams({ rsvpCode, lastname });
-    return request<Rsvp>(`/rsvp/get?${params.toString()}`, {
-        method: "GET",
+/** =======================
+ RSVP-related methods
+ ======================= */
+
+/**
+ * Create a new RSVP by calling POST /rsvp/create.
+ * Backend expects a CreateRsvpDTO. Returns { message, rsvp_id } in data,
+ * so if you need the full Rsvp object, either retrieve it again or adapt as needed.
+ */
+export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<{message: string; rsvp_id: string}>> {
+    return request<{message: string; rsvp_id: string}>("/rsvp/create", {
+        method: "POST",
         headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(rsvpData),
+    });
+}
+
+/**
+ * Edit an existing RSVP by calling PUT /rsvp/edit.
+ * The backend expects the full Rsvp object in the body, returns {message}.
+ */
+export async function editRsvp(rsvp: Rsvp): Promise<ApiResponse<{message: string}>> {
+    return request<{message: string}>("/rsvp/edit", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(rsvp),
+    });
+}
+
+/**
+ * Submit the RSVP by calling POST /rsvp/submit.
+ * This sets restricted fields on the backend. Returns {message}.
+ */
+export async function submitRsvp(rsvp: Rsvp): Promise<ApiResponse<{message: string}>> {
+    return request<{message: string}>("/rsvp/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(rsvp),
+    });
+}
+
+/**
+ * Lookup an RSVP(s) by calling POST /rsvp/lookup.
+ * The backend returns List<Rsvp>, so data will be Rsvp[].
+ */
+export async function lookupRsvp(dto: LookupDTO): Promise<ApiResponse<Rsvp[]>> {
+    return request<Rsvp[]>("/rsvp/lookup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(dto),
+    });
+}
+
+/**
+ * Delete an RSVP by calling DELETE /rsvp/delete?rsvpId=xxx.
+ * Returns {message} on success.
+ */
+export async function deleteRsvpRequest(rsvpId: string): Promise<ApiResponse<{message: string}>> {
+    const params = new URLSearchParams({ rsvpId });
+    return request<{message: string}>(`/rsvp/delete?${params.toString()}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
             "Content-Type": "application/json",
         },
         credentials: "include",
     });
 }
 
-/** Get all RSVPs. Returns an array of Rsvp. */
+/**
+ * Get all RSVPs by calling GET /rsvp/all.
+ * Returns Rsvp[] in data.
+ */
 export async function getRsvps(): Promise<ApiResponse<Rsvp[]>> {
     return request<Rsvp[]>("/rsvp/all", {
         method: "GET",
@@ -144,18 +190,51 @@ export async function getRsvps(): Promise<ApiResponse<Rsvp[]>> {
     });
 }
 
-/** Admin login. Returns { token: string, expiresIn: number } or similar. */
-export async function adminLogin(
-    username: string,
-    password: string
-): Promise<ApiResponse<{ token: string; expiresIn: number }>> {
-    return request<{ token: string; expiresIn: number }>("/auth/login", {
+/**
+ * Add a guest to an existing RSVP: POST /rsvp/guest/add
+ * Body: { first_name, last_name, rsvp_id }
+ * Returns {message}.
+ */
+export async function addGuestToRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{message: string}>> {
+    return request<{message: string}>("/rsvp/guest/add", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
         credentials: "include",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(guestDto),
+    });
+}
+
+/**
+ * Remove a guest from an existing RSVP: POST /rsvp/guest/remove
+ * Body: { first_name, last_name, rsvp_id }
+ * Returns {message}.
+ */
+export async function removeGuestFromRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{message: string}>> {
+    return request<{message: string}>("/rsvp/guest/remove", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(guestDto),
+    });
+}
+
+/**
+ * Get all wedding guests: GET /rsvp/guest/all
+ * Returns WeddingGuest[] in data.
+ */
+export async function getAllRsvpGuests(): Promise<ApiResponse<WeddingGuest[]>> {
+    return request<WeddingGuest[]>("/rsvp/guest/all", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+        },
+        credentials: "include",
     });
 }
 

@@ -6,7 +6,7 @@ import { Button, Container, Form, Row } from 'react-bootstrap';
 import '../../styles/Transitions.css';
 import '../../styles/rsvp/RsvpButtons.css';
 import CustomInputField, { CustomInputFieldRef } from '../shared/CustomInputField';
-import { useAddRsvp } from '../../hooks/rsvp/useAddRsvp';
+import {useCreateRsvp} from "../../hooks/rsvp/useCreateRsvp";
 
 interface RsvpData {
     name: string;
@@ -17,7 +17,7 @@ interface RsvpData {
 const AddRsvp: React.FC = () => {
     const navigate = useNavigate();
     // The new approach
-    const { execute: addRsvp, loading, error } = useAddRsvp();
+    const { execute: addRsvp, loading, error } = useCreateRsvp();
 
     // Refs for validating input fields
     const nameRef = useRef<CustomInputFieldRef>(null);
@@ -42,12 +42,15 @@ const AddRsvp: React.FC = () => {
 
         if (nameValid && guestCountValid) {
             const formattedRsvpData = {
-                rsvpCode: '',
-                primaryContact: {
-                    name: rsvp.name.trim(),
-                },
-                lastnames: rsvp.lastnames.trim().split(','),
-                allowedGuestCount: rsvp.allowedGuestCount,
+                primary_name: rsvp.name,
+                phone_number: '',
+                email: '',
+                address: '',
+                allowed_guests: [rsvp.name],
+                max_guests_roce: rsvp.allowedGuestCount,
+                max_guests_rehearsal: rsvp.allowedGuestCount,
+                max_guests_ceremony: rsvp.allowedGuestCount,
+                max_guests_reception: rsvp.allowedGuestCount,
             };
 
             await addRsvp(formattedRsvpData);

@@ -32,7 +32,7 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvp, deleteRsvp }) => {
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsDeleting(true);
-        await deleteRsvp(rsvp.rsvpCode);
+        await deleteRsvp(rsvp.rsvp_id);
         setIsDeleting(false);
     };
 
@@ -52,12 +52,11 @@ const RsvpRow: React.FC<RsvpRowProps> = ({ rsvp, deleteRsvp }) => {
     return (
         <>
             <tr onClick={handleRowClick} style={{ cursor: 'pointer' }}>
-                <td>{rsvp.rsvpCode}</td>
-                <td>{rsvp.primaryContact.name}</td>
-                <td className="d-none d-md-table-cell">{rsvp.allowedGuestCount}</td>
+                <td>{rsvp.rsvp_id}</td>
+                <td>{rsvp.primary_contact.name}</td>
+                <td className="d-none d-md-table-cell">{rsvp.rehearsal.allowed_guests}</td>
                 <td>
-                    <Badge className={getStatusVariant(rsvp.rsvpStatus)}>
-                        {rsvp.rsvpStatus.replace('_', ' ')}
+                    <Badge className={getStatusVariant(rsvp.primary_contact.name)}>
                     </Badge>
                 </td>
                 <td>
