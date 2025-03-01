@@ -10,9 +10,6 @@ import { useAdminLogin } from "../../hooks/auth/useAdminLogin";
 import CustomInputField from "../shared/CustomInputField";
 import { Col, Container, Row } from 'react-bootstrap';
 
-import RsvpInfo from "../shared/rsvpFlow/RsvpInfo";
-import {CSSTransition} from "react-transition-group";
-import RSVPFormStep from "../shared/rsvpFlow/RsvpFormStep";
 
 const AdminLogin: React.FC = () => {
     const [username, setUsername] = useState<string>('');
