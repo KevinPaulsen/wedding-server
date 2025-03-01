@@ -410,7 +410,7 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                         onClick={handleModalClose}
                         variant="lightOutlined"
                         width="75px"
-                        marginRight={10}
+                        marginRight={1}
                     />
                     <CustomButton
                         text="Save"

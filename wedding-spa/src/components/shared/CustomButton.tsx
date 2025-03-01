@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
-import {Button, createStyles, makeStyles, Theme} from '@material-ui/core';
+// CustomButton.tsx
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+export type ButtonVariant = 'light' | 'dark' | 'lightOutlined';
 
 interface CustomButtonProps {
     text: string;
@@ -8,59 +12,68 @@ interface CustomButtonProps {
     width?: number | string;
     maxHeight?: number | string;
     maxWidth?: number | string;
-    variant?: 'light' | 'dark' | 'lightOutlined';
+    variant?: ButtonVariant;
     togglable?: boolean;
     marginTop?: number;
     marginRight?: number;
     marginBottom?: number;
     marginLeft?: number;
     disabled?: boolean;
-    type?: 'button' | 'submit' | 'reset'; // New prop for button type
+    type?: 'button' | 'submit' | 'reset';
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            backgroundColor: 'var(--hover-light)',
-            color: 'var(--main-dark)',
-            textTransform: 'none',
-            fontFamily: '"EB Garamond", system-ui',
-            fontSize: '16px',
-            border: '2px solid var(--main-dark)',
-            width: 'auto',
-            height: 'auto',
-            maxWidth: 'none',
-            maxHeight: 'none',
-            '&:hover': {
-                backgroundColor: 'var(--hover-light)',
-            },
-        },
-        darkVariant: {
-            backgroundColor: 'var(--main-dark)',
-            color: 'var(--main-light)',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: 'var(--hover-dark)',
-            },
-        },
-        lightOutlinedVariant: {
-            backgroundColor: 'var(--main-light)',
-            color: 'var(--main-dark)',
-            border: '2px solid var(--main-dark)',
-            '&:hover': {
-                backgroundColor: 'var(--hover-dark)',
-                color: 'var(--main-light)',
-            },
-        },
-        toggled: {
-            backgroundColor: 'var(--main-dark)',
-            color: 'var(--main-light)',
-            '&:hover': {
-                backgroundColor: 'var(--hover-dark)',
-            },
-        },
-    })
-);
+interface StyledButtonProps {
+    variantType?: ButtonVariant;
+    togglable?: boolean;
+    toggled?: boolean;
+}
+
+const StyledButton = styled(Button, {
+    shouldForwardProp: (prop) => prop !== 'variantType' && prop !== 'togglable' && prop !== 'toggled',
+})<StyledButtonProps>(({ theme, variantType, togglable, toggled }) => {
+    // If the button is togglable and is in a toggled state, we use the dark variant styles.
+    const appliedVariant = togglable && toggled ? 'dark' : variantType || 'light';
+    switch (appliedVariant) {
+        case 'dark':
+            return {
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.primary.contrastText,
+                border: 'none',
+                textTransform: 'none',
+                fontFamily: theme.typography.fontFamily,
+                fontSize: '16px',
+                '&:hover': {
+                    backgroundColor: theme.palette.primary.dark,
+                },
+            };
+        case 'lightOutlined':
+            return {
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.contrastText,
+                border: `2px solid ${theme.palette.secondary.contrastText}`,
+                textTransform: 'none',
+                fontFamily: theme.typography.fontFamily,
+                fontSize: '16px',
+                '&:hover': {
+                    backgroundColor: theme.palette.primary.dark,
+                    color: theme.palette.primary.contrastText,
+                },
+            };
+        case 'light':
+        default:
+            return {
+                backgroundColor: theme.palette.secondary.dark,
+                color: theme.palette.secondary.contrastText,
+                border: `2px solid ${theme.palette.secondary.contrastText}`,
+                textTransform: 'none',
+                fontFamily: theme.typography.fontFamily,
+                fontSize: '16px',
+                '&:hover': {
+                    backgroundColor: theme.palette.secondary.dark,
+                },
+            };
+    }
+});
 
 const CustomButton: React.FC<CustomButtonProps> = ({
                                                        text,
@@ -78,19 +91,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
                                                        marginLeft = 0,
                                                        disabled = false,
                                                    }) => {
-    const classes = useStyles();
     const [toggled, setToggled] = useState(false);
-
-    const inlineStyles: React.CSSProperties = {
-        height: `${height}px`,
-        width: width,
-        maxHeight: `${maxHeight}px`,
-        maxWidth: `${maxWidth}px`,
-        marginTop,
-        marginRight,
-        marginBottom,
-        marginLeft,
-    };
 
     const handleClick = () => {
         if (togglable) {
@@ -101,23 +102,28 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         }
     };
 
-
     return (
-        <Button
-            type={type}
-            variant="contained"
+        <StyledButton
+            variantType={variant}
+            togglable={togglable}
+            toggled={toggled}
             onClick={handleClick}
             disabled={disabled}
-            className={`
-        ${classes.root}
-        ${variant === 'dark' ? classes.darkVariant : ''}
-        ${variant === 'lightOutlined' ? classes.lightOutlinedVariant : ''}
-        ${togglable && toggled ? classes.toggled : ''}
-      `}
-            style={inlineStyles}
+            type={type}
+            // Use the sx prop so sizes and margins come from theme.spacing when possible.
+            sx={{
+                height: `${height}px`,
+                width: width,
+                maxHeight: `${maxHeight}px`,
+                maxWidth: `${maxWidth}px`,
+                mt: marginTop,
+                mr: marginRight,
+                mb: marginBottom,
+                ml: marginLeft,
+            }}
         >
             {text}
-        </Button>
+        </StyledButton>
     );
 };
 
