@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFlow } from '../../../context/FlowProvider';
 import { Button } from 'react-bootstrap';
 import '../../../styles/rsvp/RsvpButtons.css';
+import CustomButton from "../CustomButton";
 
 interface CancelButtonProps {
     route: string;
@@ -20,9 +21,7 @@ const CancelButton: React.FC<CancelButtonProps> = ({ route }) => {
     };
 
     return (
-        <Button className='rsvp-button dark wire hover' onClick={handleCancel}>
-            Cancel
-        </Button>
+        <CustomButton text={"Cancel"} onClick={handleCancel} maxWidth={75} variant="lightOutlined"/>
     );
 };
 

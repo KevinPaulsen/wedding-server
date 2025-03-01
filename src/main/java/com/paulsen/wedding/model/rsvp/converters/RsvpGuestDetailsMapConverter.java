@@ -38,7 +38,7 @@ public class RsvpGuestDetailsMapConverter
                 diets = Collections.emptyList();
             } else {
                 diets = restrictions.stream()
-                                    .map(r -> new AttributeValue().withS(r.name()))
+                                    .map(r -> new AttributeValue().withS(r.toString()))
                                     .collect(Collectors.toList());
             }
 
@@ -92,7 +92,7 @@ public class RsvpGuestDetailsMapConverter
                         throw new IllegalArgumentException("Invalid dietary restriction for guest: " + guestName);
                     }
                     try {
-                        return DietaryRestriction.valueOf(s);
+                        return DietaryRestriction.fromString(s);
                     } catch (IllegalArgumentException e) {
                         throw new IllegalArgumentException("Invalid dietary restriction value for guest: " + guestName);
                     }

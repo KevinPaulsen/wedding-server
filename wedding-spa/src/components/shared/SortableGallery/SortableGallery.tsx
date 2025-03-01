@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, {JSX, useRef, useState} from "react";
 import {
     closestCenter,
     DndContext,

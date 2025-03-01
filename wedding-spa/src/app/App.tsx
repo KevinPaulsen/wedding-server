@@ -15,10 +15,34 @@ import GuestListPage from "../pages/admin/GuestListPage";
 import AddRsvpPage from "../pages/admin/AddRsvpPage";
 import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
 import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
-import RsvpFlowRoutes from "../pages/rsvp/RsvpFlowRoutes";
+import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#574c3f",
+            dark: "#d4c8ba",
+            contrastText: "#ece4da"
+        },
+        secondary: {
+            main: "#ece4da",
+            dark: "#d4c8ba",
+            contrastText: "#574c3f"
+        }
+    },
+    typography: {
+        fontFamily: "EB Garamond"
+    }
+});
+
+/*
+
+ */
 
 const App: React.FC = () => {
     return (
+        <ThemeProvider theme={theme}>
     <Routes>
         {/* Login page/redirects */}
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -41,10 +65,11 @@ const App: React.FC = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/story" element={<Story />} />
 
-        <Route path="/rsvp/*" element={<RsvpFlowRoutes />} />
+        <Route path="/rsvp/*" element={<RsvpFlowPage />} />
 
         <Route path="*" element={<NotFound />} />
     </Routes>
+        </ThemeProvider>
 );
 };
 

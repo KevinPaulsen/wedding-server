@@ -1,14 +1,23 @@
-// src/pages/rsvp/RsvpVerificationPage.tsx
-import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import CustomInputField from '../../components/shared/CustomInputField';
-import { useFlow } from '../../context/FlowProvider';
-import { useLookupRsvp } from '../../hooks/rsvp/useLookupRsvp';
+import React, {useEffect, useRef, useState} from 'react';
+import {Button, Form} from 'react-bootstrap';
+import CustomInputField from '../CustomInputField';
+import {useFlow} from '../../../context/FlowProvider';
+import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
+import {Rsvp} from "../../../types/rsvp";
+import CustomButton from "../CustomButton";
 
-const RsvpVerificationPage: React.FC = () => {
-    const navigate = useNavigate();
-    const { setFormData } = useFlow();
+interface RsvpVerificationPageProps {
+    nextPage: (rsvp: Rsvp) => void;
+    previousPage: (rsvp: Rsvp) => void;
+    requireAnswers: boolean;
+    returnPage?: string | null;
+}
+
+const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
+                                                                       nextPage,
+                                                                       requireAnswers,
+                                                                   }) => {
+    const { formData, setFormData } = useFlow();
     const firstNameRef = useRef<any>(null);
     const codeRef = useRef<any>(null);
 
@@ -34,22 +43,19 @@ const RsvpVerificationPage: React.FC = () => {
             return;
         }
 
-        // We call lookup with first_name = form.firstName, last_name = form.rsvpCode
         await doLookup({ first_name: form.firstName, last_name: form.lastName });
     };
 
-    // If data changes (meaning the request succeeded), pick the first RSVP.
-    if (data && data.length > 0) {
-        // In a real scenario you might handle multiple. Here we assume only one:
-        setFormData(data[0]); // store the found Rsvp in FlowContext
-        navigate('/rsvp/primary');
-    }
+    useEffect(() => {
+        if (data && data.length > 0) {
+            setFormData(data[0]);
+            nextPage(formData)
+        }
+    }, [data, setFormData, nextPage]);
 
     return (
         <div className="p-3">
-            <h3>RSVP Verification</h3>
             {error && <div className="alert alert-danger">{error}</div>}
-
             <Form>
                 <CustomInputField
                     ref={firstNameRef}
@@ -58,8 +64,8 @@ const RsvpVerificationPage: React.FC = () => {
                     placeholder="Enter First Name"
                     value={form.firstName}
                     onChange={handleChange}
+                    required={requireAnswers}
                 />
-
                 <CustomInputField
                     ref={codeRef}
                     name="lastName"
@@ -67,11 +73,16 @@ const RsvpVerificationPage: React.FC = () => {
                     placeholder="Enter RSVP Code"
                     value={form.lastName}
                     onChange={handleChange}
+                    required={requireAnswers}
+                />
+                <CustomButton
+                    text={loading ? 'Validating...' : 'Next'}
+                    onClick={handleNext}
+                    variant="dark"
+                    width="auto"
+                    disabled={loading}
                 />
 
-                <Button onClick={handleNext} disabled={loading}>
-                    {loading ? 'Validating...' : 'Next'}
-                </Button>
             </Form>
         </div>
     );

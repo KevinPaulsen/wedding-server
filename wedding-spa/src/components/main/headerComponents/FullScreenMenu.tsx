@@ -2,15 +2,21 @@
 import React, { useState } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import '../../../styles/FullScreenMenu.css';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Title from "./Title";
+import CustomButton from "../../shared/CustomButton";
 
 const FullScreenMenu: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    const navigate = useNavigate()
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    const handleRsvpClick = () => {
+        navigate("/rsvp");
+    }
 
     return (
         <>
@@ -40,9 +46,13 @@ const FullScreenMenu: React.FC = () => {
                         <Link to="/story" className="menu-link">Our Story</Link>
                     </Row>
                     <Row className="mb-5 justify-content-center align-items-center">
-                        <Button as={Link as any} to="/rsvp" className="custom-button light">
-                            RSVP
-                        </Button>
+                        <CustomButton
+                            text="RSVP"
+                            onClick={handleRsvpClick}
+                            variant="lightOutlined"
+                            width="80px"
+                            height="40px"
+                        />
                     </Row>
                 </Container>
             </div>

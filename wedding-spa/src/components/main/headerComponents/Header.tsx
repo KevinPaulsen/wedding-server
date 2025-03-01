@@ -2,11 +2,18 @@
 import React from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import '../../../styles/Header.css';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import FullScreenMenu from "./FullScreenMenu";
 import Title from "./Title";
+import CustomButton from "../../shared/CustomButton";
 
 const WeddingHeader: React.FC = () => {
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        navigate("/rsvp");
+    }
+
     return (
         <Container className="py-5 px-1 px-sm-5 text-center">
             {/* Header Row - HomePage Button, Stack Button, Title */}
@@ -30,7 +37,13 @@ const WeddingHeader: React.FC = () => {
 
                 {/* Centered Button */}
                 <Col xs="auto" className="mx-3">
-                    <Button as={Link as any} to="/rsvp" className="custom-button dark">RSVP</Button>
+                    <CustomButton
+                        text="RSVP"
+                        onClick={handleClick}
+                        variant="dark"
+                        width="80px"
+                        height="40px"
+                    />
                 </Col>
 
                 {/* Right Links */}
@@ -42,7 +55,12 @@ const WeddingHeader: React.FC = () => {
 
             {/* RSVP Button for Small Screens */}
             <Row className="g-0 mt-3 justify-content-center d-sm-none">
-                <Button as={Link as any} to="/rsvp" className="custom-button dark">RSVP</Button>
+                <CustomButton
+                    text="RSVP"
+                    onClick={handleClick}
+                    variant="dark"
+                    width="80px"
+                />
             </Row>
         </Container>
     );

@@ -4,6 +4,7 @@ export interface GuestListDetail {
     display_name: string;
     dietary_restrictions: string[];
     other: string;
+    coming: boolean;
 }
 
 export interface RsvpGuestDetailWithId extends GuestListDetail {
