@@ -66,7 +66,7 @@ const RSVPFormStep: React.FC<RsvpFormStepProps> = ({
         case RSVP_PRIMARY_CONTACT_PAGE:
             return (
                 <RsvpFormLayout
-                    title="Primary Contact"
+                    title="Contact Information"
                     component={
                         <RsvpPrimaryContactPage
                             nextPage={nextPage}
