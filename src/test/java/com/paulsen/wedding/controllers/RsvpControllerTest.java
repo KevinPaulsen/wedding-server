@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -47,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         Rsvp convertedRsvp = new Rsvp();
         convertedRsvp.setRsvpId("test-create-id");
         // Stub the service call regardless of the conversion details.
-        when(rsvpService.saveRsvp(any(Rsvp.class))).thenReturn(convertedRsvp);
+        when(rsvpService.saveRsvp(any(Rsvp.class), eq(true))).thenReturn(convertedRsvp);
 
         String jsonRequest = objectMapper.writeValueAsString(createDto);
 
@@ -62,7 +63,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         Rsvp rsvp = new Rsvp();
         rsvp.setRsvpId("edit-id");
         // Stub service call.
-        when(rsvpService.saveRsvp(any(Rsvp.class))).thenReturn(rsvp);
+        when(rsvpService.saveRsvp(any(Rsvp.class), eq(true))).thenReturn(rsvp);
 
         String jsonRequest = objectMapper.writeValueAsString(rsvp);
         mockMvc.perform(put("/rsvp/edit").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
@@ -85,7 +86,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         Rsvp rsvp = new Rsvp();
         rsvp.setRsvpId("submit-id");
         // Note: The controller will clear certain fields before calling saveRsvp.
-        when(rsvpService.saveRsvp(any(Rsvp.class))).thenReturn(rsvp);
+        when(rsvpService.saveRsvp(any(Rsvp.class), eq(true))).thenReturn(rsvp);
         String jsonRequest = objectMapper.writeValueAsString(rsvp);
 
         mockMvc.perform(post("/rsvp/submit").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))

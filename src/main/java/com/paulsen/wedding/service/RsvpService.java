@@ -53,7 +53,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
      * An exception is thrown if the final primary contact name is empty, or if any guest’s name is empty.
      * </p>
      */
-    @Transactional public Rsvp saveRsvp(Rsvp input) {
+    @Transactional public Rsvp saveRsvp(Rsvp input, boolean overwriteGuestList) {
         // Obtain the stored object; if no ID, create a new one.
         Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty()) ? new Rsvp()
                                                                                         : rsvpRepository.findByRsvpId(
@@ -68,13 +68,18 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         // For booleans (submitted), always override.
         stored.setSubmitted(input.isSubmitted());
 
+        // Merge guest_list.
+        Map<String, RsvpGuestDetails> mergedGuestList;
+        if (overwriteGuestList) {
+            mergedGuestList = overwriteGuestList(stored.getGuestList(), input.getGuestList());
+        } else {
+            mergedGuestList = mergeGuestList(stored.getGuestList(), input.getGuestList());
+        }
+        stored.setGuestList(mergedGuestList);
+
         // Merge primary_contact.
         WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact());
         stored.setPrimaryContact(mergedPrimary);
-
-        // Merge guest_list.
-        Map<String, RsvpGuestDetails> mergedGuestList = mergeGuestList(stored.getGuestList(), input.getGuestList());
-        stored.setGuestList(mergedGuestList);
 
         // Merge events.
         stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce()));
@@ -197,7 +202,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         return new WeddingPrimaryContact(name, email, phone, address);
     }
 
-    private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored,
+    private Map<String, RsvpGuestDetails> overwriteGuestList(Map<String, RsvpGuestDetails> stored,
             Map<String, RsvpGuestDetails> input) {
         Map<String, RsvpGuestDetails> result = Objects.requireNonNullElseGet(input,
                                                                              () -> Objects.requireNonNullElseGet(stored,
@@ -209,6 +214,25 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         }
 
         return result;
+    }
+
+    private Map<String, RsvpGuestDetails> mergeGuestList(Map<String, RsvpGuestDetails> stored,
+            Map<String, RsvpGuestDetails> input) {
+        stored = Objects.requireNonNullElse(stored, new HashMap<>());
+        input = Objects.requireNonNullElse(input, new HashMap<>());
+        Map<String, RsvpGuestDetails> merged = new HashMap<>(stored);
+
+        for (Map.Entry<String, RsvpGuestDetails> entry : input.entrySet()) {
+            if (!stored.containsKey(entry.getKey())) continue;
+
+            RsvpGuestDetails inputDetails = entry.getValue();
+            inputDetails.setDisplayName(strip(inputDetails.getDisplayName()));
+
+            merged.remove(entry.getKey());
+            merged.put(formatToIndexName(inputDetails.getDisplayName()), inputDetails);
+        }
+
+        return merged;
     }
 
     private Event mergeEvent(Event stored, Event input) {

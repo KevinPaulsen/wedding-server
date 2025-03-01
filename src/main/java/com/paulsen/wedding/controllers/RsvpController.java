@@ -32,7 +32,6 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
     private static void clearRestrictedFields(Rsvp rsvp) {
         rsvp.setSubmitted(true);
-        rsvp.setGuestList(null);
 
         if (rsvp.getRoce() != null) {
             rsvp.getRoce().setAllowedGuests(-1);
@@ -49,7 +48,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     @PostMapping("/create") public ResponseEntity<Map<String, String>> create(@RequestBody CreateRsvpDTO rsvpDTO) {
-        Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp());
+        Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp(), true);
         return new ResponseEntity<>(Map.of("message",
                                            "RSVP object created successfully.",
                                            "rsvp_id",
@@ -57,7 +56,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     @PutMapping("/edit") public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
-        rsvpService.saveRsvp(rsvpDTO);
+        rsvpService.saveRsvp(rsvpDTO, true);
         return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
     }
 
@@ -68,7 +67,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
     @PostMapping("/submit") public ResponseEntity<Map<String, String>> submitRsvp(@RequestBody Rsvp rsvpDTO) {
         clearRestrictedFields(rsvpDTO);
-        rsvpService.saveRsvp(rsvpDTO);
+        rsvpService.saveRsvp(rsvpDTO, false);
         return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
     }
 

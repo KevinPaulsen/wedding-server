@@ -80,7 +80,7 @@ import static org.mockito.Mockito.*;
             return arg;
         });
 
-        Rsvp saved = rsvpService.saveRsvp(input);
+        Rsvp saved = rsvpService.saveRsvp(input, true);
         assertNotNull(saved);
         verify(rsvpRepository).save(any(Rsvp.class));
 
@@ -119,7 +119,7 @@ import static org.mockito.Mockito.*;
         input.setRehearsal(new Event(2, Arrays.asList("John Doe", "Jane Doe")));
 
         when(rsvpRepository.save(any(Rsvp.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Rsvp result = rsvpService.saveRsvp(input);
+        Rsvp result = rsvpService.saveRsvp(input, true);
         assertNotNull(result);
 
         // Verify merge: non-null email replaced, while phone number remains unchanged.
@@ -145,7 +145,7 @@ import static org.mockito.Mockito.*;
         input.setPrimaryContact(primary);
         input.setGuestList(new HashMap<>()); // Even if guest list exists, primary contact is invalid.
 
-        assertThrows(IllegalArgumentException.class, () -> rsvpService.saveRsvp(input));
+        assertThrows(IllegalArgumentException.class, () -> rsvpService.saveRsvp(input, true));
     }
 
     @Test public void testSaveRsvp_GuestMissingInList() {
@@ -163,7 +163,7 @@ import static org.mockito.Mockito.*;
         input.setGuestList(guestList);
         input.setCeremony(new Event(1, List.of("John Doe")));
 
-        assertThrows(IllegalArgumentException.class, () -> rsvpService.saveRsvp(input));
+        assertThrows(IllegalArgumentException.class, () -> rsvpService.saveRsvp(input, true));
     }
 
     /* --- delete() Tests --- */
