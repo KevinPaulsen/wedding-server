@@ -1,9 +1,9 @@
 // src/pages/rsvp/RsvpPrimaryContactPage.tsx
-import React, {useRef} from 'react';
-import {Form} from 'react-bootstrap';
+import React, { useRef } from 'react';
+import { Form } from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
-import {useFlow} from '../../../context/FlowProvider';
-import {Rsvp} from "../../../types/rsvp";
+import { useFlow } from '../../../context/FlowProvider';
+import { Rsvp } from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
 
 interface RsvpPrimaryContactPageProps {
@@ -74,9 +74,15 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
         }
     };
 
+    // New submit handler for the form.
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        handleNext();
+    };
+
     return (
         <div className="p-3">
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <CustomInputField
                     ref={nameRef}
                     name="name"
@@ -120,7 +126,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                     />
                     <CustomButton
                         text="Next"
-                        onClick={handleNext}
+                        type="submit" // This button now acts as a submit button
                         variant="dark"
                         width="75px"
                     />

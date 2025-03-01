@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Form} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
 import {useFlow} from '../../../context/FlowProvider';
 import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
@@ -46,17 +46,23 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
         await doLookup({ first_name: form.firstName, last_name: form.lastName });
     };
 
+    // New onSubmit handler that triggers handleNext when Enter is pressed
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        await handleNext();
+    };
+
     useEffect(() => {
         if (data && data.length > 0) {
             setFormData(data[0]);
-            nextPage(formData)
+            nextPage(formData);
         }
     }, [data, setFormData, nextPage]);
 
     return (
         <div className="p-3">
             {error && <div className="alert alert-danger">{error}</div>}
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <CustomInputField
                     ref={firstNameRef}
                     name="firstName"
@@ -76,13 +82,12 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
                     required={requireAnswers}
                 />
                 <CustomButton
+                    type="submit"
                     text={loading ? 'Validating...' : 'Next'}
-                    onClick={handleNext}
                     variant="dark"
                     width="auto"
                     disabled={loading}
                 />
-
             </Form>
         </div>
     );

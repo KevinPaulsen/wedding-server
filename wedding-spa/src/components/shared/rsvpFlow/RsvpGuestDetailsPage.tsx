@@ -340,17 +340,15 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                             {/* Autocomplete with chips for Dietary Restrictions */}
                             <Autocomplete
                                 multiple
-                                freeSolo
                                 disableCloseOnSelect
                                 options={dietaryOptions}
                                 value={editingGuest.dietary_restrictions || []}
                                 onChange={(_event, newValue) =>
                                     setEditingGuest((prev) =>
-                                        prev
-                                            ? { ...prev, dietary_restrictions: newValue }
-                                            : null
+                                        prev ? { ...prev, dietary_restrictions: newValue } : null
                                     )
                                 }
+                                // Render each option with a checkbox.
                                 renderOption={(props, option, { selected }) => {
                                     const { key, ...optionProps } = props;
                                     return (
@@ -365,22 +363,35 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                                         </li>
                                     );
                                 }}
+                                // Render selected values as chips.
                                 renderTags={(value: string[], getTagProps) =>
                                     value.map((option: string, index: number) => (
-                                        <Chip label={option} size="small" {...getTagProps({ index })} />
+                                        <Chip
+                                            label={option}
+                                            size="small"
+                                            {...getTagProps({ index })}
+                                        />
                                     ))
                                 }
+                                // Make the TextField read-only to prevent typing.
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         margin="dense"
                                         label="Dietary Restrictions"
-                                        placeholder="e.g. Vegitarian, Vegan, etc..."
+                                        placeholder="Select dietary restrictions..."
+                                        // Prevent typing:
+                                        slotProps = {{
+                                            htmlInput: {
+                                                ...params.inputProps,
+                                                readOnly: true,
+                                            }
+                                        }}
                                     />
                                 )}
                             />
 
-                            <TextField
+                            {editingGuest.dietary_restrictions.includes("Other") && <TextField
                                 margin="dense"
                                 label="Other"
                                 value={editingGuest.other}
@@ -389,7 +400,7 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                                         prev ? { ...prev, other: e.target.value } : null
                                     )
                                 }
-                            />
+                            />}
                         </>
                     )}
                 </DialogContent>
