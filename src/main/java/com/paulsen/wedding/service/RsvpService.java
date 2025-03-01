@@ -150,15 +150,8 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
         final String indexName = formatToIndexName(fullName);
 
-        Rsvp rsvp = removeGuestFromRsvp(rsvpId, indexName);
-        WeddingGuest weddingGuest = unlinkGuestFromRsvp(indexName, rsvpId);
-
-        rsvpRepository.save(rsvp);
-        if (weddingGuest.getRsvpIds() == null || weddingGuest.getRsvpIds().isEmpty()) {
-            weddingGuestRepository.deleteById(fullName);
-        } else {
-            weddingGuestRepository.save(weddingGuest);
-        }
+        removeGuestFromRsvp(rsvpId, indexName);
+        unlinkGuestFromRsvp(indexName, rsvpId);
     }
 
     public List<WeddingGuest> allGuests() {
@@ -269,7 +262,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         weddingGuestRepository.save(weddingGuest);
     }
 
-    private Rsvp removeGuestFromRsvp(String rsvpId, String indexName) {
+    private void removeGuestFromRsvp(String rsvpId, String indexName) {
         Rsvp rsvp = findRsvpById(rsvpId);
 
         // Remove indexName from guest list
@@ -295,10 +288,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
                                           .toList());
         }
 
-        return rsvp;
+        rsvpRepository.save(rsvp);
     }
 
-    private WeddingGuest unlinkGuestFromRsvp(String indexName, String rsvpId) {
+    private void unlinkGuestFromRsvp(String indexName, String rsvpId) {
         WeddingGuest weddingGuest = weddingGuestRepository.findByFullName(indexName).orElse(new WeddingGuest());
 
         // Put the rsvpID in the wedding guest object
@@ -306,6 +299,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             weddingGuest.setRsvpIds(weddingGuest.getRsvpIds().stream().filter(id -> !id.equals(rsvpId)).toList());
         }
 
-        return weddingGuest;
+        if (weddingGuest.getRsvpIds() == null || weddingGuest.getRsvpIds().isEmpty()) {
+            weddingGuestRepository.deleteById(indexName);
+        } else {
+            weddingGuestRepository.save(weddingGuest);
+        }
     }
 }

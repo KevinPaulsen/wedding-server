@@ -23,13 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class) public class RsvpServiceTest {
 
-    private static final String PRIMARY_GUEST_KEY = StringFormatUtil.formatToIndexName("John Doe");
+    private static final String PRIMARY_GUEST_KEY = formatToIndexName("John Doe");
     @Mock private RsvpRepository rsvpRepository;
     @Mock private WeddingGuestRepository weddingGuestRepository;
     @InjectMocks private RsvpService rsvpService;
@@ -67,7 +68,7 @@ import static org.mockito.Mockito.*;
                                                                   "123 Main St");
         input.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"),
+        guestList.put(formatToIndexName("John Doe"),
                       new RsvpGuestDetails("John Doe", new ArrayList<>(), ""));
         input.setGuestList(guestList);
         // Set an event that refers to the guest.
@@ -94,7 +95,7 @@ import static org.mockito.Mockito.*;
         stored.getPrimaryContact().setEmail("old@example.com");
         stored.getPrimaryContact().setPhoneNumber("1111111111");
         Map<String, RsvpGuestDetails> storedGuestList = new HashMap<>();
-        storedGuestList.put(StringFormatUtil.formatToIndexName("John Doe"),
+        storedGuestList.put(formatToIndexName("John Doe"),
                             new RsvpGuestDetails("John Doe", new ArrayList<>(), "Old Other"));
         stored.setGuestList(storedGuestList);
 
@@ -107,10 +108,10 @@ import static org.mockito.Mockito.*;
         input.setPrimaryContact(new WeddingPrimaryContact("John Doe", "new@example.com", null, null));
 
         Map<String, RsvpGuestDetails> inputGuestList = new HashMap<>();
-        inputGuestList.put(StringFormatUtil.formatToIndexName("John Doe"),
+        inputGuestList.put(formatToIndexName("John Doe"),
                            new RsvpGuestDetails("John Doe", new ArrayList<>(), "New Other"));
         // Add a new guest that wasn’t in the stored object.
-        inputGuestList.put(StringFormatUtil.formatToIndexName("Jane Doe"),
+        inputGuestList.put(formatToIndexName("Jane Doe"),
                            new RsvpGuestDetails("Jane Doe", null, null));
         input.setGuestList(inputGuestList);
 
@@ -126,13 +127,13 @@ import static org.mockito.Mockito.*;
         assertEquals("1111111111", result.getPrimaryContact().getPhoneNumber());
 
         // Verify new guest added.
-        assertTrue(result.getGuestList().containsKey(StringFormatUtil.formatToIndexName("Jane Doe")));
+        assertTrue(result.getGuestList().containsKey(formatToIndexName("Jane Doe")));
         // Verify update for existing guest details.
-        assertEquals("New Other", result.getGuestList().get(StringFormatUtil.formatToIndexName("John Doe")).getOther());
+        assertEquals("New Other", result.getGuestList().get(formatToIndexName("John Doe")).getOther());
 
         // Verify that new guest is inserted into WeddingGuestRepository.
         verify(weddingGuestRepository, atLeast(1)).save(argThat(guest -> guest.getFullName()
-                                                                              .equals(StringFormatUtil.formatToIndexName(
+                                                                              .equals(formatToIndexName(
                                                                                       "Jane Doe"))));
     }
 
@@ -158,7 +159,7 @@ import static org.mockito.Mockito.*;
         input.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
         // Wrong guest provided.
-        guestList.put(StringFormatUtil.formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
         input.setGuestList(guestList);
         input.setCeremony(new Event(1, List.of("John Doe")));
 
@@ -171,8 +172,8 @@ import static org.mockito.Mockito.*;
         // Create a test RSVP with two guests.
         Rsvp rsvp = createTestRsvp("deleteRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
-        guestList.put(StringFormatUtil.formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("deleteRsvp")).thenReturn(Optional.of(rsvp));
@@ -214,7 +215,7 @@ import static org.mockito.Mockito.*;
     @Test public void testAddGuest_NewGuest() {
         Rsvp rsvp = createTestRsvp("addGuestRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("addGuestRsvp")).thenReturn(Optional.of(rsvp));
@@ -222,17 +223,17 @@ import static org.mockito.Mockito.*;
         rsvpService.addGuest("Jane Doe", "addGuestRsvp");
 
         // Verify guest added to the RSVP.
-        assertTrue(rsvp.getGuestList().containsKey(StringFormatUtil.formatToIndexName("Jane Doe")));
+        assertTrue(rsvp.getGuestList().containsKey(formatToIndexName("Jane Doe")));
         // Verify guest added to the wedding guest repository.
         verify(weddingGuestRepository, atLeast(1)).save(argThat(guest -> guest.getFullName()
-                                                                              .equals(StringFormatUtil.formatToIndexName(
+                                                                              .equals(formatToIndexName(
                                                                                       "Jane Doe"))));
     }
 
     @Test public void testAddGuest_ExistingGuest() {
         Rsvp rsvp = createTestRsvp("addExistingGuest");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("addExistingGuest")).thenReturn(Optional.of(rsvp));
@@ -256,25 +257,25 @@ import static org.mockito.Mockito.*;
     @Test public void testRemoveGuest_Existing() {
         Rsvp rsvp = createTestRsvp("removeGuestRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
-        guestList.put(StringFormatUtil.formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("removeGuestRsvp")).thenReturn(Optional.of(rsvp));
 
-        assertTrue(rsvp.getGuestList().containsKey(StringFormatUtil.formatToIndexName("Jane Doe")));
+        assertTrue(rsvp.getGuestList().containsKey(formatToIndexName("Jane Doe")));
         rsvpService.removeGuest("Jane Doe", "removeGuestRsvp");
-        assertFalse(rsvp.getGuestList().containsKey(StringFormatUtil.formatToIndexName("Jane Doe")));
+        assertFalse(rsvp.getGuestList().containsKey(formatToIndexName("Jane Doe")));
 
         // Verify that weddingGuestRepository is updated accordingly.
         verify(weddingGuestRepository, atLeast(1)).findByFullName(anyString());
-        verify(weddingGuestRepository, atLeast(1)).deleteById("Jane Doe");
+        verify(weddingGuestRepository, atLeast(1)).deleteById(formatToIndexName("Jane Doe"));
     }
 
     @Test public void testRemoveGuest_NonExistent() {
         Rsvp rsvp = createTestRsvp("removeNonExistentGuest");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("removeNonExistentGuest")).thenReturn(Optional.of(rsvp));
@@ -300,7 +301,7 @@ import static org.mockito.Mockito.*;
         guest1.setFullName(PRIMARY_GUEST_KEY);
         guest1.setRsvpIds(null);
         WeddingGuest guest2 = new WeddingGuest();
-        guest2.setFullName(StringFormatUtil.formatToIndexName("Jane Doe"));
+        guest2.setFullName(formatToIndexName("Jane Doe"));
         guest2.setRsvpIds(null);
         guestList.add(guest1);
         guestList.add(guest2);
@@ -354,7 +355,7 @@ import static org.mockito.Mockito.*;
                                                                   "123 Main St");
         rsvp.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(StringFormatUtil.formatToIndexName("John Doe"),
+        guestList.put(formatToIndexName("John Doe"),
                       new RsvpGuestDetails("John Doe", new ArrayList<>(), ""));
         rsvp.setGuestList(guestList);
         // For simplicity, all event fields use the same guest list.
