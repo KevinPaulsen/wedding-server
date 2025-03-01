@@ -70,7 +70,7 @@ const AdminLogin: React.FC = () => {
                             />
 
                             <div className="d-flex justify-content-evenly px-2">
-                                <Button className='rsvp-button width-auto dark hover' disabled={loading}>
+                                <Button type="submit" className='rsvp-button width-auto dark hover' disabled={loading}>
                                     {loading ? 'Logging in...' : 'Login'}
                                 </Button>
                             </div>
