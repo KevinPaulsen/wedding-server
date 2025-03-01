@@ -9,18 +9,21 @@ public class RsvpGuestDetails {
     @DynamoDBAttribute(attributeName="display_name") private String displayName;
     @DynamoDBAttribute(attributeName="dietary_restrictions") private List<DietaryRestriction> dietaryRestrictions;
     @DynamoDBAttribute(attributeName="other") private String other;
+    @DynamoDBAttribute(attributeName = "coming") private boolean coming;
 
     public RsvpGuestDetails() {
+        coming = true;
     }
 
     public RsvpGuestDetails(String displayName) {
-        this.displayName = displayName;
+        this(null, null, null, true);
     }
 
-    public RsvpGuestDetails(String displayName, List<DietaryRestriction> dietaryRestrictions, String other) {
+    public RsvpGuestDetails(String displayName, List<DietaryRestriction> dietaryRestrictions, String other, boolean coming) {
         this.displayName = displayName;
         this.dietaryRestrictions = dietaryRestrictions;
         this.other = other;
+        this.coming = coming;
     }
 
     @JsonProperty("display_name") public String getDisplayName() {
@@ -46,5 +49,13 @@ public class RsvpGuestDetails {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+    public boolean isComing() {
+        return coming;
+    }
+
+    public void setComing(boolean coming) {
+        this.coming = coming;
     }
 }

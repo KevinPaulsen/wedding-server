@@ -245,7 +245,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             rsvp.setGuestList(new HashMap<>());
         }
 
-        rsvp.getGuestList().putIfAbsent(indexName, new RsvpGuestDetails(displayName, Collections.emptyList(), ""));
+        rsvp.getGuestList().putIfAbsent(indexName, new RsvpGuestDetails(displayName, Collections.emptyList(), "", true));
 
         return rsvp;
     }

@@ -45,11 +45,14 @@ public class RsvpGuestDetailsMapConverter
             // Convert "other". Default to an empty string if null.
             String other = details.getOther() != null ? details.getOther() : "";
 
+            boolean coming = details.isComing();
+
             // Build a map for the guest details.
             Map<String, AttributeValue> detailsMap = new HashMap<>();
             detailsMap.put("display_name", new AttributeValue().withS(displayName));
             detailsMap.put("dietary_restrictions", new AttributeValue().withL(diets));
             detailsMap.put("other", new AttributeValue().withS(other));
+            detailsMap.put("coming", new AttributeValue().withBOOL(coming));
 
             // Put the guest entry into the main map.
             attributeMap.put(guestName, new AttributeValue().withM(detailsMap));
@@ -100,7 +103,11 @@ public class RsvpGuestDetailsMapConverter
             AttributeValue otherAttr = detailsMap.get("other");
             String other = (otherAttr != null && otherAttr.getS() != null) ? otherAttr.getS() : "";
 
-            guestMap.put(guestName, new RsvpGuestDetails(displayName, restrictions, other));
+            // Retrieve "coming"
+            AttributeValue comingAttr = detailsMap.get("coming");
+            boolean coming = (comingAttr != null && comingAttr.getBOOL() != null) ? comingAttr.getBOOL() : true;
+
+            guestMap.put(guestName, new RsvpGuestDetails(displayName, restrictions, other, coming));
         }
         return guestMap;
     }

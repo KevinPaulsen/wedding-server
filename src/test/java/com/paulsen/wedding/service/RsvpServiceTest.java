@@ -69,7 +69,7 @@ import static org.mockito.Mockito.*;
         input.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
         guestList.put(formatToIndexName("John Doe"),
-                      new RsvpGuestDetails("John Doe", new ArrayList<>(), ""));
+                      new RsvpGuestDetails("John Doe", new ArrayList<>(), "", true));
         input.setGuestList(guestList);
         // Set an event that refers to the guest.
         input.setCeremony(new Event(1, List.of("John Doe")));
@@ -96,7 +96,7 @@ import static org.mockito.Mockito.*;
         stored.getPrimaryContact().setPhoneNumber("1111111111");
         Map<String, RsvpGuestDetails> storedGuestList = new HashMap<>();
         storedGuestList.put(formatToIndexName("John Doe"),
-                            new RsvpGuestDetails("John Doe", new ArrayList<>(), "Old Other"));
+                            new RsvpGuestDetails("John Doe", new ArrayList<>(), "Old Other", true));
         stored.setGuestList(storedGuestList);
 
         // Simulate stored RSVP found by repository.
@@ -109,10 +109,10 @@ import static org.mockito.Mockito.*;
 
         Map<String, RsvpGuestDetails> inputGuestList = new HashMap<>();
         inputGuestList.put(formatToIndexName("John Doe"),
-                           new RsvpGuestDetails("John Doe", new ArrayList<>(), "New Other"));
+                           new RsvpGuestDetails("John Doe", new ArrayList<>(), "New Other", true));
         // Add a new guest that wasn’t in the stored object.
         inputGuestList.put(formatToIndexName("Jane Doe"),
-                           new RsvpGuestDetails("Jane Doe", null, null));
+                           new RsvpGuestDetails("Jane Doe", null, null, true));
         input.setGuestList(inputGuestList);
 
         // Include an event listing both guests.
@@ -159,7 +159,7 @@ import static org.mockito.Mockito.*;
         input.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
         // Wrong guest provided.
-        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null, true));
         input.setGuestList(guestList);
         input.setCeremony(new Event(1, List.of("John Doe")));
 
@@ -172,8 +172,8 @@ import static org.mockito.Mockito.*;
         // Create a test RSVP with two guests.
         Rsvp rsvp = createTestRsvp("deleteRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
-        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null, true));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null, true));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("deleteRsvp")).thenReturn(Optional.of(rsvp));
@@ -215,7 +215,7 @@ import static org.mockito.Mockito.*;
     @Test public void testAddGuest_NewGuest() {
         Rsvp rsvp = createTestRsvp("addGuestRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null, true));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("addGuestRsvp")).thenReturn(Optional.of(rsvp));
@@ -233,7 +233,7 @@ import static org.mockito.Mockito.*;
     @Test public void testAddGuest_ExistingGuest() {
         Rsvp rsvp = createTestRsvp("addExistingGuest");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null, true));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("addExistingGuest")).thenReturn(Optional.of(rsvp));
@@ -257,8 +257,8 @@ import static org.mockito.Mockito.*;
     @Test public void testRemoveGuest_Existing() {
         Rsvp rsvp = createTestRsvp("removeGuestRsvp");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
-        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null, true));
+        guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null, true));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("removeGuestRsvp")).thenReturn(Optional.of(rsvp));
@@ -275,7 +275,7 @@ import static org.mockito.Mockito.*;
     @Test public void testRemoveGuest_NonExistent() {
         Rsvp rsvp = createTestRsvp("removeNonExistentGuest");
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
-        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null));
+        guestList.put(formatToIndexName("John Doe"), new RsvpGuestDetails("John Doe", null, null, true));
         rsvp.setGuestList(guestList);
 
         when(rsvpRepository.findByRsvpId("removeNonExistentGuest")).thenReturn(Optional.of(rsvp));
@@ -356,7 +356,7 @@ import static org.mockito.Mockito.*;
         rsvp.setPrimaryContact(primary);
         Map<String, RsvpGuestDetails> guestList = new HashMap<>();
         guestList.put(formatToIndexName("John Doe"),
-                      new RsvpGuestDetails("John Doe", new ArrayList<>(), ""));
+                      new RsvpGuestDetails("John Doe", new ArrayList<>(), "", true));
         rsvp.setGuestList(guestList);
         // For simplicity, all event fields use the same guest list.
         Event event = new Event(1, List.of("John Doe"));
