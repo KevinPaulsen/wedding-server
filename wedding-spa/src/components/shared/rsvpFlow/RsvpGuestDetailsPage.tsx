@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     Autocomplete,
     Box,
-    Button,
     Checkbox,
     Chip,
     Dialog,
@@ -23,8 +22,8 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp, RsvpGuestDetailWithId } from '../../../types/rsvp';
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp, RsvpGuestDetailWithId} from '../../../types/rsvp';
 import CustomButton from '../CustomButton';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -329,7 +328,7 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                         <>
                             <TextField
                                 margin="dense"
-                                label="Display Name"
+                                label="Preferred Name"
                                 value={editingGuest.display_name}
                                 onChange={(e) =>
                                     setEditingGuest((prev) =>
@@ -376,7 +375,7 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({
                                         {...params}
                                         margin="dense"
                                         label="Dietary Restrictions"
-                                        placeholder="e.g. Vegan, Kosher"
+                                        placeholder="e.g. Vegitarian, Vegan, etc..."
                                     />
                                 )}
                             />

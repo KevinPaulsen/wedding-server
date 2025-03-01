@@ -1,10 +1,9 @@
 // src/pages/rsvp/RsvpPrimaryContactPage.tsx
-import React, { useRef } from 'react';
-import { Form } from 'react-bootstrap';
+import React, {useRef} from 'react';
+import {Form} from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
-import { useFlow } from '../../../context/FlowProvider';
-import { RSVP_GUEST_DETAILS_PAGE, RSVP_VERIFICATION_PAGE } from './RsvpFormStep';
-import { Rsvp } from "../../../types/rsvp";
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp} from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
 
 interface RsvpPrimaryContactPageProps {
@@ -18,7 +17,6 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                                                                            nextPage,
                                                                            previousPage,
                                                                            requireAnswers,
-                                                                           returnPage,
                                                                        }) => {
     const { formData, setFormData } = useFlow();
     const nameRef = useRef<any>(null);
@@ -82,7 +80,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                 <CustomInputField
                     ref={nameRef}
                     name="name"
-                    placeholder="Full Name"
+                    placeholder="Preferred Name"
                     value={primaryGuestDisplayName}
                     onChange={handleChange}
                     required={requireAnswers}

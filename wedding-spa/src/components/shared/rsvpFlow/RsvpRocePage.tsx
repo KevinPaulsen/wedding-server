@@ -14,8 +14,6 @@ interface RsvpRocePageProps {
 const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
                                                        nextPage,
                                                        previousPage,
-                                                       requireAnswers,
-                                                       returnPage,
                                                    }) => {
     return (
         <GuestSelection

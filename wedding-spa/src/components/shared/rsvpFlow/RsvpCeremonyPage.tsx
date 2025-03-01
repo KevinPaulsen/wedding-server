@@ -1,6 +1,5 @@
 // src/pages/rsvp/RsvpCeremonyPage.tsx
 import React from 'react';
-import {RSVP_RECEPTION_PAGE, RSVP_REHEARSAL_PAGE} from './RsvpFormStep';
 import GuestSelection from "./GuestSelection";
 import {Rsvp} from "../../../types/rsvp";
 

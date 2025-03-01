@@ -1,8 +1,8 @@
 // src/components/GuestSelection.tsx
 import React from 'react';
-import { createStyles, FormControlLabel, makeStyles, Switch, Theme, Typography } from '@material-ui/core';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp } from "../../../types/rsvp";
+import {createStyles, FormControlLabel, makeStyles, Switch, Theme, Typography} from '@material-ui/core';
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp} from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
 
 interface GuestSelectionProps {
@@ -208,7 +208,7 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
                     }
                     onClick={() => nextPage(formData, resetFormData)}
                     variant="dark"
-                    width={75}
+                    width={"auto"}
                 />
             </div>
         </div>
