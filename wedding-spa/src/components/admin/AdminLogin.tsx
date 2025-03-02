@@ -60,7 +60,7 @@ const AdminLogin: React.FC = () => {
 
                             <CustomInputField
                                 name="password"
-                                type="text"
+                                type="password"
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
