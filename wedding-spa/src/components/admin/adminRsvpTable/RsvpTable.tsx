@@ -22,6 +22,7 @@ interface RsvpTableProps {
     rsvpData: Rsvp[];
     deleteRsvp: (rsvpCode: string) => Promise<void>;
     error: string | null;
+    loading: boolean;
     updateRsvpInState: (updatedRsvp: Rsvp) => void;
 }
 
@@ -75,12 +76,10 @@ const columns: ColumnConfig[] = [
     },
 ];
 
-const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, updateRsvpInState }) => {
+const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, loading, updateRsvpInState }) => {
     const [order, setOrder] = React.useState<"asc" | "desc">("asc");
     const [orderBy, setOrderBy] = React.useState<string>("primaryName");
     const [selected, setSelected] = React.useState<readonly string[]>([]);
-    const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false);
-    const [deleteError, setDeleteError] = React.useState<string | null>(null);
     const [editingRsvp, setEditingRsvp] = React.useState<Rsvp | null>(null);
 
     const handleRequestSort = (columnId: string) => {
@@ -100,12 +99,11 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
         // 1) Call the server
         await editRsvpApi(updatedRsvp);
 
-        // 2) If the API call returned success, update local data:
+        // 2) If the API call returned success (no updateError), update local data
         if (!updateError) {
             updateRsvpInState(updatedRsvp);
-        } else {
-            throw new Error(updateError);
         }
+        // If there's an error, it's already set in updateError, so do not update local data
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,24 +140,13 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
         if (!window.confirm("Are you sure you want to delete the selected RSVPs?")) {
             return;
         }
-        setDeleteLoading(true);
-        setDeleteError(null);
-        try {
-            // Use Promise.allSettled to handle each deletion separately.
-            const results = await Promise.allSettled(
-                selected.map((rsvpId) => deleteRsvp(rsvpId))
-            );
-            // If any deletion failed, throw an error.
-            const failed = results.filter(result => result.status === "rejected");
-            if (failed.length > 0) {
-                throw new Error("Failed to delete one or more RSVPs.");
-            }
-            setSelected([]);
-        } catch (err: any) {
-            setDeleteError(err.message || "Failed to delete selected RSVPs.");
-        } finally {
-            setDeleteLoading(false);
-        }
+
+        // Using allSettled so each RSVP deletion can succeed/fail independently
+        await Promise.allSettled(
+            selected.map((rsvpId) => deleteRsvp(rsvpId))
+        );
+
+        setSelected([]);
     };
 
     const comparator = (a: Rsvp, b: Rsvp) => {
@@ -180,7 +167,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
     return (
         <Paper
             sx={{
-                maxWidth: 1200,      // Limit width on larger screens
+                maxWidth: 1200, // Limit width on larger screens
                 mx: "auto",
                 bgcolor: (theme) => theme.palette.secondary.light,
                 p: 2,
@@ -189,16 +176,18 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
             <EnhancedTableToolbar
                 numSelected={selected.length}
                 onDelete={handleDelete}
-                loading={deleteLoading}
+                loading={loading}
             />
-            {deleteError && <Alert severity="error">{deleteError}</Alert>}
+            {error && <Alert severity="error">{error}</Alert>}
+
             <TableContainer>
                 <Table size="small" aria-label="collapsible table">
                     <TableHead>
                         <TableRow
                             sx={{
                                 "& th": {
-                                    borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+                                    borderBottom: (theme) =>
+                                        `2px solid ${theme.palette.primary.main}`,
                                     fontWeight: "bold",
                                 },
                             }}
@@ -206,8 +195,12 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
                             <TableCell padding="checkbox">
                                 <Checkbox
                                     color="primary"
-                                    indeterminate={selected.length > 0 && selected.length < rsvpData.length}
-                                    checked={rsvpData.length > 0 && selected.length === rsvpData.length}
+                                    indeterminate={
+                                        selected.length > 0 && selected.length < rsvpData.length
+                                    }
+                                    checked={
+                                        rsvpData.length > 0 && selected.length === rsvpData.length
+                                    }
                                     onChange={handleSelectAllClick}
                                     slotProps={{
                                         input: {
@@ -220,7 +213,9 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, upda
                                 <TableCell
                                     key={column.id}
                                     sx={{
-                                        display: column.hideOnSmall ? { xs: "none", md: "table-cell" } : "table-cell",
+                                        display: column.hideOnSmall
+                                            ? { xs: "none", md: "table-cell" }
+                                            : "table-cell",
                                     }}
                                 >
                                     <TableSortLabel

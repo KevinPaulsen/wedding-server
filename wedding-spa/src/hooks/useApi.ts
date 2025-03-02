@@ -14,8 +14,7 @@ export function useApi<T, A extends unknown[]>(
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // Wrap execute in useCallback so that it's memoized.
-    const execute = useCallback(async (...args: A): Promise<void> => {
+    const execute = useCallback(async (...args: A): Promise<ApiResponse<T>> => {
         setLoading(true);
         setError(null);
         setData(null);
@@ -27,12 +26,12 @@ export function useApi<T, A extends unknown[]>(
             } else {
                 setData(response.data ?? null);
             }
+            return response;
         } catch (e: unknown) {
-            if (e instanceof Error) {
-                setError(e.message || 'Unexpected error occurred');
-            } else {
-                setError('Unexpected error occurred');
-            }
+            const errMsg =
+                e instanceof Error ? e.message || 'Unexpected error occurred' : 'Unexpected error occurred';
+            setError(errMsg);
+            return { success: false, error: errMsg, data: null } as ApiResponse<T>;
         } finally {
             setLoading(false);
         }
