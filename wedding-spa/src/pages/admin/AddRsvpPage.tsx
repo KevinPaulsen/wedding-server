@@ -5,7 +5,7 @@ import AddRsvp from "../../components/admin/AddRsvp";
 
 const AddRsvpPage: React.FC = () => {
     return (
-        <AdminLayout>
+        <AdminLayout title="Add RSVP">
             <AddRsvp />
         </AdminLayout>
     );

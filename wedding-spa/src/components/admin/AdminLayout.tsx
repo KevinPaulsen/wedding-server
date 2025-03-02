@@ -6,10 +6,11 @@ import { IoHome } from 'react-icons/io5';
 import "../../styles/Header.css";
 
 interface AdminLayoutProps {
+    title: string;
     children: React.ReactNode;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ title, children }) => {
     return (
         <Container fluid className="d-flex flex-column min-vh-100 p-0" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
             <Row className="g-0">
@@ -39,7 +40,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     </Row>
                 </Container>
             </Row>
-            <Row className="flex-grow-1 g-0">
+            <Row>
+                <h2 className="text-center mb-4">{title}</h2>
                 {children}
             </Row>
         </Container>

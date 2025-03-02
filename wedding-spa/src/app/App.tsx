@@ -17,6 +17,7 @@ import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
 import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
 import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
 import '../styles/App.css';
+import {blue, green, red} from "@mui/material/colors";
 
 const theme = createTheme({
     palette: {
@@ -54,7 +55,6 @@ const theme = createTheme({
         MuiChip: {
             styleOverrides: {
                 root: {
-                    color: '#b0643f',           // secondary.contrastText
                     fontWeight: 600,
                 },
                 clickable: {

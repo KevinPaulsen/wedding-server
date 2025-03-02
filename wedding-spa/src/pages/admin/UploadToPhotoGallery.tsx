@@ -2,14 +2,14 @@
 import React from 'react';
 import AdminLayout from "../../components/admin/AdminLayout";
 import AdminFileUploadComponent from "../../components/admin/adminGalleryControl/AdminFileUploadComponent";
-import AdminGalleryComponent from "../../components/admin/adminGalleryControl/AdminGalleryComponent";
+import PhotoGalleryComponent from "../../components/main/PhotoGalleryComponent";
 
 const AdminRsvpInfoPage: React.FC = () => {
     return (
-        <AdminLayout>
+        <AdminLayout title="Edit Gallery">
             <>
-                <AdminFileUploadComponent />
-                <AdminGalleryComponent />
+                <AdminFileUploadComponent/>
+                <PhotoGalleryComponent makeDraggable={true}/>;
             </>
         </AdminLayout>
     );

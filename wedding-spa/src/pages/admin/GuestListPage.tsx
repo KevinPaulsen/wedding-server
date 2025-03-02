@@ -5,7 +5,7 @@ import AdminRsvpController from "../../components/admin/adminRsvpTable/AdminRsvp
 
 const GuestListPage: React.FC = () => {
     return (
-        <AdminLayout>
+        <AdminLayout title="Guest List Table">
             <AdminRsvpController />
         </AdminLayout>
     );

@@ -51,7 +51,6 @@ const AdminFileUploadComponent: React.FC = () => {
         <Container className="d-flex flex-column align-items-center mb-3">
             <Row className="w-100">
                 <Col xs={12} md={6} className="mx-auto text-center">
-                    <h2 className="text-center mb-4">Upload Multiple Images</h2>
                     <Form>
                         <Form.Group controlId="formFileMultiple" className="mb-3">
                             <Form.Label column="lg">

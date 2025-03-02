@@ -33,7 +33,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
     // While token verification is in progress (or isValid is still null), show a spinner.
     if (loading || isValid === null) {
         return (
-            <AdminLayout>
+            <AdminLayout title="">
                 <div className="d-flex justify-content-center">
                     <Spinner animation="border" role="status">
                         <span className="visually-hidden">Loading...</span>
