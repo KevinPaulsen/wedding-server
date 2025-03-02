@@ -49,9 +49,6 @@ const dietaryOptions = [
     'Other',
 ];
 
-//
-// Reusable component: a single guest row
-//
 const GuestRow: React.FC<{
     guest: RsvpGuestDetailWithId;
     theme: Theme;
@@ -59,11 +56,30 @@ const GuestRow: React.FC<{
     onEdit: (id: string) => void;
     hasAnyOther: boolean;
 }> = ({ guest, theme, onToggleComing, onEdit, hasAnyOther }) => (
-    <TableRow sx={{ backgroundColor: guest.coming ? 'inherit' : theme.palette.secondary.main }}>
-        <TableCell sx={{ fontWeight: 'bold', whiteSpace: { xs: 'normal', sm: 'nowrap' }, wordBreak: 'break-word' }}>
+    <TableRow
+        sx={{
+            backgroundColor: guest.coming
+                ? 'inherit'
+                : theme.palette.action.disabledBackground,
+        }}
+    >
+        <TableCell
+            sx={{
+                fontWeight: 'bold',
+                whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                wordBreak: 'break-word',
+                color: guest.coming ? 'inherit' : theme.palette.text.disabled,
+            }}
+        >
             {guest.display_name}
         </TableCell>
-        <TableCell sx={{ whiteSpace: { xs: 'normal', sm: 'nowrap' }, wordBreak: 'break-word' }}>
+        <TableCell
+            sx={{
+                whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                wordBreak: 'break-word',
+                color: guest.coming ? 'inherit' : theme.palette.text.disabled,
+            }}
+        >
             {guest.dietary_restrictions.length > 0 || guest.other.trim() !== '' ? (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {guest.dietary_restrictions.map((r, idx) => (
@@ -87,11 +103,12 @@ const GuestRow: React.FC<{
                     gap: 0,
                 }}
             >
+                {/* Coming Icon (Check) */}
                 <IconButton
                     onClick={() => onToggleComing(guest.id, true)}
                     sx={{
                         backgroundColor: guest.coming ? theme.palette.primary.main : 'transparent',
-                        color: guest.coming ? theme.palette.primary.contrastText : 'inherit',
+                        color: guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
                         '&:hover': {
                             backgroundColor: guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
                         },
@@ -99,19 +116,30 @@ const GuestRow: React.FC<{
                 >
                     <CheckIcon />
                 </IconButton>
+
+                {/* Not Coming Icon (Close) */}
                 <IconButton
                     onClick={() => onToggleComing(guest.id, false)}
                     sx={{
-                        backgroundColor: guest.coming ? 'transparent' : theme.palette.primary.main,
-                        color: guest.coming ? 'inherit' : theme.palette.primary.contrastText,
+                        backgroundColor: !guest.coming ? theme.palette.primary.main : 'transparent',
+                        color: !guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
                         '&:hover': {
-                            backgroundColor: guest.coming ? 'rgba(0,0,0,0.1)' : theme.palette.primary.dark,
+                            backgroundColor: !guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
                         },
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
-                <IconButton aria-label="Edit Guest" onClick={() => onEdit(guest.id)}>
+
+                {/* Edit Button - Dimmed & Disabled if not coming */}
+                <IconButton
+                    aria-label="Edit Guest"
+                    onClick={() => onEdit(guest.id)}
+                    disabled={!guest.coming}
+                    sx={{
+                        opacity: guest.coming ? 1 : 0.5,
+                    }}
+                >
                     <EditIcon />
                 </IconButton>
             </Box>
