@@ -8,6 +8,7 @@ import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.repositories.RsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
+import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,8 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     private final RsvpRepository rsvpRepository;
     private final WeddingGuestRepository weddingGuestRepository;
 
-    public RsvpService(RsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository) {
+    public RsvpService(RsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository,
+            FileDescriptorMetrics fileDescriptorMetrics) {
         this.rsvpRepository = rsvpRepository;
         this.weddingGuestRepository = weddingGuestRepository;
     }
@@ -83,10 +85,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         stored.setPrimaryContact(mergedPrimary);
 
         // Merge events.
-        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce(), stored.getGuestList().size()));
-        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal(), stored.getGuestList().size()));
-        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), stored.getGuestList().size()));
-        stored.setReception(mergeEvent(stored.getReception(), input.getReception(), stored.getGuestList().size()));
+        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce(), stored.getGuestList().keySet()));
+        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal(), stored.getGuestList().keySet()));
+        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), stored.getGuestList().keySet()));
+        stored.setReception(mergeEvent(stored.getReception(), input.getReception(), stored.getGuestList().keySet()));
 
         for (String name : getAllNames(stored)) {
             if (!stored.getGuestList().containsKey(name)) {
@@ -128,7 +130,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             }
         }
 
-        for (Event event : List.of(input.getRoce(), input.getRehearsal(), input.getCeremony(), input.getReception())) {
+        for (Event event : input.getNonNullEvents()) {
             if (event == null || event.getGuestsAttending() == null) continue;
 
             List<String> guestsAttending = event.getGuestsAttending().stream().map(guest -> changingMap.getOrDefault(guest, guest)).toList();
@@ -145,7 +147,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             guestDetails.remove(wrongKey);
         }
 
-        // TODO Ensure primary contact is correct as well
+        // TODO: Ensure primary contact is correct as well
     }
 
     @Transactional public void delete(String rsvpId) {
@@ -271,11 +273,13 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         return merged;
     }
 
-    private Event mergeEvent(Event stored, Event input, int guestCount) {
+    private Event mergeEvent(Event stored, Event input, Set<String> allowedGuests) {
         int allowed = 0;
         if (input != null && input.getAllowedGuests() > 0 || stored != null && stored.getAllowedGuests() > 0) {
-            allowed = guestCount;
+            allowed = allowedGuests.size();
         }
+
+        if (allowed == 0) return new Event(0, List.of());
 
         List<String> guests;
         if (input != null && input.getGuestsAttending() != null) {
@@ -287,7 +291,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         }
 
         if (allowed < guests.size()) {
-            throw new IllegalArgumentException("This RSVP cannot have more than " + allowed + " guests.");
+            guests = guests.stream().filter(allowedGuests::contains).toList();
         }
 
         return new Event(allowed, guests);
