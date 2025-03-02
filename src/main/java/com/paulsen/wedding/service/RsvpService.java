@@ -286,6 +286,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         if (input == null && stored == null) return new Event(0, List.of());
         int allowed = Objects.requireNonNullElse(input, stored).getAllowedGuests();
 
+        if (allowed == -1) {
+            allowed = stored == null ? 0 : stored.getAllowedGuests();
+        }
+
         if (allowed > 0) {
             allowed = allowedGuests.size();
         }
