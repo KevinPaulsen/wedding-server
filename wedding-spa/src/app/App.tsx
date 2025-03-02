@@ -20,23 +20,36 @@ import '../styles/App.css';
 
 const theme = createTheme({
     palette: {
-        // Map your custom color names to the palette.
+        mode: 'light',
         primary: {
-            main: "#574c3f",       // used as "main-dark"
-            dark: "#453e34",       // used as "hover-dark"
-            contrastText: "#ece4da"// used as "main-light"
+            main: '#574c3f',
+            light: '#b0643f',
+            dark: '#453e34',
+            contrastText: '#ece4da',
         },
         secondary: {
-            main: "#ece4da",       // used as "hover-light"
-            dark: "#d4c8ba",
-            contrastText: "#574c3f"
+            main: '#ece4da',
+            light: '#d4c8ba',
+            dark: '#c6b7a7',
+            contrastText: '#574c3f',
+        },
+        background: {
+            default: '#ece4da',
+            paper: '#ece4da',
+        },
+        text: {
+            primary: '#574c3f',
+            secondary: '#b0643f',
         },
     },
     typography: {
-        // Ensure you include the system fallback.
-        fontFamily: '"EB Garamond", system-ui',
+        fontFamily: '"EB Garamond", system-ui, sans-serif',
+        fontWeightLight: 400,
+        fontWeightRegular: 500,
+        fontWeightMedium: 600,
+        fontWeightBold: 700,
     },
-    spacing: 8, // default spacing unit (8px)
+    spacing: 8, // Base spacing unit (8px)
 });
 
 const App: React.FC = () => {

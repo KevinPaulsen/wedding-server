@@ -48,7 +48,7 @@ const StyledButton = styled(Button, {
             };
         case 'lightOutlined':
             return {
-                backgroundColor: theme.palette.secondary.main,
+                backgroundColor: theme.palette.background.default,
                 color: theme.palette.secondary.contrastText,
                 border: `2px solid ${theme.palette.secondary.contrastText}`,
                 textTransform: 'none',
@@ -69,7 +69,7 @@ const StyledButton = styled(Button, {
                 fontFamily: theme.typography.fontFamily,
                 fontSize: '16px',
                 '&:hover': {
-                    backgroundColor: theme.palette.secondary.dark,
+                    backgroundColor: theme.palette.secondary.light,
                 },
             };
     }
