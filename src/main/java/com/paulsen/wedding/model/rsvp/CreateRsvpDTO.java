@@ -16,6 +16,11 @@ public class CreateRsvpDTO {
 
     private Set<String> allowedGuestDisplayNames;
 
+    private int numGuestsAllowedRoce;
+    private int numGuestsAllowedRehearsal;
+    private int numGuestsAllowedCeremony;
+    private int numGuestsAllowedReception;
+
     private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(Set<String> allowedGuestDisplayNames) {
         if (allowedGuestDisplayNames == null) {
             return Collections.emptyMap();
@@ -36,10 +41,10 @@ public class CreateRsvpDTO {
         rsvp.setSubmitted(false);
         rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, phoneNumber, email, address));
         rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
-        rsvp.setRoce(new Event(Collections.emptyList()));
-        rsvp.setRehearsal(new Event(Collections.emptyList()));
-        rsvp.setCeremony(new Event(Collections.emptyList()));
-        rsvp.setReception(new Event(Collections.emptyList()));
+        rsvp.setRoce(new Event(numGuestsAllowedRoce, Collections.emptyList()));
+        rsvp.setRehearsal(new Event(numGuestsAllowedRehearsal, Collections.emptyList()));
+        rsvp.setCeremony(new Event(numGuestsAllowedCeremony, Collections.emptyList()));
+        rsvp.setReception(new Event(numGuestsAllowedReception, Collections.emptyList()));
 
         return rsvp;
     }
@@ -82,5 +87,37 @@ public class CreateRsvpDTO {
 
     @JsonProperty("allowed_guests") public void setAllowedGuestDisplayNames(Set<String> allowedGuestDisplayNames) {
         this.allowedGuestDisplayNames = allowedGuestDisplayNames;
+    }
+
+    @JsonProperty("max_guests_roce") public int getNumGuestsAllowedRoce() {
+        return numGuestsAllowedRoce;
+    }
+
+    @JsonProperty("max_guests_roce") public void setNumGuestsAllowedRoce(int numGuestsAllowedRoce) {
+        this.numGuestsAllowedRoce = numGuestsAllowedRoce;
+    }
+
+    @JsonProperty("max_guests_rehearsal") public int getNumGuestsAllowedRehearsal() {
+        return numGuestsAllowedRehearsal;
+    }
+
+    @JsonProperty("max_guests_rehearsal") public void setNumGuestsAllowedRehearsal(int numGuestsAllowedRehearsal) {
+        this.numGuestsAllowedRehearsal = numGuestsAllowedRehearsal;
+    }
+
+    @JsonProperty("max_guests_ceremony") public int getNumGuestsAllowedCeremony() {
+        return numGuestsAllowedCeremony;
+    }
+
+    @JsonProperty("max_guests_ceremony") public void setNumGuestsAllowedCeremony(int numGuestsAllowedCeremony) {
+        this.numGuestsAllowedCeremony = numGuestsAllowedCeremony;
+    }
+
+    @JsonProperty("max_guests_reception") public int getNumGuestsAllowedReception() {
+        return numGuestsAllowedReception;
+    }
+
+    @JsonProperty("max_guests_reception") public void setNumGuestsAllowedReception(int numGuestsAllowedReception) {
+        this.numGuestsAllowedReception = numGuestsAllowedReception;
     }
 }
