@@ -1,14 +1,12 @@
 // AdminLogin.tsx
-import React, { useContext, useState, useEffect } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {AuthContext} from '../../context/AuthContext';
+import {useNavigate} from 'react-router-dom';
 import useAuthRedirect from "../../hooks/auth/useAuthRedirect";
 import Title from "../../components/main/headerComponents/Title";
-import FormInput from "../shared/FormInput";
-import { Button, Form } from "react-bootstrap";
-import { useAdminLogin } from "../../hooks/auth/useAdminLogin";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {useAdminLogin} from "../../hooks/auth/useAdminLogin";
 import CustomInputField from "../shared/CustomInputField";
-import { Col, Container, Row } from 'react-bootstrap';
 
 
 const AdminLogin: React.FC = () => {
