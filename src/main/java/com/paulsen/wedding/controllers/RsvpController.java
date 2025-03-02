@@ -55,9 +55,8 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
                                            savedRsvp.getRsvpId()), HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit") public ResponseEntity<Map<String, String>> editRsvp(@RequestBody Rsvp rsvpDTO) {
-        rsvpService.saveRsvp(rsvpDTO, true);
-        return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
+    @PutMapping("/edit") public ResponseEntity<Rsvp> editRsvp(@RequestBody Rsvp rsvpDTO) {
+        return ResponseEntity.ok(rsvpService.saveRsvp(rsvpDTO, true));
     }
 
     @DeleteMapping("/delete") public ResponseEntity<Map<String, String>> delete(@RequestParam String rsvpId) {
