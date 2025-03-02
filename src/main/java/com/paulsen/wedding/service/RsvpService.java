@@ -88,7 +88,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
                                                    .collect(Collectors.toSet());
 
         // Merge primary_contact.
-        WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact(), allowedGuests);
+        WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact(), mergedGuestList.keySet());
         stored.setPrimaryContact(mergedPrimary);
 
         // Merge events.
@@ -236,7 +236,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
                                                                  : (stored != null && stored.getName() != null
                                                                     ? formatToIndexName(stored.getName()) : "");
         if (name.isEmpty() || !allowedGuests.contains(name)) {
-            throw new IllegalArgumentException("Primary contact name must be coming and in the guest list, and not be null or empty.");
+            throw new IllegalArgumentException("Primary contact name must in the guest list, and not be null or empty.");
         }
         String email = (input != null && input.getEmail() != null) ? input.getEmail().trim()
                                                                    : (stored != null && stored.getEmail() != null
