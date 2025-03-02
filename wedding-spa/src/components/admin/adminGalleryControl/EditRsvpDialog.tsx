@@ -174,8 +174,22 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
         });
     };
 
+    // Updated handleSave function:
     const handleSave = async () => {
         if (!formData) return;
+
+        // Validate primary contact selection.
+        if (!formData.primary_contact.name || !formData.guest_list[formData.primary_contact.name]) {
+            // You can use a more sophisticated UI error message here if desired.
+            alert("Please select a valid primary contact from the guest list.");
+            return;
+        }
+
+        // Optionally, add validations for other fields here.
+        // For example, if you have refs to CustomInputField components:
+        // if (!primaryNameRef.current.validate() || !emailRef.current.validate()) { return; }
+
+        // If all validations pass, proceed to save.
         await onSave(formData);
         onClose();
     };
@@ -222,9 +236,12 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Preferred Name"
-                                    placeholder="Select Primary Contact"
+                                    size="small"
+                                    label="Primary Contact"
+                                    placeholder="Select a primary contact"
                                     required
+                                    error={!formData.primary_contact.name}
+                                    helperText={!formData.primary_contact.name ? "Primary contact is required." : ""}
                                 />
                             )}
                         />
