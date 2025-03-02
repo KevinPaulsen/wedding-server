@@ -237,7 +237,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
     private Event mergeEvent(Event stored, Event input, int guestCount) {
         int allowed = 0;
-        if (input != null && input.getAllowedGuests() <= 0 || stored != null && stored.getAllowedGuests() <= 0) {
+        if (input != null && input.getAllowedGuests() > 0 || stored != null && stored.getAllowedGuests() > 0) {
             allowed = guestCount;
         }
 
