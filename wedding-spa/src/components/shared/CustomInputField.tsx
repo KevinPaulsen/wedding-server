@@ -1,11 +1,7 @@
-import React, {
-    forwardRef,
-    useImperativeHandle,
-    useState,
-    ChangeEvent,
-    ForwardedRef,
-} from 'react';
-import { Form } from 'react-bootstrap';
+import React, { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 
 export interface CustomInputFieldProps {
     label?: string;
@@ -16,6 +12,8 @@ export interface CustomInputFieldProps {
     required?: boolean;
     name: string;
     min?: number | string;
+    padding?: object; // Custom padding for the container
+    width?: string;   // Custom width for the TextField
 }
 
 export interface CustomInputFieldRef {
@@ -32,22 +30,19 @@ const CustomInputField = forwardRef(
             onChange,
             required = true,
             name,
-            min,
+            padding = { pt: 0, pb: 1 },
+            width = '40ch',
         }: CustomInputFieldProps,
         ref: ForwardedRef<CustomInputFieldRef>
     ) => {
-        const [, setIsTouched] = useState<boolean>(false);
+        const theme = useTheme();
         const [hasError, setHasError] = useState<boolean>(false);
 
         const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-            onChange(e); // Parent component manages the input value
+            onChange(e);
             if (hasError && e.target.value.toString().trim() !== '') {
-                setHasError(false); // Reset error if user starts typing
+                setHasError(false);
             }
-        };
-
-        const handleFocus = () => {
-            setIsTouched(true);
         };
 
         const handleBlur = () => {
@@ -68,31 +63,28 @@ const CustomInputField = forwardRef(
         }));
 
         return (
-            <Form.Group controlId={name} className="d-flex flex-column align-items-center">
-                {label && <Form.Label column="lg">{label}</Form.Label>}
-                <Form.Control
+            <Box
+                sx={{
+                    ...padding,
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                <TextField
                     name={name}
                     type={type}
                     value={value}
                     onChange={handleInputChange}
-                    onFocus={handleFocus}
                     onBlur={handleBlur}
                     placeholder={placeholder}
-                    min={min}
-                    style={{
-                        width: '300px',
-                        outline: hasError ? '2px solid red' : '2px solid var(--main-dark)',
-                    }}
-                    className={hasError ? 'is-invalid' : ''}
+                    error={hasError}
+                    variant="outlined"
+                    label={label && label + (hasError ? " is Required" : "")}
+                    id="outlined-size-small"
+                    size="small"
+                    sx={{ width: width }}
                 />
-                <div style={{ height: '28px' }}>
-                    {hasError && (
-                        <Form.Text className="text-danger">
-                            This field must not be empty
-                        </Form.Text>
-                    )}
-                </div>
-            </Form.Group>
+            </Box>
         );
     }
 );

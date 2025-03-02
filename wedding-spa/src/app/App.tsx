@@ -50,6 +50,34 @@ const theme = createTheme({
         fontWeightBold: 700,
     },
     spacing: 8, // Base spacing unit (8px)
+    components: {
+        MuiChip: {
+            styleOverrides: {
+                root: {
+                    color: '#b0643f',           // secondary.contrastText
+                    fontWeight: 600,
+                },
+                clickable: {
+                    '&:hover, &:focus': {
+                        backgroundColor: '#d4c8ba', // secondary.light
+                    },
+                },
+                deleteIcon: {
+                    color: '#574c3f',
+                    '&:hover': {
+                        color: '#c6b7a7', // secondary.dark
+                    },
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                notchedOutline: {
+                    borderWidth: 2, // Thicker border
+                },
+            },
+        },
+    }
 });
 
 const App: React.FC = () => {

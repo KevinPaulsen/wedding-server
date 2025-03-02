@@ -1,5 +1,5 @@
 // RsvpGuestDetailsPage.tsx
-import React, { useState } from 'react';
+import React, {ForwardedRef, forwardRef, useRef, useState} from 'react';
 import {
     Autocomplete,
     Box,
@@ -29,6 +29,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useFlow } from '../../../context/FlowProvider';
 import { Rsvp, RsvpGuestDetailWithId } from '../../../types/rsvp';
 import CustomButton from '../CustomButton';
+import CustomInputField, {CustomInputFieldRef} from "../CustomInputField";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -207,103 +208,124 @@ const GuestTable: React.FC<{
     </TableContainer>
 );
 
-//
-// Reusable component: the edit guest modal dialog
-//
-const EditGuestDialog: React.FC<{
+interface EditGuestDialogProps {
     open: boolean;
-    editingGuest: RsvpGuestDetailWithId | null;
-    setEditingGuest: React.Dispatch<React.SetStateAction<RsvpGuestDetailWithId | null>>;
+    editingGuest: any; // Replace 'any' with your proper type if needed
+    setEditingGuest: React.Dispatch<React.SetStateAction<any>>;
     onSave: () => void;
     onClose: () => void;
     theme: Theme;
-}> = ({ open, editingGuest, setEditingGuest, onSave, onClose, theme }) => (
-    <Dialog
-        open={open}
-        onClose={onClose}
-        fullWidth
-        maxWidth="sm"
-        slotProps={{
-            paper: {
-                sx: {
-                    backgroundColor: theme.palette.primary.contrastText,
-                    color: theme.palette.primary.main,
+}
+
+const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
+    ({ open, editingGuest, setEditingGuest, onSave, onClose, theme }, ref) => (
+        <Dialog
+            open={open}
+            onClose={onClose}
+            fullWidth
+            maxWidth="sm"
+            slotProps={{
+                paper: {
+                    sx: {
+                        backgroundColor: theme.palette.primary.contrastText,
+                        color: theme.palette.primary.main,
+                    },
                 },
-            },
-        }}
-    >
-        <DialogTitle>Edit Guest</DialogTitle>
-        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 2 }}>
-            {editingGuest && (
-                <>
-                    <TextField
-                        margin="dense"
-                        label="Preferred Name"
-                        value={editingGuest.display_name}
-                        onChange={(e) =>
-                            setEditingGuest((prev) => (prev ? { ...prev, display_name: e.target.value } : null))
-                        }
-                    />
-                    <Autocomplete
-                        multiple
-                        disableCloseOnSelect
-                        options={dietaryOptions}
-                        value={editingGuest.dietary_restrictions || []}
-                        onChange={(_event, newValue) =>
-                            setEditingGuest((prev) => (prev ? { ...prev, dietary_restrictions: newValue } : null))
-                        }
-                        renderOption={(props, option, { selected }) => {
-                            const { key, ...optionProps } = props;
-                            return (
-                                <li key={key} {...optionProps}>
-                                    <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        style={{ marginRight: 8 }}
-                                        checked={selected}
-                                    />
-                                    {option}
-                                </li>
-                            );
-                        }}
-                        renderTags={(value: string[], getTagProps) =>
-                            value.map((option: string, index: number) => (
-                                <Chip label={option} size="small" {...getTagProps({ index })} />
-                            ))
-                        }
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                margin="dense"
-                                label="Dietary Restrictions"
-                                placeholder="Select dietary restrictions..."
-                                slotProps={{
-                                    htmlInput: {
-                                        ...params.inputProps,
-                                        readOnly: true,
-                                    },
-                                }}
+            }}
+        >
+            <DialogTitle>Edit Guest</DialogTitle>
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {editingGuest && (
+                    <>
+                        <CustomInputField
+                            ref={ref}
+                            value={editingGuest.display_name}
+                            onChange={(e) =>
+                                setEditingGuest((prev: any) =>
+                                    prev ? { ...prev, display_name: e.target.value } : null
+                                )
+                            }
+                            label="Perferred Name"
+                            placeholder="Preferred Name"
+                            name="display_name"
+                            required={true}
+                            width="100%"
+                            padding={{ pt: 1, pb: 0 }}
+                        />
+                        <Autocomplete
+                            multiple
+                            disableCloseOnSelect
+                            options={['Vegetarian', 'Vegan', 'Gluten Free', 'Nut Free', 'Shellfish Free', 'Other']}
+                            value={editingGuest.dietary_restrictions || []}
+                            onChange={(_event, newValue) =>
+                                setEditingGuest((prev: any) =>
+                                    prev ? { ...prev, dietary_restrictions: newValue } : null
+                                )
+                            }
+                            renderOption={(props, option, { selected }) => {
+                                const { key, ...optionProps } = props;
+                                return (
+                                    <li key={key} {...optionProps}>
+                                        <Checkbox
+                                            icon={<span />}
+                                            checkedIcon={<span />}
+                                            style={{ marginRight: 1 }}
+                                            checked={selected}
+                                        />
+                                        {option}
+                                    </li>
+                                );
+                            }}
+                            renderTags={(value: string[], getTagProps) =>
+                                value.map((option: string, index: number) => (
+                                    <Chip label={option} size="small" {...getTagProps({ index })} />
+                                ))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    margin="dense"
+                                    size="small"
+                                    sx={{ m: 0 }}
+                                    label="Dietary Restrictions"
+                                    placeholder={
+                                        editingGuest?.dietary_restrictions.length > 0
+                                            ? ''
+                                            : 'Select dietary restrictions...'
+                                    }
+                                    slotProps={{
+                                        htmlInput: {
+                                            ...params.inputProps,
+                                            readOnly: true,
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
+                        {editingGuest.dietary_restrictions.includes('Other') && (
+                            <CustomInputField
+                                value={editingGuest.other}
+                                onChange={(e) =>
+                                    setEditingGuest((prev: any) =>
+                                        prev ? { ...prev, other: e.target.value } : null
+                                    )
+                                }
+                                label="Other"
+                                placeholder="Other"
+                                name="other"
+                                required={false}
+                                width="100%"
                             />
                         )}
-                    />
-                    {editingGuest.dietary_restrictions.includes('Other') && (
-                        <TextField
-                            margin="dense"
-                            label="Other"
-                            value={editingGuest.other}
-                            onChange={(e) =>
-                                setEditingGuest((prev) => (prev ? { ...prev, other: e.target.value } : null))
-                            }
-                        />
-                    )}
-                </>
-            )}
-        </DialogContent>
-        <DialogActions>
-            <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1} />
-            <CustomButton text="Save" onClick={onSave} variant="dark" width="75px" />
-        </DialogActions>
-    </Dialog>
+                    </>
+                )}
+            </DialogContent>
+            <DialogActions>
+                <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1} />
+                <CustomButton text="Save" onClick={onSave} variant="dark" width="75px" />
+            </DialogActions>
+        </Dialog>
+    )
 );
 
 //
@@ -322,6 +344,7 @@ const ActionButtons: React.FC<{ onBack: () => void; onNext: () => void }> = ({ o
 const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({ nextPage, previousPage }) => {
     const theme: Theme = useTheme();
     const { formData, setFormData } = useFlow();
+    const primaryContactRef = useRef<CustomInputFieldRef>(null);
 
     // Convert guest_list (object) to an array of guests
     const initialGuests: RsvpGuestDetailWithId[] = Object.entries(formData.guest_list || {}).map(
@@ -367,6 +390,8 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({ nextPage, p
 
     const handleModalSave = () => {
         if (!editingGuest) return;
+        if (!primaryContactRef.current?.validate()) return;
+
         setGuests((prev) =>
             prev.map((g) => (g.id === editingGuest.id ? editingGuest : g))
         );
@@ -407,6 +432,7 @@ const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({ nextPage, p
                 />
             )}
             <EditGuestDialog
+                ref={primaryContactRef}
                 open={openModal}
                 editingGuest={editingGuest}
                 setEditingGuest={setEditingGuest}

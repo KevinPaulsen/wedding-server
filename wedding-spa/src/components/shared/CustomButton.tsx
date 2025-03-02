@@ -49,7 +49,7 @@ const StyledButton = styled(Button, {
         case 'lightOutlined':
             return {
                 backgroundColor: theme.palette.background.default,
-                color: theme.palette.secondary.contrastText,
+                color: theme.palette.text.secondary,
                 border: `2px solid ${theme.palette.secondary.contrastText}`,
                 textTransform: 'none',
                 fontFamily: theme.typography.fontFamily,

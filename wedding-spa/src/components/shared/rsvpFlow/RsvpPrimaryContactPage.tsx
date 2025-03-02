@@ -86,6 +86,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                 <CustomInputField
                     ref={nameRef}
                     name="name"
+                    label="Preferred Name"
                     placeholder="Preferred Name"
                     value={primaryGuestDisplayName}
                     onChange={handleChange}
@@ -95,6 +96,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                     ref={emailRef}
                     name="email"
                     type="email"
+                    label="Email"
                     placeholder="Email"
                     value={formData.primary_contact?.email ?? ''}
                     onChange={handleChange}
@@ -103,6 +105,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                 <CustomInputField
                     ref={addressRef}
                     name="address"
+                    label="Address"
                     placeholder="Address"
                     value={formData.primary_contact?.address ?? ''}
                     onChange={handleChange}
@@ -111,6 +114,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                 <CustomInputField
                     ref={phoneRef}
                     name="phone_number"
+                    label="Phone Number"
                     placeholder="Phone Number"
                     value={formData.primary_contact?.phone_number ?? ''}
                     onChange={handleChange}
