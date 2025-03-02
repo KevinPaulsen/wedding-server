@@ -71,6 +71,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         // Merge guest_list.
         Map<String, RsvpGuestDetails> mergedGuestList;
         if (overwriteGuestList) {
+            sanitize(input);
             mergedGuestList = overwriteGuestList(stored.getGuestList(), input.getGuestList());
         } else {
             mergedGuestList = mergeGuestList(stored.getGuestList(), input.getGuestList());
@@ -110,6 +111,41 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         }
 
         return stored;
+    }
+
+    private static void sanitize(Rsvp input) {
+        if (input == null || input.getGuestList() == null || input.getGuestList().isEmpty()) return;
+
+        Map<String, RsvpGuestDetails> guestDetails = input.getGuestList();
+        Map<String, String> changingMap = new HashMap<>();
+
+        for (Map.Entry<String, RsvpGuestDetails> entry: guestDetails.entrySet()) {
+            entry.getValue().setDisplayName(strip(entry.getValue().getDisplayName()));
+            String correctIndexName = formatToIndexName(entry.getValue().getDisplayName());
+
+            if (!entry.getKey().equals(correctIndexName)) {
+                changingMap.put(entry.getKey(), correctIndexName);
+            }
+        }
+
+        for (Event event : List.of(input.getRoce(), input.getRehearsal(), input.getCeremony(), input.getReception())) {
+            if (event == null || event.getGuestsAttending() == null) continue;
+
+            List<String> guestsAttending = event.getGuestsAttending().stream().map(guest -> changingMap.getOrDefault(guest, guest)).toList();
+            event.setGuestsAttending(guestsAttending);
+        }
+
+        for (String wrongKey : changingMap.keySet()) {
+            String correctKey = changingMap.get(wrongKey);
+            if (guestDetails.containsKey(correctKey)) {
+                throw new IllegalArgumentException("Name " + correctKey + " is a duplicate the guest list.");
+            }
+
+            guestDetails.put(correctKey, guestDetails.get(wrongKey));
+            guestDetails.remove(wrongKey);
+        }
+
+        // TODO Ensure primary contact is correct as well
     }
 
     @Transactional public void delete(String rsvpId) {

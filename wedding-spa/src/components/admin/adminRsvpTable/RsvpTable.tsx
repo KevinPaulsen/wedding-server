@@ -32,6 +32,7 @@ interface RsvpTableProps {
     rsvpData: Rsvp[];
     deleteRsvp: (rsvpCode: string) => Promise<void>;
     error: string | null;
+    updateRsvpInState: (updatedRsvp: Rsvp) => void;
 }
 
 interface EnhancedTableToolbarProps {
@@ -445,7 +446,7 @@ const CollapsibleRow: React.FC<CollapsibleRowProps> = ({ row, selected, onSelect
     );
 };
 
-const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error }) => {
+const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, updateRsvpInState }) => {
     const [order, setOrder] = React.useState<"asc" | "desc">("asc");
     const [orderBy, setOrderBy] = React.useState<string>("primaryName");
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -468,16 +469,16 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error }) =>
 
     // This method is passed to <EditRsvpDialog onSave={handleUpdateRsvp} />
     const handleUpdateRsvp = async (updatedRsvp: Rsvp) => {
-        // Because useApi returns a promise, we can 'await' it here
+        // 1) Call the server
         await editRsvpApi(updatedRsvp);
-        if (updateError) {
-            // The dialog's try/catch will catch this as an error
+
+        // 2) If the API call returned success, update local data:
+        if (!updateError) {
+            updateRsvpInState(updatedRsvp);
+        } else {
+            // If there's an error, you can throw or handle it differently
             throw new Error(updateError);
         }
-
-        // setRsvpData((prev) =>
-        //     prev.map((r) => (r.rsvp_id === updatedRsvp.rsvp_id ? updatedRsvp : r))
-        // );
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {

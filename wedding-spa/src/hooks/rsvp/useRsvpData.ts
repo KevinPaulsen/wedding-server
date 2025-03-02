@@ -13,25 +13,35 @@ export function useRsvpData() {
     const { data, error, loading, execute } = useApi<Rsvp[], []>(getRsvps);
     const [localData, setLocalData] = useState<Rsvp[]>([]);
 
-    // Fetch once on mount
     useEffect(() => {
         (async () => {
             await execute(); // calls getRsvps
         })();
-        // we don't include `execute` in dependencies if we only want to run once
     }, []);
 
-    // Sync API's `data` into localData whenever it changes
     useEffect(() => {
         if (data) {
             setLocalData(data);
         }
     }, [data]);
 
-    // local helper to remove one RSVP from local state
+    // Remove an RSVP by ID
     const removeRsvp = (rsvpCode: string) => {
         setLocalData(prev => prev.filter(r => r.rsvp_id !== rsvpCode));
     };
 
-    return { data: localData, loading, error, removeRsvp };
+    // Update an existing RSVP by matching on rsvp_id
+    const updateRsvpInState = (updatedRsvp: Rsvp) => {
+        setLocalData((prev) =>
+            prev.map((r) => (r.rsvp_id === updatedRsvp.rsvp_id ? updatedRsvp : r))
+        );
+    };
+
+    return {
+        data: localData,
+        loading,
+        error,
+        removeRsvp,
+        updateRsvpInState,
+    };
 }

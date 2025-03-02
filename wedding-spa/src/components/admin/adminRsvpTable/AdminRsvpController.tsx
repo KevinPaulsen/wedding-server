@@ -1,14 +1,12 @@
 // AdminRsvpController.tsx
-import React, {useState} from 'react';
+import React from 'react';
 import {Container} from "react-bootstrap";
 import RsvpTable from './RsvpTable';
 import {useRsvpData} from "../../../hooks/rsvp/useRsvpData";
 import {useDeleteRsvp} from "../../../hooks/rsvp/useDelete";
 
 const AdminRsvpController: React.FC = () => {
-    // useRsvpData now returns { data, loading, error, removeRsvp }
-    const { data, removeRsvp } = useRsvpData();
-    // useDeleteRsvp now returns { execute, error } (renamed execute to deleteRsvp)
+    const { data, removeRsvp, updateRsvpInState } = useRsvpData();
     const { execute: deleteRsvp, error: deleteError } = useDeleteRsvp();
 
     const handleDelete = async (rsvpCode: string) => {
@@ -20,7 +18,14 @@ const AdminRsvpController: React.FC = () => {
 
     return (
         <Container className="mt-4">
-            <RsvpTable rsvpData={data} deleteRsvp={handleDelete} error={deleteError} />
+            <RsvpTable
+                rsvpData={data}
+                deleteRsvp={handleDelete}
+                error={deleteError}
+
+                // Pass down a callback that can update local data
+                updateRsvpInState={updateRsvpInState}
+            />
         </Container>
     );
 };
