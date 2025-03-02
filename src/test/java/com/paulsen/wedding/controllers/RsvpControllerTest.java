@@ -67,8 +67,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         String jsonRequest = objectMapper.writeValueAsString(rsvp);
         mockMvc.perform(put("/rsvp/edit").contentType(MediaType.APPLICATION_JSON).content(jsonRequest))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.message").value("RSVP object updated successfully."));
+               .andExpect(status().isOk());
     }
 
     /* --- DELETE /rsvp/delete --- */

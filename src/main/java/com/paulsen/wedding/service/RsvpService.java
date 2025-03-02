@@ -82,10 +82,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         stored.setPrimaryContact(mergedPrimary);
 
         // Merge events.
-        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce()));
-        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal()));
-        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony()));
-        stored.setReception(mergeEvent(stored.getReception(), input.getReception()));
+        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce(), stored.getGuestList().size()));
+        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal(), stored.getGuestList().size()));
+        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), stored.getGuestList().size()));
+        stored.setReception(mergeEvent(stored.getReception(), input.getReception(), stored.getGuestList().size()));
 
         for (String name : getAllNames(stored)) {
             if (!stored.getGuestList().containsKey(name)) {
@@ -235,12 +235,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         return merged;
     }
 
-    private Event mergeEvent(Event stored, Event input) {
+    private Event mergeEvent(Event stored, Event input, int guestCount) {
         int allowed = 0;
-        if (input != null && input.getAllowedGuests() != -1) {
-            allowed = Math.max(input.getAllowedGuests(), 0);
-        } else if (stored != null) {
-            allowed = Math.max(stored.getAllowedGuests(), 0);
+        if (input != null && input.getAllowedGuests() <= 0 || stored != null && stored.getAllowedGuests() <= 0) {
+            allowed = guestCount;
         }
 
         List<String> guests;
