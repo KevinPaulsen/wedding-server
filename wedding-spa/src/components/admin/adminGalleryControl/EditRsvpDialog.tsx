@@ -61,6 +61,23 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
         });
     };
 
+    // Define the toggle handler function:
+    const handleEventAllowedToggle = (
+        eventName: "roce" | "rehearsal" | "ceremony" | "reception",
+        checked: boolean
+    ) => {
+        if (!formData) return;
+        // Determine the new allowed_guests value:
+        const newAllowedGuests = checked ? Object.keys(formData.guest_list).length : 0;
+        setFormData({
+            ...formData,
+            [eventName]: {
+                ...formData[eventName],
+                allowed_guests: newAllowedGuests,
+            },
+        });
+    };
+
     // Update guest fields (display name, other).
     const handleGuestChange = (
         guestKey: string,
@@ -272,6 +289,27 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
                             required
                             width="100%"
                         />
+
+                        <Typography variant="h6" marginTop={2}>
+                            Event Invitations
+                        </Typography>
+                        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+                            {(["roce", "rehearsal", "ceremony", "reception"] as const).map((eventName) => {
+                                // Consider the event "allowed" if allowed_guests is greater than 0.
+                                const allowed = formData ? formData[eventName].allowed_guests > 0 : false;
+                                return (
+                                    <Box key={eventName} sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography variant="body2" sx={{ mr: 1 }}>
+                                            {eventName.charAt(0).toUpperCase() + eventName.slice(1)}
+                                        </Typography>
+                                        <Switch
+                                            checked={allowed}
+                                            onChange={(e) => handleEventAllowedToggle(eventName, e.target.checked)}
+                                        />
+                                    </Box>
+                                );
+                            })}
+                        </Box>
 
                         <Typography variant="h6">Guest List</Typography>
                         {Object.entries(formData.guest_list).map(([guestKey, guest]) => (

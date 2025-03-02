@@ -85,25 +85,7 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
                 <>
                     <FormControlLabel
                         control={
-                            <Switch
-                                checked={allSelected}
-                                onChange={handleSelectAllToggle}
-                                name="allComingSwitch"
-                                sx={{
-                                    '& .MuiSwitch-switchBase': {
-                                        color: 'primary.main',
-                                        '&.Mui-checked': {
-                                            color: 'primary.main',
-                                            '& + .MuiSwitch-track': {
-                                                backgroundColor: 'primary.main',
-                                            },
-                                        },
-                                    },
-                                    '& .MuiSwitch-track': {
-                                        backgroundColor: 'primary.main',
-                                    },
-                                }}
-                            />
+                            <Switch checked={allSelected} onChange={handleSelectAllToggle} name="allComingSwitch" />
                         }
                         label={`${numComing} / ${numGuests} Guests Attending`}
                         sx={{

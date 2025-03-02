@@ -1,7 +1,7 @@
 // App.tsx
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {Navigate, Route, Routes} from 'react-router-dom';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import AdminLogin from "../components/admin/AdminLogin";
 import PrivateRoute from "../routes/PrivateRoute";
 import NotFound from "../components/shared/NotFound";
@@ -17,7 +17,6 @@ import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
 import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
 import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
 import '../styles/App.css';
-import {blue, green, red} from "@mui/material/colors";
 
 const theme = createTheme({
     palette: {
@@ -77,8 +76,25 @@ const theme = createTheme({
                 },
             },
         },
-    }
+        MuiSwitch: {
+            styleOverrides: {
+                switchBase: {
+                    color: '#574c3f',
+                    '&.Mui-checked': {
+                        color: '#574c3f',
+                        '& + .MuiSwitch-track': {
+                            backgroundColor: '#574c3f',
+                        },
+                    },
+                },
+                track: {
+                    backgroundColor: '#574c3f',
+                },
+            },
+        },
+    },
 });
+
 
 const App: React.FC = () => {
     return (
