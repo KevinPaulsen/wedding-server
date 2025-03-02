@@ -1,9 +1,9 @@
 // src/pages/rsvp/RsvpPrimaryContactPage.tsx
-import React, { useRef } from 'react';
-import { Form } from 'react-bootstrap';
+import React, {useRef} from 'react';
+import {Form} from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp } from "../../../types/rsvp";
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp} from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
 
 interface RsvpPrimaryContactPageProps {
