@@ -17,7 +17,7 @@ export interface ApiResponse<T> {
     error?: string;
 }
 
-export const API_URL = "https://api.kevinlovesolivia.com";
+export const API_URL = "http://localhost:8080";
 
 /**
  * A generic request function returning ApiResponse<T>.

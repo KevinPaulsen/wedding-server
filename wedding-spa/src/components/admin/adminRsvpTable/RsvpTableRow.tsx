@@ -1,4 +1,4 @@
-import {Rsvp} from "../../../types/rsvp";
+import { Rsvp } from "../../../types/rsvp";
 import React from "react";
 import {
     Box,
@@ -12,9 +12,9 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
-    Tooltip
+    Tooltip,
 } from "@mui/material";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 
 interface CollapsibleRowProps {
@@ -35,15 +35,12 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
                 : "Not Coming";
 
     const statusChipColor =
-        status === "Pending"
-            ? "info"
-            : status === "Coming"
-                ? "success"
-                : "error";
+        status === "Pending" ? "info" : status === "Coming" ? "success" : "error";
 
     // --- Guest Table Sorting Setup ---
     // Use Object.entries to capture guest key.
     type GuestEntry = [string, typeof row.guest_list[keyof typeof row.guest_list]];
+
     const guestColumns = [
         {
             id: "guestName",
@@ -110,6 +107,15 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
             },
         },
     ];
+
+    // Filter out event columns that are not allowed.
+    const filteredGuestColumns = guestColumns.filter((column) => {
+        if (column.id === "roce") return row.roce.allowed_guests > 0;
+        if (column.id === "rehearsal") return row.rehearsal.allowed_guests > 0;
+        if (column.id === "ceremony") return row.ceremony.allowed_guests > 0;
+        if (column.id === "reception") return row.reception.allowed_guests > 0;
+        return true;
+    });
 
     const [guestOrder, setGuestOrder] = React.useState<"asc" | "desc">("asc");
     const [guestOrderBy, setGuestOrderBy] = React.useState<string>("guestName");
@@ -193,10 +199,12 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
                 >
                     {row.primary_contact.phone_number}
                 </TableCell>
-                <TableCell sx={{
-                    display: { xs: "none", md: "table-cell" },
-                    color: (theme) => theme.palette.secondary.contrastText
-                }}>
+                <TableCell
+                    sx={{
+                        display: { xs: "none", md: "table-cell" },
+                        color: (theme) => theme.palette.secondary.contrastText,
+                    }}
+                >
                     {Object.keys(row.guest_list).length}
                 </TableCell>
                 <TableCell>
@@ -231,7 +239,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
                                             fontWeight: "bold",
                                         }}
                                     >
-                                        {guestColumns.map((column) => (
+                                        {filteredGuestColumns.map((column) => (
                                             <TableCell key={column.id}>
                                                 <TableSortLabel
                                                     active={guestOrderBy === column.id}
@@ -255,7 +263,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
                                                 },
                                             }}
                                         >
-                                            {guestColumns.map((column) => {
+                                            {filteredGuestColumns.map((column) => {
                                                 const value = column.getValue(entry);
                                                 if (
                                                     column.id === "roce" ||
@@ -293,19 +301,12 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
                                                                 ...entry[1].dietary_restrictions,
                                                                 ...(entry[1].other ? [entry[1].other] : []),
                                                             ].map((restriction, i) => (
-                                                                <Chip
-                                                                    key={i}
-                                                                    label={restriction}
-                                                                    sx={{ m: 0.5 }}
-                                                                    size="small"
-                                                                />
+                                                                <Chip key={i} label={restriction} sx={{ m: 0.5 }} size="small" />
                                                             ))}
                                                         </TableCell>
                                                     );
                                                 }
-                                                return (
-                                                    <TableCell key={column.id}>{value}</TableCell>
-                                                );
+                                                return <TableCell key={column.id}>{value}</TableCell>;
                                             })}
                                         </TableRow>
                                     ))}

@@ -283,25 +283,23 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     private Event mergeEvent(Event stored, Event input, Set<String> allowedGuests) {
-        if (input == null) return Objects.requireNonNullElseGet(stored, Event::new);
-        int allowed = stored.getAllowedGuests();
+        if (input == null && stored == null) return new Event(0, List.of());
+        int allowed = Objects.requireNonNullElse(input, stored).getAllowedGuests();
 
-        if (input.getAllowedGuests() == 0) {
-            allowed = 0;
-        } else if (input.getAllowedGuests() > 0) {
+        if (allowed > 0) {
             allowed = allowedGuests.size();
         }
 
         if (allowed == 0) return new Event(0, List.of());
 
         List<String> guests;
-        if (input.getGuestsAttending() != null) {
+        if (input != null && input.getGuestsAttending() != null) {
             guests = input.getGuestsAttending()
                           .stream()
                           .map(StringFormatUtil::formatToIndexName)
                           .filter(allowedGuests::contains)
                           .toList();
-        } else if (stored.getGuestsAttending() != null) {
+        } else if (stored != null && stored.getGuestsAttending() != null) {
             guests = stored.getGuestsAttending()
                            .stream()
                            .map(StringFormatUtil::formatToIndexName)

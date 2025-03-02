@@ -13,7 +13,7 @@ import {
     TableSortLabel,
 } from "@mui/material";
 import {Rsvp} from "../../../types/rsvp";
-import EditRsvpDialog from "../adminGalleryControl/EditRsvpDialog";
+import EditRsvpDialog from "./EditRsvpDialog";
 import {useEditRsvp} from "../../../hooks/rsvp/useEditRsvp";
 import {RsvpTableRow} from "./RsvpTableRow";
 import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
