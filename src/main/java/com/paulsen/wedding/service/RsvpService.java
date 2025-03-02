@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
@@ -80,15 +81,21 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         }
         stored.setGuestList(mergedGuestList);
 
+        // Set the allowed guests to be only those in the guest list who have selected they are coming
+        Set<String> allowedGuests = mergedGuestList.keySet()
+                                                   .stream()
+                                                   .filter(guest -> mergedGuestList.get(guest).isComing())
+                                                   .collect(Collectors.toSet());
+
         // Merge primary_contact.
-        WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact());
+        WeddingPrimaryContact mergedPrimary = mergeGuestInfo(stored.getPrimaryContact(), input.getPrimaryContact(), allowedGuests);
         stored.setPrimaryContact(mergedPrimary);
 
         // Merge events.
-        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce(), stored.getGuestList().keySet()));
-        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal(), stored.getGuestList().keySet()));
-        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), stored.getGuestList().keySet()));
-        stored.setReception(mergeEvent(stored.getReception(), input.getReception(), stored.getGuestList().keySet()));
+        stored.setRoce(mergeEvent(stored.getRoce(), input.getRoce(), allowedGuests));
+        stored.setRehearsal(mergeEvent(stored.getRehearsal(), input.getRehearsal(), allowedGuests));
+        stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), allowedGuests));
+        stored.setReception(mergeEvent(stored.getReception(), input.getReception(), allowedGuests));
 
         for (String name : getAllNames(stored)) {
             if (!stored.getGuestList().containsKey(name)) {
@@ -147,7 +154,9 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             guestDetails.remove(wrongKey);
         }
 
-        // TODO: Ensure primary contact is correct as well
+        if (changingMap.containsKey(input.getPrimaryContact().getName())) {
+            input.getPrimaryContact().setName(changingMap.get(input.getPrimaryContact().getName()));
+        }
     }
 
     @Transactional public void delete(String rsvpId) {
@@ -222,12 +231,12 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         return allNames;
     }
 
-    private WeddingPrimaryContact mergeGuestInfo(WeddingPrimaryContact stored, WeddingPrimaryContact input) {
+    private WeddingPrimaryContact mergeGuestInfo(WeddingPrimaryContact stored, WeddingPrimaryContact input, Set<String> allowedGuests) {
         String name = (input != null && input.getName() != null) ? formatToIndexName(input.getName())
                                                                  : (stored != null && stored.getName() != null
                                                                     ? formatToIndexName(stored.getName()) : "");
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("Primary contact name must not be null or empty.");
+        if (name.isEmpty() || !allowedGuests.contains(name)) {
+            throw new IllegalArgumentException("Primary contact name must be coming and in the guest list, and not be null or empty.");
         }
         String email = (input != null && input.getEmail() != null) ? input.getEmail().trim()
                                                                    : (stored != null && stored.getEmail() != null
@@ -274,21 +283,25 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     private Event mergeEvent(Event stored, Event input, Set<String> allowedGuests) {
-        int allowed = 0;
-        if (input != null && input.getAllowedGuests() > 0 || stored != null && stored.getAllowedGuests() > 0) {
+        if (input == null) return Objects.requireNonNullElseGet(stored, Event::new);
+        int allowed = stored.getAllowedGuests();
+
+        if (input.getAllowedGuests() == 0) {
+            allowed = 0;
+        } else if (input.getAllowedGuests() > 0) {
             allowed = allowedGuests.size();
         }
 
         if (allowed == 0) return new Event(0, List.of());
 
         List<String> guests;
-        if (input != null && input.getGuestsAttending() != null) {
+        if (input.getGuestsAttending() != null) {
             guests = input.getGuestsAttending()
                           .stream()
                           .map(StringFormatUtil::formatToIndexName)
                           .filter(allowedGuests::contains)
                           .toList();
-        } else if (stored != null && stored.getGuestsAttending() != null) {
+        } else if (stored.getGuestsAttending() != null) {
             guests = stored.getGuestsAttending()
                            .stream()
                            .map(StringFormatUtil::formatToIndexName)
