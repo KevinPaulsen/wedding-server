@@ -283,15 +283,19 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
         List<String> guests;
         if (input != null && input.getGuestsAttending() != null) {
-            guests = input.getGuestsAttending().stream().map(StringFormatUtil::formatToIndexName).toList();
+            guests = input.getGuestsAttending()
+                          .stream()
+                          .map(StringFormatUtil::formatToIndexName)
+                          .filter(allowedGuests::contains)
+                          .toList();
         } else if (stored != null && stored.getGuestsAttending() != null) {
-            guests = stored.getGuestsAttending().stream().map(StringFormatUtil::formatToIndexName).toList();
+            guests = stored.getGuestsAttending()
+                           .stream()
+                           .map(StringFormatUtil::formatToIndexName)
+                           .filter(allowedGuests::contains)
+                           .toList();
         } else {
             guests = List.of();
-        }
-
-        if (allowed < guests.size()) {
-            guests = guests.stream().filter(allowedGuests::contains).toList();
         }
 
         return new Event(allowed, guests);

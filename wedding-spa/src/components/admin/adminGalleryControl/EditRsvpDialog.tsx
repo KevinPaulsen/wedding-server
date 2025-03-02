@@ -13,7 +13,9 @@ import {
     TextField,
     Typography,
     useTheme,
+    IconButton,
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import {Rsvp} from "../../../types/rsvp";
 import CustomInputField from "../../shared/CustomInputField";
 import CustomButton from "../../shared/CustomButton";
@@ -75,6 +77,17 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
                     [field]: value,
                 },
             },
+        });
+    };
+
+    // Delete a guest from guest_list.
+    const handleDeleteGuest = (guestKey: string) => {
+        if (!formData) return;
+        const updatedGuestList = { ...formData.guest_list };
+        delete updatedGuestList[guestKey];
+        setFormData({
+            ...formData,
+            guest_list: updatedGuestList,
         });
     };
 
@@ -232,12 +245,21 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
                             <Box
                                 key={guestKey}
                                 sx={{
+                                    position: "relative",
                                     backgroundColor: theme.palette.secondary.light,
                                     borderRadius: 3,
                                     p: 1,
                                     mb: 1,
                                 }}
                             >
+                                {/* X button to remove guest */}
+                                <IconButton
+                                    size="small"
+                                    onClick={() => handleDeleteGuest(guestKey)}
+                                    sx={{ position: "absolute", top: 4, right: 4 }}
+                                >
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
                                 <Typography variant="subtitle1" sx={{ fontWeight: "bold", pb: 1 }}>
                                     Guest: {guestKey}
                                 </Typography>
@@ -344,8 +366,8 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
             </DialogContent>
             <DialogActions>
                 <CustomButton text="Add Guest" onClick={handleAddGuest} variant="dark" width="auto" />
-                <div style={{flex: '1 0 0'}}/>
-                <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1}/>
+                <div style={{ flex: '1 0 0' }} />
+                <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1} />
                 <CustomButton
                     text={loading ? "Saving..." : "Save"}
                     onClick={handleSave}
