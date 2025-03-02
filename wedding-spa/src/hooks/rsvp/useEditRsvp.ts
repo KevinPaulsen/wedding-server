@@ -5,5 +5,5 @@ import { Rsvp } from '../../types/rsvp';
 
 export function useEditRsvp() {
     // T = { message: string }, A = [Rsvp]
-    return useApi<{message: string}, [Rsvp]>(editRsvp);
+    return useApi<Rsvp, [Rsvp]>(editRsvp);
 }

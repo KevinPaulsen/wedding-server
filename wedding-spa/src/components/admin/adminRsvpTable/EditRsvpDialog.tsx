@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Rsvp } from "../../../types/rsvp";
 import CustomInputField from "../../shared/CustomInputField";
 import CustomButton from "../../shared/CustomButton";
+import {ApiResponse} from "../../../services/ApiService";
 
 const dietaryOptions = [
     "Vegetarian",
@@ -33,7 +34,7 @@ interface EditRsvpDialogProps {
     open: boolean;
     rsvp: Rsvp | null;
     onClose: () => void;
-    onSave: (updatedRsvp: Rsvp) => Promise<void>;
+    onSave: (updatedRsvp: Rsvp) => Promise<ApiResponse<Rsvp>>;
     loading?: boolean;
     error: string | null;
 }
@@ -236,8 +237,10 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
             return;
         }
 
-        await onSave(formData);
-        onClose();
+        const response = await onSave(formData);
+        if (response.success) {
+            onClose();
+        }
     };
 
     return (

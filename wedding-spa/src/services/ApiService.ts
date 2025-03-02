@@ -117,8 +117,8 @@ export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<{
  * Edit an existing RSVP by calling PUT /rsvp/edit.
  * The backend expects the full Rsvp object in the body, returns {message}.
  */
-export async function editRsvp(rsvp: Rsvp): Promise<ApiResponse<{message: string}>> {
-    return request<{message: string}>("/rsvp/edit", {
+export async function editRsvp(rsvp: Rsvp): Promise<ApiResponse<Rsvp>> {
+    return request<Rsvp>("/rsvp/edit", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

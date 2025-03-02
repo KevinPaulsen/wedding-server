@@ -96,14 +96,14 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, load
 
     // This method is passed to <EditRsvpDialog onSave={handleUpdateRsvp} />
     const handleUpdateRsvp = async (updatedRsvp: Rsvp) => {
-        // 1) Call the server
-        await editRsvpApi(updatedRsvp);
+        const newRsvpData = await editRsvpApi(updatedRsvp);
 
         // 2) If the API call returned success (no updateError), update local data
-        if (!updateError) {
-            updateRsvpInState(updatedRsvp);
+        if (newRsvpData.success) {
+            updateRsvpInState(newRsvpData.data as Rsvp);
         }
-        // If there's an error, it's already set in updateError, so do not update local data
+
+        return newRsvpData;
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
