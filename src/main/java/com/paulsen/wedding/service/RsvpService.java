@@ -172,8 +172,8 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
                                              "RSVP with name " + fullName + " not found."));
     }
 
-    private List<String> getAllNames(Rsvp rsvp) {
-        List<String> allNames = new ArrayList<>();
+    private Set<String> getAllNames(Rsvp rsvp) {
+        Set<String> allNames = new HashSet<>();
 
         allNames.add(rsvp.getPrimaryContact().getName());
         allNames.addAll(rsvp.getRoce().getGuestsAttending());
@@ -236,13 +236,6 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     private Event mergeEvent(Event stored, Event input) {
-        int allowed = 0;
-        if (input != null && input.getAllowedGuests() != -1) {
-            allowed = Math.max(input.getAllowedGuests(), 0);
-        } else if (stored != null) {
-            allowed = Math.max(stored.getAllowedGuests(), 0);
-        }
-
         List<String> guests;
         if (input != null && input.getGuestsAttending() != null) {
             guests = input.getGuestsAttending().stream().map(StringFormatUtil::formatToIndexName).toList();
@@ -252,11 +245,7 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
             guests = List.of();
         }
 
-        if (allowed < guests.size()) {
-            throw new IllegalArgumentException("This RSVP cannot have more than " + allowed + " guests.");
-        }
-
-        return new Event(allowed, guests);
+        return new Event(guests);
     }
 
     /**

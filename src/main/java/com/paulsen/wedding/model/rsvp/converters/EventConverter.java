@@ -19,9 +19,6 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
         // Create a map to represent the Event fields
         Map<String, AttributeValue> map = new HashMap<>();
 
-        // Convert allowedGuests (as a number)
-        map.put("allowed_guests", new AttributeValue().withN(String.valueOf(event.getAllowedGuests())));
-
         // Convert guestsAttending (as a list of string values)
         if (event.getGuestsAttending() == null) {
             map.put("guests_attending", new AttributeValue().withNULL(true));
@@ -44,13 +41,6 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
 
         Map<String, AttributeValue> map = attributeValue.getM();
 
-        // Extract allowedGuests and parse it to an int
-        AttributeValue allowedGuestsAttr = map.get("allowed_guests");
-        int allowedGuests = 0;
-        if (allowedGuestsAttr != null && allowedGuestsAttr.getN() != null) {
-            allowedGuests = Integer.parseInt(allowedGuestsAttr.getN());
-        }
-
         // Extract guestsAttending and convert it to a List<String>
         AttributeValue guestsAttendingAttr = map.get("guests_attending");
         List<String> guestsAttending = null;
@@ -58,6 +48,6 @@ public class EventConverter implements DynamoDBTypeConverter<AttributeValue, Eve
             guestsAttending = guestsAttendingAttr.getL().stream().map(AttributeValue::getS).toList();
         }
 
-        return new Event(allowedGuests, guestsAttending);
+        return new Event(guestsAttending);
     }
 }

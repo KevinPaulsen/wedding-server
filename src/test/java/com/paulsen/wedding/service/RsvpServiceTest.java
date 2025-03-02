@@ -72,7 +72,7 @@ import static org.mockito.Mockito.*;
                       new RsvpGuestDetails("John Doe", new ArrayList<>(), "", true));
         input.setGuestList(guestList);
         // Set an event that refers to the guest.
-        input.setCeremony(new Event(1, List.of("John Doe")));
+        input.setCeremony(new Event(List.of("John Doe")));
 
         when(rsvpRepository.save(any(Rsvp.class))).thenAnswer(invocation -> {
             Rsvp arg = invocation.getArgument(0);
@@ -116,7 +116,7 @@ import static org.mockito.Mockito.*;
         input.setGuestList(inputGuestList);
 
         // Include an event listing both guests.
-        input.setRehearsal(new Event(2, Arrays.asList("John Doe", "Jane Doe")));
+        input.setRehearsal(new Event(Arrays.asList("John Doe", "Jane Doe")));
 
         when(rsvpRepository.save(any(Rsvp.class))).thenAnswer(invocation -> invocation.getArgument(0));
         Rsvp result = rsvpService.saveRsvp(input, true);
@@ -161,7 +161,7 @@ import static org.mockito.Mockito.*;
         // Wrong guest provided.
         guestList.put(formatToIndexName("Jane Doe"), new RsvpGuestDetails("Jane Doe", null, null, true));
         input.setGuestList(guestList);
-        input.setCeremony(new Event(1, List.of("John Doe")));
+        input.setCeremony(new Event(List.of("John Doe")));
 
         assertThrows(IllegalArgumentException.class, () -> rsvpService.saveRsvp(input, true));
     }
@@ -359,7 +359,7 @@ import static org.mockito.Mockito.*;
                       new RsvpGuestDetails("John Doe", new ArrayList<>(), "", true));
         rsvp.setGuestList(guestList);
         // For simplicity, all event fields use the same guest list.
-        Event event = new Event(1, List.of("John Doe"));
+        Event event = new Event(List.of("John Doe"));
         rsvp.setRoce(event);
         rsvp.setRehearsal(event);
         rsvp.setCeremony(event);
