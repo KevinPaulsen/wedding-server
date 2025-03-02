@@ -40,7 +40,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ title, children }) => {
                     </Row>
                 </Container>
             </Row>
-            <Row>
+            <Row className="m-0">
                 <h2 className="text-center mb-4">{title}</h2>
                 {children}
             </Row>
