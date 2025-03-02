@@ -203,14 +203,30 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({ open, rsvp, onClose, on
                         <Typography variant="h6" marginBottom={1}>
                             Primary Contact Information
                         </Typography>
-                        <CustomInputField
-                            value={formData.primary_contact.name}
-                            onChange={(e) => handlePrimaryChange("name", e.target.value)}
-                            label="Preferred Name"
-                            placeholder="Preferred Name"
-                            name="name"
-                            required
-                            width="100%"
+                        <Autocomplete
+                            options={Object.entries(formData.guest_list).map(([key, guest]) => ({
+                                id: key,
+                                label: guest.display_name,
+                            }))}
+                            value={
+                                formData.primary_contact.name && formData.guest_list[formData.primary_contact.name]
+                                    ? {
+                                        id: formData.primary_contact.name,
+                                        label: formData.guest_list[formData.primary_contact.name].display_name,
+                                    }
+                                    : null
+                            }
+                            onChange={(_event, newValue) =>
+                                handlePrimaryChange("name", newValue ? newValue.id : "")
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Preferred Name"
+                                    placeholder="Select Primary Contact"
+                                    required
+                                />
+                            )}
                         />
                         <CustomInputField
                             value={formData.primary_contact.email}
