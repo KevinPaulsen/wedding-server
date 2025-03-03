@@ -12,11 +12,11 @@ public class RsvpGuestDetails {
     @DynamoDBAttribute(attributeName = "coming") private boolean coming;
 
     public RsvpGuestDetails() {
-        this(null, null, null, true);
+        this("");
     }
 
     public RsvpGuestDetails(String displayName) {
-        this(displayName, null, null, true);
+        this(displayName, List.of(), "", true);
     }
 
     public RsvpGuestDetails(String displayName, List<DietaryRestriction> dietaryRestrictions, String other, boolean coming) {
