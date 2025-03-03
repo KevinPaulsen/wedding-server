@@ -53,7 +53,7 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
     const commonComponentsProps = () => ({
         image: {
             style: {
-                border: "3px solid var(--main-dark)",
+                border: "2px solid var(--main-dark)",
                 padding: "1px",
             },
         },
@@ -79,12 +79,12 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
                             movePhoto={handleMovePhoto}
                             handleDelete={handleDelete}
                             componentsProps={commonComponentsProps}
-                            targetRowHeight={300}
+                            targetRowHeight={175}
                         />
                     ) : (
                         <RowsPhotoAlbum
                             photos={data}
-                            targetRowHeight={300}
+                            targetRowHeight={175}
                             onClick={({ index }) => setIndex(index)}
                             componentsProps={commonComponentsProps}
                         />
