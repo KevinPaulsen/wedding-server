@@ -47,12 +47,9 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         }
     }
 
-    @PostMapping("/create") public ResponseEntity<Map<String, String>> create(@RequestBody CreateRsvpDTO rsvpDTO) {
+    @PostMapping("/create") public ResponseEntity<Rsvp> create(@RequestBody CreateRsvpDTO rsvpDTO) {
         Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp(), true);
-        return new ResponseEntity<>(Map.of("message",
-                                           "RSVP object created successfully.",
-                                           "rsvp_id",
-                                           savedRsvp.getRsvpId()), HttpStatus.CREATED);
+        return new ResponseEntity<>(savedRsvp, HttpStatus.CREATED);
     }
 
     @PutMapping("/edit") public ResponseEntity<Rsvp> editRsvp(@RequestBody Rsvp rsvpDTO) {
