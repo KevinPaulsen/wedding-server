@@ -25,7 +25,10 @@ const AdminRsvpController: React.FC = () => {
 
         if (response.success) {
             addRsvp(response.data as Rsvp);
+            return true;
         }
+
+         return false;
     };
 
     return (

@@ -25,7 +25,7 @@ interface RsvpTableProps {
     deleteRsvp: (rsvpCode: string) => Promise<void>;
     deleteError: string | null;
     deleteLoading: boolean;
-    createRsvp: (createDTO: CreateRsvpDTO) => Promise<void>;
+    createRsvp: (createDTO: CreateRsvpDTO) => Promise<boolean>;
     createError: string | null;
     createLoading: boolean;
     updateRsvpInState: (updatedRsvp: Rsvp) => void;
@@ -132,6 +132,10 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
 
         return newRsvpData;
     };
+
+    const handleCreateRsvp = async (updatedRsvpDto: CreateRsvpDTO) => {
+        return await createRsvp(updatedRsvpDto);
+    }
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
@@ -276,7 +280,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
                 open={Boolean(creatingRsvp)}
                 rsvp={creatingRsvp}
                 onClose={() => setCreatingRsvp(null)}
-                onSave={handleUpdateRsvp} // TODO: Change this for custom handler
+                onSubmit={handleCreateRsvp}
                 loading={createLoading}
                 error={createError}
             />
