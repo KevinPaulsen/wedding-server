@@ -16,10 +16,10 @@ public class CreateRsvpDTO {
 
     private Set<String> allowedGuestDisplayNames;
 
-    private int numGuestsAllowedRoce;
-    private int numGuestsAllowedRehearsal;
-    private int numGuestsAllowedCeremony;
-    private int numGuestsAllowedReception;
+    private Boolean hasRoceInvitation;
+    private Boolean hasRehearsalInvitation;
+    private Boolean hasCeremonyInvitation;
+    private Boolean hasReceptionInvitation;
 
     private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(Set<String> allowedGuestDisplayNames) {
         if (allowedGuestDisplayNames == null) {
@@ -41,10 +41,10 @@ public class CreateRsvpDTO {
         rsvp.setSubmitted(false);
         rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, phoneNumber, email, address));
         rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
-        rsvp.setRoce(new Event(numGuestsAllowedRoce, Collections.emptyList()));
-        rsvp.setRehearsal(new Event(numGuestsAllowedRehearsal, Collections.emptyList()));
-        rsvp.setCeremony(new Event(numGuestsAllowedCeremony, Collections.emptyList()));
-        rsvp.setReception(new Event(numGuestsAllowedReception, Collections.emptyList()));
+        rsvp.setRoce(new Event(hasRoceInvitation, Collections.emptyList()));
+        rsvp.setRehearsal(new Event(hasRehearsalInvitation, Collections.emptyList()));
+        rsvp.setCeremony(new Event(hasCeremonyInvitation, Collections.emptyList()));
+        rsvp.setReception(new Event(hasReceptionInvitation, Collections.emptyList()));
 
         return rsvp;
     }
@@ -89,35 +89,43 @@ public class CreateRsvpDTO {
         this.allowedGuestDisplayNames = allowedGuestDisplayNames;
     }
 
-    @JsonProperty("max_guests_roce") public int getNumGuestsAllowedRoce() {
-        return numGuestsAllowedRoce;
+    @JsonProperty("roce_invitation")
+    public Boolean getHasRoceInvitation() {
+        return hasRoceInvitation;
     }
 
-    @JsonProperty("max_guests_roce") public void setNumGuestsAllowedRoce(int numGuestsAllowedRoce) {
-        this.numGuestsAllowedRoce = numGuestsAllowedRoce;
+    @JsonProperty("roce_invitation")
+    public void setHasRoceInvitation(Boolean hasRoceInvitation) {
+        this.hasRoceInvitation = hasRoceInvitation;
     }
 
-    @JsonProperty("max_guests_rehearsal") public int getNumGuestsAllowedRehearsal() {
-        return numGuestsAllowedRehearsal;
+    @JsonProperty("rehearsal_invitation")
+    public Boolean getHasRehearsalInvitation() {
+        return hasRehearsalInvitation;
     }
 
-    @JsonProperty("max_guests_rehearsal") public void setNumGuestsAllowedRehearsal(int numGuestsAllowedRehearsal) {
-        this.numGuestsAllowedRehearsal = numGuestsAllowedRehearsal;
+    @JsonProperty("rehearsal_invitation")
+    public void setHasRehearsalInvitation(Boolean hasRehearsalInvitation) {
+        this.hasRehearsalInvitation = hasRehearsalInvitation;
     }
 
-    @JsonProperty("max_guests_ceremony") public int getNumGuestsAllowedCeremony() {
-        return numGuestsAllowedCeremony;
+    @JsonProperty("ceremony_invitation")
+    public Boolean getHasCeremonyInvitation() {
+        return hasCeremonyInvitation;
     }
 
-    @JsonProperty("max_guests_ceremony") public void setNumGuestsAllowedCeremony(int numGuestsAllowedCeremony) {
-        this.numGuestsAllowedCeremony = numGuestsAllowedCeremony;
+    @JsonProperty("ceremony_invitation")
+    public void setHasCeremonyInvitation(Boolean hasCeremonyInvitation) {
+        this.hasCeremonyInvitation = hasCeremonyInvitation;
     }
 
-    @JsonProperty("max_guests_reception") public int getNumGuestsAllowedReception() {
-        return numGuestsAllowedReception;
+    @JsonProperty("reception_invitation")
+    public Boolean getHasReceptionInvitation() {
+        return hasReceptionInvitation;
     }
 
-    @JsonProperty("max_guests_reception") public void setNumGuestsAllowedReception(int numGuestsAllowedReception) {
-        this.numGuestsAllowedReception = numGuestsAllowedReception;
+    @JsonProperty("reception_invitation")
+    public void setHasReceptionInvitation(Boolean hasReceptionInvitation) {
+        this.hasReceptionInvitation = hasReceptionInvitation;
     }
 }

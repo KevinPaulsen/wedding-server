@@ -34,16 +34,16 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
         rsvp.setSubmitted(true);
 
         if (rsvp.getRoce() != null) {
-            rsvp.getRoce().setAllowedGuests(-1);
+            rsvp.getRoce().setInvited(null);
         }
         if (rsvp.getRehearsal() != null) {
-            rsvp.getRehearsal().setAllowedGuests(-1);
+            rsvp.getRehearsal().setInvited(null);
         }
         if (rsvp.getCeremony() != null) {
-            rsvp.getCeremony().setAllowedGuests(-1);
+            rsvp.getCeremony().setInvited(null);
         }
         if (rsvp.getReception() != null) {
-            rsvp.getReception().setAllowedGuests(-1);
+            rsvp.getReception().setInvited(null);
         }
     }
 

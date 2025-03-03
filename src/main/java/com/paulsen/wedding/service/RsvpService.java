@@ -283,37 +283,39 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
     }
 
     private Event mergeEvent(Event stored, Event input, Set<String> allowedGuests) {
-        if (input == null && stored == null) return new Event(0, List.of());
-        int allowed = Objects.requireNonNullElse(input, stored).getAllowedGuests();
-
-        if (allowed == -1) {
-            allowed = stored == null ? 0 : stored.getAllowedGuests();
+        // Ensure at lest 1 of the given events is non-null, if not return the standard Event.
+        if (input == null && stored == null) {
+            return new Event();
         }
 
-        if (allowed > 0) {
-            allowed = allowedGuests.size();
+        // Try to get value from input first, then stored, then default to false.
+        Boolean isInvited = Objects.requireNonNullElse(input, stored).getInvited();
+        if (isInvited == null) {
+            isInvited = stored != null && stored.getInvited();
         }
 
-        if (allowed == 0) return new Event(0, List.of());
+        // If not invited, then return a standard event
+        if (!isInvited) {
+            return new Event();
+        }
 
+        // Try to get guests from input first, then stored, then default to false.
         List<String> guests;
         if (input != null && input.getGuestsAttending() != null) {
-            guests = input.getGuestsAttending()
-                          .stream()
-                          .map(StringFormatUtil::formatToIndexName)
-                          .filter(allowedGuests::contains)
-                          .toList();
+            guests = input.getGuestsAttending();
         } else if (stored != null && stored.getGuestsAttending() != null) {
-            guests = stored.getGuestsAttending()
-                           .stream()
-                           .map(StringFormatUtil::formatToIndexName)
-                           .filter(allowedGuests::contains)
-                           .toList();
+            guests = stored.getGuestsAttending();
         } else {
             guests = List.of();
         }
 
-        return new Event(allowed, guests);
+        // Ensure all guests are properly formatted, and filter out names that are not allowed
+        guests = guests.stream()
+                       .map(StringFormatUtil::formatToIndexName)
+                       .filter(allowedGuests::contains)
+                       .toList();
+
+        return new Event(isInvited, guests);
     }
 
     /**
