@@ -25,6 +25,10 @@ export function useRsvpData() {
         }
     }, [data]);
 
+    const addRsvp = (rsvp: Rsvp) => {
+        setLocalData(prev => [...prev, rsvp]);
+    }
+
     // Remove an RSVP by ID
     const removeRsvp = (rsvpCode: string) => {
         setLocalData(prev => prev.filter(r => r.rsvp_id !== rsvpCode));
@@ -42,6 +46,7 @@ export function useRsvpData() {
         loading,
         error,
         removeRsvp,
+        addRsvp,
         updateRsvpInState,
     };
 }

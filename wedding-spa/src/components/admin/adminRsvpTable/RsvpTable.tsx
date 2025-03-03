@@ -17,12 +17,17 @@ import EditRsvpDialog from "./EditRsvpDialog";
 import {useEditRsvp} from "../../../hooks/rsvp/useEditRsvp";
 import {RsvpTableRow} from "./RsvpTableRow";
 import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
+import {CreateRsvpDTO} from "../../../types/RsvpDTO";
+import CreateRsvpDialog from "./CreateRsvpDialog";
 
 interface RsvpTableProps {
     rsvpData: Rsvp[];
     deleteRsvp: (rsvpCode: string) => Promise<void>;
-    error: string | null;
-    loading: boolean;
+    deleteError: string | null;
+    deleteLoading: boolean;
+    createRsvp: (createDTO: CreateRsvpDTO) => Promise<void>;
+    createError: string | null;
+    createLoading: boolean;
     updateRsvpInState: (updatedRsvp: Rsvp) => void;
 }
 
@@ -76,11 +81,33 @@ const columns: ColumnConfig[] = [
     },
 ];
 
-const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, loading, updateRsvpInState }) => {
+const createRsvpDto: CreateRsvpDTO = {
+    primary_name: '',
+    phone_number: '',
+    email: '',
+    address: '',
+    allowed_guests: [],
+    max_guests_roce: 0,
+    max_guests_rehearsal: 0,
+    max_guests_ceremony: 0,
+    max_guests_reception: 0,
+}
+
+const RsvpTable: React.FC<RsvpTableProps> = ({
+                                                 rsvpData,
+                                                 deleteRsvp,
+                                                 deleteError,
+                                                 deleteLoading,
+                                                 createRsvp,
+                                                 createError,
+                                                 createLoading,
+                                                 updateRsvpInState
+                                             }) => {
     const [order, setOrder] = React.useState<"asc" | "desc">("asc");
     const [orderBy, setOrderBy] = React.useState<string>("primaryName");
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [editingRsvp, setEditingRsvp] = React.useState<Rsvp | null>(null);
+    const [creatingRsvp, setCreatingRsvp] = React.useState<CreateRsvpDTO | null>(null);
 
     const handleRequestSort = (columnId: string) => {
         const isAsc = orderBy === columnId && order === "asc";
@@ -176,9 +203,11 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, load
             <EnhancedTableToolbar
                 numSelected={selected.length}
                 onDelete={handleDelete}
-                loading={loading}
+                onAddRsvp={() => setCreatingRsvp(JSON.parse(JSON.stringify(createRsvpDto)))}
+                loading={deleteLoading}
             />
-            {error && <Alert severity="error">{error}</Alert>}
+            {deleteError && <Alert severity="error">{deleteError}</Alert>}
+            {createError && <Alert severity="error">{createError}</Alert>}
 
             <TableContainer>
                 <Table size="small" aria-label="collapsible table">
@@ -243,6 +272,14 @@ const RsvpTable: React.FC<RsvpTableProps> = ({ rsvpData, deleteRsvp, error, load
                     </TableBody>
                 </Table>
             </TableContainer>
+            <CreateRsvpDialog
+                open={Boolean(creatingRsvp)}
+                rsvp={creatingRsvp}
+                onClose={() => setCreatingRsvp(null)}
+                onSave={handleUpdateRsvp} // TODO: Change this for custom handler
+                loading={createLoading}
+                error={createError}
+            />
             <EditRsvpDialog
                 open={Boolean(editingRsvp)}
                 rsvp={editingRsvp}

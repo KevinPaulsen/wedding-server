@@ -101,8 +101,8 @@ export async function verifyToken(authToken: string): Promise<ApiResponse<boolea
  * Backend expects a CreateRsvpDTO. Returns { message, rsvp_id } in data,
  * so if you need the full Rsvp object, either retrieve it again or adapt as needed.
  */
-export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<{message: string; rsvp_id: string}>> {
-    return request<{message: string; rsvp_id: string}>("/rsvp/create", {
+export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<Rsvp>> {
+    return request<Rsvp>("/rsvp/create", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
