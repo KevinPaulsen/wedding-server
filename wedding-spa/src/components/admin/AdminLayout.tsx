@@ -1,8 +1,8 @@
 // AdminLayout.tsx
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { IoHome } from 'react-icons/io5';
+import {Col, Container, Row} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import {IoHome} from 'react-icons/io5';
 import "../../styles/Header.css";
 
 interface AdminLayoutProps {
@@ -35,7 +35,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ title, children }) => {
                             <Link to="/admin/guests" className="nav-link">Guest List</Link>
                             <Link to="/admin/dashboard" className="nav-link">RSVP Info</Link>
                             <Link to="/admin/add-photos" className="nav-link">Add Photos</Link>
-                            <Link to="/admin/add-rsvp" className="nav-link">Add RSVP</Link>
                         </Col>
                     </Row>
                 </Container>

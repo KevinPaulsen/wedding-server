@@ -12,7 +12,6 @@ import Details from "../pages/home/Details";
 import Gallery from "../pages/home/GalleryPage";
 import AdminMain from "../pages/admin/AdminRsvpInfoPage";
 import GuestListPage from "../pages/admin/GuestListPage";
-import AddRsvpPage from "../pages/admin/AddRsvpPage";
 import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
 import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
 import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
@@ -113,7 +112,6 @@ const App: React.FC = () => {
 
                 <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage />} />} />
                 <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage />} />} />
-                <Route path="/admin/add-rsvp" element={<PrivateRoute component={<AddRsvpPage />} />} />
 
                 <Route path="/" element={<HomePage />} />
                 <Route path="/gallery" element={<Gallery />} />
