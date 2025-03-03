@@ -486,9 +486,6 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
                                     renderOption={(props, option, { selected }) => (
                                         <li {...props}>
                                             <Checkbox
-                                                icon={<span />}
-                                                checkedIcon={<span />}
-                                                style={{ marginRight: 8 }}
                                                 checked={selected}
                                             />
                                             {option}

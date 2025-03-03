@@ -267,9 +267,6 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
                                 return (
                                     <li key={key} {...optionProps}>
                                         <Checkbox
-                                            icon={<span />}
-                                            checkedIcon={<span />}
-                                            style={{ marginRight: 1 }}
                                             checked={selected}
                                         />
                                         {option}
