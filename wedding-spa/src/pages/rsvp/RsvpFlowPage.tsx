@@ -14,10 +14,10 @@ import {Rsvp} from "../../types/rsvp";
 
 function allowedPage(rsvp: Rsvp, nextStep: number) {
     switch (nextStep) {
-        case RSVP_ROCE_PAGE: return rsvp.roce.allowed_guests > 0;
-        case RSVP_REHEARSAL_PAGE: return rsvp.rehearsal.allowed_guests > 0;
-        case RSVP_CEREMONY_PAGE: return rsvp.ceremony.allowed_guests > 0;
-        case RSVP_RECEPTION_PAGE: return rsvp.reception.allowed_guests > 0;
+        case RSVP_ROCE_PAGE: return rsvp.roce.invited;
+        case RSVP_REHEARSAL_PAGE: return rsvp.rehearsal.invited;
+        case RSVP_CEREMONY_PAGE: return rsvp.ceremony.invited;
+        case RSVP_RECEPTION_PAGE: return rsvp.reception.invited;
         default: return true;
     }
 }

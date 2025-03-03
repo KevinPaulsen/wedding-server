@@ -2,14 +2,14 @@
 // (Optional) If you want a dedicated interface for createRsvp.
 export interface CreateRsvpDTO {
     primary_name: string;
-    phone_number: string;
-    email: string;
-    address: string;
-    allowed_guests?: string[];
-    max_guests_roce?: number;
-    max_guests_rehearsal?: number;
-    max_guests_ceremony?: number;
-    max_guests_reception?: number;
+    phone_number?: string;
+    email?: string;
+    address?: string;
+    allowed_guests: string[];
+    roce_invitation?: boolean;
+    rehearsal_invitation?: boolean;
+    ceremony_invitation?: boolean;
+    reception_invitation?: boolean;
 }
 
 // src/types/LookupDTO.ts

@@ -26,7 +26,7 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
     );
     const eventData = formData[eventKey];
 
-    if (!eventData || eventData.allowed_guests <= 0) {
+    if (!eventData || !eventData.invited) {
         return null;
     }
 
@@ -79,7 +79,7 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
 
     return (
         <Box sx={{ p: 3 }}>
-            {eventData.allowed_guests <= 0 ? (
+            {!eventData.invited ? (
                 <Typography>You have no invitation.</Typography>
             ) : (
                 <>

@@ -62,7 +62,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
             id: "roce",
             label: "Roce",
             getValue: (entry: GuestEntry) => {
-                if (row.roce.allowed_guests === 0) return "";
+                if (!row.roce.invited) return "";
                 return row.roce.guests_attending
                     .map((s) => s.toLowerCase())
                     .includes(entry[0].toLowerCase())
@@ -74,7 +74,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
             id: "rehearsal",
             label: "Rehearsal",
             getValue: (entry: GuestEntry) => {
-                if (row.rehearsal.allowed_guests === 0) return "";
+                if (!row.rehearsal.invited) return "";
                 return row.rehearsal.guests_attending
                     .map((s) => s.toLowerCase())
                     .includes(entry[0].toLowerCase())
@@ -86,7 +86,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
             id: "ceremony",
             label: "Ceremony",
             getValue: (entry: GuestEntry) => {
-                if (row.ceremony.allowed_guests === 0) return "";
+                if (!row.ceremony.invited) return "";
                 return row.ceremony.guests_attending
                     .map((s) => s.toLowerCase())
                     .includes(entry[0].toLowerCase())
@@ -98,7 +98,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
             id: "reception",
             label: "Reception",
             getValue: (entry: GuestEntry) => {
-                if (row.reception.allowed_guests === 0) return "";
+                if (!row.reception.invited) return "";
                 return row.reception.guests_attending
                     .map((s) => s.toLowerCase())
                     .includes(entry[0].toLowerCase())
@@ -110,10 +110,10 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({ row, selected, onS
 
     // Filter out event columns that are not allowed.
     const filteredGuestColumns = guestColumns.filter((column) => {
-        if (column.id === "roce") return row.roce.allowed_guests > 0;
-        if (column.id === "rehearsal") return row.rehearsal.allowed_guests > 0;
-        if (column.id === "ceremony") return row.ceremony.allowed_guests > 0;
-        if (column.id === "reception") return row.reception.allowed_guests > 0;
+        if (column.id === "roce") return row.roce.invited;
+        if (column.id === "rehearsal") return row.rehearsal.invited;
+        if (column.id === "ceremony") return row.ceremony.invited;
+        if (column.id === "reception") return row.reception.invited;
         return true;
     });
 

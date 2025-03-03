@@ -87,10 +87,10 @@ const createRsvpDto: CreateRsvpDTO = {
     email: '',
     address: '',
     allowed_guests: [],
-    max_guests_roce: 0,
-    max_guests_rehearsal: 0,
-    max_guests_ceremony: 0,
-    max_guests_reception: 0,
+    roce_invitation: false,
+    rehearsal_invitation: false,
+    ceremony_invitation: false,
+    reception_invitation: false,
 }
 
 const RsvpTable: React.FC<RsvpTableProps> = ({

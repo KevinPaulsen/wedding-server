@@ -9,14 +9,14 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
     Switch,
     TextField,
     Typography,
     useTheme,
-    IconButton,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { Rsvp } from "../../../types/rsvp";
+import {Rsvp} from "../../../types/rsvp";
 import CustomInputField from "../../shared/CustomInputField";
 import CustomButton from "../../shared/CustomButton";
 import {ApiResponse} from "../../../services/ApiService";
@@ -347,7 +347,7 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
                             {(["roce", "rehearsal", "ceremony", "reception"] as const).map(
                                 (eventName) => {
                                     const allowed =
-                                        formData && formData[eventName].allowed_guests > 0;
+                                        formData && formData[eventName].invited;
                                     return (
                                         <Box
                                             key={eventName}
@@ -442,7 +442,7 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
                                     </Box>
                                     {(["roce", "rehearsal", "ceremony", "reception"] as const).map(
                                         (eventName) => {
-                                            if (formData[eventName].allowed_guests === 0)
+                                            if (!formData[eventName].invited)
                                                 return null;
                                             return (
                                                 <Box

@@ -23,19 +23,19 @@ export interface Rsvp {
     primary_contact: PrimaryContact;
     guest_list: { [key: string]: GuestListDetail };
     roce: {
-        allowed_guests: number;
+        invited: boolean;
         guests_attending: string[];
     };
     rehearsal: {
-        allowed_guests: number;
+        invited: boolean;
         guests_attending: string[];
     };
     ceremony: {
-        allowed_guests: number;
+        invited: boolean;
         guests_attending: string[];
     };
     reception: {
-        allowed_guests: number;
+        invited: boolean;
         guests_attending: string[];
     };
     submitted: boolean;

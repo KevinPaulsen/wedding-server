@@ -30,19 +30,19 @@ const initialState: FlowState = {
         },
         guest_list: {},
         roce: {
-            allowed_guests: 0,
+            invited: false,
             guests_attending: [],
         },
         rehearsal: {
-            allowed_guests: 0,
+            invited: false,
             guests_attending: [],
         },
         ceremony: {
-            allowed_guests: 0,
+            invited: false,
             guests_attending: [],
         },
         reception: {
-            allowed_guests: 0,
+            invited: false,
             guests_attending: [],
         },
         submitted: false,
