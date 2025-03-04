@@ -176,7 +176,7 @@
     align-content: end;
     max-width: 100px;
     margin: 0 auto 0.5rem;
-    filter: invert(1);
+    filter: invert(1) brightness(0) saturate(100%);
 }
 
 /************************************************

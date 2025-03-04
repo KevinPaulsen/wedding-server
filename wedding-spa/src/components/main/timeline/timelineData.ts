@@ -5,6 +5,7 @@ import cocktail from "../../../assets/icons/Cocktail.png";
 import food from "../../../assets/icons/Food.png";
 import party from "../../../assets/icons/Party.png";
 import tea from "../../../assets/icons/Tea.png";
+import sendoff from "../../../assets/icons/Sendoff.png";
 
 export interface TimelineEvent {
     time: string;
@@ -52,6 +53,6 @@ export const timelineEvents: TimelineEvent[] = [
     {
         time: "10:30 PM",
         title: "Send Off",
-        image: tea,
+        image: sendoff,
     },
 ];

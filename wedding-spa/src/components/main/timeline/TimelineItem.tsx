@@ -26,6 +26,7 @@ const TimelineDetails: React.FC<TimelineDetailsProps> = ({ image, time, title, l
     );
 };
 
+
 interface TimelineItemProps {
     position: "left" | "right" | "center";
     topOffset: number;
