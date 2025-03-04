@@ -1,9 +1,12 @@
-// PrivateRoute.tsx
-import React, { useContext, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+// src/routes/PrivateRoute.tsx
+import React, {useContext, useEffect} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {AuthContext} from '../context/AuthContext';
 import useTokenVerification from '../hooks/auth/useTokenVerification';
-import { Spinner } from 'react-bootstrap';
+
+// MUI imports
+import {Box, CircularProgress} from '@mui/material';
+
 import AdminLayout from '../components/admin/AdminLayout';
 
 interface PrivateRouteProps {
@@ -19,10 +22,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Call the token verification hook.
+    // Verify token
     const { isValid, loading, error } = useTokenVerification(authToken);
 
-    // useEffect to handle redirection when token is invalid or there's an error.
     useEffect(() => {
         if (isValid === false || error) {
             logout();
@@ -30,25 +32,30 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
         }
     }, [isValid, error, logout, navigate, location]);
 
-    // While token verification is in progress (or isValid is still null), show a spinner.
+    // While token verification is in progress, show a loading indicator
     if (loading || isValid === null) {
         return (
             <AdminLayout title="">
-                <div className="d-flex justify-content-center">
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </div>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                    }}
+                >
+                    <CircularProgress aria-label="Loading..." />
+                </Box>
             </AdminLayout>
         );
     }
 
-    // If token is invalid or an error exists, render nothing (redirection will occur).
-    if (isValid === false || error) {
+    // If token is invalid or there's an error, render nothing (redirection occurs)
+    if (!isValid || error) {
         return null;
     }
 
-    // Otherwise, render the protected component.
+    // Otherwise, render the protected component
     return component;
 };
 
