@@ -176,7 +176,14 @@
     align-content: end;
     max-width: 100px;
     margin: 0 auto 0.5rem;
-    filter: invert(1) brightness(0) saturate(100%);
+}
+
+/* Timeline.css */
+.icon {
+    width: 100px;           /* Adjust the size as needed */
+    height: 100px;          /* Adjust the size as needed */
+    background-color: var(--main-dark);
+    display: block;
 }
 
 /************************************************

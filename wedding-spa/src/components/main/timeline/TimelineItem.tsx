@@ -15,7 +15,13 @@ const TimelineDetails: React.FC<TimelineDetailsProps> = ({ image, time, title, l
     return (
         <>
             <Row className="event-image" style={{ minHeight: height }}>
-                <img src={image} alt={title} />
+                <div
+                    className="icon"
+                    style={{
+                        WebkitMask: `url(${image}) no-repeat center/contain`,
+                        mask: `url(${image}) no-repeat center/contain`,
+                    }}
+                />
             </Row>
             <Row className="m-0 event-time">{time}</Row>
             <Container className="m-0 g-0" style={{ minHeight: height }}>
@@ -58,7 +64,6 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ position, topOffset, time, 
             <Container className="event-content">
                 <TimelineDetails image={image} location={location} time={time} title={title} />
             </Container>
-            <div className="event-content"></div>
         </div>
     );
 };

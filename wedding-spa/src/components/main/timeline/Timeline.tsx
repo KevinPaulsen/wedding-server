@@ -5,9 +5,9 @@ import TimelineItem from "./TimelineItem";
 import '../../../styles/Timeline.css';
 
 const Timeline: React.FC = () => {
-    const padding = 200;
+    const padding = 150;
     const buffer = 125;
-    const containerHeight = 50 + padding + buffer + (timelineEvents.length - 2) * padding + 32;
+    const containerHeight = 50 + padding + buffer + (timelineEvents.length - 2) * padding + 100;
 
     return (
         <div className="timeline-container" style={{ height: containerHeight }}>
