@@ -1,4 +1,4 @@
-// Timeline.jsx
+// components/main/timeline/Timeline.tsx
 import React from "react";
 import { timelineEvents } from "./timelineData";
 import TimelineItem from "./TimelineItem";

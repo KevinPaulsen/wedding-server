@@ -1,4 +1,4 @@
-// LoadingSpinner.tsx
+// components/admin/LoadingSpinner.tsx
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 

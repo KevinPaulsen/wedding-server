@@ -1,4 +1,4 @@
-// src/pages/home/StoryPage.tsx
+// pages/home/StoryPage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
 import Story from '../../components/main/Story';

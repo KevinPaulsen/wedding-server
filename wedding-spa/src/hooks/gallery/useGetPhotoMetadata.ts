@@ -1,4 +1,4 @@
-// useGetPhotoMetadata.ts
+// hooks/gallery/useGetPhotoMetadata.ts
 import { useEffect, useState } from 'react';
 import { useApi } from '../useApi';
 import { getPhotoMetadata } from "../../services/ApiService";

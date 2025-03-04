@@ -1,3 +1,4 @@
+// components/shared/SortableGallery/SortableGallery.tsx
 import React, {JSX, useRef, useState} from "react";
 import {
     closestCenter,

@@ -1,4 +1,4 @@
-// useTokenVerification.ts
+// hooks/auth/useTokenVerification.ts
 import { useEffect } from 'react';
 import { useApi } from '../useApi'; // adjust the path as needed
 import { verifyToken } from "../../services/ApiService";

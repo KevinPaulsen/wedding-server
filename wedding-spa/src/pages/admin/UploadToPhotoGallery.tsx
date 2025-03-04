@@ -1,4 +1,4 @@
-// src/pages/admin/UploadToPhotoGallery.tsx
+// pages/admin/UploadToPhotoGallery.tsx
 import React from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import AdminFileUploadComponent from '../../components/admin/adminGalleryControl/AdminFileUploadComponent';

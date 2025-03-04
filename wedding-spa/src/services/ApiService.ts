@@ -1,4 +1,4 @@
-// ApiService.ts
+// services/ApiService.ts
 
 import { getImageDimensions } from "./utils";
 import { Rsvp } from "../types/rsvp";            // your Rsvp/Guest interfaces

@@ -1,4 +1,4 @@
-// src/types/CreateRsvpDTO.ts
+// types/RsvpDTO.ts
 // (Optional) If you want a dedicated interface for createRsvp.
 export interface CreateRsvpDTO {
     primary_name: string;

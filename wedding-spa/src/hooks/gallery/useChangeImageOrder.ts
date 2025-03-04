@@ -1,4 +1,4 @@
-// useChangeImageOrder.ts
+// hooks/gallery/useChangeImageOrder.ts
 import { useApi } from '../useApi'; // adjust path as needed
 import { postChangeImageOrder } from "../../services/ApiService";
 

@@ -1,4 +1,4 @@
-// hooks/rsvp/useCreateRsvp.ts
+// hooks/rsvp/useDelete.ts
 import {useApi} from '../useApi';
 import {deleteRsvpRequest} from '../../services/ApiService';
 

@@ -1,3 +1,4 @@
+// components/shared/SortableGallery/Overlay.tsx
 import React from "react";
 
 interface Photo {

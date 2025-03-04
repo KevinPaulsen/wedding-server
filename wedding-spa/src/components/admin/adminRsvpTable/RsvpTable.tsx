@@ -1,4 +1,4 @@
-// RsvpTable.tsx
+// components/admin/adminRsvpTable/RsvpTable.tsx
 import React from 'react';
 import {
     Alert,

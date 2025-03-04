@@ -1,4 +1,4 @@
-// src/pages/rsvp/RsvpFormStep.tsx
+// components/shared/rsvpFlow/RsvpFormStep.tsx
 import React from 'react';
 import RsvpConfirmation from './RsvpConfirmation';
 import RsvpVerificationPage from './RsvpVerificationPage';

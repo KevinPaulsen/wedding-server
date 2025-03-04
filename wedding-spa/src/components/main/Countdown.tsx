@@ -1,4 +1,4 @@
-// Countdown.tsx
+// components/main/Countdown.tsx
 import React, { useEffect, useState } from 'react';
 import InfoContainer from "./InfoContainer";
 

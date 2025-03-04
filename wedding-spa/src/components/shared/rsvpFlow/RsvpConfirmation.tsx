@@ -1,4 +1,4 @@
-// src/pages/rsvp/RsvpConfirmation.tsx
+// components/shared/rsvpFlow/RsvpConfirmation.tsx
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';

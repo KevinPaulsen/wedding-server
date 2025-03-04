@@ -1,4 +1,4 @@
-// src/pages/rsvp/RsvpPrimaryContactPage.tsx
+// components/shared/rsvpFlow/RsvpPrimaryContactPage.tsx
 import React, { useRef } from 'react';
 import { Form } from 'react-bootstrap';
 import CustomInputField from '../CustomInputField';

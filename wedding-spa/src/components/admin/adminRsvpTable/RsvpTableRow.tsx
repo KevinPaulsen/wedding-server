@@ -1,3 +1,4 @@
+// components/admin/adminRsvpTable/RsvpTableRow.tsx
 import { Rsvp } from "../../../types/rsvp";
 import React from "react";
 import {

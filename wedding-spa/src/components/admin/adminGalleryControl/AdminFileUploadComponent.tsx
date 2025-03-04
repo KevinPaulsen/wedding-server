@@ -1,4 +1,4 @@
-// AdminFileUploadComponent.jsx
+// components/admin/adminGalleryControl/AdminFileUploadComponent.tsx
 import React, { useState } from 'react';
 import {
     Container,

@@ -1,4 +1,4 @@
-// src/App.tsx
+// app/App.tsx
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';

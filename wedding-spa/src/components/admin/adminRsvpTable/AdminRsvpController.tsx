@@ -1,4 +1,4 @@
-// AdminRsvpController.tsx
+// components/admin/adminRsvpTable/AdminRsvpController.tsx
 import React from 'react';
 import RsvpTable from './RsvpTable';
 import {useRsvpData} from "../../../hooks/rsvp/useRsvpData";

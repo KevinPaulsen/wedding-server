@@ -1,4 +1,4 @@
-// src/pages/home/GalleryPage.tsx
+// pages/home/GalleryPage.tsx
 import React from 'react';
 import { Typography } from '@mui/material';
 import BaseLayout from '../../components/main/BaseLayout';

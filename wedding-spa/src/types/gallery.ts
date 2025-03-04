@@ -1,4 +1,4 @@
-// src/types/gallery.ts
+// types/gallery.ts
 
 /**
  * Represents the raw image metadata from the backend API.

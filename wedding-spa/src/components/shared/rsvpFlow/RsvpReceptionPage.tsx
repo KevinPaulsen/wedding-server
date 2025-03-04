@@ -1,4 +1,4 @@
-// src/pages/rsvp/RsvpReceptionPage.tsx
+// components/shared/rsvpFlow/RsvpReceptionPage.tsx
 import React from 'react';
 import {useSubmitRsvp} from '../../../hooks/rsvp/useSubmitRsvp';
 import GuestSelection from "./GuestSelection";

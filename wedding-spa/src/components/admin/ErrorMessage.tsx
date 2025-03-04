@@ -1,4 +1,4 @@
-// ErrorMessage.tsx
+// components/admin/ErrorMessage.tsx
 import React from 'react';
 
 interface ErrorMessageProps {

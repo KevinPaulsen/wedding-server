@@ -1,4 +1,4 @@
-// TimelineItem.jsx
+// components/main/timeline/TimelineItem.tsx
 import React from "react";
 import '../../../styles/Timeline.css';
 import { Container, Row } from "react-bootstrap";

@@ -1,4 +1,4 @@
-// useDeleteImage.ts
+// hooks/gallery/useDeleteImage.ts
 import { useApi } from '../useApi';
 import { deleteImageRequest } from "../../services/ApiService";
 

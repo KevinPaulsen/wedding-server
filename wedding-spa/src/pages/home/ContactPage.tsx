@@ -1,4 +1,4 @@
-// src/pages/home/ContactPage.tsx
+// pages/home/ContactPage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
 import Contact from '../../components/main/Contact';

@@ -1,3 +1,4 @@
+// components/shared/SortableGallery/Sortable.tsx
 import React, { cloneElement } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 

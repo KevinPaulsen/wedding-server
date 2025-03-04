@@ -1,4 +1,4 @@
-// timelineData.ts
+// components/main/timeline/timelineData.ts
 import adoration from "../../../assets/icons/Adoration.png";
 import ceremony from "../../../assets/icons/Cerimony.png";
 import cocktail from "../../../assets/icons/Cocktail.png";

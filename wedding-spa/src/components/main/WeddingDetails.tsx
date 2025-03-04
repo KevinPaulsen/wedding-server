@@ -1,4 +1,4 @@
-// WeddingDetails.tsx
+// components/main/WeddingDetails.tsx
 import React from 'react';
 import InfoContainer from "./InfoContainer";
 

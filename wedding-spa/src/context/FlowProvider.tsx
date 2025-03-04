@@ -1,4 +1,4 @@
-// src/context/FlowContext.tsx
+// context/FlowProvider.tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { Rsvp, GuestListDetail, PrimaryContact, RsvpGuestDetailWithId } from '../types/rsvp';
 

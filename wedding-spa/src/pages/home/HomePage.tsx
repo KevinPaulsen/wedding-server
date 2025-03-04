@@ -1,4 +1,4 @@
-// src/pages/home/HomePage.tsx
+// pages/home/HomePage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
 import MainPhoto from '../../components/main/MainPhoto';

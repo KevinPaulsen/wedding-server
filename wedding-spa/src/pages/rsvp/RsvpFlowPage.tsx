@@ -1,4 +1,4 @@
-// src/pages/rsvp/RsvpFlowPage.tsx
+// pages/rsvp/RsvpFlowPage.tsx
 import React, {useState} from 'react';
 import Container from '@mui/material/Container';
 import {CSSTransition} from 'react-transition-group';

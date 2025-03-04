@@ -1,4 +1,4 @@
-// src/types/rsvp.ts
+// types/rsvp.ts
 
 export interface GuestListDetail {
     display_name: string;
