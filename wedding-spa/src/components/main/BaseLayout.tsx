@@ -13,7 +13,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
             <Row className="g-0">
                 <Header />
             </Row>
-            <Row className="flex-grow-1 g-0">
+            <Row className="g-0">
                 {children}
             </Row>
         </Container>

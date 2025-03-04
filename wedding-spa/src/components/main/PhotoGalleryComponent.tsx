@@ -71,7 +71,7 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
     return (
         <Container>
             <Row className="justify-content-center mb-5">
-                <div className="col-12 col-md-10 col-lg-8">
+                <div className="col-11">
                     {makeDraggable ? (
                         <SortableGallery
                             gallery={RowsPhotoAlbum}
