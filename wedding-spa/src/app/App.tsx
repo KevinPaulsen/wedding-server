@@ -1,20 +1,19 @@
-// App.tsx
+// src/App.tsx
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import AdminLogin from "../components/admin/AdminLogin";
-import PrivateRoute from "../routes/PrivateRoute";
-import NotFound from "../components/shared/NotFound";
-import HomePage from "../pages/home/HomePage";
-import Story from "../pages/home/StoryPage";
-import Contact from "../pages/home/ContactPage";
-import Details from "../pages/home/Details";
-import Gallery from "../pages/home/GalleryPage";
-import AdminMain from "../pages/admin/AdminRsvpInfoPage";
-import GuestListPage from "../pages/admin/GuestListPage";
-import AdminRsvpFlow from "../pages/admin/AdminRsvpFlow";
-import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
-import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
+import AdminLogin from '../components/admin/AdminLogin';
+import PrivateRoute from '../routes/PrivateRoute';
+import NotFound from '../components/shared/NotFound';
+import HomePage from '../pages/home/HomePage';
+import Story from '../pages/home/StoryPage';
+import Contact from '../pages/home/ContactPage';
+import Details from '../pages/home/Details';
+import Gallery from '../pages/home/GalleryPage';
+import AdminMain from '../pages/admin/AdminRsvpInfoPage';
+import GuestListPage from '../pages/admin/GuestListPage';
+import UploadPhotoPage from '../pages/admin/UploadToPhotoGallery';
+import RsvpFlowPage from '../pages/rsvp/RsvpFlowPage';
 import '../styles/App.css';
 
 // Define your color constants
@@ -117,8 +116,6 @@ const App: React.FC = () => {
                 {/* Dashboard Page/redirects */}
                 <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain />} />} />
                 <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
-
-                <Route path="/admin/edit-rsvp" element={<PrivateRoute component={<AdminRsvpFlow />} />} />
 
                 <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage />} />} />
                 <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage />} />} />

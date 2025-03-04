@@ -1,24 +1,35 @@
-// RsvpFlowPage.tsx
+// src/pages/rsvp/RsvpFlowPage.tsx
 import React, {useState} from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
+import Container from '@mui/material/Container';
 import {CSSTransition} from 'react-transition-group';
-import Title from "../../components/main/headerComponents/Title";
-import CancelButton from "../../components/shared/rsvpFlow/CancelButton";
+
+import Title from '../../components/main/headerComponents/Title';
+import CancelButton from '../../components/shared/rsvpFlow/CancelButton';
 import RSVPFormStep, {
     RSVP_CEREMONY_PAGE,
-    RSVP_CONFIRMATION_PAGE, RSVP_RECEPTION_PAGE, RSVP_REHEARSAL_PAGE, RSVP_ROCE_PAGE,
+    RSVP_CONFIRMATION_PAGE,
+    RSVP_RECEPTION_PAGE,
+    RSVP_REHEARSAL_PAGE,
+    RSVP_ROCE_PAGE,
     RSVP_VERIFICATION_PAGE
-} from "../../components/shared/rsvpFlow/RsvpFormStep";
+} from '../../components/shared/rsvpFlow/RsvpFormStep';
+
+import {Rsvp} from '../../types/rsvp';
 import '../../styles/RsvpFlow.css';
-import {Rsvp} from "../../types/rsvp";
+import {Grid2} from "@mui/material";
 
 function allowedPage(rsvp: Rsvp, nextStep: number) {
     switch (nextStep) {
-        case RSVP_ROCE_PAGE: return rsvp.roce.invited;
-        case RSVP_REHEARSAL_PAGE: return rsvp.rehearsal.invited;
-        case RSVP_CEREMONY_PAGE: return rsvp.ceremony.invited;
-        case RSVP_RECEPTION_PAGE: return rsvp.reception.invited;
-        default: return true;
+        case RSVP_ROCE_PAGE:
+            return rsvp.roce.invited;
+        case RSVP_REHEARSAL_PAGE:
+            return rsvp.rehearsal.invited;
+        case RSVP_CEREMONY_PAGE:
+            return rsvp.ceremony.invited;
+        case RSVP_RECEPTION_PAGE:
+            return rsvp.reception.invited;
+        default:
+            return true;
     }
 }
 
@@ -32,28 +43,24 @@ const RsvpFlowPage: React.FC = () => {
             setInProp(false);
 
             let nextStep = currentStep + 1;
-
             while (!allowedPage(rsvp, nextStep)) {
-                nextStep = nextStep + 1;
+                nextStep += 1;
             }
-
             setCurrentStep(nextStep);
         }
-    }
+    };
 
     const previousPage = (rsvp: Rsvp): void => {
         if (inProp) {
             setInProp(false);
 
             let nextStep = currentStep - 1;
-
             while (!allowedPage(rsvp, nextStep)) {
-                nextStep = nextStep - 1;
+                nextStep -= 1;
             }
-
             setCurrentStep(nextStep);
         }
-    }
+    };
 
     const onExited = (): void => {
         setDisplayedStep(currentStep);
@@ -61,28 +68,72 @@ const RsvpFlowPage: React.FC = () => {
     };
 
     return (
-        <Container fluid className="d-flex flex-column vh-100" style={{ backgroundColor: 'var(--main-light)' }}>
-            <Row className="g-0 mt-5 text-center align-items-center">
-                <Col>
+        <Container
+            maxWidth={false}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                backgroundColor: 'var(--main-light)',
+            }}
+        >
+            <Grid2
+                container
+                sx={{
+                    mt: 5,
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Grid2 sx={{ flexBasis: '100%' }}>
                     <Title link={false} color="default" />
-                </Col>
-            </Row>
+                </Grid2>
+            </Grid2>
 
-            <Row className="flex-grow-1 align-items-center justify-content-center text-center">
-                <Col className="col-12">
-                    <CSSTransition in={inProp} timeout={200} classNames="fade" onExited={onExited} unmountOnExit>
-                        <RSVPFormStep step={displayedStep} nextPage={nextPage} previousPage={previousPage} />
+            <Grid2
+                container
+                sx={{
+                    flexGrow: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                }}
+            >
+                <Grid2 sx={{ flexBasis: '100%' }}>
+                    <CSSTransition
+                        in={inProp}
+                        timeout={200}
+                        classNames="fade"
+                        onExited={onExited}
+                        unmountOnExit
+                    >
+                        <RSVPFormStep
+                            step={displayedStep}
+                            nextPage={nextPage}
+                            previousPage={previousPage}
+                        />
                     </CSSTransition>
-                </Col>
-            </Row>
+                </Grid2>
+            </Grid2>
 
-            <Row style={{ height: '75px' }} className="pb-3 pt-2 text-center justify-content-center align-items-center">
+            <Grid2
+                container
+                sx={{
+                    height: '75px',
+                    pb: 3,
+                    pt: 2,
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
                 {currentStep !== RSVP_CONFIRMATION_PAGE && (
-                    <Col>
+                    <Grid2>
                         <CancelButton route="/" />
-                    </Col>
+                    </Grid2>
                 )}
-            </Row>
+            </Grid2>
         </Container>
     );
 };
