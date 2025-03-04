@@ -1,14 +1,12 @@
 // components/shared/rsvpFlow/RsvpPrimaryContactPage.tsx
-import React, { useRef } from 'react';
-import { Form } from 'react-bootstrap';
+import React, {useRef} from 'react';
+import {Box} from '@mui/material';
 import CustomInputField from '../CustomInputField';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp } from "../../../types/rsvp";
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp} from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
-// Import MUI components for Autocomplete
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 
 interface RsvpPrimaryContactPageProps {
     nextPage: (rsvp: Rsvp) => void;
@@ -23,26 +21,15 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                                                                            requireAnswers,
                                                                        }) => {
     const { formData, setFormData } = useFlow();
-    // Remove the nameRef since primary contact is now an Autocomplete field
     const emailRef = useRef<any>(null);
     const addressRef = useRef<any>(null);
     const phoneRef = useRef<any>(null);
 
-    // Get the primary contact key, which is assumed to be a key of the guest_list.
-    const primaryContactKey = formData.primary_contact?.name;
-    // Get the primary guest's display name from guest_list.
-    const primaryGuestDisplayName =
-        primaryContactKey && formData.guest_list?.[primaryContactKey]
-            ? formData.guest_list[primaryContactKey].display_name
-            : '';
-
-    // Build options for the Autocomplete from the guest_list.
     const primaryOptions = Object.entries(formData.guest_list || {}).map(([key, guest]) => ({
         id: key,
         label: guest.display_name,
     }));
 
-    // Update primary contact field
     const handlePrimaryChange = (field: string, value: string) => {
         setFormData({
             ...formData,
@@ -54,7 +41,6 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // This handler is for the other fields (email, address, phone)
         setFormData({
             ...formData,
             primary_contact: {
@@ -73,22 +59,19 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
         const validAddress = addressRef.current.validate();
         const validPhone = phoneRef.current.validate();
 
-        // Ensure primary contact is selected along with other valid fields.
         if (formData.primary_contact?.name && validEmail && validAddress && validPhone) {
             nextPage(formData);
         }
     };
 
-    // New submit handler for the form.
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleNext();
     };
 
     return (
-        <div className="p-3">
-            <Form onSubmit={handleSubmit}>
-                {/* Primary Contact Autocomplete */}
+        <Box sx={{ p: 3 }}>
+            <Box component="form" onSubmit={handleSubmit}>
                 <Box sx={{ pt: 0, pb: 1, display: 'flex', justifyContent: 'center' }}>
                     <Autocomplete
                         options={primaryOptions}
@@ -108,7 +91,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                                 {...params}
                                 size="small"
                                 variant="outlined"
-                                label={"Primary Contact" + (formData.primary_contact?.name ? "" : " is Required")}
+                                label={`Primary Contact${formData.primary_contact?.name ? '' : ' is Required'}`}
                                 placeholder="Select a primary contact"
                                 required
                                 error={!formData.primary_contact?.name}
@@ -118,7 +101,6 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                     />
                 </Box>
 
-                {/* Other fields remain as CustomInputField components */}
                 <CustomInputField
                     ref={emailRef}
                     name="email"
@@ -148,22 +130,12 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                     required={requireAnswers}
                 />
 
-                <div className="d-flex justify-content-evenly px-2">
-                    <CustomButton
-                        text="Back"
-                        onClick={handleBack}
-                        variant="dark"
-                        width="75px"
-                    />
-                    <CustomButton
-                        text="Next"
-                        type="submit"
-                        variant="dark"
-                        width="75px"
-                    />
-                </div>
-            </Form>
-        </div>
+                <Box sx={{ display: 'flex', justifyContent: 'space-evenly', px: 2 }}>
+                    <CustomButton text="Back" onClick={handleBack} variant="dark" width="75px" />
+                    <CustomButton text="Next" type="submit" variant="dark" width="75px" />
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

@@ -1,5 +1,5 @@
 // components/shared/SortableGallery/SortableGallery.tsx
-import React, {JSX, useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import {
     closestCenter,
     DndContext,
@@ -17,8 +17,8 @@ import Sortable from "./Sortable";
 import Overlay from "./Overlay";
 import classes from "./SortableGallery.module.css";
 import { PhotoMetadata } from "../../../hooks/gallery/useGetPhotoMetadata";
+import { Box, IconButton } from '@mui/material';
 
-// Combine PhotoMetadata with any additional optional fields
 export interface Photo extends PhotoMetadata {
     key?: string;
     srcSet?: Array<{ src: string; width: number }>;
@@ -70,7 +70,6 @@ export default function SortableGallery({
         useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
     );
 
-    // Map photos to add an "id" field (using key if available, or src otherwise)
     const photos = photoSet.map((photo) => ({ ...photo, id: photo.key || photo.src }));
 
     const handleDragStart = ({ active }: DragStartEvent) => {
@@ -105,7 +104,7 @@ export default function SortableGallery({
         photo: Photo,
         props: Record<string, unknown>
     ) => (
-        <Sortable key={photo.id} id={photo.id!}>
+        <Sortable key={photo.id!} id={photo.id!}>
             <Component {...props} />
         </Sortable>
     );
@@ -118,7 +117,7 @@ export default function SortableGallery({
             collisionDetection={closestCenter}
         >
             <SortableContext items={photos}>
-                <div className={classes.gallery}>
+                <Box className={classes.gallery}>
                     <Gallery
                         ref={ref}
                         photos={photos}
@@ -132,20 +131,31 @@ export default function SortableGallery({
                                 props: Record<string, unknown>,
                                 context: { photo: Photo }
                             ) => (
-                                <button
-                                    className={classes.extraButton}
+                                <IconButton
                                     onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
                                         handleDelete(context.photo, event)
                                     }
-                                    style={{ color: "var(--accent-text)" }}
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 5,
+                                        right: 5,
+                                        background: 'transparent',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        padding: '0.2rem 0.5rem',
+                                        cursor: 'pointer',
+                                        opacity: 1,
+                                        transition: 'opacity 0.2s',
+                                        color: 'var(--accent-text)',
+                                    }}
                                 >
                                     X
-                                </button>
+                                </IconButton>
                             ),
                         }}
                         {...rest}
                     />
-                </div>
+                </Box>
             </SortableContext>
             <DragOverlay>
                 {activePhoto && (

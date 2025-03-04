@@ -29,9 +29,9 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled(Button, {
-    shouldForwardProp: (prop) => prop !== 'variantType' && prop !== 'togglable' && prop !== 'toggled',
+    shouldForwardProp: (prop) =>
+        prop !== 'variantType' && prop !== 'togglable' && prop !== 'toggled',
 })<StyledButtonProps>(({ theme, variantType, togglable, toggled }) => {
-    // If the button is togglable and is in a toggled state, we use the dark variant styles.
     const appliedVariant = togglable && toggled ? 'dark' : variantType || 'light';
     switch (appliedVariant) {
         case 'dark':
@@ -110,7 +110,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
             onClick={handleClick}
             disabled={disabled}
             type={type}
-            // Use the sx prop so sizes and margins come from theme.spacing when possible.
             sx={{
                 height: `${height}px`,
                 width: width,

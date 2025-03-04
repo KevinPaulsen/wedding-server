@@ -2,7 +2,6 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFlow} from '../../../context/FlowProvider';
-import '../../../styles/rsvp/RsvpButtons.css';
 import CustomButton from "../CustomButton";
 
 interface CancelButtonProps {
@@ -20,7 +19,7 @@ const CancelButton: React.FC<CancelButtonProps> = ({ route }) => {
     };
 
     return (
-        <CustomButton text={"Cancel"} onClick={handleCancel} maxWidth={75} variant="lightOutlined"/>
+        <CustomButton text="Cancel" onClick={handleCancel} maxWidth={75} variant="lightOutlined" />
     );
 };
 

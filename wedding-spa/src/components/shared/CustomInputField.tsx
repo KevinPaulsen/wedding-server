@@ -13,8 +13,8 @@ export interface CustomInputFieldProps {
     required?: boolean;
     name: string;
     min?: number | string;
-    padding?: object; // Custom padding for the container
-    width?: string;   // Custom width for the TextField
+    padding?: object;
+    width?: string;
 }
 
 export interface CustomInputFieldRef {
@@ -52,7 +52,6 @@ const CustomInputField = forwardRef(
             }
         };
 
-        // Expose a validate method to parent components using ref
         useImperativeHandle(ref, () => ({
             validate: () => {
                 if (required && (!value || value.toString().trim() === '')) {
@@ -81,9 +80,8 @@ const CustomInputField = forwardRef(
                     error={hasError}
                     variant="outlined"
                     label={label && label + (hasError ? " is Required" : "")}
-                    id="outlined-size-small"
                     size="small"
-                    sx={{ width: width }}
+                    sx={{ width }}
                 />
             </Box>
         );

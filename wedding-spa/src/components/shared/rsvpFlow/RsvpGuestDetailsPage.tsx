@@ -1,5 +1,5 @@
 // components/shared/rsvpFlow/RsvpGuestDetailsPage.tsx
-import React, {ForwardedRef, forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 import {
     Autocomplete,
     Box,
@@ -17,51 +17,29 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField, Theme,
+    TextField,
     Typography,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp, RsvpGuestDetailWithId } from '../../../types/rsvp';
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp, RsvpGuestDetailWithId} from '../../../types/rsvp';
 import CustomButton from '../CustomButton';
 import CustomInputField, {CustomInputFieldRef} from "../CustomInputField";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-interface RsvpGuestDetailsPageProps {
-    nextPage: (rsvp: Rsvp) => void;
-    previousPage: (rsvp: Rsvp) => void;
-    requireAnswers: boolean;
-    returnPage?: string | null;
-}
-
-const dietaryOptions = [
-    'Vegetarian',
-    'Vegan',
-    'Gluten Free',
-    'Nut Free',
-    'Shellfish Free',
-    'Other',
-];
-
+// Guest row component
 const GuestRow: React.FC<{
     guest: RsvpGuestDetailWithId;
-    theme: Theme;
+    theme: any;
     onToggleComing: (id: string, newValue: boolean) => void;
     onEdit: (id: string) => void;
     hasAnyOther: boolean;
 }> = ({ guest, theme, onToggleComing, onEdit, hasAnyOther }) => (
     <TableRow
         sx={{
-            backgroundColor: guest.coming
-                ? 'inherit'
-                : theme.palette.action.disabledBackground,
+            backgroundColor: guest.coming ? 'inherit' : theme.palette.action.disabledBackground,
         }}
     >
         <TableCell
@@ -94,7 +72,7 @@ const GuestRow: React.FC<{
                 'None'
             )}
         </TableCell>
-        <TableCell onClick={(e) => e.stopPropagation()} sx={{ width: { xs: 'auto', md: '1%' } }}>
+        <TableCell sx={{ width: { xs: 'auto', md: '1%' } }}>
             <Box
                 sx={{
                     display: 'flex',
@@ -104,7 +82,6 @@ const GuestRow: React.FC<{
                     gap: 0,
                 }}
             >
-                {/* Coming Icon (Check) */}
                 <IconButton
                     onClick={() => onToggleComing(guest.id, true)}
                     sx={{
@@ -117,8 +94,6 @@ const GuestRow: React.FC<{
                 >
                     <CheckIcon />
                 </IconButton>
-
-                {/* Not Coming Icon (Close) */}
                 <IconButton
                     onClick={() => onToggleComing(guest.id, false)}
                     sx={{
@@ -131,8 +106,6 @@ const GuestRow: React.FC<{
                 >
                     <CloseIcon />
                 </IconButton>
-
-                {/* Edit Button - Dimmed & Disabled if not coming */}
                 <IconButton
                     aria-label="Edit Guest"
                     onClick={() => onEdit(guest.id)}
@@ -148,12 +121,10 @@ const GuestRow: React.FC<{
     </TableRow>
 );
 
-//
-// Reusable component: the guest table
-//
+// Guest table component
 const GuestTable: React.FC<{
     guests: RsvpGuestDetailWithId[];
-    theme: Theme;
+    theme: any;
     onToggleComing: (id: string, newValue: boolean) => void;
     onEdit: (id: string) => void;
     hasAnyOther: boolean;
@@ -210,11 +181,11 @@ const GuestTable: React.FC<{
 
 interface EditGuestDialogProps {
     open: boolean;
-    editingGuest: any; // Replace 'any' with your proper type if needed
+    editingGuest: any;
     setEditingGuest: React.Dispatch<React.SetStateAction<any>>;
     onSave: () => void;
     onClose: () => void;
-    theme: Theme;
+    theme: any;
 }
 
 const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
@@ -245,7 +216,7 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
                                     prev ? { ...prev, display_name: e.target.value } : null
                                 )
                             }
-                            label="Perferred Name"
+                            label="Preferred Name"
                             placeholder="Preferred Name"
                             name="display_name"
                             required={true}
@@ -262,17 +233,12 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
                                     prev ? { ...prev, dietary_restrictions: newValue } : null
                                 )
                             }
-                            renderOption={(props, option, { selected }) => {
-                                const { key, ...optionProps } = props;
-                                return (
-                                    <li key={key} {...optionProps}>
-                                        <Checkbox
-                                            checked={selected}
-                                        />
-                                        {option}
-                                    </li>
-                                );
-                            }}
+                            renderOption={(props, option, { selected }) => (
+                                <li {...props}>
+                                    <Checkbox checked={selected} />
+                                    {option}
+                                </li>
+                            )}
                             renderTags={(value: string[], getTagProps) =>
                                 value.map((option: string, index: number) => (
                                     <Chip label={option} size="small" {...getTagProps({ index })} />
@@ -286,16 +252,9 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
                                     sx={{ m: 0 }}
                                     label="Dietary Restrictions"
                                     placeholder={
-                                        editingGuest?.dietary_restrictions.length > 0
-                                            ? ''
-                                            : 'Select dietary restrictions...'
+                                        editingGuest?.dietary_restrictions.length > 0 ? '' : 'Select dietary restrictions...'
                                     }
-                                    slotProps={{
-                                        htmlInput: {
-                                            ...params.inputProps,
-                                            readOnly: true,
-                                        },
-                                    }}
+                                    inputProps={{ ...params.inputProps, readOnly: true }}
                                 />
                             )}
                         />
@@ -325,30 +284,20 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
     )
 );
 
-//
-// Reusable component: action buttons for navigation
-//
 const ActionButtons: React.FC<{ onBack: () => void; onNext: () => void }> = ({ onBack, onNext }) => (
-    <Box display="flex" justifyContent="space-evenly" mt={4}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mt: 4 }}>
         <CustomButton text="Back" onClick={onBack} variant="dark" width="75px" />
         <CustomButton text="Next" onClick={onNext} variant="dark" width="75px" />
     </Box>
 );
 
-//
-// Main Component
-//
-const RsvpGuestDetailsPage: React.FC<RsvpGuestDetailsPageProps> = ({ nextPage, previousPage }) => {
-    const theme: Theme = useTheme();
+const RsvpGuestDetailsPage: React.FC<{ nextPage: (rsvp: Rsvp) => void; previousPage: (rsvp: Rsvp) => void; }> = ({ nextPage, previousPage }) => {
+    const theme = useTheme();
     const { formData, setFormData } = useFlow();
     const primaryContactRef = useRef<CustomInputFieldRef>(null);
 
-    // Convert guest_list (object) to an array of guests
     const initialGuests: RsvpGuestDetailWithId[] = Object.entries(formData.guest_list || {}).map(
-        ([id, details]) => ({
-            id,
-            ...details,
-        })
+        ([id, details]) => ({ id, ...details })
     );
 
     const [guests, setGuests] = useState<RsvpGuestDetailWithId[]>(initialGuests);

@@ -11,16 +11,11 @@ interface RsvpReceptionPageProps {
     returnPage?: string | null;
 }
 
-const RsvpReceptionPage: React.FC<RsvpReceptionPageProps> = ({
-                                                                 nextPage,
-                                                                 previousPage,
-                                                             }) => {
+const RsvpReceptionPage: React.FC<RsvpReceptionPageProps> = ({ nextPage, previousPage }) => {
     const { execute: doSubmit, error, loading } = useSubmitRsvp();
 
     const handleSubmit = async (formData: Rsvp, resetFormData?: () => void) => {
-        if (resetFormData == null) return;
-
-        // Attempt final submission
+        if (!resetFormData) return;
         await doSubmit(formData);
 
         // If no error after finishing, reset and navigate

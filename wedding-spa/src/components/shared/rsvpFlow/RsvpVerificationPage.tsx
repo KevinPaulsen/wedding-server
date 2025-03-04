@@ -1,6 +1,6 @@
 // components/shared/rsvpFlow/RsvpVerificationPage.tsx
 import React, {useEffect, useRef, useState} from 'react';
-import {Form} from 'react-bootstrap';
+import {Alert, Box} from '@mui/material';
 import CustomInputField from '../CustomInputField';
 import {useFlow} from '../../../context/FlowProvider';
 import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
@@ -14,10 +14,7 @@ interface RsvpVerificationPageProps {
     returnPage?: string | null;
 }
 
-const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
-                                                                       nextPage,
-                                                                       requireAnswers,
-                                                                   }) => {
+const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({ nextPage, requireAnswers }) => {
     const { formData, setFormData } = useFlow();
     const firstNameRef = useRef<any>(null);
     const codeRef = useRef<any>(null);
@@ -39,15 +36,10 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
     const handleNext = async () => {
         const validFirst = firstNameRef.current.validate();
         const validCode = codeRef.current.validate();
-
-        if (!validFirst || !validCode) {
-            return;
-        }
-
+        if (!validFirst || !validCode) return;
         await doLookup({ first_name: form.firstName, last_name: form.lastName });
     };
 
-    // New onSubmit handler that triggers handleNext when Enter is pressed
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         await handleNext();
@@ -58,12 +50,12 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
             setFormData(data[0]);
             nextPage(formData);
         }
-    }, [data, setFormData, nextPage]);
+    }, [data, setFormData, nextPage, formData]);
 
     return (
-        <div className="p-3">
-            {error && <div className="alert alert-danger">{error}</div>}
-            <Form onSubmit={handleSubmit}>
+        <Box sx={{ p: 3 }}>
+            {error && <Alert severity="error">{error}</Alert>}
+            <Box component="form" onSubmit={handleSubmit}>
                 <CustomInputField
                     ref={firstNameRef}
                     name="firstName"
@@ -91,8 +83,8 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({
                     width="auto"
                     disabled={loading}
                 />
-            </Form>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

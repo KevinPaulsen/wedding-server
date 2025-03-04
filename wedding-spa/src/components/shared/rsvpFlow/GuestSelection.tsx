@@ -1,8 +1,8 @@
 // components/shared/rsvpFlow/GuestSelection.tsx
 import React from 'react';
-import { FormControlLabel, Switch, Typography, Box } from '@mui/material';
-import { useFlow } from '../../../context/FlowProvider';
-import { Rsvp } from "../../../types/rsvp";
+import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
+import {useFlow} from '../../../context/FlowProvider';
+import {Rsvp} from "../../../types/rsvp";
 import CustomButton from "../CustomButton";
 
 interface GuestSelectionProps {
@@ -19,7 +19,6 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
                                                            loading = null,
                                                        }) => {
     const { formData, resetFormData, setFormData } = useFlow();
-
     const guestList = formData.guest_list || {};
     const comingGuestKeys = Object.keys(guestList).filter(
         (guestKey) => guestList[guestKey].coming
@@ -95,7 +94,6 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
                             },
                         }}
                     />
-
                     <Box
                         sx={{
                             display: 'flex',
@@ -116,27 +114,15 @@ const GuestSelection: React.FC<GuestSelectionProps> = ({
                                     variant={isAttending ? 'dark' : 'light'}
                                     height={50}
                                     maxWidth={300}
-                                    marginBottom={1} // using the spacing scale (1 = 8px)
+                                    marginBottom={1}
                                 />
                             );
                         })}
                     </Box>
                 </>
             )}
-
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-evenly',
-                    mt: 3,
-                }}
-            >
-                <CustomButton
-                    text="Back"
-                    onClick={() => backPage(formData)}
-                    variant="dark"
-                    width={75}
-                />
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mt: 3 }}>
+                <CustomButton text="Back" onClick={() => backPage(formData)} variant="dark" width={75} />
                 <CustomButton
                     text={
                         loading === null

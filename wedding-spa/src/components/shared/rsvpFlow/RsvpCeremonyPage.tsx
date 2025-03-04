@@ -10,10 +10,7 @@ interface RsvpCeremonyPageProps {
     returnPage?: string | null;
 }
 
-const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({
-                                                               nextPage,
-                                                               previousPage,
-                                                           }) => {
+const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({ nextPage, previousPage }) => {
     return (
         <GuestSelection
             eventKey="ceremony"

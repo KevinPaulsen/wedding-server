@@ -2,7 +2,6 @@
 import React, { cloneElement } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 
-// Extend HTMLAttributes to include custom data attributes.
 interface CustomHTMLAttributes<T> extends React.HTMLAttributes<T> {
   "data-active"?: boolean;
   "data-position"?: string;
@@ -10,7 +9,6 @@ interface CustomHTMLAttributes<T> extends React.HTMLAttributes<T> {
 
 interface SortableProps {
   id: string;
-  // Require that children support our custom attributes and ref forwarding.
   children: React.ReactElement<
       CustomHTMLAttributes<HTMLElement> & React.RefAttributes<HTMLElement>
   >;

@@ -1,7 +1,8 @@
 // components/shared/rsvpFlow/RsvpConfirmation.tsx
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Box, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import CustomButton from "../CustomButton";
 
 interface RsvpConfirmationProps {
     returnPage?: string | null;
@@ -11,18 +12,14 @@ const RsvpConfirmation: React.FC<RsvpConfirmationProps> = ({ returnPage }) => {
     const navigate = useNavigate();
 
     const handleReturnHome = () => {
-        if (!returnPage) {
-            navigate('/');
-        } else {
-            navigate(returnPage);
-        }
+        navigate(returnPage ? returnPage : '/');
     };
 
     return (
-        <div className="p-3 text-center">
-            <p>Your RSVP has been successfully submitted.</p>
-            <Button className="rsvp-button width-auto dark hover"  onClick={handleReturnHome}>Return Home</Button>
-        </div>
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+            <Typography>Your RSVP has been successfully submitted.</Typography>
+            <CustomButton text="Return Home" onClick={handleReturnHome} width="auto" variant="dark" />
+        </Box>
     );
 };
 

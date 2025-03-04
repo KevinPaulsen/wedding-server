@@ -1,5 +1,6 @@
 // components/shared/rsvpFlow/RsvpFormStep.tsx
 import React from 'react';
+import {Box, Typography} from '@mui/material';
 import RsvpConfirmation from './RsvpConfirmation';
 import RsvpVerificationPage from './RsvpVerificationPage';
 import RsvpPrimaryContactPage from './RsvpPrimaryContactPage';
@@ -34,10 +35,10 @@ export const RSVP_CONFIRMATION_PAGE = 8;
 
 const RsvpFormLayout: React.FC<RsvpLayoutProps> = ({ title, component }) => {
     return (
-        <div>
-            <h3>{title}</h3>
+        <Box>
+            <Typography variant="h5" sx={{ mb: 2 }}>{title}</Typography>
             {component}
-        </div>
+        </Box>
     );
 };
 
@@ -85,8 +86,6 @@ const RSVPFormStep: React.FC<RsvpFormStepProps> = ({
                         <RsvpGuestDetailsPage
                             nextPage={nextPage}
                             previousPage={previousPage}
-                            requireAnswers={requireAnswers}
-                            returnPage={returnPage}
                         />
                     }
                 />
@@ -155,7 +154,7 @@ const RSVPFormStep: React.FC<RsvpFormStepProps> = ({
                 />
             );
         default:
-            return <div>Unknown Step</div>;
+            return <Box>Unknown Step</Box>;
     }
 };
 
