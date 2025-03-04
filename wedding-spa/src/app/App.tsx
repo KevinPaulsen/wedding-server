@@ -17,28 +17,38 @@ import UploadPhotoPage from "../pages/admin/UploadToPhotoGallery";
 import RsvpFlowPage from "../pages/rsvp/RsvpFlowPage";
 import '../styles/App.css';
 
+// Define your color constants
+const primaryMainDark = '#574c3f';
+const primaryLightDark = '#b0643f';
+const primaryDarkDark = '#453e34';
+
+const secondaryMainLight = '#ece4da';
+const secondaryLightLight = '#d4c8ba';
+const secondaryDarkLight = '#c6b7a7';
+
+// Create the theme using the variables
 const theme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#574c3f',
-            light: '#b0643f',
-            dark: '#453e34',
-            contrastText: '#ece4da',
+            main: primaryMainDark,
+            light: primaryLightDark,
+            dark: primaryDarkDark,
+            contrastText: secondaryMainLight,
         },
         secondary: {
-            main: '#ece4da',
-            light: '#d4c8ba',
-            dark: '#c6b7a7',
-            contrastText: '#574c3f',
+            main: secondaryMainLight,
+            light: secondaryLightLight,
+            dark: secondaryDarkLight,
+            contrastText: primaryMainDark,
         },
         background: {
-            default: '#ece4da',
-            paper: '#ece4da',
+            default: secondaryMainLight,
+            paper: secondaryMainLight,
         },
         text: {
-            primary: '#574c3f',
-            secondary: '#b0643f',
+            primary: primaryMainDark,
+            secondary: primaryLightDark,
         },
     },
     typography: {
@@ -57,13 +67,13 @@ const theme = createTheme({
                 },
                 clickable: {
                     '&:hover, &:focus': {
-                        backgroundColor: '#d4c8ba', // secondary.light
+                        backgroundColor: secondaryLightLight,
                     },
                 },
                 deleteIcon: {
-                    color: '#574c3f',
+                    color: primaryMainDark,
                     '&:hover': {
-                        color: '#c6b7a7', // secondary.dark
+                        color: secondaryDarkLight,
                     },
                 },
             },
@@ -78,16 +88,16 @@ const theme = createTheme({
         MuiSwitch: {
             styleOverrides: {
                 switchBase: {
-                    color: '#574c3f',
+                    color: primaryMainDark,
                     '&.Mui-checked': {
-                        color: '#574c3f',
+                        color: primaryMainDark,
                         '& + .MuiSwitch-track': {
-                            backgroundColor: '#574c3f',
+                            backgroundColor: primaryMainDark,
                         },
                     },
                 },
                 track: {
-                    backgroundColor: '#574c3f',
+                    backgroundColor: primaryMainDark,
                 },
             },
         },
