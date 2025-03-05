@@ -1,5 +1,5 @@
 // components/main/ExpressCheckoutModal.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -10,63 +10,61 @@ import {
   Typography,
   Divider
 } from '@mui/material';
-import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { createPaymentIntent } from "../../services/ApiService";
 
 // Initialize Stripe with your publishable key
 const stripePromise = loadStripe('pk_test_51QzKvKJr833cmALT8OGod7YPuE9AAxV8HvV0vNjKoJpv0yHPVMRUjtF89PnoWnn1lMH9HuSV99bFqN7EEzsqkM2z00OeATR7bZ');
 
-// Child component that mounts the expressCheckout element
-const ExpressCheckoutContent: React.FC<{ clientSecret: string; onMessage: (msg: string) => void }> = ({ clientSecret, onMessage }) => {
+const PaymentForm: React.FC<{ clientSecret: string; onMessage: (msg: string) => void }> = ({ clientSecret, onMessage }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!stripe || !elements || !containerRef.current) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
 
-    // If an expressCheckout element already exists, unmount it before creating a new one.
-    const existingElement = elements.getElement('expressCheckout');
-    if (existingElement) {
-      existingElement.unmount();
+    try {
+      // Call elements.submit() immediately upon clicking "Pay"
+      await elements.submit();
+    } catch (submitError: any) {
+      onMessage("Submission failed: " + (submitError.message || ""));
+      return;
     }
 
-    // Create the expressCheckout element (clientSecret is passed to confirmPayment below)
-    const checkoutElem = elements.create("expressCheckout", {
-      emailRequired: true,
-    });
-    checkoutElem.mount(containerRef.current);
-
-    // Listen for the confirm event to trigger payment confirmation
-    checkoutElem.on('confirm', async () => {
-      const { error } = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          // Replace with your actual return URL
-          return_url: 'http://kevinlovesolivia.com',
-        },
-      });
-      if (error) {
-        onMessage(error.message || "Payment failed");
-      } else {
-        onMessage("Payment successful! You will be redirected shortly.");
-      }
+    // Now confirm the payment
+    const { error } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        // Make sure to use HTTPS and a valid return URL
+        return_url: 'https://kevinlovesolivia.com/success',
+      },
     });
 
-    // Cleanup: unmount the element when the component is unmounted
-    return () => {
-      checkoutElem.unmount();
-    };
-  }, [stripe, elements, clientSecret, onMessage]);
+    if (error) {
+      onMessage(error.message || "Payment failed");
+    } else {
+      onMessage("Payment successful! You will be redirected shortly.");
+    }
+  };
 
-  return <div ref={containerRef} style={{ minHeight: '60px' }} />;
+  return (
+      <form onSubmit={handleSubmit}>
+        {/* PaymentElement always includes a credit card input,
+          and—if available and your domain is verified—Apple Pay and other relevant methods */}
+        <PaymentElement />
+        <Button variant="contained" type="submit" disabled={!stripe} sx={{ mt: 2 }}>
+          Pay
+        </Button>
+      </form>
+  );
 };
 
 const ExpressCheckoutModal: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [donationAmount, setDonationAmount] = useState("50"); // default donation amount
+  const [donationAmount, setDonationAmount] = useState("50"); // default donation amount (USD)
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -86,8 +84,7 @@ const ExpressCheckoutModal: React.FC = () => {
   useEffect(() => {
     if (open) {
       const amountValue = parseFloat(donationAmount);
-      // Multiply by 100 to convert dollars to cents
-      const amount = (!isNaN(amountValue) && amountValue > 0) ? amountValue * 100 : 5000;
+      const amount = (!isNaN(amountValue) && amountValue > 0) ? amountValue * 100 : 5000; // convert to cents
       createPaymentIntent(amount)
       .then(response => {
         if (response.success && response.data) {
@@ -128,9 +125,9 @@ const ExpressCheckoutModal: React.FC = () => {
               Payment:
             </Typography>
             {clientSecret ? (
-                // Wrap the payment element with the Elements provider, passing clientSecret as an option
+                // Wrap the PaymentForm with the Elements provider, passing the clientSecret.
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <ExpressCheckoutContent clientSecret={clientSecret} onMessage={setMessage} />
+                  <PaymentForm clientSecret={clientSecret} onMessage={setMessage} />
                 </Elements>
             ) : (
                 <div>Loading payment details...</div>

@@ -27,12 +27,7 @@ public class StripeController {
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
             .setAmount(amount)
             .setCurrency("usd")
-            // Enable automatic payment methods (which powers the Express Checkout Element)
-            .setAutomaticPaymentMethods(
-                PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
-                    .setEnabled(true)
-                    .build()
-            )
+            .addPaymentMethodType("card")  // Ensure credit card is available
             .build();
         PaymentIntent paymentIntent = PaymentIntent.create(params);
         return ResponseEntity.ok(Map.of("clientSecret", paymentIntent.getClientSecret()));
