@@ -24,6 +24,7 @@ import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js';
 import { createPaymentIntent } from "../../services/ApiService";
 import CustomButton from "../shared/CustomButton";
+import * as stripeJs from "@stripe/stripe-js";
 
 // Initialize Stripe with your publishable key
 const stripePromise = loadStripe('pk_test_51QzKvKJr833cmALT8OGod7YPuE9AAxV8HvV0vNjKoJpv0yHPVMRUjtF89PnoWnn1lMH9HuSV99bFqN7EEzsqkM2z00OeATR7bZ');
@@ -38,6 +39,27 @@ interface PaymentFormProps {
 export interface PaymentFormHandle {
   submitPayment: () => Promise<void>;
 }
+
+// Define your appearance object using your theme colors
+const appearance = {
+  theme: 'flat',
+  variables: {
+    colorPrimary: '#574c3f',        // primaryMainDark
+    colorBackground: '#ece4da',     // secondaryMainLight
+    colorText: '#574c3f',           // primaryMainDark
+    fontFamily: '"EB Garamond", system-ui, sans-serif',
+  },
+  rules: {
+    '.Input': {
+      border: '2px solid #574c3f',
+      borderRadius: '4px',
+      padding: '8px',
+    },
+    '.Label': {
+      color: '#574c3f',
+    },
+  },
+};
 
 /**
  * PaymentForm is now wrapped in a <form> so that pressing Enter triggers its onSubmit.
@@ -170,7 +192,6 @@ const ExpressCheckoutModal: React.FC = () => {
         </Button>
 
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-          <DialogTitle>Donate to Our Wedding</DialogTitle>
           <DialogContent>
             <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
               Select a donation amount (USD):
@@ -286,7 +307,11 @@ const ExpressCheckoutModal: React.FC = () => {
                         }
                         e.preventDefault();
                       }}
-                      InputProps={{ disableUnderline: true }}
+                      slotProps={{
+                        input: {
+                          disableUnderline: true
+                        }
+                      }}
                       sx={{
                         flex: 1,
                         input: {
@@ -307,10 +332,8 @@ const ExpressCheckoutModal: React.FC = () => {
                 </Box>
             )}
 
-            <Divider sx={{ my: 2 }} />
-
             {clientSecret ? (
-                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
                   <PaymentForm
                       ref={paymentFormRef}
                       clientSecret={clientSecret}
@@ -320,7 +343,9 @@ const ExpressCheckoutModal: React.FC = () => {
                   />
                 </Elements>
             ) : (
-                <div>Loading payment details...</div>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '150px' }}>
+                  <CircularProgress aria-label="Loading..." />
+                </Box>
             )}
 
             {message && (

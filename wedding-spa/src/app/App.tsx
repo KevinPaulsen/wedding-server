@@ -15,7 +15,6 @@ import GuestListPage from '../pages/admin/GuestListPage';
 import UploadPhotoPage from '../pages/admin/UploadToPhotoGallery';
 import RsvpFlowPage from '../pages/rsvp/RsvpFlowPage';
 import '../styles/App.css';
-import RegistryComponent from "../components/main/RegistryComponent";
 import RegistryPage from "../pages/home/RegistryPage";
 
 // Define your color constants
