@@ -1,16 +1,45 @@
 // components/main/MainPhoto.tsx
 import React from 'react';
-import { Container, Image } from 'react-bootstrap';
-import '../../styles/MainPhoto.css';
+import { Box, Typography } from '@mui/material';
 
 const MainPhoto: React.FC = () => {
     return (
-        <Container className="position-relative p-0">
-            <Image src="/assets/mainCoupleImage.jpeg" alt="Main Image" className="main-image position-absolute w-100 h-100" />
-            <h3 className="date-text position-absolute w-100 h-100 justify-content-center align-items-center">
+        <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box
+                component="img"
+                src="/assets/mainCoupleImage.jpeg"
+                alt="Main Image"
+                sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: '50% 38%',
+                    filter: 'brightness(50%)',
+                }}
+            />
+            <Typography
+                variant="h3"
+                sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontFamily: '"Baskervville", serif',
+                    fontWeight: 800,
+                    color: 'var(--main-light)',
+                    fontSize: 'clamp(1em, 12vw + 1em, 15rem)',
+                }}
+            >
                 09 . 13. 2025
-            </h3>
-        </Container>
+            </Typography>
+        </Box>
     );
 };
 

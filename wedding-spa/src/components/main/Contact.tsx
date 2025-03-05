@@ -1,15 +1,16 @@
 // components/main/Contact.tsx
 import React from 'react';
-import { Container } from 'react-bootstrap';
-import '../../styles/StoryContent.css';
+import { Container, Typography } from '@mui/material';
 
 const Contact: React.FC = () => {
     return (
-        <Container fluid className="text-center">
-            <h1 className="text-center mb-3">Contact</h1>
-            <div className="story text-center mb-3">
+        <Container sx={{ textAlign: 'center' }}>
+            <Typography variant="h3" sx={{ mb: 3 }}>
+                Contact
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }} className="story">
                 Plz Don&apos;t...
-            </div>
+            </Typography>
         </Container>
     );
 };

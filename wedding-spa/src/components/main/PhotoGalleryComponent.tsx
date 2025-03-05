@@ -1,26 +1,22 @@
 // components/main/PhotoGalleryComponent.tsx
-import React, { useState } from "react";
-import { RowsPhotoAlbum } from "react-photo-album";
-import "react-photo-album/rows.css";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-import useGetPhotoMetadata, {PhotoMetadata} from "../../hooks/gallery/useGetPhotoMetadata";
-import { Container, Row } from "react-bootstrap";
-import SortableGallery from "../shared/SortableGallery/SortableGallery";
-import { arrayMove } from "@dnd-kit/sortable";
-import { useChangeImageOrder } from "../../hooks/gallery/useChangeImageOrder";
-import { useDeleteImage } from "../../hooks/gallery/useDeleteImage";
+import React, {useState} from 'react';
+import {RowsPhotoAlbum} from 'react-photo-album';
+import 'react-photo-album/rows.css';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
+import useGetPhotoMetadata, {PhotoMetadata} from '../../hooks/gallery/useGetPhotoMetadata';
+import {Container, Grid2} from '@mui/material';
+import SortableGallery from '../shared/SortableGallery/SortableGallery';
+import {arrayMove} from '@dnd-kit/sortable';
+import {useChangeImageOrder} from '../../hooks/gallery/useChangeImageOrder';
+import {useDeleteImage} from '../../hooks/gallery/useDeleteImage';
 
 const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDraggable = false }) => {
     const [index, setIndex] = useState<number>(-1);
-
-    // Our generic hook returns { data, setData, loading, error }
     const { data, setData, loading, error } = useGetPhotoMetadata();
-
-    // Get the execute functions from the specialized hooks.
     const { execute: changeImageOrder } = useChangeImageOrder();
     const { execute: deleteImage } = useDeleteImage();
 
@@ -30,7 +26,6 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
 
     const handleMovePhoto = (oldIndex: number, newIndex: number) => {
         if (oldIndex === newIndex) return;
-
         const movingImageId = data[oldIndex].imageId;
         let previousImageId: string | null;
         let followingImageId: string | null;
@@ -43,10 +38,7 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
             followingImageId = data[newIndex].imageId;
         }
 
-        // Update image order using the generic hook
         changeImageOrder(movingImageId, previousImageId, followingImageId);
-
-        // Locally update the photo order
         const newData = arrayMove(data, oldIndex, newIndex);
         setData(newData);
     };
@@ -54,8 +46,8 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
     const commonComponentsProps = () => ({
         image: {
             style: {
-                border: "2px solid var(--main-dark)",
-                padding: "1px",
+                border: '2px solid var(--main-dark)',
+                padding: '1px',
             },
         },
     });
@@ -63,16 +55,13 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
     const handleDelete = (photo: PhotoMetadata, event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-
-        // Call the generic deleteImage function
         deleteImage(photo.imageId);
-        setData(prevData => prevData.filter((item: PhotoMetadata) => item.imageId !== photo.imageId));
+        setData((prevData) => prevData.filter((item: PhotoMetadata) => item.imageId !== photo.imageId));
     };
 
     return (
         <Container>
-            <Row className="justify-content-center mb-5">
-                <div className="col-11">
+            <Grid2 container justifyContent="center" sx={{ mb: 5, width: '100%', flexDirection: 'column' }}>
                     {makeDraggable ? (
                         <SortableGallery
                             gallery={RowsPhotoAlbum}
@@ -90,8 +79,8 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
                             componentsProps={commonComponentsProps}
                         />
                     )}
-                </div>
-            </Row>
+            </Grid2>
+
             {!makeDraggable && (
                 <Lightbox
                     slides={data}
