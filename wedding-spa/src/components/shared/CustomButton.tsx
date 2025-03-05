@@ -1,12 +1,12 @@
 // components/shared/CustomButton.tsx
-import React, { useState } from 'react';
+import React, {ReactNode, useState} from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
 export type ButtonVariant = 'light' | 'dark' | 'lightOutlined';
 
 interface CustomButtonProps {
-    text: string;
+    text: ReactNode;
     onClick?: () => void;
     height?: number | string;
     width?: number | string;
