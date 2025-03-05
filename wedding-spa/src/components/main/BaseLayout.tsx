@@ -1,7 +1,7 @@
 // components/main/BaseLayout.tsx
 import React from 'react';
-import { Container, Row } from 'react-bootstrap';
-import Header from "./headerComponents/Header";
+import Box from '@mui/material/Box';
+import Header from './headerComponents/Header';
 
 interface BaseLayoutProps {
     children: React.ReactNode;
@@ -9,14 +9,22 @@ interface BaseLayoutProps {
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
     return (
-        <Container fluid className="d-flex flex-column min-vh-100 p-0" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-            <Row className="g-0">
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                p: 0,
+                pb: 'env(safe-area-inset-bottom)',
+            }}
+        >
+            <Box>
                 <Header />
-            </Row>
-            <Row className="flex-grow-1 g-0">
+            </Box>
+            <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 {children}
-            </Row>
-        </Container>
+            </Box>
+        </Box>
     );
 };
 
