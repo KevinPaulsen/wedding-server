@@ -8,9 +8,12 @@ import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRep
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration @EnableDynamoDBRepositories(basePackageClasses=UserRepository.class) public class DynamoDBConfig {
+@Configuration
+@EnableDynamoDBRepositories(basePackageClasses = UserRepository.class)
+public class DynamoDBConfig {
 
-    @Bean public AmazonDynamoDB amazonDynamoDB() {
-        return AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
-    }
+  @Bean
+  public AmazonDynamoDB amazonDynamoDB() {
+    return AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_WEST_2).build();
+  }
 }

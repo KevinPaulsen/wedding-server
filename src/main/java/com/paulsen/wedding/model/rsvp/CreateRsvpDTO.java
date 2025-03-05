@@ -2,130 +2,142 @@ package com.paulsen.wedding.model.rsvp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.paulsen.wedding.util.StringFormatUtil;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class CreateRsvpDTO {
-    private String primaryName;
-    private String phoneNumber;
-    private String email;
-    private String address;
 
-    private Set<String> allowedGuestDisplayNames;
+  private String primaryName;
+  private String phoneNumber;
+  private String email;
+  private String address;
 
-    private Boolean hasRoceInvitation;
-    private Boolean hasRehearsalInvitation;
-    private Boolean hasCeremonyInvitation;
-    private Boolean hasReceptionInvitation;
+  private Set<String> allowedGuestDisplayNames;
 
-    private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(Set<String> allowedGuestDisplayNames) {
-        if (allowedGuestDisplayNames == null) {
-            return Collections.emptyMap();
-        }
+  private Boolean hasRoceInvitation;
+  private Boolean hasRehearsalInvitation;
+  private Boolean hasCeremonyInvitation;
+  private Boolean hasReceptionInvitation;
 
-        Map<String, RsvpGuestDetails> rsvpGuestDetailsMap = new HashMap<>();
-
-        for (String displayName : allowedGuestDisplayNames) {
-            rsvpGuestDetailsMap.put(StringFormatUtil.formatToIndexName(displayName), new RsvpGuestDetails(displayName));
-        }
-
-        return rsvpGuestDetailsMap;
+  private static Map<String, RsvpGuestDetails> toRsvpGuestDetailsMap(
+      Set<String> allowedGuestDisplayNames) {
+    if (allowedGuestDisplayNames == null) {
+      return Collections.emptyMap();
     }
 
-    public Rsvp toRsvp() {
-        Rsvp rsvp = new Rsvp();
+    Map<String, RsvpGuestDetails> rsvpGuestDetailsMap = new HashMap<>();
 
-        rsvp.setSubmitted(false);
-        rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, phoneNumber, email, address));
-        rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
-        rsvp.setRoce(new Event(hasRoceInvitation, Collections.emptyList()));
-        rsvp.setRehearsal(new Event(hasRehearsalInvitation, Collections.emptyList()));
-        rsvp.setCeremony(new Event(hasCeremonyInvitation, Collections.emptyList()));
-        rsvp.setReception(new Event(hasReceptionInvitation, Collections.emptyList()));
-
-        return rsvp;
+    for (String displayName : allowedGuestDisplayNames) {
+      rsvpGuestDetailsMap.put(StringFormatUtil.formatToIndexName(displayName),
+          new RsvpGuestDetails(displayName));
     }
 
-    @JsonProperty("primary_name") public String getPrimaryName() {
-        return primaryName;
-    }
+    return rsvpGuestDetailsMap;
+  }
 
-    @JsonProperty("primary_name") public void setPrimaryName(String primaryName) {
-        this.primaryName = primaryName;
-    }
+  public Rsvp toRsvp() {
+    Rsvp rsvp = new Rsvp();
 
-    @JsonProperty("phone_number") public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    rsvp.setSubmitted(false);
+    rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, phoneNumber, email, address));
+    rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
+    rsvp.setRoce(new Event(hasRoceInvitation, Collections.emptyList()));
+    rsvp.setRehearsal(new Event(hasRehearsalInvitation, Collections.emptyList()));
+    rsvp.setCeremony(new Event(hasCeremonyInvitation, Collections.emptyList()));
+    rsvp.setReception(new Event(hasReceptionInvitation, Collections.emptyList()));
 
-    @JsonProperty("phone_number") public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    return rsvp;
+  }
 
-    @JsonProperty("email") public String getEmail() {
-        return email;
-    }
+  @JsonProperty("primary_name")
+  public String getPrimaryName() {
+    return primaryName;
+  }
 
-    @JsonProperty("email") public void setEmail(String email) {
-        this.email = email;
-    }
+  @JsonProperty("primary_name")
+  public void setPrimaryName(String primaryName) {
+    this.primaryName = primaryName;
+  }
 
-    @JsonProperty("address") public String getAddress() {
-        return address;
-    }
+  @JsonProperty("phone_number")
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-    @JsonProperty("address") public void setAddress(String address) {
-        this.address = address;
-    }
+  @JsonProperty("phone_number")
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 
-    @JsonProperty("allowed_guests") public Set<String> getAllowedGuestDisplayNames() {
-        return allowedGuestDisplayNames;
-    }
+  @JsonProperty("email")
+  public String getEmail() {
+    return email;
+  }
 
-    @JsonProperty("allowed_guests") public void setAllowedGuestDisplayNames(Set<String> allowedGuestDisplayNames) {
-        this.allowedGuestDisplayNames = allowedGuestDisplayNames;
-    }
+  @JsonProperty("email")
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    @JsonProperty("roce_invitation")
-    public Boolean getHasRoceInvitation() {
-        return hasRoceInvitation;
-    }
+  @JsonProperty("address")
+  public String getAddress() {
+    return address;
+  }
 
-    @JsonProperty("roce_invitation")
-    public void setHasRoceInvitation(Boolean hasRoceInvitation) {
-        this.hasRoceInvitation = hasRoceInvitation;
-    }
+  @JsonProperty("address")
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    @JsonProperty("rehearsal_invitation")
-    public Boolean getHasRehearsalInvitation() {
-        return hasRehearsalInvitation;
-    }
+  @JsonProperty("allowed_guests")
+  public Set<String> getAllowedGuestDisplayNames() {
+    return allowedGuestDisplayNames;
+  }
 
-    @JsonProperty("rehearsal_invitation")
-    public void setHasRehearsalInvitation(Boolean hasRehearsalInvitation) {
-        this.hasRehearsalInvitation = hasRehearsalInvitation;
-    }
+  @JsonProperty("allowed_guests")
+  public void setAllowedGuestDisplayNames(Set<String> allowedGuestDisplayNames) {
+    this.allowedGuestDisplayNames = allowedGuestDisplayNames;
+  }
 
-    @JsonProperty("ceremony_invitation")
-    public Boolean getHasCeremonyInvitation() {
-        return hasCeremonyInvitation;
-    }
+  @JsonProperty("roce_invitation")
+  public Boolean getHasRoceInvitation() {
+    return hasRoceInvitation;
+  }
 
-    @JsonProperty("ceremony_invitation")
-    public void setHasCeremonyInvitation(Boolean hasCeremonyInvitation) {
-        this.hasCeremonyInvitation = hasCeremonyInvitation;
-    }
+  @JsonProperty("roce_invitation")
+  public void setHasRoceInvitation(Boolean hasRoceInvitation) {
+    this.hasRoceInvitation = hasRoceInvitation;
+  }
 
-    @JsonProperty("reception_invitation")
-    public Boolean getHasReceptionInvitation() {
-        return hasReceptionInvitation;
-    }
+  @JsonProperty("rehearsal_invitation")
+  public Boolean getHasRehearsalInvitation() {
+    return hasRehearsalInvitation;
+  }
 
-    @JsonProperty("reception_invitation")
-    public void setHasReceptionInvitation(Boolean hasReceptionInvitation) {
-        this.hasReceptionInvitation = hasReceptionInvitation;
-    }
+  @JsonProperty("rehearsal_invitation")
+  public void setHasRehearsalInvitation(Boolean hasRehearsalInvitation) {
+    this.hasRehearsalInvitation = hasRehearsalInvitation;
+  }
+
+  @JsonProperty("ceremony_invitation")
+  public Boolean getHasCeremonyInvitation() {
+    return hasCeremonyInvitation;
+  }
+
+  @JsonProperty("ceremony_invitation")
+  public void setHasCeremonyInvitation(Boolean hasCeremonyInvitation) {
+    this.hasCeremonyInvitation = hasCeremonyInvitation;
+  }
+
+  @JsonProperty("reception_invitation")
+  public Boolean getHasReceptionInvitation() {
+    return hasReceptionInvitation;
+  }
+
+  @JsonProperty("reception_invitation")
+  public void setHasReceptionInvitation(Boolean hasReceptionInvitation) {
+    this.hasReceptionInvitation = hasReceptionInvitation;
+  }
 }
