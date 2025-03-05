@@ -344,3 +344,17 @@ export async function deleteImageRequest(imageId: string): Promise<ApiResponse<n
         body: JSON.stringify({ imageId }),
     });
 }
+
+/** ============================
+ REGISTRY-related methods
+ ============================ */
+
+export async function createPaymentIntent(amount: number): Promise<ApiResponse<{ clientSecret: string }>> {
+    return request<{ clientSecret: string }>("/create-payment-intent", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount })
+    });
+}

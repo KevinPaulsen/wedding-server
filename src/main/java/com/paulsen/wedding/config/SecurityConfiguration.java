@@ -17,7 +17,7 @@ public class SecurityConfiguration {
 
   private static final String[] AUTHORIZED_ENDPOINTS = {
       "/auth/login", "/auth/verify-token", "/actuator/health", "/gallery/all", "/rsvp/lookup",
-      "/rsvp/submit"
+      "/rsvp/submit", "/create-checkout-session", "/create-payment-intent"
   };
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final AuthenticationProvider authenticationProvider;

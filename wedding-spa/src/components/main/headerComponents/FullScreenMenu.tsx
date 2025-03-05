@@ -42,7 +42,7 @@ const FullScreenMenu: React.FC = () => {
                     <Row className="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
                         <Link to="/gallery" className="menu-link">Gallery</Link>
                         <Link to="/details" className="menu-link">Details</Link>
-                        <Link to="/contact" className="menu-link">Contact</Link>
+                        <Link to="/registry" className="menu-link">Registry</Link>
                         <Link to="/story" className="menu-link">Our Story</Link>
                     </Row>
                     <Row className="mb-5 justify-content-center align-items-center">

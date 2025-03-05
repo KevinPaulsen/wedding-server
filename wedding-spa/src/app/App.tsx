@@ -15,6 +15,8 @@ import GuestListPage from '../pages/admin/GuestListPage';
 import UploadPhotoPage from '../pages/admin/UploadToPhotoGallery';
 import RsvpFlowPage from '../pages/rsvp/RsvpFlowPage';
 import '../styles/App.css';
+import RegistryComponent from "../components/main/RegistryComponent";
+import RegistryPage from "../pages/home/RegistryPage";
 
 // Define your color constants
 const primaryMainDark = '#574c3f';
@@ -124,6 +126,7 @@ const App: React.FC = () => {
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/details" element={<Details />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/registry" element={<RegistryPage />} />
                 <Route path="/story" element={<Story />} />
 
                 <Route path="/rsvp/*" element={<RsvpFlowPage />} />

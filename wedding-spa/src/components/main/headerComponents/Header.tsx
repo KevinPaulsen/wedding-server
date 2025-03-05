@@ -48,7 +48,7 @@ const WeddingHeader: React.FC = () => {
 
                 {/* Right Links */}
                 <Col className="d-flex justify-content-start flex-grow-1 gap-3">
-                    <Link to="/contact" className="nav-link">Contact</Link>
+                    <Link to="/registry" className="nav-link">Registry</Link>
                     <Link to="/story" className="nav-link">Our Story</Link>
                 </Col>
             </Row>
