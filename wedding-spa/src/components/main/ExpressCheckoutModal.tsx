@@ -22,43 +22,44 @@ const ExpressCheckoutContent: React.FC<{ clientSecret: string; onMessage: (msg: 
   const stripe = useStripe();
   const elements = useElements();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [checkoutElem, setCheckoutElem] = useState<any>(null);
 
   useEffect(() => {
-    if (stripe && elements && !checkoutElem && containerRef.current) {
-      // Create the expressCheckout element with clientSecret included in options
-      const checkoutElem = elements.create("expressCheckout", {
-        emailRequired: true,
-      });
-      checkoutElem.mount(containerRef.current);
-      setCheckoutElem(checkoutElem);
+    if (!stripe || !elements || !containerRef.current) return;
 
-      // Listen for the confirm event
-      checkoutElem.on('confirm', async () => {
-        const { error } = await stripe.confirmPayment({
-          elements,
-          clientSecret,
-          confirmParams: {
-            // Replace with your actual return URL
-            return_url: 'http://kevinlovesolivia.com',
-          },
-        });
-        if (error) {
-          onMessage(error.message || "Payment failed");
-        } else {
-          onMessage("Payment successful! You will be redirected shortly.");
-        }
-      });
-
-      // Cleanup when the component is unmounted
-      return () => {
-        if (checkoutElem) {
-          checkoutElem.unmount();
-          setCheckoutElem(null);
-        }
-      };
+    // If an expressCheckout element already exists, unmount it before creating a new one.
+    const existingElement = elements.getElement('expressCheckout');
+    if (existingElement) {
+      existingElement.unmount();
     }
-  }, [stripe, elements, checkoutElem, clientSecret, onMessage]);
+
+    // Create the expressCheckout element (clientSecret is passed to confirmPayment below)
+    const checkoutElem = elements.create("expressCheckout", {
+      emailRequired: true,
+    });
+    checkoutElem.mount(containerRef.current);
+
+    // Listen for the confirm event to trigger payment confirmation
+    checkoutElem.on('confirm', async () => {
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          // Replace with your actual return URL
+          return_url: 'http://kevinlovesolivia.com',
+        },
+      });
+      if (error) {
+        onMessage(error.message || "Payment failed");
+      } else {
+        onMessage("Payment successful! You will be redirected shortly.");
+      }
+    });
+
+    // Cleanup: unmount the element when the component is unmounted
+    return () => {
+      checkoutElem.unmount();
+    };
+  }, [stripe, elements, clientSecret, onMessage]);
 
   return <div ref={containerRef} style={{ minHeight: '60px' }} />;
 };
@@ -101,7 +102,7 @@ const ExpressCheckoutModal: React.FC = () => {
         setMessage("Error initializing payment.");
       });
     }
-  }, [open]);
+  }, [open, donationAmount]);
 
   return (
       <>
