@@ -1,5 +1,5 @@
 // components/main/ExpressCheckoutModal.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
   Dialog,
@@ -14,33 +14,33 @@ import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { createPaymentIntent } from "../../services/ApiService";
 
-// Initialize Stripe outside of components
+// Initialize Stripe with your publishable key
 const stripePromise = loadStripe('pk_test_51QzKvKJr833cmALT8OGod7YPuE9AAxV8HvV0vNjKoJpv0yHPVMRUjtF89PnoWnn1lMH9HuSV99bFqN7EEzsqkM2z00OeATR7bZ');
 
-// This component is rendered inside the Elements provider and mounts the Express Checkout Element
+// Child component that mounts the expressCheckout element
 const ExpressCheckoutContent: React.FC<{ clientSecret: string; onMessage: (msg: string) => void }> = ({ clientSecret, onMessage }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [checkoutElem, setCheckoutElem] = useState<any>(null);
 
   useEffect(() => {
-    if (stripe && elements) {
-      // Create and mount the Express Checkout Element with emailRequired option
+    if (stripe && elements && !checkoutElem && containerRef.current) {
+      // Create the expressCheckout element with clientSecret included in options
       const checkoutElem = elements.create("expressCheckout", {
         emailRequired: true,
       });
-      const container = document.getElementById("express-checkout-element");
-      if (container) {
-        checkoutElem.mount(container);
-      }
+      checkoutElem.mount(containerRef.current);
+      setCheckoutElem(checkoutElem);
 
-      // Listen for the confirm event to trigger payment confirmation
+      // Listen for the confirm event
       checkoutElem.on('confirm', async () => {
         const { error } = await stripe.confirmPayment({
           elements,
           clientSecret,
           confirmParams: {
             // Replace with your actual return URL
-            return_url: 'https://yourwebsite.com/success',
+            return_url: 'http://kevinlovesolivia.com',
           },
         });
         if (error) {
@@ -52,12 +52,15 @@ const ExpressCheckoutContent: React.FC<{ clientSecret: string; onMessage: (msg: 
 
       // Cleanup when the component is unmounted
       return () => {
-        checkoutElem.unmount();
+        if (checkoutElem) {
+          checkoutElem.unmount();
+          setCheckoutElem(null);
+        }
       };
     }
-  }, [stripe, elements, clientSecret, onMessage]);
+  }, [stripe, elements, checkoutElem, clientSecret, onMessage]);
 
-  return <div id="express-checkout-element" style={{ minHeight: '60px' }} />;
+  return <div ref={containerRef} style={{ minHeight: '60px' }} />;
 };
 
 const ExpressCheckoutModal: React.FC = () => {
@@ -98,7 +101,7 @@ const ExpressCheckoutModal: React.FC = () => {
         setMessage("Error initializing payment.");
       });
     }
-  }, [open, donationAmount]);
+  }, [open]);
 
   return (
       <>
