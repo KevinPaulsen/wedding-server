@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  TextField,
   Typography
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -77,9 +78,7 @@ const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
 
       return (
           <form onSubmit={handleSubmit}>
-            <PaymentElement
-                onChange={(e) => onPaymentCompleteChange?.(e.complete)}
-            />
+            <PaymentElement onChange={(e) => onPaymentCompleteChange?.(e.complete)} />
             <button type="submit" style={{ display: 'none' }}>Submit</button>
           </form>
       );
@@ -150,7 +149,11 @@ const ExpressCheckoutModal: React.FC = () => {
             onClose={handleClose}
             fullWidth
             maxWidth="sm"
-            PaperProps={{ sx: { minHeight: 400, display: 'flex', flexDirection: 'column' } }}
+            slotProps={{
+              paper: {
+                sx: { minHeight: 500, display: 'flex', flexDirection: 'column' }
+              }
+            }}
         >
           <DialogTitle sx={{ textAlign: 'center', position: 'relative' }}>
             Donate to Our Wedding
@@ -160,7 +163,7 @@ const ExpressCheckoutModal: React.FC = () => {
           </DialogTitle>
 
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               {step === 'selection' && (
                   <>
                     <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
@@ -170,7 +173,7 @@ const ExpressCheckoutModal: React.FC = () => {
                       {[25, 50, 100].map(amount => (
                           <Button
                               key={amount}
-                              variant={selectedPreset === amount ? 'contained' : 'outlined'}
+                              variant={!showCustomInput && (selectedPreset === amount) ? 'contained' : 'outlined'}
                               onClick={() => { setSelectedPreset(amount); setShowCustomInput(false); }}
                               size="large"
                               sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
@@ -178,14 +181,88 @@ const ExpressCheckoutModal: React.FC = () => {
                             ${amount}
                           </Button>
                       ))}
-                      <Button
-                          variant="outlined"
-                          onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
-                          size="large"
-                          sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
-                      >
-                        Other amount
-                      </Button>
+                      {/* Either show the "Other amount" button or the custom input field */}
+                      {!showCustomInput && (
+                          <Button
+                              variant="outlined"
+                              onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
+                              size="large"
+                              sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
+                          >
+                            Other amount
+                          </Button>
+                      )}
+                      {showCustomInput && (
+                          <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                bgcolor: 'primary.main',
+                                borderRadius: 2,
+                                padding: '8px 12px',
+                                color: 'primary.contrastText',
+                                mb: 2,
+                                width: '100%'
+                              }}
+                          >
+                            <Typography variant="h5" sx={{ mr: 1, color: 'inherit' }}>
+                              $
+                            </Typography>
+                            <TextField
+                                variant="standard"
+                                type="text"
+                                value={customAmount}
+                                onChange={(e) => {
+                                  const newValue = e.target.value;
+                                  if (/^\d*\.?\d*$/.test(newValue)) {
+                                    setCustomAmount(newValue);
+                                  }
+                                }}
+                                placeholder="0.00"
+                                required
+                                onKeyDown={(e) => {
+                                  const allowedKeys = [
+                                    'Backspace',
+                                    'Tab',
+                                    'Enter',
+                                    'Escape',
+                                    'ArrowLeft',
+                                    'ArrowRight',
+                                    'Home',
+                                    'End'
+                                  ];
+                                  if (allowedKeys.includes(e.key)) return;
+                                  if (e.ctrlKey || e.metaKey) return;
+                                  if (/\d/.test(e.key)) return;
+                                  if (e.key === '.') {
+                                    if (customAmount.includes('.')) {
+                                      e.preventDefault();
+                                    }
+                                    return;
+                                  }
+                                  e.preventDefault();
+                                }}
+                                slotProps={{
+                                  input: {
+                                    disableUnderline: true
+                                  }
+                                }}
+                                sx={{
+                                  flex: 1,
+                                  input: { fontSize: '1.25rem', color: 'primary.contrastText' }
+                                }}
+                            />
+                            <IconButton
+                                onClick={() => {
+                                  setShowCustomInput(false);
+                                  setCustomAmount("");
+                                }}
+                                sx={{ color: 'primary.contrastText' }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </Box>
+                      )}
                     </Box>
                   </>
               )}
@@ -202,8 +279,14 @@ const ExpressCheckoutModal: React.FC = () => {
                               onPaymentCompleteChange={setIsPaymentComplete}
                           />
                         </Elements>
-                    ) : <CircularProgress />}
-                    {message && <Typography variant="body2" color="error" sx={{ mt: 2 }}>{message}</Typography>}
+                    ) : (
+                        <CircularProgress />
+                    )}
+                    {message && (
+                        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                          {message}
+                        </Typography>
+                    )}
                   </>
               )}
             </DialogContent>
