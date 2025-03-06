@@ -5,9 +5,6 @@ import { Container, Box, Typography } from '@mui/material';
 const Story: React.FC = () => {
     return (
         <Container sx={{ textAlign: 'center' }}>
-            <Typography variant="h3" sx={{ mb: 3 }}>
-                Our Story
-            </Typography>
             <Typography variant="body1" sx={{ mb: 3 }} className="story">
                 Legend says that Kevin Loves Olivia. Some have even said that Olivia loves Kevin back.
                 But Kevin at least made a website for her.
