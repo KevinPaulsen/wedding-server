@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Box, Container, Link, Typography } from '@mui/material';
 import ExpressCheckoutModal from "./ExpressCheckoutModal";
 import DonateCard from "./DonateCard";
-import rome from "../../assets/rome.jpg";
-import furnishing from "../../assets/furnishing.jpg";
-import registry from "../../assets/registry.jpg";
+import rome from "../../../assets/rome.jpg";
+import furnishing from "../../../assets/furnishing.jpg";
+import registry from "../../../assets/registry.jpg";
 
 const RegistryComponent: React.FC = () => {
   const [open, setOpen] = useState(false);

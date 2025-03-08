@@ -14,8 +14,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { createPaymentIntent } from "../../services/ApiService";
-import CustomButton from "../shared/CustomButton";
+import { createPaymentIntent } from "../../../services/ApiService";
+import CustomButton from "../../shared/CustomButton";
 
 // Initialize Stripe
 const stripePromise = loadStripe('pk_test_51QzKvKJr833cmALT8OGod7YPuE9AAxV8HvV0vNjKoJpv0yHPVMRUjtF89PnoWnn1lMH9HuSV99bFqN7EEzsqkM2z00OeATR7bZ');

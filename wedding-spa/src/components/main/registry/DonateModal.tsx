@@ -16,7 +16,7 @@ import {
     useStripe,
     useElements
 } from '@stripe/react-stripe-js';
-import {createPaymentIntent} from "../../services/ApiService";
+import {createPaymentIntent} from "../../../services/ApiService";
 
 const DonateModal: React.FC = () => {
     const [open, setOpen] = useState(false);

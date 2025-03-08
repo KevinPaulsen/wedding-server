@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, CardActions, Button, Typography } from '@mui/material';
-import CustomButton from "../shared/CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 interface GenericCardProps {
   image: string;
