@@ -53,7 +53,7 @@ const theme = createTheme({
         },
     },
     typography: {
-        fontFamily: '"EB Garamond", system-ui, sans-serif',
+        fontFamily: '"EB Garamond"',
         fontWeightLight: 400,
         fontWeightRegular: 500,
         fontWeightMedium: 600,

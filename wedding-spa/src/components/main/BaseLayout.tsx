@@ -2,6 +2,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Header from './headerComponents/Header';
+import Footer from "./headerComponents/Footer";
 
 interface BaseLayoutProps {
     children: React.ReactNode;
@@ -24,6 +25,9 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 {children}
             </Box>
+          <Box>
+            <Footer />
+          </Box>
         </Box>
     );
 };
