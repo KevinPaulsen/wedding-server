@@ -72,7 +72,7 @@ const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
         const { error } = await stripe.confirmPayment({
           elements,
           clientSecret,
-          confirmParams: { return_url: 'https://kevinlovesolivia.com/success' },
+          confirmParams: { return_url: 'https://kevinlovesolivia.com/payment-confirmation' },
         });
 
         onMessage(error ? error.message || "Payment failed" : "Payment successful! You will be redirected shortly.");
@@ -238,7 +238,11 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                                 }
                                 e.preventDefault();
                               }}
-                              InputProps={{ disableUnderline: true }}
+                              slotProps={{
+                                input: {
+                                  disableUnderline: true,
+                                }
+                              }}
                               sx={{
                                 flex: 1,
                                 input: { fontSize: '1.25rem', color: 'primary.contrastText' },

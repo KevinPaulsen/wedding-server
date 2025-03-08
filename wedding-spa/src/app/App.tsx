@@ -16,6 +16,7 @@ import UploadPhotoPage from '../pages/admin/UploadToPhotoGallery';
 import RsvpFlowPage from '../pages/rsvp/RsvpFlowPage';
 import '../styles/App.css';
 import RegistryPage from "../pages/home/RegistryPage";
+import PaymentConfirmationPage from "../pages/home/PaymentConfirmationPage";
 
 // Define your color constants
 const primaryMainDark = '#574c3f';
@@ -126,6 +127,7 @@ const App: React.FC = () => {
                 <Route path="/details" element={<Details />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/registry" element={<RegistryPage />} />
+                <Route path="/payment-confirmation" element={<PaymentConfirmationPage />} />
                 <Route path="/story" element={<Story />} />
 
                 <Route path="/rsvp/*" element={<RsvpFlowPage />} />
