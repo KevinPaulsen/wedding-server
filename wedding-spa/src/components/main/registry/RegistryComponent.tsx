@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Container, Link, Typography } from '@mui/material';
-import ExpressCheckoutModal from "./ExpressCheckoutModal";
+import ExpressCheckoutDialog from "./ExpressCheckoutDialog";
 import DonateCard from "./DonateCard";
 import rome from "../../../assets/rome.jpg";
 import furnishing from "../../../assets/furnishing.jpg";
@@ -89,7 +89,7 @@ const RegistryComponent: React.FC = () => {
           />
         </Box>
 
-        <ExpressCheckoutModal open={open} onClose={handleClose} />
+        <ExpressCheckoutDialog open={open} onClose={handleClose} />
       </Container>
   );
 };

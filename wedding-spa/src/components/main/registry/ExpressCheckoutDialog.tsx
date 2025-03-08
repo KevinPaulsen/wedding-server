@@ -89,7 +89,7 @@ const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
     }
 );
 
-const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClose }) => {
+const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onClose }) => {
   const [step, setStep] = useState<'selection' | 'payment'>('selection');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<number>(25);
@@ -144,7 +144,7 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
           maxWidth="sm"
           slotProps={{
             paper: {
-              sx: { minHeight: 500, display: 'flex', flexDirection: 'column' }
+              sx: { width: "400px", minHeight: 500, display: 'flex', flexDirection: 'column' }
             }
           }}
       >
@@ -164,26 +164,22 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2, width: '100%', alignItems: 'center' }}>
                     {[25, 50, 100].map(amount => (
-                        <Button
+                        <CustomButton
                             key={amount}
-                            variant={!showCustomInput && selectedPreset === amount ? 'contained' : 'outlined'}
+                            variant={!showCustomInput && selectedPreset === amount ? 'dark' : 'light'}
                             onClick={() => { setSelectedPreset(amount); setShowCustomInput(false); }}
-                            size="large"
-                            sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
-                        >
-                          ${amount}
-                        </Button>
+                            text={'$' + amount}
+                            height={50}
+                        />
                     ))}
                     {/* Either show the "Other amount" button or the custom input field */}
                     {!showCustomInput && (
-                        <Button
-                            variant="outlined"
+                        <CustomButton
+                            variant="light"
                             onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
-                            size="large"
-                            sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
-                        >
-                          Other amount
-                        </Button>
+                            text={"Other Amount"}
+                            height={50}
+                        />
                     )}
                     {showCustomInput && (
                         <Box
@@ -191,19 +187,25 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
                               display: 'flex',
                               alignItems: 'center',
                               bgcolor: 'primary.main',
-                              borderRadius: 2,
+                              borderRadius: 1,
                               padding: '8px 12px',
                               color: 'primary.contrastText',
-                              mb: 2,
-                              width: '100%'
+                              height: "50px",
+                              width: '100%',
+                              maxWidth: 300,
+                              mt: 0,
+                              mb: 0,
                             }}
                         >
-                          <Typography variant="h5" sx={{ mr: 1, color: 'inherit' }}>
+                          <Typography variant="h6" sx={{ mr: 1, color: 'inherit' }}>
                             $
                           </Typography>
                           <TextField
+                              autoFocus
+                              fullWidth
                               variant="standard"
                               type="text"
+                              size="small"
                               value={customAmount}
                               onChange={(e) => {
                                 const newValue = e.target.value;
@@ -238,7 +240,7 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
                               InputProps={{ disableUnderline: true }}
                               sx={{
                                 flex: 1,
-                                input: { fontSize: '1.25rem', color: 'primary.contrastText' }
+                                input: { fontSize: '1.25rem', color: 'primary.contrastText' },
                               }}
                           />
                           <IconButton
@@ -258,6 +260,9 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
 
             {step === 'payment' && (
                 <>
+                  <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
+                    Processing Payment of ${parseFloat(donationAmount).toFixed(2)}
+                  </Typography>
                   {clientSecret ? (
                       <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
                         <PaymentForm
@@ -279,27 +284,26 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
                 </>
             )}
           </DialogContent>
-
-          <DialogActions
-              sx={{
-                justifyContent: step === 'selection' ? 'center' : 'space-between',
-                width: '100%'
-              }}
-          >
-            {step === 'payment' && (
-                <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined" />
-            )}
-            <CustomButton
-                text={step === 'selection' ? "Continue to Payment" : "Pay"}
-                onClick={step === 'selection' ? handleContinue : () => paymentFormRef.current?.submitPayment()}
-                variant="dark"
-                disabled={step === 'selection' ? !isCustomValid : !isPayEnabled}
-                width="auto"
-            />
-          </DialogActions>
         </Box>
+        <DialogActions
+            sx={{
+              justifyContent: step === 'selection' ? 'center' : 'space-between',
+              width: '100%'
+            }}
+        >
+          {step === 'payment' && (
+              <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined" />
+          )}
+          <CustomButton
+              text={step === 'selection' ? "Continue to Payment" : "Pay"}
+              onClick={step === 'selection' ? handleContinue : () => paymentFormRef.current?.submitPayment()}
+              variant="dark"
+              disabled={step === 'selection' ? !isCustomValid : !isPayEnabled}
+              width="auto"
+          />
+        </DialogActions>
       </Dialog>
   );
 };
 
-export default ExpressCheckoutModal;
+export default ExpressCheckoutDialog;
