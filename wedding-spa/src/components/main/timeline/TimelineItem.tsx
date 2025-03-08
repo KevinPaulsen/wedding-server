@@ -31,7 +31,7 @@ const TimelineDetails: React.FC<TimelineDetailsProps> = ({ image, time, title, l
             </Box>
           <Box sx={{
             minHeight: height,
-            minWidth: "130px",
+            minWidth: "168px",
             display: 'flex',
             flexDirection: 'column',
           }}>

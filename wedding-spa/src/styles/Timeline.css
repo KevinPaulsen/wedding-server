@@ -16,8 +16,8 @@
     --connector-width: 25%;        /* Enough to span from item edge to vertical center */
 
     /* Event content offsets */
-    --event-transform-y: -57%;     /* How far up/down to shift event content */
-    --event-offset: calc(var(--connector-width) - 18px);
+    --event-transform-y: -155px;     /* How far up/down to shift event content */
+    --event-offset: calc(var(--connector-width) - 40px);
 
     /* Bullseye circles */
     --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));

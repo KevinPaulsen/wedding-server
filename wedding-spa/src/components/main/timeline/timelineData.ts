@@ -32,7 +32,7 @@ export const timelineEvents: TimelineEvent[] = [
     },
     {
         time: "5:30 PM",
-        title: "RECEPTION",
+        title: "COCKTAIL HOUR",
         location: "PICKERING BARN",
         address: "1730 10th Ave NW\nIssaquah, WA 98027",
         image: cocktail,
