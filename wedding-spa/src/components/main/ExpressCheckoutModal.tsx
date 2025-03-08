@@ -118,7 +118,7 @@ const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClo
   };
 
   const donationAmount = showCustomInput ? customAmount : selectedPreset.toString();
-  const isCustomValid = !showCustomInput || (customAmount.trim() !== "" && !isNaN(parseFloat(customAmount)) && parseFloat(customAmount) > 0);
+  const isCustomValid = !showCustomInput || (customAmount.trim() !== "" && !isNaN(parseFloat(customAmount)) && parseFloat(customAmount) >= 0.5);
   const isPayEnabled = !paymentLoading && isPaymentComplete && isCustomValid;
 
   const handleContinue = () => {
