@@ -14,7 +14,7 @@ const RegistryComponent: React.FC = () => {
 
   // Function to open the Amazon Registry website in a new tab
   const openRegistrySite = () => {
-    window.open("https://www.amazon.com/wedding-registry/your-registry-link", "_blank", "noopener,noreferrer");
+    window.open("https://www.amazon.com/wedding/share/kevinolivia", "_blank", "noopener,noreferrer");
   };
 
   return (

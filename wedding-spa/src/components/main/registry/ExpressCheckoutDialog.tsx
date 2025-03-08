@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect } from 'react';
 import {
-  Box, Button,
+  Box,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -8,7 +8,8 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-  Typography
+  Typography,
+  Slide
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
@@ -100,7 +101,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
   const [isPaymentComplete, setIsPaymentComplete] = useState(false);
   const paymentFormRef = useRef<PaymentFormHandle>(null);
 
-  // When modal opens, reset state
+  // Reset state when modal opens
   useEffect(() => {
     if (open) {
       setStep('selection');
@@ -158,11 +159,11 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             {step === 'selection' && (
-                <>
-                  <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                    Select a donation amount (USD):
-                  </Typography>
+                <Slide direction="right" in={step === 'selection'} mountOnEnter unmountOnExit>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2, width: '100%', alignItems: 'center' }}>
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                      Select a donation amount (USD):
+                    </Typography>
                     {[25, 50, 100].map(amount => (
                         <CustomButton
                             key={amount}
@@ -190,7 +191,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                               borderRadius: 1,
                               padding: '8px 12px',
                               color: 'primary.contrastText',
-                              height: "50px",
+                              height: 50,
                               width: '100%',
                               maxWidth: 300,
                               mt: 0,
@@ -255,33 +256,35 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                         </Box>
                     )}
                   </Box>
-                </>
+                </Slide>
             )}
 
             {step === 'payment' && (
-                <>
-                  <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-                    Processing Payment of ${parseFloat(donationAmount).toFixed(2)}
-                  </Typography>
-                  {clientSecret ? (
-                      <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
-                        <PaymentForm
-                            ref={paymentFormRef}
-                            clientSecret={clientSecret}
-                            onMessage={setMessage}
-                            setPaymentLoading={setPaymentLoading}
-                            onPaymentCompleteChange={setIsPaymentComplete}
-                        />
-                      </Elements>
-                  ) : (
-                      <CircularProgress />
-                  )}
-                  {message && (
-                      <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-                        {message}
-                      </Typography>
-                  )}
-                </>
+                <Slide direction="left" in={step === 'payment'} mountOnEnter unmountOnExit>
+                  <Box>
+                    <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
+                      Processing Payment of ${parseFloat(donationAmount).toFixed(2)}
+                    </Typography>
+                    {clientSecret ? (
+                        <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
+                          <PaymentForm
+                              ref={paymentFormRef}
+                              clientSecret={clientSecret}
+                              onMessage={setMessage}
+                              setPaymentLoading={setPaymentLoading}
+                              onPaymentCompleteChange={setIsPaymentComplete}
+                          />
+                        </Elements>
+                    ) : (
+                        <CircularProgress />
+                    )}
+                    {message && (
+                        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                          {message}
+                        </Typography>
+                    )}
+                  </Box>
+                </Slide>
             )}
           </DialogContent>
         </Box>
