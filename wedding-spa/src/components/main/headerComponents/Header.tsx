@@ -37,9 +37,9 @@ const WeddingHeader: React.FC = () => {
     };
 
     return (
-        <Container className="py-5 px-1 px-sm-5 text-center">
+        <Container className="py-5 text-center">
             {/* Header Row - HomePage Button, Stack Button, Title */}
-            <Grid2 container alignItems="center" px={1}>
+            <Grid2 container alignItems="center" px={0}>
                 <Grid2 size={2}></Grid2>
                 <Grid2 size={8}>
                     <Title />
