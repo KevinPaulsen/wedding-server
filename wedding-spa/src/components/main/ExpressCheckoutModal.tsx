@@ -1,7 +1,6 @@
-import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect } from 'react';
 import {
-  Box,
-  Button,
+  Box, Button,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -34,6 +33,11 @@ const appearance = {
     '.Label': { color: '#574c3f' },
   },
 };
+
+interface ExpressCheckoutModalProps {
+  open: boolean;
+  onClose: () => void;
+}
 
 interface PaymentFormProps {
   clientSecret: string;
@@ -85,7 +89,7 @@ const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
     }
 );
 
-const ExpressCheckoutModal: React.FC = () => {
+const ExpressCheckoutModal: React.FC<ExpressCheckoutModalProps> = ({ open, onClose }) => {
   const [step, setStep] = useState<'selection' | 'payment'>('selection');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<number>(25);
@@ -95,23 +99,17 @@ const ExpressCheckoutModal: React.FC = () => {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [isPaymentComplete, setIsPaymentComplete] = useState(false);
   const paymentFormRef = useRef<PaymentFormHandle>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleOpen = () => {
-    setStep('selection');
-    setDialogOpen(true);
-    setMessage(null);
-    setClientSecret(null);
-  };
-
-  const handleClose = () => {
-    setDialogOpen(false);
-    setStep('selection');
-    setMessage(null);
-    setClientSecret(null);
-    setShowCustomInput(false);
-    setCustomAmount("");
-  };
+  // When modal opens, reset state
+  useEffect(() => {
+    if (open) {
+      setStep('selection');
+      setMessage(null);
+      setClientSecret(null);
+      setShowCustomInput(false);
+      setCustomAmount("");
+    }
+  }, [open]);
 
   const handleBack = () => {
     setStep('selection');
@@ -139,178 +137,168 @@ const ExpressCheckoutModal: React.FC = () => {
   };
 
   return (
-      <>
-        <Button variant="contained" onClick={handleOpen}>
-          Donate
-        </Button>
+      <Dialog
+          open={open}
+          onClose={onClose}
+          fullWidth
+          maxWidth="sm"
+          slotProps={{
+            paper: {
+              sx: { minHeight: 500, display: 'flex', flexDirection: 'column' }
+            }
+          }}
+      >
+        <DialogTitle sx={{ textAlign: 'center', position: 'relative' }}>
+          Donate to Our Wedding
+          <IconButton onClick={onClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
-        <Dialog
-            open={dialogOpen}
-            onClose={handleClose}
-            fullWidth
-            maxWidth="sm"
-            slotProps={{
-              paper: {
-                sx: { minHeight: 500, display: 'flex', flexDirection: 'column' }
-              }
-            }}
-        >
-          <DialogTitle sx={{ textAlign: 'center', position: 'relative' }}>
-            Donate to Our Wedding
-            <IconButton onClick={handleClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              {step === 'selection' && (
-                  <>
-                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-                      Select a donation amount (USD):
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2, width: '100%', alignItems: 'center' }}>
-                      {[25, 50, 100].map(amount => (
-                          <Button
-                              key={amount}
-                              variant={!showCustomInput && (selectedPreset === amount) ? 'contained' : 'outlined'}
-                              onClick={() => { setSelectedPreset(amount); setShowCustomInput(false); }}
-                              size="large"
-                              sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
-                          >
-                            ${amount}
-                          </Button>
-                      ))}
-                      {/* Either show the "Other amount" button or the custom input field */}
-                      {!showCustomInput && (
-                          <Button
-                              variant="outlined"
-                              onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
-                              size="large"
-                              sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
-                          >
-                            Other amount
-                          </Button>
-                      )}
-                      {showCustomInput && (
-                          <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                bgcolor: 'primary.main',
-                                borderRadius: 2,
-                                padding: '8px 12px',
-                                color: 'primary.contrastText',
-                                mb: 2,
-                                width: '100%'
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            {step === 'selection' && (
+                <>
+                  <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                    Select a donation amount (USD):
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2, width: '100%', alignItems: 'center' }}>
+                    {[25, 50, 100].map(amount => (
+                        <Button
+                            key={amount}
+                            variant={!showCustomInput && selectedPreset === amount ? 'contained' : 'outlined'}
+                            onClick={() => { setSelectedPreset(amount); setShowCustomInput(false); }}
+                            size="large"
+                            sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
+                        >
+                          ${amount}
+                        </Button>
+                    ))}
+                    {/* Either show the "Other amount" button or the custom input field */}
+                    {!showCustomInput && (
+                        <Button
+                            variant="outlined"
+                            onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
+                            size="large"
+                            sx={{ fontSize: '1rem', padding: '12px 24px', width: '100%' }}
+                        >
+                          Other amount
+                        </Button>
+                    )}
+                    {showCustomInput && (
+                        <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              bgcolor: 'primary.main',
+                              borderRadius: 2,
+                              padding: '8px 12px',
+                              color: 'primary.contrastText',
+                              mb: 2,
+                              width: '100%'
+                            }}
+                        >
+                          <Typography variant="h5" sx={{ mr: 1, color: 'inherit' }}>
+                            $
+                          </Typography>
+                          <TextField
+                              variant="standard"
+                              type="text"
+                              value={customAmount}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                if (/^\d*\.?\d*$/.test(newValue)) {
+                                  setCustomAmount(newValue);
+                                }
                               }}
-                          >
-                            <Typography variant="h5" sx={{ mr: 1, color: 'inherit' }}>
-                              $
-                            </Typography>
-                            <TextField
-                                variant="standard"
-                                type="text"
-                                value={customAmount}
-                                onChange={(e) => {
-                                  const newValue = e.target.value;
-                                  if (/^\d*\.?\d*$/.test(newValue)) {
-                                    setCustomAmount(newValue);
+                              placeholder="0.00"
+                              required
+                              onKeyDown={(e) => {
+                                const allowedKeys = [
+                                  'Backspace',
+                                  'Tab',
+                                  'Enter',
+                                  'Escape',
+                                  'ArrowLeft',
+                                  'ArrowRight',
+                                  'Home',
+                                  'End'
+                                ];
+                                if (allowedKeys.includes(e.key)) return;
+                                if (e.ctrlKey || e.metaKey) return;
+                                if (/\d/.test(e.key)) return;
+                                if (e.key === '.') {
+                                  if (customAmount.includes('.')) {
+                                    e.preventDefault();
                                   }
-                                }}
-                                placeholder="0.00"
-                                required
-                                onKeyDown={(e) => {
-                                  const allowedKeys = [
-                                    'Backspace',
-                                    'Tab',
-                                    'Enter',
-                                    'Escape',
-                                    'ArrowLeft',
-                                    'ArrowRight',
-                                    'Home',
-                                    'End'
-                                  ];
-                                  if (allowedKeys.includes(e.key)) return;
-                                  if (e.ctrlKey || e.metaKey) return;
-                                  if (/\d/.test(e.key)) return;
-                                  if (e.key === '.') {
-                                    if (customAmount.includes('.')) {
-                                      e.preventDefault();
-                                    }
-                                    return;
-                                  }
-                                  e.preventDefault();
-                                }}
-                                slotProps={{
-                                  input: {
-                                    disableUnderline: true
-                                  }
-                                }}
-                                sx={{
-                                  flex: 1,
-                                  input: { fontSize: '1.25rem', color: 'primary.contrastText' }
-                                }}
-                            />
-                            <IconButton
-                                onClick={() => {
-                                  setShowCustomInput(false);
-                                  setCustomAmount("");
-                                }}
-                                sx={{ color: 'primary.contrastText' }}
-                            >
-                              <CloseIcon />
-                            </IconButton>
-                          </Box>
-                      )}
-                    </Box>
-                  </>
-              )}
-
-              {step === 'payment' && (
-                  <>
-                    {clientSecret ? (
-                        <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
-                          <PaymentForm
-                              ref={paymentFormRef}
-                              clientSecret={clientSecret}
-                              onMessage={setMessage}
-                              setPaymentLoading={setPaymentLoading}
-                              onPaymentCompleteChange={setIsPaymentComplete}
+                                  return;
+                                }
+                                e.preventDefault();
+                              }}
+                              InputProps={{ disableUnderline: true }}
+                              sx={{
+                                flex: 1,
+                                input: { fontSize: '1.25rem', color: 'primary.contrastText' }
+                              }}
                           />
-                        </Elements>
-                    ) : (
-                        <CircularProgress />
+                          <IconButton
+                              onClick={() => {
+                                setShowCustomInput(false);
+                                setCustomAmount("");
+                              }}
+                              sx={{ color: 'primary.contrastText' }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
                     )}
-                    {message && (
-                        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-                          {message}
-                        </Typography>
-                    )}
-                  </>
-              )}
-            </DialogContent>
+                  </Box>
+                </>
+            )}
 
-            <DialogActions
-                sx={{
-                  justifyContent: step === 'selection' ? 'center' : 'space-between',
-                  width: '100%'
-                }}
-            >
-              {step === 'payment' && (
-                  <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined" />
-              )}
-              <CustomButton
-                  text={step === 'selection' ? "Continue to Payment" : "Pay"}
-                  onClick={step === 'selection' ? handleContinue : () => paymentFormRef.current?.submitPayment()}
-                  variant="dark"
-                  disabled={step === 'selection' ? !isCustomValid : !isPayEnabled}
-                  width="auto"
-              />
-            </DialogActions>
-          </Box>
-        </Dialog>
-      </>
+            {step === 'payment' && (
+                <>
+                  {clientSecret ? (
+                      <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
+                        <PaymentForm
+                            ref={paymentFormRef}
+                            clientSecret={clientSecret}
+                            onMessage={setMessage}
+                            setPaymentLoading={setPaymentLoading}
+                            onPaymentCompleteChange={setIsPaymentComplete}
+                        />
+                      </Elements>
+                  ) : (
+                      <CircularProgress />
+                  )}
+                  {message && (
+                      <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                        {message}
+                      </Typography>
+                  )}
+                </>
+            )}
+          </DialogContent>
+
+          <DialogActions
+              sx={{
+                justifyContent: step === 'selection' ? 'center' : 'space-between',
+                width: '100%'
+              }}
+          >
+            {step === 'payment' && (
+                <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined" />
+            )}
+            <CustomButton
+                text={step === 'selection' ? "Continue to Payment" : "Pay"}
+                onClick={step === 'selection' ? handleContinue : () => paymentFormRef.current?.submitPayment()}
+                variant="dark"
+                disabled={step === 'selection' ? !isCustomValid : !isPayEnabled}
+                width="auto"
+            />
+          </DialogActions>
+        </Box>
+      </Dialog>
   );
 };
 
