@@ -11,48 +11,51 @@ export interface TimelineEvent {
     time: string;
     title: string;
     location?: string;
+    address?: string;
     image: string;
 }
 
 export const timelineEvents: TimelineEvent[] = [
     {
-        time: "10:00 AM",
-        title: "Ceremony",
-        location: "Blessed Sacrament",
+        time: "12:30 PM",
+        title: "CEREMONY",
+        location: "BLESSED SACRAMENT",
+        address: "5050 8th Ave NE\nSeattle, WA 98105",
         image: ceremony,
     },
     {
-        time: "11:00 AM",
-        title: "Holy Hour",
-        location: "Newman Center",
+        time: "3:00 PM",
+        title: "HOLY HOUR",
+        location: "NEWMAN CENTER",
+        address: "4502 20th Ave NE\nSeattle, WA 98105",
         image: adoration,
     },
     {
-        time: "5:00 PM",
-        title: "Cocktail Hour",
-        location: "Pickering Barn",
+        time: "5:30 PM",
+        title: "RECEPTION",
+        location: "PICKERING BARN",
+        address: "1730 10th Ave NW\nIssaquah, WA 98027",
         image: cocktail,
     },
     {
-        time: "6:00 PM",
-        title: "Dinner",
-        location: "Pickering Barn",
+        time: "6:30 PM",
+        title: "DINNER",
+        location: "PICKERING BARN",
         image: food,
     },
     {
-        time: "7:30 PM",
+        time: "8:00 PM",
         title: "PARTY!",
-        location: "Dance Floor",
         image: party,
     },
     {
         time: "9:00 PM",
-        title: "Chai Bar",
+        title: "CHAI BAR",
         image: tea,
     },
     {
         time: "10:30 PM",
-        title: "Send Off",
+        title: "SEND OFF",
         image: sendoff,
     },
 ];

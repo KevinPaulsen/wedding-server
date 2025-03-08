@@ -16,7 +16,7 @@
     --connector-width: 25%;        /* Enough to span from item edge to vertical center */
 
     /* Event content offsets */
-    --event-transform-y: -52%;     /* How far up/down to shift event content */
+    --event-transform-y: -57%;     /* How far up/down to shift event content */
     --event-offset: calc(var(--connector-width) - 18px);
 
     /* Bullseye circles */
@@ -133,49 +133,6 @@
     bottom: 0;
     transform: translateX(-50%);
     background: var(--main-light);
-}
-
-/* Title/time text */
-.event-time {
-    color: var(--main-dark);
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-
-    /* Fit content but still be centered */
-    display: inline-block;
-    width: fit-content;
-
-    /* Center in the row */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-.event-title {
-    color: var(--main-dark);
-    font-size: 20px;
-    height: fit-content;
-    font-weight: bold;
-    justify-content: center;
-    text-align: center;
-}
-
-/* Location below in orange */
-.event-location {
-    font-size: 19px;
-    color: var(--accent-text);
-    height: fit-content;
-    justify-content: center;
-    text-align: center;
-}
-
-/* Image placed above the text */
-.event-image {
-    display: block;
-    align-content: end;
-    max-width: 100px;
-    margin: 0 auto 0.5rem;
 }
 
 /* Timeline.css */
