@@ -6,7 +6,8 @@ const WeddingFooter: React.FC = () => {
       <Box
           component="footer"
           sx={{
-            py: 1,
+            pt: 1,
+            pb: 2,
           }}
       >
         <Container maxWidth="sm">

@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 
 const MainPhoto: React.FC = () => {
         return (
-            <Box sx={{ position: 'relative', width: '100%', flexGrow: 1}}>
+            <Box sx={{ position: 'relative', width: '100%', height: '600px' }}>
                     <Box
                         component="img"
                         src="/assets/mainCoupleImage.jpeg"
