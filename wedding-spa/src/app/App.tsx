@@ -102,6 +102,31 @@ const theme = createTheme({
                 },
             },
         },
+        MuiCssBaseline: {
+            styleOverrides: {
+                '.menu-link': {
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    fontSize: '1.25rem',
+                    position: 'relative',
+                    paddingBottom: 4,
+                    '&:after': {
+                        content: '""',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '2px',
+                        backgroundColor: primaryLightDark,
+                        bottom: 3,
+                        left: 0,
+                        opacity: 0,
+                    },
+                    // When the link is active, show the underline.
+                    '&.active:after': {
+                        opacity: 1,
+                    },
+                },
+            },
+        },
     },
 });
 
