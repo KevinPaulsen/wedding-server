@@ -77,6 +77,7 @@ const RegistryComponent: React.FC = () => {
               description="Donate what you wish."
               buttonText="Donate"
               onButtonClick={handleOpen}
+              showVenmo
           />
           <DonateCard
               image={furnishing}
@@ -84,6 +85,7 @@ const RegistryComponent: React.FC = () => {
               description="Donate what you wish."
               buttonText="Donate"
               onButtonClick={handleOpen}
+              showVenmo
           />
         </Box>
 
