@@ -51,6 +51,7 @@ const theme = createTheme({
       primary: primaryMainDark,
       secondary: primaryLightDark,
     },
+    divider: primaryLightDark,
   },
   typography: {
     fontFamily: '"EB Garamond"',

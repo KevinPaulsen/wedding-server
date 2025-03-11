@@ -36,7 +36,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({children}) => {
             centerButton={true}
             mainDestination="/"
         />
-        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
           {children}
         </Box>
         <Box>
