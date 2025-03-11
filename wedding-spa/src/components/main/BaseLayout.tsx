@@ -9,6 +9,7 @@ interface BaseLayoutProps {
 }
 
 const leftLinks: HeaderLink[] = [
+  {label: 'Things to Do', to: '/things-to-do'},
   {label: 'Gallery', to: '/gallery'},
   {label: 'Details', to: '/details'},
 ];
@@ -16,6 +17,7 @@ const leftLinks: HeaderLink[] = [
 const rightLinks: HeaderLink[] = [
   {label: 'Registry', to: '/registry'},
   {label: 'Our Story', to: '/story'},
+  {label: 'Wedding Party', to: '/wedding-party'},
 ];
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({children}) => {

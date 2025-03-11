@@ -12,15 +12,6 @@ export interface HeaderLink {
   to: string;
 }
 
-// Define a type for a center button configuration.
-export interface CenterButtonConfig {
-  text: string;
-  onClick: () => void;
-  variant?: ButtonVariant;
-  width?: string;
-  height?: string;
-}
-
 // Props for our header component.
 export interface AppHeaderProps {
   title: string;
@@ -105,7 +96,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
             }
           </Grid2>
           <Grid2 size={2} container justifyContent="flex-end">
-            <FullScreenMenu/>
+            <FullScreenMenu links={[...leftLinks, ...rightLinks]} />
           </Grid2>
         </Grid2>
 
