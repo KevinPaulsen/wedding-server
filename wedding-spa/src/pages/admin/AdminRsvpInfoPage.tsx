@@ -5,7 +5,7 @@ import AdminRsvpController from '../../components/admin/adminRsvpTable/AdminRsvp
 
 const AdminRsvpInfoPage: React.FC = () => {
     return (
-        <AdminLayout title="RSVP Table Information">
+        <AdminLayout>
             <AdminRsvpController />
         </AdminLayout>
     );

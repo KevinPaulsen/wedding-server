@@ -6,7 +6,7 @@ import PhotoGalleryComponent from '../../components/main/PhotoGalleryComponent';
 
 const UploadPhotoPage: React.FC = () => {
     return (
-        <AdminLayout title="Edit Gallery">
+        <AdminLayout>
             <>
                 <AdminFileUploadComponent />
                 <PhotoGalleryComponent makeDraggable />

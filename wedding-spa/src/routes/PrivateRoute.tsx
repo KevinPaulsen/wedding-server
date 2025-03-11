@@ -35,7 +35,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component }) => {
     // While token verification is in progress, show a loading indicator
     if (loading || isValid === null) {
         return (
-            <AdminLayout title="">
+            <AdminLayout>
                 <Box
                     sx={{
                         display: 'flex',

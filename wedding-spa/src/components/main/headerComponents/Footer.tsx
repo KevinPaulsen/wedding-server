@@ -3,13 +3,7 @@ import {Box, Container, Typography} from '@mui/material';
 
 const WeddingFooter: React.FC = () => {
   return (
-      <Box
-          component="footer"
-          sx={{
-            pt: 1,
-            pb: 2,
-          }}
-      >
+      <Box component="footer">
         <Container maxWidth="sm">
           {/* Initials */}
           <Typography
