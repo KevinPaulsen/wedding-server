@@ -13,7 +13,7 @@ const WeddingFooter: React.FC = () => {
         <Container maxWidth="sm">
           {/* Initials */}
           <Typography
-              variant="h3"
+              variant="h5"
               align="center"
               color="primary"
           >
@@ -24,7 +24,7 @@ const WeddingFooter: React.FC = () => {
           <Box
               sx={{
                 height: "2px",
-                width: '40%',
+                width: '20%',
                 bgcolor: 'primary.light',
                 mx: 'auto',
               }}
@@ -32,7 +32,7 @@ const WeddingFooter: React.FC = () => {
 
           {/* Wedding Date */}
           <Typography
-              variant="h5"
+              variant="body1"
               align="center"
           >
             9 . 13. 2025
