@@ -1,7 +1,7 @@
 .gallery :global(.react-photo-album) {
   --position-indicator-width: 4px;
   --position-indicator-offset: calc(
-    (15px + var(--position-indicator-width)) / -2
+      (15px + var(--position-indicator-width)) / -2
   );
 }
 

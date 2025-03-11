@@ -32,7 +32,7 @@ export interface AppHeaderProps {
 }
 
 // Create a styled NavLink that shows an underline when active and on hover.
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
+const StyledNavLink = styled(NavLink)(({theme}) => ({
   textDecoration: 'none',
   color: 'inherit',
   fontSize: '1.25rem',

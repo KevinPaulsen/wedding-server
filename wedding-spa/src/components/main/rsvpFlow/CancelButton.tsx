@@ -5,22 +5,22 @@ import {useFlow} from '../../../context/FlowProvider';
 import CustomButton from "../../shared/CustomButton";
 
 interface CancelButtonProps {
-    route: string;
+  route: string;
 }
 
-const CancelButton: React.FC<CancelButtonProps> = ({ route }) => {
-    const navigate = useNavigate();
-    const { resetFormData, resetStepState } = useFlow();
+const CancelButton: React.FC<CancelButtonProps> = ({route}) => {
+  const navigate = useNavigate();
+  const {resetFormData, resetStepState} = useFlow();
 
-    const handleCancel = () => {
-        resetFormData();
-        resetStepState();
-        navigate(route);
-    };
+  const handleCancel = () => {
+    resetFormData();
+    resetStepState();
+    navigate(route);
+  };
 
-    return (
-        <CustomButton text="Cancel" onClick={handleCancel} maxWidth={75} variant="lightOutlined" />
-    );
+  return (
+      <CustomButton text="Cancel" onClick={handleCancel} maxWidth={75} variant="lightOutlined"/>
+  );
 };
 
 export default CancelButton;

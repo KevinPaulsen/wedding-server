@@ -1,88 +1,88 @@
 .drop-down-animation {
-    animation: dropDown 0.3s ease-in-out;
+  animation: dropDown 0.3s ease-in-out;
 }
 
 @keyframes dropDown {
-    0% {
-        max-height: 0;
-        opacity: 0;
-    }
-    100% {
-        max-height: 500px; /* Arbitrary value to ensure smooth dropdown */
-        opacity: 1;
-    }
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 500px; /* Arbitrary value to ensure smooth dropdown */
+    opacity: 1;
+  }
 }
 
 .custom-table {
-    background-color: var(--hover-light);
-    color: var(--main-dark);
-    border-collapse: separate;
-    border-spacing: 0 12px;
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
+  background-color: var(--hover-light);
+  color: var(--main-dark);
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .custom-table th,
 .custom-table td {
-    color: var(--main-dark);
-    background-color: transparent; /* Make the background transparent */
-    border: none; /* Remove default borders between cells */
-    text-align: center; /* Center the text in both headers and table cells */
+  color: var(--main-dark);
+  background-color: transparent; /* Make the background transparent */
+  border: none; /* Remove default borders between cells */
+  text-align: center; /* Center the text in both headers and table cells */
 }
 
 .custom-table tr {
-    border-bottom: 1px solid var(--main-dark); /* Add border between rows */
+  border-bottom: 1px solid var(--main-dark); /* Add border between rows */
 }
 
 .custom-table thead th {
-    border-bottom: 2px solid var(--main-dark); /* Optional: distinct header bottom border */
-    font-weight: bold;
-    text-align: center;
+  border-bottom: 2px solid var(--main-dark); /* Optional: distinct header bottom border */
+  font-weight: bold;
+  text-align: center;
 }
 
 .custom-table tbody tr:last-child {
 }
 
 .custom-table .btn {
-    color: var(--main-dark);
-    font-weight: bold;
+  color: var(--main-dark);
+  font-weight: bold;
 }
 
 /* Hover effect for icon buttons */
 .badge .icon-button:hover,
 .fa-edit:hover,
 .fa-trash:hover {
-    opacity: 0.7; /* Makes the icon slightly transparent on hover */
+  opacity: 0.7; /* Makes the icon slightly transparent on hover */
 }
 
 /* Ensure icons have a transition effect */
 .badge .icon-button,
 .fa-edit,
 .fa-trash {
-    transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 /* Table.css */
 
 /* Ensure these selectors are specific enough */
 .custom-table .badge-attending {
-    border: 2px solid green;
-    background-color: transparent !important;
-    color: green !important;
-    font-weight: bold !important;
+  border: 2px solid green;
+  background-color: transparent !important;
+  color: green !important;
+  font-weight: bold !important;
 }
 
 .custom-table .badge-not-attending {
-    border: 2px solid red;
-    color: red !important;
-    background-color: transparent !important;
-    font-weight: bold !important;
+  border: 2px solid red;
+  color: red !important;
+  background-color: transparent !important;
+  font-weight: bold !important;
 }
 
 .custom-table .badge-pending {
-    border: 2px solid blue;
-    color: blue !important;
-    background-color: transparent !important;
-    font-weight: bold !important;
+  border: 2px solid blue;
+  color: blue !important;
+  background-color: transparent !important;
+  font-weight: bold !important;
 }

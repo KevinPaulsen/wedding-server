@@ -5,22 +5,22 @@ import {useNavigate} from 'react-router-dom';
 import CustomButton from "../../shared/CustomButton";
 
 interface RsvpConfirmationProps {
-    returnPage?: string | null;
+  returnPage?: string | null;
 }
 
-const RsvpConfirmation: React.FC<RsvpConfirmationProps> = ({ returnPage }) => {
-    const navigate = useNavigate();
+const RsvpConfirmation: React.FC<RsvpConfirmationProps> = ({returnPage}) => {
+  const navigate = useNavigate();
 
-    const handleReturnHome = () => {
-        navigate(returnPage ? returnPage : '/');
-    };
+  const handleReturnHome = () => {
+    navigate(returnPage ? returnPage : '/');
+  };
 
-    return (
-        <Box sx={{ p: 3, textAlign: 'center' }}>
-            <Typography>Your RSVP has been successfully submitted.</Typography>
-            <CustomButton text="Return Home" onClick={handleReturnHome} width="auto" variant="dark" />
-        </Box>
-    );
+  return (
+      <Box sx={{p: 3, textAlign: 'center'}}>
+        <Typography>Your RSVP has been successfully submitted.</Typography>
+        <CustomButton text="Return Home" onClick={handleReturnHome} width="auto" variant="dark"/>
+      </Box>
+  );
 };
 
 export default RsvpConfirmation;

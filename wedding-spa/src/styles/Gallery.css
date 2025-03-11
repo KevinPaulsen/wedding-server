@@ -1,9 +1,9 @@
 .info-text {
-    color: var(--main-dark);
-    background: none;
+  color: var(--main-dark);
+  background: none;
 }
 
 .max-image {
-    width: 100%;
-    max-width: 400px;
+  width: 100%;
+  max-width: 400px;
 }

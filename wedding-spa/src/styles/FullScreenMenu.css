@@ -1,97 +1,97 @@
 .menu-button-container {
-    position: relative;
+  position: relative;
 }
 
 .menu-button-container.above-overlay {
-    z-index: 1002;
+  z-index: 1002;
 }
 
 .menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    background: transparent;
-    width: 50px;
-    height: 50px;
-    transition: background 0.3s ease;
-    border: none;
+  background: transparent;
+  width: 50px;
+  height: 50px;
+  transition: background 0.3s ease;
+  border: none;
 }
 
 .menu-button.open .line {
-    background-color: var(--main-light)
+  background-color: var(--main-light)
 }
 
 .menu-button:hover,
 .menu-button:focus,
 .menu-button:active,
 .menu-button:focus-visible {
-    background: transparent !important;
-    box-shadow: none !important; /* Remove focus outline */
-    outline: none !important; /* Remove outline on focus */
+  background: transparent !important;
+  box-shadow: none !important; /* Remove focus outline */
+  outline: none !important; /* Remove outline on focus */
 }
 
 .menu-icon {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 25px;
-    height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 25px;
 }
 
 .line {
-    height: 3px;
-    width: 100%;
-    background-color: var(--main-dark);
-    transition: all 0.3s ease;
+  height: 3px;
+  width: 100%;
+  background-color: var(--main-dark);
+  transition: all 0.3s ease;
 }
 
 .open .top-line {
-    transform: translateY(11px) rotate(45deg);
+  transform: translateY(11px) rotate(45deg);
 }
 
 .open .middle-line {
-    opacity: 0;
+  opacity: 0;
 }
 
 .open .bottom-line {
-    transform: translateY(-11px) rotate(-45deg);
+  transform: translateY(-11px) rotate(-45deg);
 }
 
 .fullscreen-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--main-dark);
-    visibility: hidden;
-    opacity: 0;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--main-dark);
+  visibility: hidden;
+  opacity: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .fullscreen-overlay .container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .fullscreen-overlay.show {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 .menu-link {
-    color: var(--main-light);
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    text-decoration: none;
-    transition: color 0.3s;
+  color: var(--main-light);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
 .menu-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 

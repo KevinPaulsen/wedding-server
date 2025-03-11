@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Container, Link, Typography } from '@mui/material';
+import React, {useState} from 'react';
+import {Box, Container, Typography} from '@mui/material';
 import ExpressCheckoutDialog from "./ExpressCheckoutDialog";
 import DonateCard from "./DonateCard";
 import rome from "../../../assets/rome.jpg";
@@ -18,8 +18,8 @@ const RegistryComponent: React.FC = () => {
   };
 
   return (
-      <Container sx={{ textAlign: 'center' }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1 }}>
+      <Container sx={{textAlign: 'center'}}>
+        <Typography variant="h4" component="h1" sx={{fontWeight: 'bold', mb: 1}}>
           Amazon Registry
         </Typography>
         <Box
@@ -49,7 +49,7 @@ const RegistryComponent: React.FC = () => {
           />
         </Box>
 
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mt: 5 }}>
+        <Typography variant="h4" component="h1" sx={{fontWeight: 'bold', mt: 5}}>
           Cash Gift
         </Typography>
         <Box
@@ -89,7 +89,7 @@ const RegistryComponent: React.FC = () => {
           />
         </Box>
 
-        <ExpressCheckoutDialog open={open} onClose={handleClose} />
+        <ExpressCheckoutDialog open={open} onClose={handleClose}/>
       </Container>
   );
 };

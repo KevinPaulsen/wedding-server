@@ -1,9 +1,9 @@
 .story {
-    color: var(--main-dark);
-    background: none;
+  color: var(--main-dark);
+  background: none;
 }
 
 .gallery-image {
-    width: 100%;
-    max-width: 200px;
+  width: 100%;
+  max-width: 200px;
 }

@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect } from 'react';
+import React, {forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {
   Box,
   CircularProgress,
@@ -7,15 +7,15 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Slide,
   TextField,
-  Typography,
-  Slide
+  Typography
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import {Elements, PaymentElement, useElements, useStripe} from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { createPaymentIntent } from "../../../services/ApiService";
+import {loadStripe} from '@stripe/stripe-js';
+import {createPaymentIntent} from "../../../services/ApiService";
 import CustomButton from "../../shared/CustomButton";
 
 // Initialize Stripe
@@ -30,8 +30,8 @@ const appearance = {
     fontFamily: "EB Garamond"
   },
   rules: {
-    '.Input': { border: '2px solid #574c3f', borderRadius: '4px', padding: '8px' },
-    '.Label': { color: '#574c3f' },
+    '.Input': {border: '2px solid #574c3f', borderRadius: '4px', padding: '8px'},
+    '.Label': {color: '#574c3f'},
   },
 };
 
@@ -52,7 +52,7 @@ export interface PaymentFormHandle {
 }
 
 const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
-    ({ clientSecret, onMessage, setPaymentLoading, onPaymentCompleteChange }, ref) => {
+    ({clientSecret, onMessage, setPaymentLoading, onPaymentCompleteChange}, ref) => {
       const stripe = useStripe();
       const elements = useElements();
 
@@ -69,28 +69,28 @@ const PaymentForm = forwardRef<PaymentFormHandle, PaymentFormProps>(
           return;
         }
 
-        const { error } = await stripe.confirmPayment({
+        const {error} = await stripe.confirmPayment({
           elements,
           clientSecret,
-          confirmParams: { return_url: 'https://kevinlovesolivia.com/payment-confirmation' },
+          confirmParams: {return_url: 'https://kevinlovesolivia.com/payment-confirmation'},
         });
 
         onMessage(error ? error.message || "Payment failed" : "Payment successful! You will be redirected shortly.");
         setPaymentLoading(false);
       };
 
-      useImperativeHandle(ref, () => ({ submitPayment: () => handleSubmit() }));
+      useImperativeHandle(ref, () => ({submitPayment: () => handleSubmit()}));
 
       return (
           <form onSubmit={handleSubmit}>
-            <PaymentElement onChange={(e) => onPaymentCompleteChange?.(e.complete)} />
-            <button type="submit" style={{ display: 'none' }}>Submit</button>
+            <PaymentElement onChange={(e) => onPaymentCompleteChange?.(e.complete)}/>
+            <button type="submit" style={{display: 'none'}}>Submit</button>
           </form>
       );
     }
 );
 
-const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onClose }) => {
+const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({open, onClose}) => {
   const [step, setStep] = useState<'selection' | 'payment'>('selection');
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<number>(25);
@@ -145,30 +145,46 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
           maxWidth="sm"
           slotProps={{
             paper: {
-              sx: { width: "400px", minHeight: 500, display: 'flex', flexDirection: 'column' }
+              sx: {width: "400px", minHeight: 500, display: 'flex', flexDirection: 'column'}
             }
           }}
       >
-        <DialogTitle sx={{ textAlign: 'center', position: 'relative' }}>
+        <DialogTitle sx={{textAlign: 'center', position: 'relative'}}>
           Donate to Our Wedding
-          <IconButton onClick={onClose} sx={{ position: 'absolute', right: 8, top: 8 }}>
-            <CloseIcon />
+          <IconButton onClick={onClose} sx={{position: 'absolute', right: 8, top: 8}}>
+            <CloseIcon/>
           </IconButton>
         </DialogTitle>
 
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <DialogContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+          <DialogContent sx={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
             {step === 'selection' && (
                 <Slide direction="right" in={step === 'selection'} mountOnEnter unmountOnExit>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2, width: '100%', alignItems: 'center' }}>
-                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
+                  <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                    mb: 2,
+                    width: '100%',
+                    alignItems: 'center'
+                  }}>
+                    <Typography variant="h6" gutterBottom sx={{textAlign: 'center'}}>
                       Select a donation amount (USD):
                     </Typography>
                     {[25, 50, 100].map(amount => (
                         <CustomButton
                             key={amount}
                             variant={!showCustomInput && selectedPreset === amount ? 'dark' : 'light'}
-                            onClick={() => { setSelectedPreset(amount); setShowCustomInput(false); }}
+                            onClick={() => {
+                              setSelectedPreset(amount);
+                              setShowCustomInput(false);
+                            }}
                             text={'$' + amount}
                             height={50}
                         />
@@ -177,7 +193,10 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                     {!showCustomInput && (
                         <CustomButton
                             variant="light"
-                            onClick={() => { setShowCustomInput(true); setCustomAmount(""); }}
+                            onClick={() => {
+                              setShowCustomInput(true);
+                              setCustomAmount("");
+                            }}
                             text={"Other Amount"}
                             height={50}
                         />
@@ -198,7 +217,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                               mb: 0,
                             }}
                         >
-                          <Typography variant="h6" sx={{ mr: 1, color: 'inherit' }}>
+                          <Typography variant="h6" sx={{mr: 1, color: 'inherit'}}>
                             $
                           </Typography>
                           <TextField
@@ -245,7 +264,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                               }}
                               sx={{
                                 flex: 1,
-                                input: { fontSize: '1.25rem', color: 'primary.contrastText' },
+                                input: {fontSize: '1.25rem', color: 'primary.contrastText'},
                               }}
                           />
                           <IconButton
@@ -253,9 +272,9 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                                 setShowCustomInput(false);
                                 setCustomAmount("");
                               }}
-                              sx={{ color: 'primary.contrastText' }}
+                              sx={{color: 'primary.contrastText'}}
                           >
-                            <CloseIcon />
+                            <CloseIcon/>
                           </IconButton>
                         </Box>
                     )}
@@ -266,11 +285,14 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
             {step === 'payment' && (
                 <Slide direction="left" in={step === 'payment'} mountOnEnter unmountOnExit>
                   <Box>
-                    <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
+                    <Typography variant="h6" sx={{mb: 2, textAlign: 'center'}}>
                       Processing Payment of ${parseFloat(donationAmount).toFixed(2)}
                     </Typography>
                     {clientSecret ? (
-                        <Elements stripe={stripePromise} options={{ clientSecret, appearance } as stripeJs.StripeElementsOptions}>
+                        <Elements stripe={stripePromise} options={{
+                          clientSecret,
+                          appearance
+                        } as stripeJs.StripeElementsOptions}>
                           <PaymentForm
                               ref={paymentFormRef}
                               clientSecret={clientSecret}
@@ -280,10 +302,10 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
                           />
                         </Elements>
                     ) : (
-                        <CircularProgress />
+                        <CircularProgress/>
                     )}
                     {message && (
-                        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                        <Typography variant="body2" color="error" sx={{mt: 2}}>
                           {message}
                         </Typography>
                     )}
@@ -299,7 +321,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({ open, onCl
             }}
         >
           {step === 'payment' && (
-              <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined" />
+              <CustomButton width="auto" text="Back" onClick={handleBack} variant="lightOutlined"/>
           )}
           <CustomButton
               text={step === 'selection' ? "Continue to Payment" : "Pay"}

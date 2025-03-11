@@ -1,29 +1,29 @@
 /* Transition Classes */
 .fade-enter {
-    opacity: 0;
+  opacity: 0;
 }
 
 .fade-enter-active {
-    opacity: 1;
-    transition: opacity 200ms ease-in-out;
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
 }
 
 .fade-exit {
-    opacity: 1;
+  opacity: 1;
 }
 
 .fade-exit-active {
-    opacity: 0;
-    transition: opacity 200ms ease-in-out;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
 }
 
 /* Positioning to Prevent Overlaps */
 .form-container {
-    position: relative;
-    min-height: 200px; /* Adjust based on your content */
+  position: relative;
+  min-height: 200px; /* Adjust based on your content */
 }
 
 .form-container > * {
-    position: absolute;
-    width: 100%;
+  position: absolute;
+  width: 100%;
 }

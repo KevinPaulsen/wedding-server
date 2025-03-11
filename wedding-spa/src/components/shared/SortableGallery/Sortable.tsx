@@ -1,6 +1,6 @@
 // components/shared/SortableGallery/Sortable.tsx
-import React, { cloneElement } from "react";
-import { useSortable } from "@dnd-kit/sortable";
+import React, {cloneElement} from "react";
+import {useSortable} from "@dnd-kit/sortable";
 
 interface CustomHTMLAttributes<T> extends React.HTMLAttributes<T> {
   "data-active"?: boolean;
@@ -14,9 +14,9 @@ interface SortableProps {
   >;
 }
 
-export default function Sortable({ id, children }: SortableProps) {
-  const { attributes, listeners, isDragging, index, activeIndex, over, setNodeRef } =
-      useSortable({ id });
+export default function Sortable({id, children}: SortableProps) {
+  const {attributes, listeners, isDragging, index, activeIndex, over, setNodeRef} =
+      useSortable({id});
 
   return cloneElement(children, {
     ref: setNodeRef,

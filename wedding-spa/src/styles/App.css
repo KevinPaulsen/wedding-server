@@ -5,23 +5,23 @@
 
 
 html, body, h1, h2, h3, h4, h5, h6 {
-    font-family: "EB Garamond", system-ui;
-    font-style: normal;
-    font-optical-sizing: auto;
-    margin: 0;
-    padding: 0;
-    color: var(--main-dark);
-    background-color: transparent;
+  font-family: "EB Garamond", system-ui;
+  font-style: normal;
+  font-optical-sizing: auto;
+  margin: 0;
+  padding: 0;
+  color: var(--main-dark);
+  background-color: transparent;
 }
 
 .App {
-    text-align: center;
-    margin: 0 auto;
-    max-width: 1200px;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1200px;
 }
 
 /* App.css */
 .container {
-    transition: opacity 0.5s ease-in-out;
-    opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
 }

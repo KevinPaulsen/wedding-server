@@ -13,15 +13,15 @@ interface GenericCardProps {
 }
 
 const DonateCard: React.FC<GenericCardProps> = ({
-                                                   image,
-                                                   title,
-                                                   description,
-                                                   buttonText,
-                                                   onButtonClick,
+                                                  image,
+                                                  title,
+                                                  description,
+                                                  buttonText,
+                                                  onButtonClick,
                                                   showVenmo,
-                                                 }) => {
+                                                }) => {
   return (
-      <Card sx={{ maxWidth: 345, bgcolor: "secondary.light" }}>
+      <Card sx={{maxWidth: 345, bgcolor: "secondary.light"}}>
         <CardMedia
             component="img"
             height="200"
@@ -36,7 +36,7 @@ const DonateCard: React.FC<GenericCardProps> = ({
             {description}
           </Typography>
         </CardContent>
-        <CardActions sx={{ justifyContent: "center" }}>
+        <CardActions sx={{justifyContent: "center"}}>
           <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', gap: 1}}>
             <CustomButton text={buttonText} onClick={onButtonClick} variant="dark" maxWidth="100%"/>
             {showVenmo && <VenmoDonateButton/>}

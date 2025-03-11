@@ -1,15 +1,15 @@
 .main-image {
-    object-fit: cover;
-    object-position: 50% 38%;
-    top: 0;
-    left: 0;
-    filter: brightness(50%);
+  object-fit: cover;
+  object-position: 50% 38%;
+  top: 0;
+  left: 0;
+  filter: brightness(50%);
 }
 
 .date-text {
-    font-family: "Baskervville", serif;
-    font-weight: 800;
-    color: var(--main-light);
-    display: flex;
-    font-size: clamp(1em, 12vw + 1em, 15rem);
+  font-family: "Baskervville", serif;
+  font-weight: 800;
+  color: var(--main-light);
+  display: flex;
+  font-size: clamp(1em, 12vw + 1em, 15rem);
 }

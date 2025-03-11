@@ -2,10 +2,10 @@
 import React from 'react';
 
 interface ErrorMessageProps {
-    error: string;
+  error: string;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ error }) => (
+const ErrorMessage: React.FC<ErrorMessageProps> = ({error}) => (
     <div className="text-danger text-center">Error: {error}</div>
 );
 

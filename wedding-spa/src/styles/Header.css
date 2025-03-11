@@ -1,65 +1,65 @@
 .title {
-    font-size: clamp(1em, 4vw + 1em, 6em);
+  font-size: clamp(1em, 4vw + 1em, 6em);
 }
 
 .custom-button {
-    border-radius: 0;
-    height: 40px;
-    width: 80px;
+  border-radius: 0;
+  height: 40px;
+  width: 80px;
 }
 
 .custom-button.light {
-    background: var(--main-light);
-    color: var(--main-dark);
-    border: 2px solid var(--main-light);
+  background: var(--main-light);
+  color: var(--main-dark);
+  border: 2px solid var(--main-light);
 }
 
 .custom-button.dark {
-    background: var(--main-dark);
-    color: var(--main-light);
-    border: 2px solid var(--main-dark);
+  background: var(--main-dark);
+  color: var(--main-light);
+  border: 2px solid var(--main-dark);
 }
 
 .custom-button:hover {
-    background: var(--hover-dark);
-    color: var(--main-light);
+  background: var(--hover-dark);
+  color: var(--main-light);
 }
 
 .custom-button:focus,
 .custom-button:active {
-    background: var(--main-dark) !important;
-    border-color: var(--main-dark) !important;
-    color: var(--main-light);
+  background: var(--main-dark) !important;
+  border-color: var(--main-dark) !important;
+  color: var(--main-light);
 }
 
 .nav-link {
-    color: var(--main-dark);
-    font-size: 1.2em;
-    text-decoration: none;
+  color: var(--main-dark);
+  font-size: 1.2em;
+  text-decoration: none;
 }
 
 .nav-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .home-button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 
-    background-color: transparent;
-    border: none;
-    color: var(--main-dark);
-    overflow: visible;
+  background-color: transparent;
+  border: none;
+  color: var(--main-dark);
+  overflow: visible;
 }
 
 .home-button svg {
-    position: absolute;
-    font-size: 40px;
+  position: absolute;
+  font-size: 40px;
 }
 
 
@@ -67,6 +67,6 @@
 .home-button:focus,
 .home-button:active,
 .home-button:focus-visible {
-    background: transparent !important;
-    color: var(--hover-dark) !important;
+  background: transparent !important;
+  color: var(--hover-dark) !important;
 }

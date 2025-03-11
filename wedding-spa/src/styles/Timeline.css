@@ -1,84 +1,84 @@
 :root {
-    /* Layout / Sizing */
-    --container-width: 95%;
-    --container-margin: 2rem auto;
-    --spiral-top-offset: 0;
+  /* Layout / Sizing */
+  --container-width: 95%;
+  --container-margin: 2rem auto;
+  --spiral-top-offset: 0;
 
-    /* Vertical line */
-    --timeline-top-offset: 50px;
-    --line-width: 3px;
+  /* Vertical line */
+  --timeline-top-offset: 50px;
+  --line-width: 3px;
 
-    /* Timeline items */
-    --timeline-item-padding: 1rem;
-    --timeline-item-gap: calc(var(--circle2-size) / 2 - 1px);     /* Gap between item edge and center line */
+  /* Timeline items */
+  --timeline-item-padding: 1rem;
+  --timeline-item-gap: calc(var(--circle2-size) / 2 - 1px); /* Gap between item edge and center line */
 
-    /* Horizontal connector */
-    --connector-width: 25%;        /* Enough to span from item edge to vertical center */
+  /* Horizontal connector */
+  --connector-width: 25%; /* Enough to span from item edge to vertical center */
 
-    /* Event content offsets */
-    --event-transform-y: -155px;     /* How far up/down to shift event content */
-    --event-offset: calc(var(--connector-width) - 40px);
+  /* Event content offsets */
+  --event-transform-y: -155px; /* How far up/down to shift event content */
+  --event-offset: calc(var(--connector-width) - 40px);
 
-    /* Bullseye circles */
-    --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
-    --circle2-size: 25px;
-    --circle3-size: 12px;
+  /* Bullseye circles */
+  --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
+  --circle2-size: 25px;
+  --circle3-size: 12px;
 
-    /* Arc sizes */
-    --arc-container-diamater: 45px;
-    --half-arc-container-width: calc(var(--arc-container-diamater) / 2);
-    --half-arc-container-height: var(--arc-container-diamater);
+  /* Arc sizes */
+  --arc-container-diamater: 45px;
+  --half-arc-container-width: calc(var(--arc-container-diamater) / 2);
+  --half-arc-container-height: var(--arc-container-diamater);
 }
 
 /************************************************
  * TIMELINE CONTAINER & VERTICAL CENTER LINE
  ************************************************/
 .timeline-container {
-    position: relative;
-    width: var(--container-width);
-    margin: var(--container-margin);
+  position: relative;
+  width: var(--container-width);
+  margin: var(--container-margin);
 }
 
 /* The spiral at the top */
 .spiral-top {
-    position: absolute;
-    top: var(--spiral-top-offset);
-    left: 50%;
-    transform: translateX(-50%);
+  position: absolute;
+  top: var(--spiral-top-offset);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Main vertical line down the center of the container */
 .timeline-container::before {
-    content: "";
-    position: absolute;
-    top: var(--timeline-top-offset);
-    bottom: 0;
-    left: 50%;
-    width: var(--line-width);
-    background: var(--main-dark);
-    transform: translateX(-50%);
-    z-index: 0; /* behind everything else */
+  content: "";
+  position: absolute;
+  top: var(--timeline-top-offset);
+  bottom: 0;
+  left: 50%;
+  width: var(--line-width);
+  background: var(--main-dark);
+  transform: translateX(-50%);
+  z-index: 0; /* behind everything else */
 }
 
 /************************************************
  * TIMELINE ITEM (ABSOLUTE POSITION)
  ************************************************/
 .timeline-item {
-    position: absolute;
-    width: calc(50% - var(--timeline-item-gap));
-    padding: var(--timeline-item-padding);
-    text-align: center;
-    /* No explicit z-index here, so it remains above the line’s z-index: 0 */
+  position: absolute;
+  width: calc(50% - var(--timeline-item-gap));
+  padding: var(--timeline-item-padding);
+  text-align: center;
+  /* No explicit z-index here, so it remains above the line’s z-index: 0 */
 }
 
 /* Left-side items: pinned to the left side */
 .timeline-item.left {
-    left: 0;
+  left: 0;
 }
 
 /* Right-side items: pinned to the right side */
 .timeline-item.right {
-    right: 0;
+  right: 0;
 }
 
 /************************************************
@@ -86,157 +86,157 @@
  ************************************************/
 .timeline-item.left::after,
 .timeline-item.right::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: var(--connector-width);
-    height: var(--line-width);
-    background: var(--main-dark);
-    z-index: 2; /* above circles */
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--connector-width);
+  height: var(--line-width);
+  background: var(--main-dark);
+  z-index: 2; /* above circles */
 }
 
 /* For left items: extends from item’s right edge to center. */
 .timeline-item.left::after {
-    right: 0;
+  right: 0;
 }
 
 /* For right items: extends from item’s left edge to center. */
 .timeline-item.right::after {
-    left: 0;
+  left: 0;
 }
 
 /************************************************
  * EVENT CONTENT (TITLE/TIME, LOCATION, IMAGE)
  ************************************************/
 .event-content {
-    width: auto;
-    height: fit-content;
-    position: absolute;
-    transform: translateY(var(--event-transform-y));
+  width: auto;
+  height: fit-content;
+  position: absolute;
+  transform: translateY(var(--event-transform-y));
 }
 
 /* For left items: place content to the left of the intersection */
 .timeline-item.left .event-content {
-    right: var(--event-offset);
+  right: var(--event-offset);
 }
 
 /* For right items: place content to the right of the intersection */
 .timeline-item.right .event-content {
-    left: var(--event-offset);
+  left: var(--event-offset);
 }
 
 /* Center item special styling */
 .timeline-item.center {
-    width: auto;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    background: var(--main-light);
+  width: auto;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  background: var(--main-light);
 }
 
 /* Timeline.css */
 .icon {
-    width: 100px;           /* Adjust the size as needed */
-    height: 100px;          /* Adjust the size as needed */
-    background-color: var(--main-dark);
-    display: block;
+  width: 100px; /* Adjust the size as needed */
+  height: 100px; /* Adjust the size as needed */
+  background-color: var(--main-dark);
+  display: block;
 }
 
 /************************************************
  * INTERSECTION BULLSEYE (3-LAYERED CIRCLES)
  ************************************************/
 .intersection {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* For left items: place intersection at item’s right edge */
 .timeline-item.left .intersection {
-    left: calc(100% + var(--timeline-item-gap));
+  left: calc(100% + var(--timeline-item-gap));
 }
 
 /* For right items: place intersection at item’s left edge */
 .timeline-item.right .intersection {
-    left: calc(-1 * var(--timeline-item-gap));
+  left: calc(-1 * var(--timeline-item-gap));
 }
 
 /* Center bullseye circles in .intersection */
 .circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
 }
 
 /* Circle #1 */
 .circle-1 {
-    width: var(--circle1-size);
-    height: var(--circle1-size);
-    background-color: var(--main-light);
+  width: var(--circle1-size);
+  height: var(--circle1-size);
+  background-color: var(--main-light);
 }
 
 /* Circle #2 */
 .circle-2 {
-    width: var(--circle2-size);
-    height: var(--circle2-size);
-    border: var(--line-width) solid var(--main-dark);
-    background-color: var(--main-light);
-    box-sizing: border-box;
-    border-radius: 50%;
+  width: var(--circle2-size);
+  height: var(--circle2-size);
+  border: var(--line-width) solid var(--main-dark);
+  background-color: var(--main-light);
+  box-sizing: border-box;
+  border-radius: 50%;
 }
 
 /* Circle #3 */
 .circle-3 {
-    width: var(--circle3-size);
-    height: var(--circle3-size);
-    background-color: var(--accent-text);
+  width: var(--circle3-size);
+  height: var(--circle3-size);
+  background-color: var(--accent-text);
 }
 
 /************************************************
  * BASE ARC
  ************************************************/
 .arc {
-    position: absolute;
-    overflow: hidden;
-    width: var(--arc-container-diamater);
-    height: var(--arc-container-diamater);
-    z-index: 4;
+  position: absolute;
+  overflow: hidden;
+  width: var(--arc-container-diamater);
+  height: var(--arc-container-diamater);
+  z-index: 4;
 }
 
 .arc.half {
-    width: var(--half-arc-container-width);
-    height: var(--half-arc-container-height);
-    overflow: hidden;
-    position: absolute;
-    transform: translate(-100%, -50%);
+  width: var(--half-arc-container-width);
+  height: var(--half-arc-container-height);
+  overflow: hidden;
+  position: absolute;
+  transform: translate(-100%, -50%);
 }
 
 /* When the half arc is inside a left timeline item, shift it differently */
 .timeline-item.left .arc.half {
-    transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .arc.half::before {
-    content: "";
-    position: absolute;
-    width: var(--arc-container-diamater);
-    height: var(--arc-container-diamater);
-    border: var(--line-width) solid var(--main-dark);
-    border-radius: 50%;
+  content: "";
+  position: absolute;
+  width: var(--arc-container-diamater);
+  height: var(--arc-container-diamater);
+  border: var(--line-width) solid var(--main-dark);
+  border-radius: 50%;
 }
 
 /* Left Half Arc: shows the left half of the circle */
 .arc.left-half::before {
-    top: 0;
-    left: 0px;
+  top: 0;
+  left: 0px;
 }
 
 /* Right Half Arc: shows the right half of the circle */
 .arc.right-half::before {
-    top: 0;
-    left: calc(-1 * var(--half-arc-container-width));
+  top: 0;
+  left: calc(-1 * var(--half-arc-container-width));
 }

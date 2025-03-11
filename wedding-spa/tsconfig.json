@@ -3,14 +3,18 @@
     "target": "ES6",
     "module": "ESNext",
     "jsx": "react-jsx",
-    "allowJs": true,             // Allow JavaScript files to coexist
-    "checkJs": false,            // Optional: enable if you want TypeScript to check your .js files
+    "allowJs": true,
+    // Allow JavaScript files to coexist
+    "checkJs": false,
+    // Optional: enable if you want TypeScript to check your .js files
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
 

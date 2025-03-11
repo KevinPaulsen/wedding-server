@@ -1,8 +1,8 @@
 // services/ApiService.ts
 
-import { getImageDimensions } from "./utils";
-import { Rsvp } from "../types/rsvp";            // your Rsvp/Guest interfaces
-import { ImageMetadata } from "../types/gallery";
+import {getImageDimensions} from "./utils";
+import {Rsvp} from "../types/rsvp"; // your Rsvp/Guest interfaces
+import {ImageMetadata} from "../types/gallery";
 import {AddGuestDTO, CreateRsvpDTO, LookupDTO, WeddingGuest} from "../types/RsvpDTO";
 
 /**
@@ -12,9 +12,9 @@ import {AddGuestDTO, CreateRsvpDTO, LookupDTO, WeddingGuest} from "../types/Rsvp
  * - error?: error message if success is false
  */
 export interface ApiResponse<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 export const API_URL = "https://api.kevinlovesolivia.com";
@@ -27,43 +27,43 @@ async function request<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
-    try {
-        const response = await fetch(`${API_URL}${endpoint}`, options);
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, options);
 
-        // 1. If response not OK, parse an error
-        if (!response.ok) {
-            let errorMessage = "An unknown error occurred";
-            try {
-                const errorData = await response.json();
-                // Adjust if your server uses a different field for errors
-                errorMessage = errorData?.detail || errorData?.message || errorMessage;
-            } catch {
-                // If we can't parse JSON, keep default errorMessage
-            }
-            return { success: false, error: errorMessage };
-        }
-
-        // 2. If 204 or no content, just return success
-        if (response.status === 204) {
-            return { success: true };
-        }
-
-        // 3. Parse response text
-        const text = await response.text();
-        if (!text) {
-            return { success: true };
-        }
-
-        const data: T = JSON.parse(text);
-        return { success: true, data };
-    } catch (error: unknown) {
-        // 4. Network or fetch-level error
-        console.error("API Request Error:", error);
-        if (error instanceof Error) {
-            return {success: false, error: error.message || "Request failed"};
-        }
-        return {success: false, error: "Request failed"};
+    // 1. If response not OK, parse an error
+    if (!response.ok) {
+      let errorMessage = "An unknown error occurred";
+      try {
+        const errorData = await response.json();
+        // Adjust if your server uses a different field for errors
+        errorMessage = errorData?.detail || errorData?.message || errorMessage;
+      } catch {
+        // If we can't parse JSON, keep default errorMessage
+      }
+      return {success: false, error: errorMessage};
     }
+
+    // 2. If 204 or no content, just return success
+    if (response.status === 204) {
+      return {success: true};
+    }
+
+    // 3. Parse response text
+    const text = await response.text();
+    if (!text) {
+      return {success: true};
+    }
+
+    const data: T = JSON.parse(text);
+    return {success: true, data};
+  } catch (error: unknown) {
+    // 4. Network or fetch-level error
+    console.error("API Request Error:", error);
+    if (error instanceof Error) {
+      return {success: false, error: error.message || "Request failed"};
+    }
+    return {success: false, error: "Request failed"};
+  }
 }
 
 /** Admin login. Returns { token: string, expiresIn: number } or similar. */
@@ -71,25 +71,25 @@ export async function adminLogin(
     username: string,
     password: string
 ): Promise<ApiResponse<{ token: string; expiresIn: number }>> {
-    return request<{ token: string; expiresIn: number }>("/auth/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-    });
+  return request<{ token: string; expiresIn: number }>("/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({username, password}),
+  });
 }
 
 /** Verify a token. Returns a boolean in `data`. */
 export async function verifyToken(authToken: string): Promise<ApiResponse<boolean>> {
-    return request<boolean>("/auth/verify-token", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-        },
-    });
+  return request<boolean>("/auth/verify-token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
 }
 
 /** =======================
@@ -102,15 +102,15 @@ export async function verifyToken(authToken: string): Promise<ApiResponse<boolea
  * so if you need the full Rsvp object, either retrieve it again or adapt as needed.
  */
 export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<Rsvp>> {
-    return request<Rsvp>("/rsvp/create", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(rsvpData),
-    });
+  return request<Rsvp>("/rsvp/create", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(rsvpData),
+  });
 }
 
 /**
@@ -118,30 +118,30 @@ export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<R
  * The backend expects the full Rsvp object in the body, returns {message}.
  */
 export async function editRsvp(rsvp: Rsvp): Promise<ApiResponse<Rsvp>> {
-    return request<Rsvp>("/rsvp/edit", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify(rsvp),
-    });
+  return request<Rsvp>("/rsvp/edit", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+    },
+    credentials: "include",
+    body: JSON.stringify(rsvp),
+  });
 }
 
 /**
  * Submit the RSVP by calling POST /rsvp/submit.
  * This sets restricted fields on the backend. Returns {message}.
  */
-export async function submitRsvp(rsvp: Rsvp): Promise<ApiResponse<{message: string}>> {
-    return request<{message: string}>("/rsvp/submit", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(rsvp),
-    });
+export async function submitRsvp(rsvp: Rsvp): Promise<ApiResponse<{ message: string }>> {
+  return request<{ message: string }>("/rsvp/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(rsvp),
+  });
 }
 
 /**
@@ -149,30 +149,30 @@ export async function submitRsvp(rsvp: Rsvp): Promise<ApiResponse<{message: stri
  * The backend returns List<Rsvp>, so data will be Rsvp[].
  */
 export async function lookupRsvp(dto: LookupDTO): Promise<ApiResponse<Rsvp[]>> {
-    return request<Rsvp[]>("/rsvp/lookup", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(dto),
-    });
+  return request<Rsvp[]>("/rsvp/lookup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(dto),
+  });
 }
 
 /**
  * Delete an RSVP by calling DELETE /rsvp/delete?rsvpId=xxx.
  * Returns {message} on success.
  */
-export async function deleteRsvpRequest(rsvpId: string): Promise<ApiResponse<{message: string}>> {
-    const params = new URLSearchParams({ rsvpId });
-    return request<{message: string}>(`/rsvp/delete?${params.toString()}`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    });
+export async function deleteRsvpRequest(rsvpId: string): Promise<ApiResponse<{ message: string }>> {
+  const params = new URLSearchParams({rsvpId});
+  return request<{ message: string }>(`/rsvp/delete?${params.toString()}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
 }
 
 /**
@@ -180,13 +180,13 @@ export async function deleteRsvpRequest(rsvpId: string): Promise<ApiResponse<{me
  * Returns Rsvp[] in data.
  */
 export async function getRsvps(): Promise<ApiResponse<Rsvp[]>> {
-    return request<Rsvp[]>("/rsvp/all", {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        },
-        credentials: "include",
-    });
+  return request<Rsvp[]>("/rsvp/all", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+    },
+    credentials: "include",
+  });
 }
 
 /**
@@ -194,16 +194,18 @@ export async function getRsvps(): Promise<ApiResponse<Rsvp[]>> {
  * Body: { first_name, last_name, rsvp_id }
  * Returns {message}.
  */
-export async function addGuestToRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{message: string}>> {
-    return request<{message: string}>("/rsvp/guest/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify(guestDto),
-    });
+export async function addGuestToRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{
+  message: string
+}>> {
+  return request<{ message: string }>("/rsvp/guest/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+    },
+    credentials: "include",
+    body: JSON.stringify(guestDto),
+  });
 }
 
 /**
@@ -211,16 +213,18 @@ export async function addGuestToRsvp(guestDto: AddGuestDTO): Promise<ApiResponse
  * Body: { first_name, last_name, rsvp_id }
  * Returns {message}.
  */
-export async function removeGuestFromRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{message: string}>> {
-    return request<{message: string}>("/rsvp/guest/remove", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify(guestDto),
-    });
+export async function removeGuestFromRsvp(guestDto: AddGuestDTO): Promise<ApiResponse<{
+  message: string
+}>> {
+  return request<{ message: string }>("/rsvp/guest/remove", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+    },
+    credentials: "include",
+    body: JSON.stringify(guestDto),
+  });
 }
 
 /**
@@ -228,13 +232,13 @@ export async function removeGuestFromRsvp(guestDto: AddGuestDTO): Promise<ApiRes
  * Returns WeddingGuest[] in data.
  */
 export async function getAllRsvpGuests(): Promise<ApiResponse<WeddingGuest[]>> {
-    return request<WeddingGuest[]>("/rsvp/guest/all", {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-        },
-        credentials: "include",
-    });
+  return request<WeddingGuest[]>("/rsvp/guest/all", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+    },
+    credentials: "include",
+  });
 }
 
 /** ============================
@@ -250,66 +254,66 @@ export async function getAllRsvpGuests(): Promise<ApiResponse<WeddingGuest[]>> {
  * Returns the new ImageMetadata with final info
  */
 export async function uploadPhoto(file: File): Promise<ApiResponse<ImageMetadata>> {
-    // 1. Get the image dimensions from the file
-    const { width, height } = await getImageDimensions(file);
+  // 1. Get the image dimensions from the file
+  const {width, height} = await getImageDimensions(file);
 
-    // 2. Request a pre-signed URL
-    const presigned = await request<{ url: string; key: string }>(
-        "/gallery/generate-presigned-url",
-        {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ fileName: file.name }),
-        }
-    );
-
-    if (!presigned.success || !presigned.data) {
-        return { success: false, error: presigned.error ?? "Failed to generate presigned URL" };
-    }
-
-    const { url, key } = presigned.data;
-
-    // 3. Upload directly to S3
-    const s3Response = await fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-    });
-    if (!s3Response.ok) {
-        return { success: false, error: `S3 upload failed for ${file.name}` };
-    }
-
-    // 4. Remove query params to get the final image URL
-    const imageUrl = url.split("?")[0];
-
-    // 5. Save metadata in your backend
-    const metadataPayload = {
-        imageId: key,
-        imageUrl,
-        width,
-        height,
-    };
-
-    return request<ImageMetadata>("/gallery/metadata", {
+  // 2. Request a pre-signed URL
+  const presigned = await request<{ url: string; key: string }>(
+      "/gallery/generate-presigned-url",
+      {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(metadataPayload),
-    });
+        body: JSON.stringify({fileName: file.name}),
+      }
+  );
+
+  if (!presigned.success || !presigned.data) {
+    return {success: false, error: presigned.error ?? "Failed to generate presigned URL"};
+  }
+
+  const {url, key} = presigned.data;
+
+  // 3. Upload directly to S3
+  const s3Response = await fetch(url, {
+    method: "PUT",
+    headers: {"Content-Type": file.type},
+    body: file,
+  });
+  if (!s3Response.ok) {
+    return {success: false, error: `S3 upload failed for ${file.name}`};
+  }
+
+  // 4. Remove query params to get the final image URL
+  const imageUrl = url.split("?")[0];
+
+  // 5. Save metadata in your backend
+  const metadataPayload = {
+    imageId: key,
+    imageUrl,
+    width,
+    height,
+  };
+
+  return request<ImageMetadata>("/gallery/metadata", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(metadataPayload),
+  });
 }
 
 /** Get all photo metadata. Returns an array of ImageMetadata. */
 export async function getPhotoMetadata(): Promise<ApiResponse<ImageMetadata[]>> {
-    return request<ImageMetadata[]>("/gallery/all", {
-        method: "GET",
-        headers: {},
-        credentials: "include",
-    });
+  return request<ImageMetadata[]>("/gallery/all", {
+    method: "GET",
+    headers: {},
+    credentials: "include",
+  });
 }
 
 /** Change the order of images. Returns no data (null). */
@@ -318,43 +322,45 @@ export async function postChangeImageOrder(
     previousImageId: string | null,
     followingImageId: string | null
 ): Promise<ApiResponse<null>> {
-    return request<null>("/gallery/change-image-order", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            movingImageId,
-            previousImageId,
-            followingImageId,
-        }),
-    });
+  return request<null>("/gallery/change-image-order", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      movingImageId,
+      previousImageId,
+      followingImageId,
+    }),
+  });
 }
 
 /** Delete an image by ID. Returns no data (null). */
 export async function deleteImageRequest(imageId: string): Promise<ApiResponse<null>> {
-    return request<null>(`/gallery/delete`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ imageId }),
-    });
+  return request<null>(`/gallery/delete`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({imageId}),
+  });
 }
 
 /** ============================
  REGISTRY-related methods
  ============================ */
 
-export async function createPaymentIntent(amount: number): Promise<ApiResponse<{ clientSecret: string }>> {
-    return request<{ clientSecret: string }>("/create-payment-intent", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ amount })
-    });
+export async function createPaymentIntent(amount: number): Promise<ApiResponse<{
+  clientSecret: string
+}>> {
+  return request<{ clientSecret: string }>("/create-payment-intent", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({amount})
+  });
 }

@@ -1,86 +1,86 @@
 .rsvp-status-button {
-    border: 2px solid var(--main-dark);
-    border-radius: 0;
-    background: none;
-    color: var(--main-dark);
-    font-size: 24px;
-    width: 200px;
-    height: 200px;
+  border: 2px solid var(--main-dark);
+  border-radius: 0;
+  background: none;
+  color: var(--main-dark);
+  font-size: 24px;
+  width: 200px;
+  height: 200px;
 }
 
 .rsvp-status-button:hover,
 .rsvp-status-button:focus {
-    border: 2px solid var(--main-dark);
-    background: none;
-    color: var(--main-dark);
-    box-shadow: none;
+  border: 2px solid var(--main-dark);
+  background: none;
+  color: var(--main-dark);
+  box-shadow: none;
 }
 
 .rsvp-status-button.active,
 .rsvp-status-button.active:hover,
 .rsvp-status-button:active {
-    background: var(--main-dark);
-    color: var(--main-light);
-    border: 2px solid var(--main-dark);
+  background: var(--main-dark);
+  color: var(--main-light);
+  border: 2px solid var(--main-dark);
 }
 
 .rsvp-button {
-    border-radius: 0;
-    height: 40px;
-    width: 80px;
+  border-radius: 0;
+  height: 40px;
+  width: 80px;
 }
 
 /* Width variants */
 .rsvp-button.long {
-    width: 120px;
+  width: 120px;
 }
 
 .rsvp-button.width-auto {
-    width: auto;
+  width: auto;
 }
 
 /* Dark variant */
 .rsvp-button.dark {
-    background: var(--main-dark);
-    color: var(--main-light);
-    border: 2px solid var(--main-dark);
+  background: var(--main-dark);
+  color: var(--main-light);
+  border: 2px solid var(--main-dark);
 }
 
 /* Light variant */
 .rsvp-button.light {
-    background: var(--main-light);
-    color: var(--main-dark);
-    border: 2px solid var(--main-light);
+  background: var(--main-light);
+  color: var(--main-dark);
+  border: 2px solid var(--main-light);
 }
 
 /* Wire variants (no background) */
 .rsvp-button.dark.wire {
-    background: none;
-    color: var(--main-dark);
-    border: 2px solid var(--main-dark);
+  background: none;
+  color: var(--main-dark);
+  border: 2px solid var(--main-dark);
 }
 
 .rsvp-button.light.wire {
-    background: none;
-    color: var(--main-light);
-    border: 2px solid var(--main-light);
+  background: none;
+  color: var(--main-light);
+  border: 2px solid var(--main-light);
 }
 
 .rsvp-button.dark.wire.hover:hover {
-    background: var(--main-dark);
-    color: var(--main-light);
+  background: var(--main-dark);
+  color: var(--main-light);
 }
 
 .rsvp-button.dark.hover:hover {
-    background: var(--hover-dark);
+  background: var(--hover-dark);
 }
 
 .rsvp-button.dark.wire:active {
-    background: var(--main-light);
-    color: var(--main-dark);
+  background: var(--main-light);
+  color: var(--main-dark);
 }
 
 .rsvp-button.dark:active {
-    background: var(--main-dark);
-    color: var(--main-light);
+  background: var(--main-dark);
+  color: var(--main-light);
 }

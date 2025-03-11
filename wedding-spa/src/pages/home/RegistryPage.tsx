@@ -6,7 +6,7 @@ import RegistryComponent from "../../components/main/registry/RegistryComponent"
 const RegistryPage: React.FC = () => {
   return (
       <BaseLayout>
-        <RegistryComponent />
+        <RegistryComponent/>
       </BaseLayout>
   );
 };

@@ -7,7 +7,11 @@
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks"
+  ],
   "env": {
     "browser": true,
     "es6": true,
@@ -18,7 +22,9 @@
     "no-unused-vars": "warn",
     "react/prop-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
-    "prettier/prettier": ["error"]
+    "prettier/prettier": [
+      "error"
+    ]
   },
   "settings": {
     "react": {

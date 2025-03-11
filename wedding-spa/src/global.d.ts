@@ -1,15 +1,15 @@
 // global.d.ts
 declare module "*.png" {
-    const value: string;
-    export default value;
+  const value: string;
+  export default value;
 }
 
 declare module "*.jpg" {
-    const value: string;
-    export default value;
+  const value: string;
+  export default value;
 }
 
 declare module '*.module.css' {
-    const classes: { [key: string]: string };
-    export default classes;
+  const classes: { [key: string]: string };
+  export default classes;
 }

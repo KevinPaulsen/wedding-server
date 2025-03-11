@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import venmo from '../../../assets/venmo.png';
 
 const VenmoDonateButton = () => {
@@ -11,7 +11,7 @@ const VenmoDonateButton = () => {
           rel="noopener noreferrer"
           sx={{
             backgroundColor: "#008CFF", // Venmo Blue
-            "&:hover": { backgroundColor: "#357ABD" },
+            "&:hover": {backgroundColor: "#357ABD"},
             padding: "8px 16px",
             display: "flex",
             alignItems: "center",
@@ -20,7 +20,7 @@ const VenmoDonateButton = () => {
         <img
             src={venmo}
             alt="Venmo Icon"
-            style={{ height: 20 }}
+            style={{height: 20}}
         />
       </Button>
   );
