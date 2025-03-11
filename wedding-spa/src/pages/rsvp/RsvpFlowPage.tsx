@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import {CSSTransition} from 'react-transition-group';
 
 import Title from '../../components/main/headerComponents/Title';
-import CancelButton from '../../components/shared/rsvpFlow/CancelButton';
+import CancelButton from '../../components/main/rsvpFlow/CancelButton';
 import RSVPFormStep, {
     RSVP_CEREMONY_PAGE,
     RSVP_CONFIRMATION_PAGE,
@@ -12,7 +12,7 @@ import RSVPFormStep, {
     RSVP_REHEARSAL_PAGE,
     RSVP_ROCE_PAGE,
     RSVP_VERIFICATION_PAGE
-} from '../../components/shared/rsvpFlow/RsvpFormStep';
+} from '../../components/main/rsvpFlow/RsvpFormStep';
 
 import {Rsvp} from '../../types/rsvp';
 import '../../styles/RsvpFlow.css';

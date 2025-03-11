@@ -26,8 +26,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import {useFlow} from '../../../context/FlowProvider';
 import {Rsvp, RsvpGuestDetailWithId} from '../../../types/rsvp';
-import CustomButton from '../CustomButton';
-import CustomInputField, {CustomInputFieldRef} from "../CustomInputField";
+import CustomButton from '../../shared/CustomButton';
+import CustomInputField, {CustomInputFieldRef} from "../../shared/CustomInputField";
 
 // Guest row component
 const GuestRow: React.FC<{

@@ -3,7 +3,7 @@ import React from 'react';
 import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
 import {useFlow} from '../../../context/FlowProvider';
 import {Rsvp} from "../../../types/rsvp";
-import CustomButton from "../CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 interface GuestSelectionProps {
     eventKey: 'roce' | 'rehearsal' | 'ceremony' | 'reception';

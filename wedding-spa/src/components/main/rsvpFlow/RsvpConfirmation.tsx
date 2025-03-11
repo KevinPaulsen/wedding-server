@@ -2,7 +2,7 @@
 import React from 'react';
 import {Box, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import CustomButton from "../CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 interface RsvpConfirmationProps {
     returnPage?: string | null;

@@ -1,11 +1,11 @@
 // components/shared/rsvpFlow/RsvpVerificationPage.tsx
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Box} from '@mui/material';
-import CustomInputField from '../CustomInputField';
+import CustomInputField from '../../shared/CustomInputField';
 import {useFlow} from '../../../context/FlowProvider';
 import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
 import {Rsvp} from "../../../types/rsvp";
-import CustomButton from "../CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 interface RsvpVerificationPageProps {
     nextPage: (rsvp: Rsvp) => void;

@@ -1,10 +1,10 @@
 // components/shared/rsvpFlow/RsvpPrimaryContactPage.tsx
 import React, {useRef} from 'react';
 import {Box} from '@mui/material';
-import CustomInputField from '../CustomInputField';
+import CustomInputField from '../../shared/CustomInputField';
 import {useFlow} from '../../../context/FlowProvider';
 import {Rsvp} from "../../../types/rsvp";
-import CustomButton from "../CustomButton";
+import CustomButton from "../../shared/CustomButton";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 

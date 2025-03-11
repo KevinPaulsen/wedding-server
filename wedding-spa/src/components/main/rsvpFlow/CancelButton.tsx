@@ -2,7 +2,7 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFlow} from '../../../context/FlowProvider';
-import CustomButton from "../CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 interface CancelButtonProps {
     route: string;
