@@ -81,7 +81,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
           }}
       >
         {/* Top Row: Home Icon, Title & FullScreenMenu */}
-        <Grid2 container alignItems="center">
+        <Grid2 container alignItems="center" px={3}>
           <Grid2 size={2} container alignItems="center">
             {homeIconDestination && (
                 <Box

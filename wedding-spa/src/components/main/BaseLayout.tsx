@@ -30,11 +30,12 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({children}) => {
           }}
       >
         <WeddingHeader
-            title="Kevin & Olivia"
-            leftLinks={leftLinks}
-            rightLinks={rightLinks}
-            centerButton={true}
-            mainDestination="/"
+          title="Kevin & Olivia"
+          leftLinks={leftLinks}
+          rightLinks={rightLinks}
+          centerButton={true}
+          mainDestination="/"
+          homeIconDestination={'/'}
         />
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
           {children}
