@@ -332,7 +332,7 @@ const StoryComponent: React.FC = () => {
                               loading="lazy"
                               sx={{
                                 width: "100%",
-                                height: "100%",
+                                height: "200px",
                                 objectFit: "cover",
                                 borderRadius: 2,
                               }}
