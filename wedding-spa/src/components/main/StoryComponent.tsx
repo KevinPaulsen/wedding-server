@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
-  CircularProgress,
   Paper,
   Step,
   StepButton,
@@ -11,19 +10,24 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Collapse,
 } from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
-// Example icons...
 import SchoolIcon from "@mui/icons-material/School";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import PeopleIcon from "@mui/icons-material/People";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
+// Import your local images:
+import firstMysteryImage from "../../assets/mainCoupleImage.jpeg";
+import weddingSparkImage from "../../assets/mainCoupleImage.jpeg";
+import fastFocusedImage from "../../assets/mainCoupleImage.jpeg";
+import noDateDilemmaImage from "../../assets/mainCoupleImage.jpeg";
+import rooftopSurpriseImage from "../../assets/mainCoupleImage.jpeg";
+
 interface StoryStep {
   label: string;
-  shortDescription: string;
   longDescription: string;
   icon: React.ReactElement;
   image?: string;
@@ -32,94 +36,52 @@ interface StoryStep {
 export const storySteps: StoryStep[] = [
   {
     label: "The First Mystery",
-    shortDescription:
-        "We met at the Newman Center—Kevin a freshman, Olivia a sophomore—but no one remembers exactly when!",
     longDescription:
         "Kevin’s earliest memory is of Olivia and some upperclassmen convincing him she and Daphne were sisters. We still have no proof they aren’t. Regardless, it set the stage for everything that followed.",
     icon: <SchoolIcon fontSize="large" />,
-    image:
-        "https://paulsen-wedding-photo-gallery.s3.us-west-2.amazonaws.com/images/Olivia-Kevin-Engagement-105.jpeg",
+    image: firstMysteryImage,
   },
   {
     label: "Wedding Spark",
-    shortDescription:
-        "Our friend groups merged on a wedding trip, and Kevin quickly realized Olivia's humor and passion were irresistible.",
     longDescription:
         "At a mutual friend’s wedding, Kevin discovered Olivia's unique charm—her hilarious hot takes (especially her humorous disdain for the Midwest) instantly captivated him.",
     icon: <CelebrationIcon fontSize="large" />,
-    image:
-        "https://paulsen-wedding-photo-gallery.s3.us-west-2.amazonaws.com/images/Olivia-Kevin-Engagement-105.jpeg",
+    image: weddingSparkImage,
   },
   {
     label: "Fast & Focused",
-    shortDescription:
-        "Olivia’s dating fast for her peer ministry left Kevin in a bind—so he joined a dating fast himself and enrolled in FOCUS.",
     longDescription:
         "Inspired by Olivia’s commitment, Kevin decided to start his own dating fast by joining FOCUS. But just before leaving for training, he confessed his feelings. Olivia kept him in suspense for a whole week before admitting she liked him back.",
     icon: <HourglassEmptyIcon fontSize="large" />,
-    image:
-        "https://paulsen-wedding-photo-gallery.s3.us-west-2.amazonaws.com/images/Olivia-Kevin-Engagement-105.jpeg",
+    image: fastFocusedImage,
   },
   {
     label: "No-Date Dilemma",
-    shortDescription:
-        "We initially agreed to stay friends until Kevin’s mission ended—but our connection was too strong to resist.",
     longDescription:
         "Despite promising to wait until Kevin returned from his mission, the magnetic pull between us made silence unbearable. We quickly acknowledged our love, even if it meant surviving a year-long conversation limit of 1.5 hours per week!",
     icon: <PeopleIcon fontSize="large" />,
-    image:
-        "https://paulsen-wedding-photo-gallery.s3.us-west-2.amazonaws.com/images/Olivia-Kevin-Engagement-105.jpeg",
+    image: noDateDilemmaImage,
   },
   {
     label: "Rooftop Surprise",
-    shortDescription:
-        "On August 3, 2024, Kevin surprised Olivia on a sunset rooftop—turning a playful 'maybe' into an enthusiastic 'yes!'",
     longDescription:
         "Kevin orchestrated a breathtaking proposal on the rooftop of the Graduate Hotel. With Olivia expecting him to have left for Baltimore, the surprise unfolded against a stunning sunset. After a playful 'maybe,' her enthusiastic 'yes' sealed our forever.",
     icon: <EmojiEventsIcon fontSize="large" />,
-    image:
-        "https://paulsen-wedding-photo-gallery.s3.us-west-2.amazonaws.com/images/Olivia-Kevin-Engagement-105.jpeg",
+    image: rooftopSurpriseImage,
   },
 ];
 
 const StoryComponent: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // A single piece of state:
-  // - page = which step index we’re on
-  // - direction = +1 forward, -1 backward
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  const [expanded, setExpanded] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Animate left or right
-  const variants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? "100%" : "-100%",
-    }),
-    center: {
-      x: 0,
-    },
-    exit: (dir: number) => ({
-      x: dir > 0 ? "-100%" : "100%",
-    }),
-  };
 
   const handleStep = (nextStep: number) => {
     if (nextStep === page) return;
-    setDirection(nextStep > page ? 1 : -1);
     setPage(nextStep);
-
-    setExpanded(false);
-    setImageLoaded(false);
   };
 
-  const toggleExpanded = () => setExpanded(!expanded);
-
-  // For swipe left/right
+  // Swipe handlers
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       if (page < storySteps.length - 1) {
@@ -132,98 +94,223 @@ const StoryComponent: React.FC = () => {
       }
     },
     trackMouse: true,
+    delta: 50,
   });
 
   return (
-      <Box sx={{ width: "100%", padding: 4 }}>
-        <Box sx={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <Typography variant="h4" align="center" gutterBottom>
+      <Box sx={{ width: "100%", p: { xs: 2, sm: 4 } }}>
+        <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
+          <Typography variant={isMobile ? "h5" : "h4"} align="center" gutterBottom>
             Our Story
           </Typography>
 
-          <Stepper
-              nonLinear
-              activeStep={page}
-              alternativeLabel={!isMobile}
-              orientation={isMobile ? "vertical" : "horizontal"}
-              sx={{ background: "transparent", padding: 2 }}
-          >
-            {storySteps.map((step, index) => (
-                <Step key={step.label}>
-                  <StepButton
-                      onClick={() => handleStep(index)}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        transform: page === index ? "scale(1.2)" : "scale(1)",
-                        transition: "transform 0.3s ease-in-out",
-                        color:
-                            page === index
-                                ? theme.palette.primary.main
-                                : theme.palette.text.primary,
-                      }}
-                  >
-                    <StepLabel
-                        slots={{
-                          stepIcon: () => step.icon,
-                        }}
-                        sx={{
-                          "& .MuiStepIcon-root": {
-                            marginBottom: 1,
-                          },
-                        }}
-                    >
-                      <Typography variant="caption">{step.label}</Typography>
-                    </StepLabel>
-                  </StepButton>
-                </Step>
-            ))}
-          </Stepper>
-
-          <Box
-              {...handlers}
-              sx={{
-                position: "relative",
-                overflow: "hidden",
-                minHeight: "400px",
-                marginTop: 4,
-              }}
-          >
-            <AnimatePresence initial={false} custom={direction}>
-              {/*
-              Key must change when 'page' changes so the old one unmounts
-              and the new one mounts.
-              'custom={direction}' is read by the variants
-            */}
-              <motion.div
-                  key={page}
-                  custom={direction}
-                  variants={variants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ type: "spring", stiffness: 90, damping: 20 }}
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                  }}
+          {/* ---------------- DESKTOP (HORIZONTAL STEPPER) ---------------- */}
+          {!isMobile ? (
+              <Stepper
+                  nonLinear
+                  activeStep={page}
+                  alternativeLabel
+                  orientation="horizontal"
+                  sx={{ background: "transparent", p: 2 }}
               >
+                {storySteps.map((step, index) => (
+                    <Step key={step.label}>
+                      <StepButton
+                          onClick={() => handleStep(index)}
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: page === index ? "scale(1.2)" : "scale(1)",
+                            transition: "transform 0.3s ease-in-out",
+                            color:
+                                page === index
+                                    ? theme.palette.primary.light
+                                    : theme.palette.primary.main,
+                          }}
+                      >
+                        <StepLabel
+                            slots={{ stepIcon: () => step.icon }}
+                            sx={{ "& .MuiStepIcon-root": { mb: 1 } }}
+                        >
+                          <Typography
+                              variant="caption"
+                              sx={{
+                                color:
+                                    page === index
+                                        ? theme.palette.primary.light
+                                        : theme.palette.primary.main,
+                              }}
+                          >
+                            {step.label}
+                          </Typography>
+                        </StepLabel>
+                      </StepButton>
+                    </Step>
+                ))}
+              </Stepper>
+          ) : (
+              /* ---------------- MOBILE (VERTICAL STEPPER) with Collapse ---------------- */
+              <Stepper orientation="vertical" nonLinear sx={{ p: 2 }}>
+                {storySteps.map((step, index) => {
+                  const isActive = page === index;
+                  return (
+                      <Step key={step.label}>
+                        <StepButton
+                            onClick={() => handleStep(index)}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              transform: isActive ? "scale(1.05)" : "scale(1)",
+                              transition: "transform 0.3s ease-in-out",
+                              color: isActive
+                                  ? theme.palette.primary.light
+                                  : theme.palette.primary.main,
+                            }}
+                        >
+                          <StepLabel
+                              slots={{ stepIcon: () => step.icon }}
+                              sx={{
+                                "& .MuiStepIcon-root": { mr: 1 },
+                              }}
+                          >
+                            <Typography
+                                variant="caption"
+                                sx={{
+                                  color: isActive
+                                      ? theme.palette.primary.light
+                                      : theme.palette.primary.main,
+                                }}
+                            >
+                              {step.label}
+                            </Typography>
+                          </StepLabel>
+                        </StepButton>
+
+                        {/* The key to smooth open/close is to ensure the final height
+                      is predictable, especially around images. */}
+                        <Collapse in={isActive} timeout="auto" unmountOnExit>
+                          <Box {...handlers} sx={{ position: "relative", mt: 2 }}>
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                  p: 3,
+                                  borderRadius: 2,
+                                  background: theme.palette.secondary.dark,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                  overflow: "hidden",
+                                }}
+                            >
+                              <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    width: "100%",
+                                  }}
+                              >
+                                {step.image && (
+                                    // Aspect-ratio box to avoid reflow as the image loads
+                                    <Box
+                                        sx={{
+                                          position: "relative",
+                                          width: "100%",
+                                          overflow: "hidden",
+                                          borderRadius: 2,
+                                          // 16:9 ratio reserved
+                                          pt: "56.25%",
+                                          mb: 2,
+                                        }}
+                                    >
+                                      <Box
+                                          component="img"
+                                          src={step.image}
+                                          alt={step.label}
+                                          loading="lazy"
+                                          sx={{
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                          }}
+                                      />
+                                    </Box>
+                                )}
+                                <Box sx={{ textAlign: "center" }}>
+                                  <Typography
+                                      variant="h6"
+                                      gutterBottom
+                                      sx={{
+                                        fontWeight: 500,
+                                        color: theme.palette.primary.light,
+                                      }}
+                                  >
+                                    {step.label}
+                                  </Typography>
+                                  <Typography variant="body1" sx={{ mt: 2 }}>
+                                    {step.longDescription}
+                                  </Typography>
+                                </Box>
+                              </Box>
+
+                              {/* Same navigation buttons as on desktop */}
+                              <Box
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    mt: 3,
+                                  }}
+                              >
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={page === 0}
+                                    onClick={() => handleStep(page - 1)}
+                                >
+                                  Previous
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={page === storySteps.length - 1}
+                                    onClick={() => handleStep(page + 1)}
+                                >
+                                  Next
+                                </Button>
+                              </Box>
+                            </Paper>
+                          </Box>
+                        </Collapse>
+                      </Step>
+                  );
+                })}
+              </Stepper>
+          )}
+
+          {/* ---------------- DESKTOP CARD BELOW ---------------- */}
+          {!isMobile && (
+              <Box {...handlers} sx={{ position: "relative", mt: 4 }}>
                 <Paper
                     elevation={4}
                     sx={{
-                      padding: 3,
+                      p: 3,
                       borderRadius: 2,
                       background: theme.palette.secondary.dark,
-                      minHeight: "400px",
                       display: "flex",
+                      flexDirection: "column",
                       alignItems: "center",
+                      overflow: "hidden",
                     }}
                 >
                   <Box
                       sx={{
                         display: "flex",
-                        flexDirection: isMobile ? "column" : "row",
+                        flexDirection: "row",
                         alignItems: "center",
                         width: "100%",
                       }}
@@ -232,38 +319,27 @@ const StoryComponent: React.FC = () => {
                         <Box
                             sx={{
                               flex: 1,
-                              marginRight: isMobile ? 0 : 2,
-                              marginBottom: isMobile ? 2 : 0,
+                              mr: 2,
                               position: "relative",
+                              overflow: "hidden",
+                              borderRadius: 2,
                             }}
                         >
-                          {!imageLoaded && (
-                              <Box
-                                  sx={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)",
-                                  }}
-                              >
-                                <CircularProgress color="secondary" />
-                              </Box>
-                          )}
                           <Box
                               component="img"
                               src={storySteps[page].image}
                               alt={storySteps[page].label}
-                              onLoad={() => setImageLoaded(true)}
+                              loading="lazy"
                               sx={{
                                 width: "100%",
-                                height: "auto",
+                                height: "100%",
+                                objectFit: "cover",
                                 borderRadius: 2,
-                                display: imageLoaded ? "block" : "none",
                               }}
                           />
                         </Box>
                     )}
-                    <Box sx={{ flex: 2 }}>
+                    <Box sx={{ flex: 2, textAlign: "center" }}>
                       <Typography
                           variant="h4"
                           gutterBottom
@@ -274,18 +350,39 @@ const StoryComponent: React.FC = () => {
                       >
                         {storySteps[page].label}
                       </Typography>
-                        <Typography
-                            variant="h6"
-                            sx={{ marginTop: 2 }}
-                        >
-                          {storySteps[page].longDescription}
-                        </Typography>
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                        {storySteps[page].longDescription}
+                      </Typography>
                     </Box>
                   </Box>
+                  <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        mt: 3,
+                      }}
+                  >
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={page === 0}
+                        onClick={() => handleStep(page - 1)}
+                    >
+                      Previous
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={page === storySteps.length - 1}
+                        onClick={() => handleStep(page + 1)}
+                    >
+                      Next
+                    </Button>
+                  </Box>
                 </Paper>
-              </motion.div>
-            </AnimatePresence>
-          </Box>
+              </Box>
+          )}
         </Box>
       </Box>
   );
