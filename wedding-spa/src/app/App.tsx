@@ -17,7 +17,8 @@ import RsvpFlowPage from '../pages/rsvp/RsvpFlowPage';
 import '../styles/App.css';
 import RegistryPage from "../pages/home/RegistryPage";
 import PaymentConfirmationPage from "../pages/home/PaymentConfirmationPage";
-import ComingSoonPage from "../pages/home/ComingSoonPage";
+import ThingsToDoPage from "../pages/home/ThingsToDoPage";
+import WeddingPartyPage from "../pages/home/WeddingPartyPage";
 
 // Define your color constants
 const primaryMainDark = '#574c3f';
@@ -156,8 +157,8 @@ const App: React.FC = () => {
           <Route path="/registry" element={<RegistryPage/>}/>
           <Route path="/payment-confirmation" element={<PaymentConfirmationPage/>}/>
           <Route path="/story" element={<StoryPage/>}/>
-          <Route path="/things-to-do" element={<ComingSoonPage/>}/>
-          <Route path="/wedding-party" element={<ComingSoonPage/>}/>
+          <Route path="/things-to-do" element={<ThingsToDoPage/>}/>
+          <Route path="/wedding-party" element={<WeddingPartyPage/>}/>
 
           <Route path="/rsvp/*" element={<RsvpFlowPage/>}/>
 
