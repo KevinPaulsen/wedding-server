@@ -6,7 +6,7 @@ import AdminLogin from '../components/admin/AdminLogin';
 import PrivateRoute from '../routes/PrivateRoute';
 import NotFound from '../components/shared/NotFound';
 import HomePage from '../pages/home/HomePage';
-import Story from '../pages/home/StoryPage';
+import StoryPage from '../pages/home/StoryPage';
 import Contact from '../pages/home/ContactPage';
 import Details from '../pages/home/Details';
 import Gallery from '../pages/home/GalleryPage';
@@ -155,7 +155,7 @@ const App: React.FC = () => {
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/registry" element={<RegistryPage/>}/>
           <Route path="/payment-confirmation" element={<PaymentConfirmationPage/>}/>
-          <Route path="/story" element={<Story/>}/>
+          <Route path="/story" element={<StoryPage/>}/>
           <Route path="/things-to-do" element={<ComingSoonPage/>}/>
           <Route path="/wedding-party" element={<ComingSoonPage/>}/>
 

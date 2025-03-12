@@ -1,12 +1,12 @@
 // pages/home/StoryPage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
-import Story from '../../components/main/Story';
+import StoryComponent from '../../components/main/StoryComponent';
 
 const StoryPage: React.FC = () => {
   return (
       <BaseLayout>
-        <Story/>
+        <StoryComponent/>
       </BaseLayout>
   );
 };
