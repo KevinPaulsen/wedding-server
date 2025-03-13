@@ -17,12 +17,14 @@ import {useSwipeable} from "react-swipeable";
 // Import your local images:
 import firstMysteryImage from "../../assets/mainCoupleImage.jpeg";
 
-import School from "@mui/icons-material/School";
-import Groups from "@mui/icons-material/Groups";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import HourglassEmpty from "@mui/icons-material/HourglassEmpty";
-import Lightbulb from "@mui/icons-material/Lightbulb";
-import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
+import SchoolIcon from '@mui/icons-material/School';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import MoodIcon from '@mui/icons-material/Mood';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 interface StoryStep {
   label: string;
@@ -31,53 +33,47 @@ interface StoryStep {
   image?: string;
 }
 
-export const storySteps: StoryStep[] = [
+const storySteps: StoryStep[] = [
   {
-    label: "The Mysterious Meeting",
-    longDescription: `
-Kevin and Olivia do not recall the precise moment they first crossed paths. They do know they were both students at the University of Washington—Kevin was a wide-eyed freshman, and Olivia was a confident sophomore—and both frequented the Catholic Newman Center. Kevin's first memory was when some upperclassmen jokingly tried to convince Kevin into believing Olivia and a friend named Daphne were sisters. It was a baffling start, to say the least.
-    `,
-    icon: <School />,
+    label: "In the Beginning...",
+    longDescription: "Kevin and Olivia both attended the University of Washington and were active members of the Newman Center. Oddly enough, neither one can recall the exact moment they first met. Kevin was a freshman in 2020, while Olivia was a year ahead of him—and each had their own circle of friends. Kevin’s first memory happened at a Chipotle: a group of mischievous upperclassmen (led by Olivia) tried to convince Kevin that Olivia and another student, Daphne, were sisters. Of course, they weren't. From that day on, Kevin knew who Olivia was, but they remained distant acquaintances throughout their time on campus.\n",
+    icon: <SchoolIcon />,
     image: firstMysteryImage,
   },
   {
-    label: "A Reunion and a Realization",
-    longDescription: `
-Fast-forward to 2023: Kevin was working near UW, while Olivia was still immersed in her studies. Their friend groups merged, leading them to go to a mutual friend’s wedding. Kevin, finally getting to know Olivia, found Olivia’s wit and humor thoroughly captivating. Somehow even her lighthearted digs at the Midwest he found enticing. By the time the wedding festivities wrapped up, he was convinced Olivia was an extraordinary blend of charm, beauty, and intelligence.
-    `,
-    icon: <Groups />,
+    label: "The Meet Cute",
+    longDescription: "Fast-forward to 2022. Kevin was working but still in the UW neighborhood, and Olivia had become a Peer Minister at the Newman Center. Many of Kevin’s close friends also served in peer ministry that year, finally causing their social circles to crash into one another. A trip to a mutual friend’s wedding in St. Louis sealed the deal. Five of them stayed in an Airbnb for a few days, and Kevin and Olivia went from virtual strangers to new friends in record time.\n",
+    icon: <GroupAddIcon />,
     image: firstMysteryImage,
   },
   {
-    label: "Confessions and Complications",
-    longDescription: `
-Kevin wore his heart on his sleeve, all but announcing his feelings. Meanwhile, Olivia, serving as a peer minister, casually mentioned she was on a “dating fast” for her peer ministry year. Undeterred, Kevin decided to embark on his own dating fast by joining FOCUS (Fellowship of Catholic University Students). But first, he had to share his growing affection for her. Olivia kept him on pins and needles for an entire week before finally admitting the feelings were mutual.
-    `,
-    icon: <FavoriteBorder />,
+    label: "Midwest Shade & Sparks",
+    longDescription: "During that wedding trip, Kevin quickly became smitten by Olivia’s beauty, her sarcastic sense of humor, and her inexplicably fierce pride for Washington State. Her endless comments about the Midwest—often tinged with witty skepticism about corn and flatness—left Kevin oddly charmed. He soon found himself finding every excuse to be around her once they returned to Seattle, even though it was painfully obvious (to literally everyone) that he was falling hard.\n",
+    icon: <MoodIcon />,
     image: firstMysteryImage,
   },
   {
-    label: "A Year (Mostly) Apart",
-    longDescription: `
-Kevin prepared to head to Baltimore for his FOCUS mission, prompting both to agree it might be “best” to remain friends—at least in theory. That plan quickly unraveled when they found themselves whispering, “I love you,” and deciding to tackle a dating fast together: limiting their weekly calls to a mere hour and a half. It was far from easy, but the experience helped them place God at the center of their relationship and stay focused on the bigger picture.
-    `,
-    icon: <HourglassEmpty />,
+    label: "Fast and FOCUSed",
+    longDescription: "Shortly after, Kevin discovered that Olivia was on a “dating fast” as part of her peer ministry. She made this crystal clear during a small-group retreat when she casually announced it in front of Kevin and the rest of the group. Disheartened, Kevin stubbornly decided to join FOCUS (the Fellowship of Catholic University Students) which requires a dating fast of his own. He likes to joke that was the “real” reason he applied, but the truth is he felt called to serve. Regardless, both of them stuck to their fasts...for a while.\n",
+    icon: <FastForwardIcon />,
     image: firstMysteryImage,
   },
   {
-    label: "The Grand Realization",
-    longDescription: `
-After enduring a challenging year, Kevin and Olivia both realized their relationship was more than a fleeting romance. Despite telling anyone who would listen that an engagement was nowhere on the horizon, Kevin soon realized there was no sense in waiting. He resolved to propose before returning to Baltimore—a mere three weeks away—kickstarting a whirlwind of planning more ambitious than any FOCUS retreat he had ever attended.
-    `,
-    icon: <Lightbulb />,
+    label: "Confession & Chaos",
+    longDescription: "As the months went by, Kevin couldn’t keep his feelings hidden. Before leaving for his FOCUS assignment in Baltimore, he confessed his affection during a walk. Olivia took a whole week to gather her thoughts before finally working up the nerve to admit that she had feelings for him too. Kevin described this as a time of being “happy-sad”: thrilled that their feelings matched, but heartbroken at the idea of leaving so soon. They agreed not to start dating mere weeks before Kevin moved—but that resolve lasted all of ten days before they caved, realizing long distance would be easier than remaining “just friends.”\n",
+    icon: <HourglassEmptyIcon />,
     image: firstMysteryImage,
   },
   {
-    label: "The Rooftop Surprise",
-    longDescription: `
-In that short window, Kevin asked for Olivia’s parents’ and sisters’ blessings, secured the perfect ring, and orchestrated an elaborate plan with her friends. On August 3rd, 2024, he led Olivia to believe he had already left for Baltimore. Meanwhile, her friends guided her to the rooftop of the Graduate Hotel at sunset. Kevin appeared out of nowhere, knelt down, and asked her to marry him. After a playful “maybe,” Olivia offered an enthusiastic “yes!” And just like that, the rest became history.
-    `,
-    icon: <CheckCircleOutline />,
+    label: "Love Across Zip Codes",
+    longDescription: "So, they dated…with a catch. Their dating fast led them to limit communication to just an hour and a half each week with no texting. That year was tough—Kevin in Baltimore, Olivia back in Seattle—but it gave them a chance to center their budding relationship on Christ and discern marriage seriously. As Kevin always says, “You don’t do a dating fast with someone if you’re not absolutely serious about them!” Their relationship grew strong in its commitment and faith, and by the end of Kevin’s first year with FOCUS, they both knew where this was headed.",
+    icon: <FlightTakeoffIcon />,
+    image: firstMysteryImage,
+  },
+  {
+    label: "The ‘Maybe’ Proposal",
+    longDescription: "When Kevin returned home for the summer, he quickly realized Olivia was the woman he was going to marry, and there was no point in waiting. He asked Olivia’s parents and sisters for their blessing and schemed the perfect plan. On August 3, 2024, Olivia’s friends took her to the rooftop of the Graduate Hotel (where Kevin and Olivia had many dates and impactful moments) at sunset. Olivia was under the impression that Kevin was already on his way back to Baltimore. Suddenly, he appeared behind her, dropped to one knee, and asked if she would make him the happiest man alive. Caught off guard, Olivia, nervous and excited, replied “Maybe!” Kevin finished his sentence—“…and do me the great honor of being my wife?”—and she immediately said, “Yes!” They walked away from that rooftop with a ring and the unshakable certainty that their forever had just begun.",
+    icon: <FavoriteIcon />,
     image: firstMysteryImage,
   },
 ];
