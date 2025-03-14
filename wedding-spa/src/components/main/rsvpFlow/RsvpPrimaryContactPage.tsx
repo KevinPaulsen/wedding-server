@@ -1,9 +1,8 @@
-// components/shared/rsvpFlow/RsvpPrimaryContactPage.tsx
-import React, {useRef} from 'react';
-import {Box} from '@mui/material';
-import CustomInputField from '../../shared/CustomInputField';
-import {useFlow} from '../../../context/FlowProvider';
-import {Rsvp} from "../../../types/rsvp";
+import React, { useRef } from 'react';
+import { Box } from '@mui/material';
+import CustomInputField, { CustomInputFieldRef } from '../../shared/CustomInputField';
+import { useFlow } from '../../../context/FlowProvider';
+import { Rsvp } from "../../../types/rsvp";
 import CustomButton from "../../shared/CustomButton";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -20,10 +19,10 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                                                                          previousPage,
                                                                          requireAnswers,
                                                                        }) => {
-  const {formData, setFormData} = useFlow();
-  const emailRef = useRef<any>(null);
-  const addressRef = useRef<any>(null);
-  const phoneRef = useRef<any>(null);
+  const { formData, setFormData } = useFlow();
+  const emailRef = useRef<CustomInputFieldRef>(null);
+  const addressRef = useRef<CustomInputFieldRef>(null);
+  const phoneRef = useRef<CustomInputFieldRef>(null);
 
   const primaryOptions = Object.entries(formData.guest_list || {}).map(([key, guest]) => ({
     id: key,
@@ -55,9 +54,9 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
   };
 
   const handleNext = () => {
-    const validEmail = emailRef.current.validate();
-    const validAddress = addressRef.current.validate();
-    const validPhone = phoneRef.current.validate();
+    const validEmail = emailRef.current?.validate();
+    const validAddress = addressRef.current?.validate();
+    const validPhone = phoneRef.current?.validate();
 
     if (formData.primary_contact?.name && validEmail && validAddress && validPhone) {
       nextPage(formData);
@@ -70,9 +69,9 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
   };
 
   return (
-      <Box sx={{p: 3}}>
+      <Box sx={{ p: 3 }}>
         <Box component="form" onSubmit={handleSubmit}>
-          <Box sx={{pt: 0, pb: 1, display: 'flex', justifyContent: 'center'}}>
+          <Box sx={{ pt: 0, pb: 1, display: 'flex', justifyContent: 'center' }}>
             <Autocomplete
                 options={primaryOptions}
                 value={
@@ -95,7 +94,7 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
                         placeholder="Select a primary contact"
                         required
                         error={!formData.primary_contact?.name}
-                        sx={{width: '40ch'}}
+                        sx={{ width: '40ch' }}
                     />
                 )}
             />
@@ -130,9 +129,9 @@ const RsvpPrimaryContactPage: React.FC<RsvpPrimaryContactPageProps> = ({
               required={requireAnswers}
           />
 
-          <Box sx={{display: 'flex', justifyContent: 'space-evenly', px: 2}}>
-            <CustomButton text="Back" onClick={handleBack} variant="dark" width="75px"/>
-            <CustomButton text="Next" type="submit" variant="dark" width="75px"/>
+          <Box sx={{ display: 'flex', justifyContent: 'space-evenly', px: 2 }}>
+            <CustomButton text="Back" onClick={handleBack} variant="dark" width="75px" />
+            <CustomButton text="Next" type="submit" variant="dark" width="75px" />
           </Box>
         </Box>
       </Box>

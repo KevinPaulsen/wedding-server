@@ -1,11 +1,11 @@
-// components/shared/rsvpFlow/RsvpVerificationPage.tsx
-import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Box} from '@mui/material';
-import CustomInputField from '../../shared/CustomInputField';
-import {useFlow} from '../../../context/FlowProvider';
-import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
-import {Rsvp} from "../../../types/rsvp";
+import React, { useEffect, useRef } from 'react';
+import { Alert, Box } from '@mui/material';
+import CustomInputField, { CustomInputFieldRef } from '../../shared/CustomInputField';
+import { useFlow } from '../../../context/FlowProvider';
+import { useLookupRsvp } from '../../../hooks/rsvp/useLookupRsvp';
+import { Rsvp } from "../../../types/rsvp";
 import CustomButton from "../../shared/CustomButton";
+import { useFormFields } from '../../../hooks/useFormFields';
 
 interface RsvpVerificationPageProps {
   nextPage: (rsvp: Rsvp) => void;
@@ -14,30 +14,23 @@ interface RsvpVerificationPageProps {
   returnPage?: string | null;
 }
 
-const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({nextPage, requireAnswers}) => {
-  const {setFormData} = useFlow();
-  const firstNameRef = useRef<any>(null);
-  const codeRef = useRef<any>(null);
+const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({ nextPage, requireAnswers }) => {
+  const { setFormData } = useFlow();
+  const firstNameRef = useRef<CustomInputFieldRef>(null);
+  const lastNameRef = useRef<CustomInputFieldRef>(null);
 
-  const {data, error, loading, execute: doLookup} = useLookupRsvp();
+  const { data, error, loading, execute: doLookup } = useLookupRsvp();
 
-  const [form, setForm] = useState({
+  const [form, handleChange] = useFormFields<{ firstName: string; lastName: string }>({
     firstName: '',
     lastName: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleNext = async () => {
-    const validFirst = firstNameRef.current.validate();
-    const validCode = codeRef.current.validate();
-    if (!validFirst || !validCode) return;
-    await doLookup({first_name: form.firstName, last_name: form.lastName});
+    const validFirst = firstNameRef.current?.validate();
+    const validLast = lastNameRef.current?.validate();
+    if (!validFirst || !validLast) return;
+    await doLookup({ first_name: form.firstName, last_name: form.lastName });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +46,7 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({nextPage, re
   }, [data, setFormData, nextPage]);
 
   return (
-      <Box sx={{p: 3}}>
+      <Box sx={{ p: 3 }}>
         {error && <Alert severity="error">{error}</Alert>}
         <Box component="form" onSubmit={handleSubmit}>
           <CustomInputField
@@ -67,7 +60,7 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({nextPage, re
               required={requireAnswers}
           />
           <CustomInputField
-              ref={codeRef}
+              ref={lastNameRef}
               name="lastName"
               type="text"
               label="Last Name"

@@ -1,7 +1,6 @@
-// components/shared/rsvpFlow/RsvpRehearsalPage.tsx
 import React from 'react';
-import GuestSelection from "./GuestSelection";
-import {Rsvp} from "../../../types/rsvp";
+import { Rsvp } from "../../../types/rsvp";
+import RsvpEventPage from "./RsvpEventPage";
 
 interface RsvpRehearsalPageProps {
   nextPage: (rsvp: Rsvp) => void;
@@ -10,12 +9,19 @@ interface RsvpRehearsalPageProps {
   returnPage?: string | null;
 }
 
-const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({nextPage, previousPage}) => {
+const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({
+                                                               nextPage,
+                                                               previousPage,
+                                                               requireAnswers,
+                                                               returnPage,
+                                                             }) => {
   return (
-      <GuestSelection
+      <RsvpEventPage
           eventKey="rehearsal"
-          backPage={previousPage}
           nextPage={nextPage}
+          previousPage={previousPage}
+          requireAnswers={requireAnswers}
+          returnPage={returnPage}
       />
   );
 };
