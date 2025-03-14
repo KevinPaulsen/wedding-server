@@ -1,3 +1,5 @@
+import React from 'react';
+import { useSwipeable } from 'react-swipeable';
 import {
   Box,
   Button,
@@ -7,14 +9,25 @@ import {
   StepLabel,
   Stepper,
   Typography,
-  useTheme
-} from "@mui/material";
-import {StoryProps} from "./StoryComponent";
-import React from "react";
+  useTheme,
+} from '@mui/material';
+import { StoryProps } from './StoryComponent';
 
 // Desktop version: horizontal stepper
 const DesktopStoryStepper: React.FC<StoryProps> = ({ page, handleStep, storySteps }) => {
   const theme = useTheme();
+  const maxSteps = storySteps.length;
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (page < maxSteps - 1) handleStep(page + 1);
+    },
+    onSwipedRight: () => {
+      if (page > 0) handleStep(page - 1);
+    },
+    trackMouse: true,
+  });
+
   return (
       <>
         <Stepper
@@ -22,28 +35,25 @@ const DesktopStoryStepper: React.FC<StoryProps> = ({ page, handleStep, storyStep
             activeStep={page}
             alternativeLabel
             orientation="horizontal"
-            sx={{ background: "transparent", p: 2 }}
+            sx={{ background: 'transparent', p: 2 }}
         >
           {storySteps.map((step, index) => (
               <Step key={step.label}>
                 <StepButton
                     onClick={() => handleStep(index)}
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      transform: page === index ? "scale(1.2)" : "scale(1)",
-                      transition: "transform 0.3s ease-in-out",
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      transform: page === index ? 'scale(1.2)' : 'scale(1)',
+                      transition: 'transform 0.3s ease-in-out',
                       color:
                           page === index
                               ? theme.palette.primary.light
                               : theme.palette.primary.main,
                     }}
                 >
-                  <StepLabel
-                      slots={{ stepIcon: () => step.icon }}
-                      sx={{ "& .MuiStepIcon-root": { mb: 1 } }}
-                  >
+                  <StepLabel slots={{ stepIcon: () => step.icon }} sx={{ '& .MuiStepIcon-root': { mb: 1 } }}>
                     <Typography
                         variant="caption"
                         sx={{
@@ -60,73 +70,87 @@ const DesktopStoryStepper: React.FC<StoryProps> = ({ page, handleStep, storyStep
               </Step>
           ))}
         </Stepper>
-        <Box sx={{ position: "relative", mt: 4 }}>
+
+        <Box sx={{ position: 'relative', mt: 4 }}>
           <Paper
               elevation={4}
               sx={{
                 p: 3,
                 borderRadius: 2,
                 background: theme.palette.secondary.dark,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                overflow: "hidden",
+                overflow: 'hidden', // ensures adjacent slides are not visible
               }}
+              {...swipeHandlers}
           >
-            <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "100%",
-                  minHeight: "360px",
-                }}
-            >
-              {storySteps[page].image && (
-                  <Box
-                      sx={{
-                        flex: 1,
-                        mr: 2,
-                        position: "relative",
-                        overflow: "hidden",
-                        borderRadius: 2,
-                      }}
-                  >
+            {/* This wrapper limits the visible area to a single slide */}
+            <Box sx={{ width: '100%', overflow: 'hidden' }}>
+              <Box
+                  sx={{
+                    display: 'flex',
+                    transition: 'transform 0.5s ease-out',
+                    transform: `translateX(-${page * 100}%)`,
+                  }}
+              >
+                {storySteps.map((step, index) => (
                     <Box
-                        component="img"
-                        src={storySteps[page].image}
-                        alt={storySteps[page].label}
-                        loading="lazy"
+                        key={index}
                         sx={{
-                          width: "100%",
-                          height: "200px",
-                          objectFit: "cover",
-                          borderRadius: 2,
+                          flex: '0 0 100%',
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
                         }}
-                    />
-                  </Box>
-              )}
-              <Box sx={{ flex: 2, textAlign: "center" }}>
-                <Typography
-                    variant="h4"
-                    gutterBottom
-                    sx={{
-                      fontWeight: 500,
-                      color: theme.palette.primary.light,
-                    }}
-                >
-                  {storySteps[page].label}
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 2, fontSize: 20 }}>
-                  {storySteps[page].longDescription}
-                </Typography>
+                    >
+                      {step.image && (
+                          <Box
+                              sx={{
+                                flex: 1,
+                                mr: 2,
+                                position: 'relative',
+                                overflow: 'hidden',
+                                borderRadius: 2,
+                              }}
+                          >
+                            <Box
+                                component="img"
+                                src={step.image}
+                                alt={step.label}
+                                loading="lazy"
+                                sx={{
+                                  width: '100%',
+                                  height: '200px',
+                                  objectFit: 'cover',
+                                  borderRadius: 2,
+                                }}
+                            />
+                          </Box>
+                      )}
+                      <Box sx={{ flex: 2, textAlign: 'center' }}>
+                        <Typography
+                            variant="h4"
+                            gutterBottom
+                            sx={{
+                              fontWeight: 500,
+                              color: theme.palette.primary.light,
+                            }}
+                        >
+                          {step.label}
+                        </Typography>
+                        <Typography variant="body1" sx={{ mt: 2, fontSize: 20 }}>
+                          {step.longDescription}
+                        </Typography>
+                      </Box>
+                    </Box>
+                ))}
               </Box>
             </Box>
+
             <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  width: '100%',
                   mt: 3,
                 }}
             >
