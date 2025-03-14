@@ -55,6 +55,15 @@ const theme = createTheme({
     },
     divider: primaryLightDark,
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 750,
+      lg: 1000,
+      xl: 1200,
+    },
+  },
   typography: {
     fontFamily: '"EB Garamond"',
     fontWeightLight: 400,

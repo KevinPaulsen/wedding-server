@@ -54,9 +54,9 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ links }) => {
 
   return (
       <>
-        {/* Menu Toggle Button for small screens */}
-        <Box sx={{ display: { xs: 'block', sm: 'none' } }} className={`menu-button-container ${menuOpen ? 'above-overlay' : ''}`}>
-          <Button onClick={toggleMenu} className={`menu-button ${menuOpen ? 'open' : ''}`} aria-label="Toggle Menu">
+        {/* Menu Toggle Button for medium screens */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }} className={`menu-button-container ${menuOpen ? 'above-overlay' : ''}`}>
+          <Button sx={{minWidth: 0, p: 0}} onClick={toggleMenu} className={`menu-button ${menuOpen ? 'open' : ''}`} aria-label="Toggle Menu">
             <Box className="menu-icon">
               <Box className="line top-line" />
               <Box className="line middle-line" />
