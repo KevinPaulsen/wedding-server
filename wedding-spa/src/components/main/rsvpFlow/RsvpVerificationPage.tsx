@@ -15,7 +15,7 @@ interface RsvpVerificationPageProps {
 }
 
 const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({nextPage, requireAnswers}) => {
-  const {formData, setFormData} = useFlow();
+  const {setFormData} = useFlow();
   const firstNameRef = useRef<any>(null);
   const codeRef = useRef<any>(null);
 
@@ -48,9 +48,9 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({nextPage, re
   useEffect(() => {
     if (data && data.length > 0) {
       setFormData(data[0]);
-      nextPage(formData);
+      nextPage(data[0]);
     }
-  }, [data, setFormData, nextPage, formData]);
+  }, [data, setFormData, nextPage]);
 
   return (
       <Box sx={{p: 3}}>

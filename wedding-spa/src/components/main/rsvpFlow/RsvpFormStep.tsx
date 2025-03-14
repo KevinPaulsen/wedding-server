@@ -9,6 +9,7 @@ import RsvpRocePage from './RsvpRocePage';
 import RsvpRehearsalPage from './RsvpRehearsalPage';
 import RsvpCeremonyPage from './RsvpCeremonyPage';
 import RsvpReceptionPage from './RsvpReceptionPage';
+import RsvpGuestAttendancePage from "./RsvpGuestAttendancePage";
 import {Rsvp} from "../../../types/rsvp";
 
 interface RsvpFormStepProps {
@@ -25,13 +26,14 @@ interface RsvpLayoutProps {
 }
 
 export const RSVP_VERIFICATION_PAGE = 1;
-export const RSVP_PRIMARY_CONTACT_PAGE = 2;
-export const RSVP_GUEST_DETAILS_PAGE = 3;
-export const RSVP_ROCE_PAGE = 4;
-export const RSVP_REHEARSAL_PAGE = 5;
-export const RSVP_CEREMONY_PAGE = 6;
-export const RSVP_RECEPTION_PAGE = 7;
-export const RSVP_CONFIRMATION_PAGE = 8;
+export const RSVP_GUEST_ATTENDANCE_PAGE = 2;
+export const RSVP_PRIMARY_CONTACT_PAGE = 3;
+export const RSVP_GUEST_DETAILS_PAGE = 4;
+export const RSVP_ROCE_PAGE = 5;
+export const RSVP_REHEARSAL_PAGE = 6;
+export const RSVP_CEREMONY_PAGE = 7;
+export const RSVP_RECEPTION_PAGE = 8;
+export const RSVP_CONFIRMATION_PAGE = 9;
 
 const RsvpFormLayout: React.FC<RsvpLayoutProps> = ({title, component}) => {
   return (
@@ -56,6 +58,20 @@ const RSVPFormStep: React.FC<RsvpFormStepProps> = ({
               title="RSVP Verification"
               component={
                 <RsvpVerificationPage
+                    nextPage={nextPage}
+                    previousPage={previousPage}
+                    requireAnswers={requireAnswers}
+                    returnPage={returnPage}
+                />
+              }
+          />
+      );
+    case RSVP_GUEST_ATTENDANCE_PAGE:
+      return (
+          <RsvpFormLayout
+              title="Guest Attendance"
+              component={
+                <RsvpGuestAttendancePage
                     nextPage={nextPage}
                     previousPage={previousPage}
                     requireAnswers={requireAnswers}

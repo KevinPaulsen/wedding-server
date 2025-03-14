@@ -38,15 +38,22 @@ const RsvpFlowPage: React.FC = () => {
   const [displayedStep, setDisplayedStep] = useState<number>(RSVP_VERIFICATION_PAGE);
   const [inProp, setInProp] = useState<boolean>(true);
 
-  const nextPage = (rsvp: Rsvp): void => {
+  const nextPage = (
+      rsvp: Rsvp,
+      resetOrTargetStep?: (() => void) | number
+  ): void => {
     if (inProp) {
       setInProp(false);
-
-      let nextStep = currentStep + 1;
-      while (!allowedPage(rsvp, nextStep)) {
-        nextStep += 1;
+      if (typeof resetOrTargetStep === "number") {
+        // If a target step (number) is provided, jump directly there.
+        setCurrentStep(resetOrTargetStep);
+      } else {
+        let nextStep = currentStep + 1;
+        while (!allowedPage(rsvp, nextStep)) {
+          nextStep += 1;
+        }
+        setCurrentStep(nextStep);
       }
-      setCurrentStep(nextStep);
     }
   };
 
