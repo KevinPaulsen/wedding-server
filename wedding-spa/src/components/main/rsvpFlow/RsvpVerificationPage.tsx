@@ -42,18 +42,17 @@ const RsvpVerificationPage: React.FC<RsvpVerificationPageProps> = ({ nextPage, r
 
   useEffect(() => {
     if (data && data.length > 0) {
+      // Clear the lookup data immediately to prevent re-processing
+      resetLookupResults();
       if (data.length === 1) {
-        // Only one RSVP found, update formData and proceed immediately.
         setFormData(data[0]);
-        resetLookupResults();
         nextPage(data[0], RSVP_GUEST_ATTENDANCE_PAGE);
       } else {
-        // Multiple RSVPs found: store lookup results and navigate to the selection page.
         setLookupResults(data);
-        nextPage(formData); // formData remains unchanged; selection page will update it.
+        nextPage(formData); // Only navigate once per lookup.
       }
     }
-  }, [data, setFormData, nextPage, setLookupResults, formData]);
+  }, [data]);
 
   return (
       <Box sx={{ p: 3 }}>
