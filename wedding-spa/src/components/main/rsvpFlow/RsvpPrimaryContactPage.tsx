@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Box } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import CustomInputField, { CustomInputFieldRef } from '../../shared/CustomInputField';
 import { useFlow } from '../../../context/FlowProvider';
 import { Rsvp } from "../../../types/rsvp";

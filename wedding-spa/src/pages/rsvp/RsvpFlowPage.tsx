@@ -38,14 +38,10 @@ const RsvpFlowPage: React.FC = () => {
   const [displayedStep, setDisplayedStep] = useState<number>(RSVP_VERIFICATION_PAGE);
   const [inProp, setInProp] = useState<boolean>(true);
 
-  const nextPage = (
-      rsvp: Rsvp,
-      resetOrTargetStep?: (() => void) | number
-  ): void => {
+  const nextPage = (rsvp: Rsvp, resetOrTargetStep?: (() => void) | number): void => {
     if (inProp) {
       setInProp(false);
       if (typeof resetOrTargetStep === "number") {
-        // If a target step (number) is provided, jump directly there.
         setCurrentStep(resetOrTargetStep);
       } else {
         let nextStep = currentStep + 1;
@@ -60,7 +56,6 @@ const RsvpFlowPage: React.FC = () => {
   const previousPage = (rsvp: Rsvp): void => {
     if (inProp) {
       setInProp(false);
-
       let nextStep = currentStep - 1;
       while (!allowedPage(rsvp, nextStep)) {
         nextStep -= 1;
@@ -93,8 +88,8 @@ const RsvpFlowPage: React.FC = () => {
               justifyContent: 'center',
             }}
         >
-          <Grid2 sx={{flexBasis: '100%'}}>
-            <Title link={false} color="default"/>
+          <Grid2 sx={{ flexBasis: '100%' }}>
+            <Title link={false} color="default" />
           </Grid2>
         </Grid2>
 
@@ -107,7 +102,7 @@ const RsvpFlowPage: React.FC = () => {
               textAlign: 'center',
             }}
         >
-          <Grid2 sx={{flexBasis: '100%'}}>
+          <Grid2 sx={{ flexBasis: '100%' }}>
             <CSSTransition
                 in={inProp}
                 timeout={200}
@@ -137,7 +132,7 @@ const RsvpFlowPage: React.FC = () => {
         >
           {currentStep !== RSVP_CONFIRMATION_PAGE && (
               <Grid2>
-                <CancelButton route="/"/>
+                <CancelButton route="/" />
               </Grid2>
           )}
         </Grid2>

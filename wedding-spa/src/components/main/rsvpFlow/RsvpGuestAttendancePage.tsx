@@ -4,7 +4,7 @@ import CustomButton from '../../shared/CustomButton';
 import { useFlow } from '../../../context/FlowProvider';
 import { Rsvp } from '../../../types/rsvp';
 import { useSubmitRsvp } from '../../../hooks/rsvp/useSubmitRsvp';
-import { RSVP_CONFIRMATION_PAGE } from "./RsvpFormStep";
+import {RSVP_CONFIRMATION_PAGE, RSVP_VERIFICATION_PAGE} from "./RsvpFormStep";
 
 interface RsvpGuestAttendancePageProps {
   nextPage: (rsvp: Rsvp, resetOrTargetStep?: (() => void) | number) => void;
@@ -17,7 +17,7 @@ const RsvpGuestAttendancePage: React.FC<RsvpGuestAttendancePageProps> = ({
                                                                            nextPage,
                                                                            previousPage,
                                                                          }) => {
-  const { formData, setFormData, resetFormData } = useFlow();
+  const { formData, lookupResults, setFormData, resetFormData } = useFlow();
   const { execute: doSubmit, error, loading } = useSubmitRsvp();
 
   // Compute initial selection: true if at least one guest is coming, false otherwise.
@@ -31,7 +31,11 @@ const RsvpGuestAttendancePage: React.FC<RsvpGuestAttendancePageProps> = ({
   };
 
   const handleBack = () => {
-    previousPage(formData);
+    if (lookupResults && lookupResults.length !== 0) {
+      previousPage(formData);
+    } else {
+      nextPage(formData, RSVP_VERIFICATION_PAGE);
+    }
   };
 
   const handleNext = async () => {
@@ -72,13 +76,13 @@ const RsvpGuestAttendancePage: React.FC<RsvpGuestAttendancePageProps> = ({
           <CustomButton
               text="Yes"
               onClick={() => handleOptionSelect(true)}
-              variant={selection === true ? 'dark' : 'lightOutlined'}
+              variant={selection ? 'dark' : 'lightOutlined'}
               width="100px"
           />
           <CustomButton
               text="No"
               onClick={() => handleOptionSelect(false)}
-              variant={selection === false ? 'dark' : 'lightOutlined'}
+              variant={!selection ? 'dark' : 'lightOutlined'}
               width="100px"
           />
         </Box>
@@ -91,7 +95,7 @@ const RsvpGuestAttendancePage: React.FC<RsvpGuestAttendancePageProps> = ({
               disabled={loading}
           />
           <CustomButton
-              text={selection === false ? (loading ? 'Submitting...' : 'Submit') : 'Next'}
+              text={!selection ? (loading ? 'Submitting...' : 'Submit') : 'Next'}
               onClick={handleNext}
               variant="dark"
               width="auto"

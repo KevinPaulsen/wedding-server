@@ -10,10 +10,11 @@ interface CancelButtonProps {
 
 const CancelButton: React.FC<CancelButtonProps> = ({route}) => {
   const navigate = useNavigate();
-  const {resetFormData, resetStepState} = useFlow();
+  const {resetFormData, resetLookupResults, resetStepState} = useFlow();
 
   const handleCancel = () => {
     resetFormData();
+    resetLookupResults();
     resetStepState();
     navigate(route);
   };

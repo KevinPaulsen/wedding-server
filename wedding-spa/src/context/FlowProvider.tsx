@@ -12,6 +12,7 @@ interface FlowState {
   };
   formData: Rsvp;
   editingGuest: RsvpGuestDetailWithId | null;
+  lookupResults: Rsvp[] | null;
 }
 
 const initialState: FlowState = {
@@ -49,6 +50,7 @@ const initialState: FlowState = {
     submitted: false,
   },
   editingGuest: null,
+  lookupResults: null,
 };
 
 const actionTypes = {
@@ -61,6 +63,8 @@ const actionTypes = {
   SET_EDITING_GUEST: 'SET_EDITING_GUEST',
   UPDATE_GUEST: 'UPDATE_GUEST',
   UPDATE_PREFERRED_CONTACT_FIELD: 'UPDATE_PREFERRED_CONTACT_FIELD',
+  SET_LOOKUP_RESULTS: 'SET_LOOKUP_RESULTS',
+  RESET_LOOKUP_RESULTS: 'RESET_LOOKUP_RESULTS',
 } as const;
 
 type Action =
@@ -97,6 +101,13 @@ type Action =
     | {
   type: typeof actionTypes.UPDATE_PREFERRED_CONTACT_FIELD;
   payload: { field: keyof PrimaryContact; value: string };
+}
+    | {
+  type: typeof actionTypes.SET_LOOKUP_RESULTS;
+  payload: Rsvp[];
+}
+    | {
+  type: typeof actionTypes.RESET_LOOKUP_RESULTS;
 };
 
 function reducer(state: FlowState, action: Action): FlowState {
@@ -104,7 +115,7 @@ function reducer(state: FlowState, action: Action): FlowState {
     case actionTypes.SET_STEP:
       return {
         ...state,
-        step: {...state.step, ...action.payload},
+        step: { ...state.step, ...action.payload },
       };
     case actionTypes.RESET_STEP:
       return {
@@ -114,12 +125,13 @@ function reducer(state: FlowState, action: Action): FlowState {
     case actionTypes.SET_FORM_DATA:
       return {
         ...state,
-        formData: {...state.formData, ...action.payload},
+        formData: { ...state.formData, ...action.payload },
       };
     case actionTypes.RESET_FORM_DATA:
       return {
         ...state,
         formData: initialState.formData,
+        lookupResults: initialState.lookupResults,
       };
     case actionTypes.ADD_GUEST:
       return {
@@ -133,7 +145,7 @@ function reducer(state: FlowState, action: Action): FlowState {
         },
       };
     case actionTypes.DELETE_GUEST:
-      const {[action.payload]: _, ...remainingGuests} = state.formData.guest_list;
+      const { [action.payload]: _, ...remainingGuests } = state.formData.guest_list;
       return {
         ...state,
         formData: {
@@ -142,7 +154,7 @@ function reducer(state: FlowState, action: Action): FlowState {
         },
       };
     case actionTypes.SET_EDITING_GUEST:
-      return {...state, editingGuest: action.payload};
+      return { ...state, editingGuest: action.payload };
     case actionTypes.UPDATE_GUEST:
       return {
         ...state,
@@ -164,6 +176,16 @@ function reducer(state: FlowState, action: Action): FlowState {
             [action.payload.field]: action.payload.value,
           },
         },
+      };
+    case actionTypes.SET_LOOKUP_RESULTS:
+      return {
+        ...state,
+        lookupResults: action.payload,
+      };
+    case actionTypes.RESET_LOOKUP_RESULTS:
+      return {
+        ...state,
+        lookupResults: initialState.lookupResults,
       };
     default:
       return state;
@@ -193,6 +215,11 @@ interface FlowContextType {
 
   // contact field update
   updatePreferredContactField: (field: keyof PrimaryContact, value: string) => void;
+
+  // NEW: lookup results
+  lookupResults: Rsvp[] | null;
+  setLookupResults: (lookupResults: Rsvp[]) => void;
+  resetLookupResults: () => void;
 }
 
 const FlowContext = createContext<FlowContextType | undefined>(undefined);
@@ -210,46 +237,54 @@ interface FlowProviderProps {
   children: ReactNode;
 }
 
-export const FlowProvider: React.FC<FlowProviderProps> = ({children}) => {
+export const FlowProvider: React.FC<FlowProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const setStep = (stepData: Partial<FlowState['step']>) => {
-    dispatch({type: actionTypes.SET_STEP, payload: stepData});
+    dispatch({ type: actionTypes.SET_STEP, payload: stepData });
   };
 
   const resetStepState = () => {
-    dispatch({type: actionTypes.RESET_STEP});
+    dispatch({ type: actionTypes.RESET_STEP });
   };
 
   const setFormData = (formData: Partial<FlowState['formData']>) => {
-    dispatch({type: actionTypes.SET_FORM_DATA, payload: formData});
+    dispatch({ type: actionTypes.SET_FORM_DATA, payload: formData });
   };
 
   const resetFormData = () => {
-    dispatch({type: actionTypes.RESET_FORM_DATA});
+    dispatch({ type: actionTypes.RESET_FORM_DATA });
   };
 
   const addGuest = (guest: RsvpGuestDetailWithId) => {
-    dispatch({type: actionTypes.ADD_GUEST, payload: guest});
+    dispatch({ type: actionTypes.ADD_GUEST, payload: guest });
   };
 
   const deleteGuest = (id: string) => {
-    dispatch({type: actionTypes.DELETE_GUEST, payload: id});
+    dispatch({ type: actionTypes.DELETE_GUEST, payload: id });
   };
 
   const setEditingGuest = (guest: RsvpGuestDetailWithId | null) => {
-    dispatch({type: actionTypes.SET_EDITING_GUEST, payload: guest});
+    dispatch({ type: actionTypes.SET_EDITING_GUEST, payload: guest });
   };
 
   const updateGuest = (id: string, guest: GuestListDetail) => {
-    dispatch({type: actionTypes.UPDATE_GUEST, payload: {id, guest}});
+    dispatch({ type: actionTypes.UPDATE_GUEST, payload: { id, guest } });
   };
 
   const updatePreferredContactField = (field: keyof PrimaryContact, value: string) => {
     dispatch({
       type: actionTypes.UPDATE_PREFERRED_CONTACT_FIELD,
-      payload: {field, value},
+      payload: { field, value },
     });
+  };
+
+  const setLookupResults = (lookupResults: Rsvp[]) => {
+    dispatch({ type: actionTypes.SET_LOOKUP_RESULTS, payload: lookupResults });
+  };
+
+  const resetLookupResults = () => {
+    dispatch({ type: actionTypes.RESET_LOOKUP_RESULTS });
   };
 
   return (
@@ -267,6 +302,9 @@ export const FlowProvider: React.FC<FlowProviderProps> = ({children}) => {
             editingGuest: state.editingGuest,
             setEditingGuest,
             updatePreferredContactField,
+            lookupResults: state.lookupResults,
+            setLookupResults,
+            resetLookupResults,
           }}
       >
         {children}
