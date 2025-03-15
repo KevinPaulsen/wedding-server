@@ -1,4 +1,4 @@
-// pages/home/GalleryPage.tsx
+// pages/home/PaymentConfirmationPage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
 import PaymentConfirmation from "../../components/main/registry/PaymentConfirmation";

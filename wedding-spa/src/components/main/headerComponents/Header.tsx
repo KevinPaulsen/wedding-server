@@ -1,3 +1,4 @@
+// components/main/headerComponents/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Grid2, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';

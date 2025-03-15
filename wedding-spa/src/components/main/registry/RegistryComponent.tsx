@@ -1,3 +1,4 @@
+// components/main/registry/RegistryComponent.tsx
 import React, {useState} from 'react';
 import {Box, Container, Typography} from '@mui/material';
 import ExpressCheckoutDialog from "./ExpressCheckoutDialog";

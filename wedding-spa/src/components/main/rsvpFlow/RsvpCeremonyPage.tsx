@@ -1,3 +1,4 @@
+// components/main/rsvpFlow/RsvpCeremonyPage.tsx
 import React from 'react';
 import { Rsvp } from "../../../types/rsvp";
 import RsvpEventPage from "./RsvpEventPage";

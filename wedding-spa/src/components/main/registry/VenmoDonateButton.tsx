@@ -1,3 +1,4 @@
+// components/main/registry/VenmoDonateButton.tsx
 import {Button} from "@mui/material";
 import venmo from '../../../assets/venmo.png';
 

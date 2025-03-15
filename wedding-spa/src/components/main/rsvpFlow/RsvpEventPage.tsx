@@ -1,3 +1,4 @@
+// components/main/rsvpFlow/RsvpEventPage.tsx
 import React from 'react';
 import GuestSelection from "./GuestSelection";
 import { Rsvp } from "../../../types/rsvp";

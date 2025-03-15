@@ -1,3 +1,4 @@
+// components/main/rsvpFlow/RsvpGuestAttendancePage.tsx
 import React, { useState } from 'react';
 import { Box, Typography, Alert } from '@mui/material';
 import CustomButton from '../../shared/CustomButton';

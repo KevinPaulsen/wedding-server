@@ -1,3 +1,4 @@
+// components/main/ourStory/MobileStoryStepper.tsx
 import {
   Box,
   Button,

@@ -1,4 +1,4 @@
-// components/shared/rsvpFlow/RsvpGuestDetailsPage.tsx
+// components/main/rsvpFlow/RsvpGuestDetailsPage.tsx
 import React, {forwardRef, useRef, useState} from 'react';
 import {
   Autocomplete,

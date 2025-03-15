@@ -1,4 +1,4 @@
-// components/shared/rsvpFlow/GuestSelection.tsx
+// components/main/rsvpFlow/GuestSelection.tsx
 import React from 'react';
 import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
 import {useFlow} from '../../../context/FlowProvider';

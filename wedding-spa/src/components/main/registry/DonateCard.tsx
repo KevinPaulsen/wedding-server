@@ -1,3 +1,4 @@
+// components/main/registry/DonateCard.tsx
 import React from 'react';
 import {Box, Card, CardActions, CardContent, CardMedia, Typography} from '@mui/material';
 import CustomButton from "../../shared/CustomButton";

@@ -1,3 +1,4 @@
+// components/main/ourStory/StoryComponent.tsx
 import React, {useState} from "react";
 import {Box, useMediaQuery, useTheme,} from "@mui/material";
 

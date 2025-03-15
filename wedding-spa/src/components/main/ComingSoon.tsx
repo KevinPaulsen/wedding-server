@@ -1,4 +1,4 @@
-// components/ComingSoon.tsx
+// components/main/ComingSoon.tsx
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 

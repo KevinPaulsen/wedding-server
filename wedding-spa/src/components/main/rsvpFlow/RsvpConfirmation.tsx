@@ -1,4 +1,4 @@
-// components/shared/rsvpFlow/RsvpConfirmation.tsx
+// components/main/rsvpFlow/RsvpConfirmation.tsx
 import React from 'react';
 import {Box, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';

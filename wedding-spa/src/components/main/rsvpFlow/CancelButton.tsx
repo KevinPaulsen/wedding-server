@@ -1,4 +1,4 @@
-// components/shared/rsvpFlow/CancelButton.tsx
+// components/main/rsvpFlow/CancelButton.tsx
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFlow} from '../../../context/FlowProvider';

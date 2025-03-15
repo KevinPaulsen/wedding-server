@@ -1,4 +1,4 @@
-// pages/home/Details.tsx
+// pages/home/WeddingPartyPage.tsx
 import React from 'react';
 import BaseLayout from '../../components/main/BaseLayout';
 import ComingSoonComponent from "../../components/main/ComingSoon";

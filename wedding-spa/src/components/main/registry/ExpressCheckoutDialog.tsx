@@ -1,3 +1,4 @@
+// components/main/registry/ExpressCheckoutDialog.tsx
 import React, {forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {
   Box,
