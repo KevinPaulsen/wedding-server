@@ -1,5 +1,5 @@
 // pages/rsvp/RSVPStep5GuestDetails.tsx
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Autocomplete,
   Box,
@@ -29,7 +29,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import {EventData, FormData} from './RsvpFlowPage';
-import CustomInputField, {CustomInputFieldRef} from '../../components/shared/CustomInputField';
 import CustomButton from '../../components/shared/CustomButton';
 
 interface RsvpGuestDetailsStepProps {
@@ -139,7 +138,6 @@ const GuestRow: React.FC<GuestRowProps> = ({
 );
 
 // --- GuestTable Component ---
-// Note: Added editingGuestId prop to the interface.
 interface GuestTableProps {
   guests: RsvpGuestDetailWithId[];
   theme: any;
@@ -195,7 +193,7 @@ const GuestTable: React.FC<GuestTableProps> = ({
         </TableHead>
         <TableBody>
           {guests.map((guest) =>
-              editingGuestId === guest.id ? null : ( // When editing, that row will be handled in the modal.
+              editingGuestId === guest.id ? null : (
                   <GuestRow
                       key={guest.id}
                       guest={guest}
@@ -221,114 +219,168 @@ interface EditGuestDialogProps {
   theme: any;
 }
 
-const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
-    ({ open, editingGuest, setEditingGuest, onSave, onClose, theme }, ref) => (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            fullWidth
-            maxWidth="sm"
-            slotProps={{
-              paper: {
-                sx: {
-                  backgroundColor: theme.palette.primary.contrastText,
-                  color: theme.palette.primary.main,
-                },
+const EditGuestDialog: React.FC<EditGuestDialogProps> = ({
+                                                           open,
+                                                           editingGuest,
+                                                           setEditingGuest,
+                                                           onSave,
+                                                           onClose,
+                                                           theme,
+                                                         }) => {
+  const [displayNameError, setDisplayNameError] = useState('');
+
+  // Clear error when the dialog is closed or re-opened.
+  useEffect(() => {
+    if (!open) {
+      setDisplayNameError('');
+    }
+  }, [open]);
+
+  const validateName = () => {
+    if (!editingGuest || editingGuest.display_name.trim() === '') {
+      setDisplayNameError('Preferred Name is required');
+      return false;
+    } else {
+      setDisplayNameError('');
+      return true;
+    }
+  };
+
+  const handleSave = () => {
+    if (validateName()) {
+      onSave();
+    }
+  };
+
+  // When clicking away (backdrop or escape), run validation and block close if invalid.
+  const handleDialogClose = (event: object, reason: string) => {
+    if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+      if (!validateName()) {
+        return;
+      }
+    }
+    onClose();
+  };
+
+  return (
+      <Dialog
+          open={open}
+          onClose={handleDialogClose}
+          fullWidth
+          maxWidth="sm"
+          slotProps={{
+            paper: {
+              sx: {
+                backgroundColor: theme.palette.primary.contrastText,
+                color: theme.palette.primary.main,
               },
-            }}
-        >
-          <DialogTitle>Edit Guest</DialogTitle>
-          <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {editingGuest && (
-                <>
-                  <CustomInputField
-                      ref={ref}
-                      value={editingGuest.display_name}
-                      onChange={(e) =>
-                          setEditingGuest((prev) =>
-                              prev ? { ...prev, display_name: e.target.value } : null
-                          )
-                      }
-                      label="Preferred Name"
-                      placeholder="Preferred Name"
-                      name="display_name"
-                      required={true}
-                      width="100%"
-                      padding={{ pt: 1, pb: 0 }}
-                  />
-                  <Autocomplete
-                      multiple
-                      disableCloseOnSelect
-                      options={[
-                        'Vegetarian',
-                        'Vegan',
-                        'Gluten Free',
-                        'Nut Free',
-                        'Shellfish Free',
-                        'Other',
-                      ]}
-                      value={editingGuest.dietary_restrictions || []}
-                      onChange={(_event, newValue) =>
-                          setEditingGuest((prev) =>
-                              prev ? { ...prev, dietary_restrictions: newValue } : null
-                          )
-                      }
-                      renderOption={(props, option, { selected }) => {
-                        const { key, ...rest } = props;
-                        return (
-                            <li key={key} {...rest}>
-                              <Checkbox checked={selected} />
-                              {option}
-                            </li>
-                        );
-                      }}
-                      renderTags={(value: string[], getTagProps) =>
-                          value.map((option: string, index: number) => {
-                            const { key, ...rest } = getTagProps({ index });
-                            return <Chip key={key} label={option} size="small" {...rest} />;
-                          })
-                      }
-                      renderInput={(params) => (
-                          <TextField
-                              {...params}
-                              margin="dense"
-                              size="small"
-                              sx={{ m: 0 }}
-                              label="Dietary Restrictions"
-                              placeholder={
-                                editingGuest?.dietary_restrictions.length > 0
-                                    ? ''
-                                    : 'Select dietary restrictions...'
+            },
+          }}
+      >
+        <DialogTitle>Edit Guest</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {editingGuest && (
+              <>
+                <TextField
+                    value={editingGuest.display_name}
+                    sx={{mt: 1}}
+                    size="small"
+                    onChange={(e) =>
+                        setEditingGuest((prev) =>
+                            prev ? { ...prev, display_name: e.target.value } : null
+                        )
+                    }
+                    onBlur={validateName}
+                    label="Preferred Name"
+                    placeholder="Preferred Name"
+                    required
+                    fullWidth
+                    error={!!displayNameError}
+                    helperText={displayNameError}
+                />
+                <Autocomplete
+                    multiple
+                    disableCloseOnSelect
+                    options={[
+                      'Vegetarian',
+                      'Vegan',
+                      'Gluten Free',
+                      'Nut Free',
+                      'Shellfish Free',
+                      'Other',
+                    ]}
+                    value={editingGuest.dietary_restrictions || []}
+                    onChange={(_event, newValue) =>
+                        setEditingGuest((prev) =>
+                            prev
+                                ? {
+                                  ...prev,
+                                  dietary_restrictions: newValue,
+                                  other: newValue.includes('Other') ? prev.other : '',
+                                }
+                                : null
+                        )
+                    }
+                    renderOption={(props, option, { selected }) => {
+                      const { key, ...rest } = props;
+                      return (
+                          <li key={key} {...rest}>
+                            <Checkbox checked={selected} />
+                            {option}
+                          </li>
+                      );
+                    }}
+                    renderTags={(value: string[], getTagProps) =>
+                        value.map((option: string, index: number) => {
+                          const { key, ...rest } = getTagProps({ index });
+                          return <Chip key={key} label={option} size="small" {...rest} />;
+                        })
+                    }
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            margin="dense"
+                            size="small"
+                            sx={{ m: 0 }}
+                            label="Dietary Restrictions"
+                            placeholder={
+                              editingGuest?.dietary_restrictions.length > 0
+                                  ? ''
+                                  : 'Select dietary restrictions...'
+                            }
+                            slotProps={{
+                              htmlInput: {
+                                ...params.inputProps,
+                                readOnly: true,
                               }
-                              inputProps={{ ...params.inputProps, readOnly: true }}
-                          />
-                      )}
-                  />
-                  {editingGuest.dietary_restrictions.includes('Other') && (
-                      <CustomInputField
-                          value={editingGuest.other}
-                          onChange={(e) =>
-                              setEditingGuest((prev) =>
-                                  prev ? { ...prev, other: e.target.value } : null
-                              )
-                          }
-                          label="Other"
-                          placeholder="Other"
-                          name="other"
-                          required={false}
-                          width="100%"
-                      />
-                  )}
-                </>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1} />
-            <CustomButton text="Save" onClick={onSave} variant="dark" width="75px" />
-          </DialogActions>
-        </Dialog>
-    )
-);
+                            }}
+                        />
+                    )}
+                />
+                {editingGuest.dietary_restrictions.includes('Other') && (
+                    <TextField
+                        value={editingGuest.other}
+                        size="small"
+                        onChange={(e) =>
+                            setEditingGuest((prev) =>
+                                prev ? { ...prev, other: e.target.value } : null
+                            )
+                        }
+                        label="Other"
+                        placeholder="Other"
+                        fullWidth
+                    />
+                )}
+              </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <CustomButton text="Cancel" onClick={onClose} variant="lightOutlined" width="75px" marginRight={1} />
+          <CustomButton text="Save" onClick={handleSave} variant="dark" width="75px" />
+        </DialogActions>
+      </Dialog>
+  );
+};
 
 // --- RsvpGuestDetailsStep Component ---
 const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNext, onBack }) => {
