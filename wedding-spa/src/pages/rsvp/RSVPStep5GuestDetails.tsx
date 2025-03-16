@@ -1,4 +1,5 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+// pages/rsvp/RSVPStep5GuestDetails.tsx
+import React, {forwardRef, useEffect, useState} from 'react';
 import {
   Autocomplete,
   Box,
@@ -22,15 +23,13 @@ import {
   useTheme,
 } from '@mui/material';
 import StepLayout from './RSVPStepLayout';
-import { useFormContext } from 'react-hook-form';
-import { Rsvp, RsvpGuestDetailWithId } from '../../types/rsvp';
+import {useFormContext} from 'react-hook-form';
+import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { FormData } from './RsvpFlowPage';
-import CustomInputField, { CustomInputFieldRef } from '../../components/shared/CustomInputField';
+import {EventData, FormData} from './RsvpFlowPage';
+import CustomInputField, {CustomInputFieldRef} from '../../components/shared/CustomInputField';
 import CustomButton from '../../components/shared/CustomButton';
 
 interface RsvpGuestDetailsStepProps {
@@ -260,7 +259,14 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
                   <Autocomplete
                       multiple
                       disableCloseOnSelect
-                      options={['Vegetarian', 'Vegan', 'Gluten Free', 'Nut Free', 'Shellfish Free', 'Other']}
+                      options={[
+                        'Vegetarian',
+                        'Vegan',
+                        'Gluten Free',
+                        'Nut Free',
+                        'Shellfish Free',
+                        'Other',
+                      ]}
                       value={editingGuest.dietary_restrictions || []}
                       onChange={(_event, newValue) =>
                           setEditingGuest((prev) =>
@@ -327,7 +333,7 @@ const EditGuestDialog = forwardRef<CustomInputFieldRef, EditGuestDialogProps>(
 // --- RsvpGuestDetailsStep Component ---
 const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNext, onBack }) => {
   const theme = useTheme();
-  const { watch, setValue } = useFormContext<FormData>();
+  const { watch, setValue, getValues } = useFormContext<FormData>();
 
   // Get guest details from form state; if empty, initialize them from rsvp.guest_list.
   const guestDetails = watch('guest_details') || [];
@@ -342,11 +348,25 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
 
   const guests: RsvpGuestDetailWithId[] = guestDetails;
 
+  // When toggling a guest's "coming" status, update the guest details.
+  // Additionally, if the guest is marked as not coming, remove them from all event guest lists.
   const handleToggleComing = (guestId: string, newValue: boolean) => {
     const updatedGuests = guests.map((guest) =>
         guest.id === guestId ? { ...guest, coming: newValue } : guest
     );
     setValue('guest_details', updatedGuests);
+
+    if (!newValue) {
+      const currentFormData = getValues();
+      const eventKeys: (keyof FormData)[] = ['roce', 'rehearsal', 'ceremony', 'reception'];
+      eventKeys.forEach((key) => {
+        const eventData: EventData = currentFormData[key] as EventData;
+        if (eventData && eventData.guests_attending.includes(guestId)) {
+          const updatedAttending = eventData.guests_attending.filter((id: string) => id !== guestId);
+          setValue(key, { ...eventData, guests_attending: updatedAttending });
+        }
+      });
+    }
   };
 
   const handleEdit = (guestId: string) => {
@@ -390,14 +410,9 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
                     editingGuestId={editingGuest ? editingGuest.id : null}
                     onToggleComing={handleToggleComing}
                     onEdit={handleEdit}
-                    onSave={(id: string, updatedGuest: RsvpGuestDetailWithId) => {
-                      const updatedGuests = guests.map((guest) =>
-                          guest.id === updatedGuest.id ? updatedGuest : guest
-                      );
-                      setValue('guest_details', updatedGuests);
-                    }}
-                    onCancelEdit={handleModalClose}
                     hasAnyOther={hasAnyOther}
+                    onSave={() => {}}
+                    onCancelEdit={handleModalClose}
                 />
             )}
           </Box>

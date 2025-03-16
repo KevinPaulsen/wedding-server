@@ -1,3 +1,4 @@
+// pages/rsvp/RSVPStep6EventAttendance.tsx
 import React from 'react';
 import { Box, Button, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { useFormContext, useWatch, SubmitHandler } from 'react-hook-form';

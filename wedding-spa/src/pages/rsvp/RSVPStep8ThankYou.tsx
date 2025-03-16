@@ -1,3 +1,4 @@
+// pages/rsvp/RSVPStep8ThankYou.tsx
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';

@@ -1,3 +1,4 @@
+// pages/rsvp/RSVPStep2RsvpSelection.tsx
 import React, { useState } from 'react';
 import { Box, Button, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
@@ -28,11 +29,23 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
       setValue('primary_contact_email', selectedRsvp.primary_contact.email);
       setValue('primary_contact_phone', selectedRsvp.primary_contact.phone_number);
       setValue('primary_contact_address', selectedRsvp.primary_contact.address);
-      // Set default event attendance fields.
-      setValue('rehearsal_attendance', selectedRsvp.rehearsal.guests_attending);
-      setValue('ceremony_attendance', selectedRsvp.ceremony.guests_attending);
-      setValue('reception_attendance', selectedRsvp.reception.guests_attending);
-      setValue('roce_attendance', selectedRsvp.roce.guests_attending);
+      // Set default event attendance fields using the new EventData structure.
+      setValue('rehearsal', {
+        invited: selectedRsvp.rehearsal.invited,
+        guests_attending: selectedRsvp.rehearsal.guests_attending,
+      });
+      setValue('ceremony', {
+        invited: selectedRsvp.ceremony.invited,
+        guests_attending: selectedRsvp.ceremony.guests_attending,
+      });
+      setValue('reception', {
+        invited: selectedRsvp.reception.invited,
+        guests_attending: selectedRsvp.reception.guests_attending,
+      });
+      setValue('roce', {
+        invited: selectedRsvp.roce.invited,
+        guests_attending: selectedRsvp.roce.guests_attending,
+      });
       onNext(selectedRsvp);
     }
   };

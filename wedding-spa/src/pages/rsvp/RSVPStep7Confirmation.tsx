@@ -1,3 +1,4 @@
+// pages/rsvp/RSVPStep7Confirmation.tsx
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import StepLayout from './RSVPStepLayout';
@@ -35,16 +36,16 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({ formData, onNext, o
         </Typography>
         <Box mt={2}>
           <Typography variant="subtitle1">
-            Rehearsal: {(formData.rehearsal_attendance || []).join(', ')}
+            Rehearsal: {(formData.rehearsal.guests_attending || []).join(', ')}
           </Typography>
           <Typography variant="subtitle1">
-            Ceremony: {(formData.ceremony_attendance || []).join(', ')}
+            Ceremony: {(formData.ceremony.guests_attending || []).join(', ')}
           </Typography>
           <Typography variant="subtitle1">
-            Reception: {(formData.reception_attendance || []).join(', ')}
+            Reception: {(formData.reception.guests_attending || []).join(', ')}
           </Typography>
           <Typography variant="subtitle1">
-            Roce: {(formData.roce_attendance || []).join(', ')}
+            Roce: {(formData.roce.guests_attending || []).join(', ')}
           </Typography>
         </Box>
         <Box mt={2} display="flex" justifyContent="space-between">

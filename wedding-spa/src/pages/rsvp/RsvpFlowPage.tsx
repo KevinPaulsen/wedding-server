@@ -1,3 +1,4 @@
+// pages/rsvp/RsvpFlowPage.tsx
 import React, { useState } from 'react';
 import { Box, Button, CircularProgress, Fade, Typography } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -8,12 +9,20 @@ import RsvpSelectionStep from './RSVPStep2RsvpSelection';
 import AttendanceDecisionStep from './RSVPStep3AttendanceDecision';
 import PrimaryContactStep from './RSVPStep4PrimaryContact';
 import RsvpGuestDetailsStep from './RSVPStep5GuestDetails';
-import EventAttendanceStep from './RSVPStep6EventAttendance';
 import ConfirmationStep from './RSVPStep7Confirmation';
 import ThankYouStep from './RSVPStep8ThankYou';
 
-import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
+import { Rsvp, RsvpGuestDetailWithId } from '../../types/rsvp';
 import { useSubmitRsvp } from '../../hooks/rsvp/useSubmitRsvp';
+import RsvpRocePage from "./RSVPStep6-1Roce";
+import RsvpRehearsalPage from "./RSVPStep6-2Rehearsal";
+import RsvpCeremonyPage from "./RSVPStep6-3Ceremony";
+import RsvpReceptionPage from "./RSVPStep6-4Reception";
+
+export type EventData = {
+  invited: boolean;
+  guests_attending: string[];
+};
 
 export type FormData = {
   first_name: string;
@@ -24,10 +33,10 @@ export type FormData = {
   primary_contact_email: string;
   primary_contact_phone: string;
   primary_contact_address: string;
-  rehearsal_attendance?: string[];
-  ceremony_attendance?: string[];
-  reception_attendance?: string[];
-  roce_attendance?: string[];
+  rehearsal: EventData;
+  ceremony: EventData;
+  reception: EventData;
+  roce: EventData;
   guest_details?: RsvpGuestDetailWithId[];
 };
 
@@ -42,15 +51,31 @@ const RsvpFlow: React.FC = () => {
       primary_contact_email: '',
       primary_contact_phone: '',
       primary_contact_address: '',
-      rehearsal_attendance: [],
-      ceremony_attendance: [],
-      reception_attendance: [],
-      roce_attendance: [],
+      rehearsal: { invited: false, guests_attending: [] },
+      ceremony: { invited: false, guests_attending: [] },
+      reception: { invited: false, guests_attending: [] },
+      roce: { invited: false, guests_attending: [] },
       guest_details: [],
     },
   });
 
-  // Manage state for steps, fade transitions, and RSVP data.
+  // Watch form data for dynamic checks (like event invitation status)
+  const formData = methods.watch();
+
+  // Mapping of event steps to their corresponding keys in FormData
+  const eventStepKeys: { [step: number]: keyof FormData } = {
+    6: 'roce',
+    7: 'rehearsal',
+    8: 'ceremony',
+    9: 'reception',
+  };
+
+  const isStepInvited = (step: number): boolean => {
+    const key = eventStepKeys[step];
+    if (!key) return true;
+    return (formData[key] as EventData).invited;
+  };
+
   const [skippedSelection, setSkippedSelection] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [showStep, setShowStep] = useState<boolean>(true);
@@ -59,13 +84,13 @@ const RsvpFlow: React.FC = () => {
   const submitRsvpApi = useSubmitRsvp();
   const [submitting, setSubmitting] = useState(false);
 
-  // Cancel button resets the form and navigates home.
+  // Cancel resets form and navigates home.
   const handleCancel = () => {
     methods.reset();
     navigate('/');
   };
 
-  // Transition function: fades out, then changes step, then fades in.
+  // Transition between steps with a fade.
   const transitionToStep = (newStep: number) => {
     setShowStep(false);
     setTimeout(() => {
@@ -74,15 +99,31 @@ const RsvpFlow: React.FC = () => {
     }, 300);
   };
 
-  // Navigation handlers using the transition.
-  const nextStep = () => transitionToStep(currentStep + 1);
-  const previousStep = () => transitionToStep(currentStep - 1);
+  // Helper functions to skip event steps that the user is not invited to.
+  const getNextStep = (step: number): number => {
+    let next = step + 1;
+    while ([6, 7, 8, 9].includes(next) && !isStepInvited(next)) {
+      next++;
+    }
+    return next;
+  };
 
-  // Helper to convert guest list object to an array.
+  const getPreviousStep = (step: number): number => {
+    let prev = step - 1;
+    while ([6, 7, 8, 9].includes(prev) && !isStepInvited(prev)) {
+      prev--;
+    }
+    return prev;
+  };
+
+  const nextStep = () => transitionToStep(getNextStep(currentStep));
+  const previousStep = () => transitionToStep(getPreviousStep(currentStep));
+
+  // Convert guest_list object into an array.
   const convertToGuestList = (guestList: { [key: string]: any }): RsvpGuestDetailWithId[] =>
       Object.entries(guestList).map(([id, details]) => ({ id, ...details }));
 
-  // Handle name lookup: if one RSVP is found, skip the selection step.
+  // Handle lookup: if one result, prepopulate form and skip selection.
   const handleLookupNext = (results: Rsvp[]) => {
     setLookupResults(results);
     if (results.length === 1) {
@@ -93,22 +134,33 @@ const RsvpFlow: React.FC = () => {
       methods.setValue('primary_contact_email', singleRsvp.primary_contact.email);
       methods.setValue('primary_contact_phone', singleRsvp.primary_contact.phone_number);
       methods.setValue('primary_contact_address', singleRsvp.primary_contact.address);
-      // Set default event attendance values.
-      methods.setValue('rehearsal_attendance', singleRsvp.rehearsal.guests_attending);
-      methods.setValue('ceremony_attendance', singleRsvp.ceremony.guests_attending);
-      methods.setValue('reception_attendance', singleRsvp.reception.guests_attending);
-      methods.setValue('roce_attendance', singleRsvp.roce.guests_attending);
-      // Also set guest details.
+      // Set each event field.
+      methods.setValue('rehearsal', {
+        invited: singleRsvp.rehearsal.invited,
+        guests_attending: singleRsvp.rehearsal.guests_attending,
+      });
+      methods.setValue('ceremony', {
+        invited: singleRsvp.ceremony.invited,
+        guests_attending: singleRsvp.ceremony.guests_attending,
+      });
+      methods.setValue('reception', {
+        invited: singleRsvp.reception.invited,
+        guests_attending: singleRsvp.reception.guests_attending,
+      });
+      methods.setValue('roce', {
+        invited: singleRsvp.roce.invited,
+        guests_attending: singleRsvp.roce.guests_attending,
+      });
+      // Set guest details.
       methods.setValue('guest_details', convertToGuestList(singleRsvp.guest_list));
       setSkippedSelection(true);
-      transitionToStep(3); // Jump to Attendance Decision (step 3)
+      transitionToStep(3); // Proceed to Attendance Decision
     } else if (results.length > 1) {
       setSkippedSelection(false);
-      transitionToStep(2); // Proceed to RSVP selection (step 2)
+      transitionToStep(2); // Proceed to RSVP Selection
     }
   };
 
-  // Handle selection step when multiple RSVP records are found.
   const handleRsvpSelectionNext = (rsvp: Rsvp) => {
     setSelectedRsvp(rsvp);
     methods.setValue('selectedRsvpId', rsvp.rsvp_id);
@@ -116,16 +168,27 @@ const RsvpFlow: React.FC = () => {
     methods.setValue('primary_contact_email', rsvp.primary_contact.email);
     methods.setValue('primary_contact_phone', rsvp.primary_contact.phone_number);
     methods.setValue('primary_contact_address', rsvp.primary_contact.address);
-    methods.setValue('rehearsal_attendance', rsvp.rehearsal.guests_attending);
-    methods.setValue('ceremony_attendance', rsvp.ceremony.guests_attending);
-    methods.setValue('reception_attendance', rsvp.reception.guests_attending);
-    methods.setValue('roce_attendance', rsvp.roce.guests_attending);
-    // Also set guest details.
+    methods.setValue('rehearsal', {
+      invited: rsvp.rehearsal.invited,
+      guests_attending: rsvp.rehearsal.guests_attending,
+    });
+    methods.setValue('ceremony', {
+      invited: rsvp.ceremony.invited,
+      guests_attending: rsvp.ceremony.guests_attending,
+    });
+    methods.setValue('reception', {
+      invited: rsvp.reception.invited,
+      guests_attending: rsvp.reception.guests_attending,
+    });
+    methods.setValue('roce', {
+      invited: rsvp.roce.invited,
+      guests_attending: rsvp.roce.guests_attending,
+    });
     methods.setValue('guest_details', convertToGuestList(rsvp.guest_list));
-    nextStep(); // Proceed to Attendance Decision (step 3)
+    nextStep(); // Proceed to Attendance Decision
   };
 
-  // When the user selects "no" for attendance.
+  // When user selects "no" for attendance.
   const handleSubmitNo = async () => {
     const formData = methods.getValues();
     const updatedGuestList = (formData.guest_details || []).map((guest) => ({
@@ -134,10 +197,10 @@ const RsvpFlow: React.FC = () => {
     }));
     const rsvpToSubmit: Rsvp = {
       ...selectedRsvp!,
-      guest_list: updatedGuestList.reduce(
-          (acc, guest, idx) => ({ ...acc, [idx]: guest }),
-          {}
-      ),
+      guest_list: updatedGuestList.reduce((acc, guest) => {
+        acc[guest.id] = guest;
+        return acc;
+      }, {} as { [key: string]: any }),
       submitted: true,
       primary_contact: {
         name: formData.primary_contact_name,
@@ -165,13 +228,13 @@ const RsvpFlow: React.FC = () => {
 
     const response = await submitRsvpApi.execute(rsvpToSubmit);
     if (response.success) {
-      transitionToStep(8); // Move to Thank You (step 8)
+      transitionToStep(11); // Thank You step
     } else {
       alert(response.error || 'Submission failed');
     }
   };
 
-  // Final submission when the user confirms the RSVP.
+  // Final submission: convert guest_details array back to object and include event data.
   const handleSubmitRsvp = async (formData: FormData) => {
     setSubmitting(true);
     const rsvpToSubmit: Rsvp = {
@@ -189,27 +252,15 @@ const RsvpFlow: React.FC = () => {
         phone_number: formData.primary_contact_phone,
         address: formData.primary_contact_address,
       },
-      roce: {
-        invited: selectedRsvp!.roce.invited,
-        guests_attending: formData.roce_attendance || [],
-      },
-      rehearsal: {
-        invited: selectedRsvp!.rehearsal.invited,
-        guests_attending: formData.rehearsal_attendance || [],
-      },
-      ceremony: {
-        invited: selectedRsvp!.ceremony.invited,
-        guests_attending: formData.ceremony_attendance || [],
-      },
-      reception: {
-        invited: selectedRsvp!.reception.invited,
-        guests_attending: formData.reception_attendance || [],
-      },
+      roce: formData.roce,
+      rehearsal: formData.rehearsal,
+      ceremony: formData.ceremony,
+      reception: formData.reception,
     };
     const response = await submitRsvpApi.execute(rsvpToSubmit);
     setSubmitting(false);
     if (response.success) {
-      nextStep(); // Proceed to Thank You (step 8)
+      nextStep(); // Proceed to Thank You (step 11)
     } else {
       alert(response.error || 'Submission failed');
     }
@@ -220,7 +271,7 @@ const RsvpFlow: React.FC = () => {
     handleSubmitRsvp(formData);
   };
 
-  // Custom onBack handler for the Attendance Decision step.
+  // Custom onBack for Attendance Decision.
   const onBackFromAttendance = () => {
     if (skippedSelection) {
       transitionToStep(1);
@@ -229,7 +280,7 @@ const RsvpFlow: React.FC = () => {
     }
   };
 
-  // Render the current step based on the currentStep state.
+  // Render steps.
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -273,16 +324,38 @@ const RsvpFlow: React.FC = () => {
             )
         );
       case 6:
-        return (
-            selectedRsvp && (
-                <EventAttendanceStep
-                    rsvp={selectedRsvp}
-                    onNext={nextStep}
-                    onBack={previousStep}
-                />
-            )
-        );
+        return selectedRsvp ? (
+            <RsvpRocePage
+                nextPage={(formData: FormData) => nextStep()}
+                previousPage={(formData: FormData) => previousStep()}
+                requireAnswers={true}
+            />
+        ) : null;
       case 7:
+        return selectedRsvp ? (
+            <RsvpRehearsalPage
+                nextPage={(formData: FormData) => nextStep()}
+                previousPage={(formData: FormData) => previousStep()}
+                requireAnswers={true}
+            />
+        ) : null;
+      case 8:
+        return selectedRsvp ? (
+            <RsvpCeremonyPage
+                nextPage={(formData: FormData) => nextStep()}
+                previousPage={(formData: FormData) => previousStep()}
+                requireAnswers={true}
+            />
+        ) : null;
+      case 9:
+        return selectedRsvp ? (
+            <RsvpReceptionPage
+                nextPage={(formData: FormData) => nextStep()}
+                previousPage={(formData: FormData) => previousStep()}
+                requireAnswers={true}
+            />
+        ) : null;
+      case 10:
         return (
             <ConfirmationStep
                 formData={methods.getValues()}
@@ -290,7 +363,7 @@ const RsvpFlow: React.FC = () => {
                 onBack={previousStep}
             />
         );
-      case 8:
+      case 11:
         return <ThankYouStep />;
       default:
         return null;
@@ -309,14 +382,14 @@ const RsvpFlow: React.FC = () => {
               p: 2,
             }}
         >
-          {/* Header with the "Kevin & Olivia" title */}
+          {/* Header */}
           <Box sx={{ mt: 2 }}>
             <Typography variant="h2" sx={{ textAlign: 'center' }}>
               Kevin & Olivia
             </Typography>
           </Box>
 
-          {/* Step content (centered vertically and horizontally) */}
+          {/* Step Content */}
           <Box
               sx={{
                 flex: 1,
@@ -331,12 +404,12 @@ const RsvpFlow: React.FC = () => {
             </Fade>
           </Box>
 
-          {/* Cancel button */}
+          {/* Cancel Button */}
           <Box sx={{ mb: 2 }}>
             <Button onClick={handleCancel}>Cancel</Button>
           </Box>
 
-          {/* Submission progress indicator */}
+          {/* Submission Progress */}
           {submitting && (
               <Box mt={2} display="flex" justifyContent="center">
                 <CircularProgress />
