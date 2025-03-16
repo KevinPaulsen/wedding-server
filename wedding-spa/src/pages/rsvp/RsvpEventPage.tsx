@@ -1,8 +1,8 @@
 // pages/rsvp/RsvpEventPage.tsx
 import React from 'react';
-import { Box, FormControlLabel, Switch, Typography } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
-import { FormData } from './RsvpFlowPage';
+import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
+import {useFormContext} from 'react-hook-form';
+import {FormData} from './RsvpFlowPage';
 import CustomButton from '../../components/shared/CustomButton';
 import StepLayout from "./RSVPStepLayout";
 

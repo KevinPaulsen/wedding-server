@@ -337,7 +337,7 @@ const RsvpFlow: React.FC = () => {
                 nextPage={(formData: FormData) =>
                     currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
                 }
-                previousPage={(formData: FormData) => previousStep()}
+                previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
@@ -347,7 +347,7 @@ const RsvpFlow: React.FC = () => {
                 nextPage={(formData: FormData) =>
                     currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
                 }
-                previousPage={(formData: FormData) => previousStep()}
+                previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
@@ -357,7 +357,7 @@ const RsvpFlow: React.FC = () => {
                 nextPage={(formData: FormData) =>
                     currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
                 }
-                previousPage={(formData: FormData) => previousStep()}
+                previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
@@ -367,7 +367,7 @@ const RsvpFlow: React.FC = () => {
                 nextPage={(formData: FormData) =>
                     currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
                 }
-                previousPage={(formData: FormData) => previousStep()}
+                previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;

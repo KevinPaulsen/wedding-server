@@ -1,9 +1,16 @@
 // pages/rsvp/RSVPStep3AttendanceDecision.tsx
 import React from 'react';
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import { useFormContext, SubmitHandler } from 'react-hook-form';
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Typography
+} from '@mui/material';
+import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import { FormData } from './RsvpFlowPage';
+import {FormData} from './RsvpFlowPage';
 
 interface AttendanceDecisionStepProps {
   onNext: () => void;

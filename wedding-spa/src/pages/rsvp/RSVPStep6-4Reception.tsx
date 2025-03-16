@@ -1,7 +1,6 @@
 // pages/rsvp/RSVPStep6-4Reception.tsx
 import React from 'react';
 import RsvpEventPage from './RsvpEventPage';
-import StepLayout from "./RSVPStepLayout";
 
 interface RsvpReceptionPageProps {
   nextPage: (formData: any) => void;

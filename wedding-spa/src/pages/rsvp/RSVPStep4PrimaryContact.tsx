@@ -2,18 +2,17 @@
 import React from 'react';
 import {
   Box,
-  Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
-  FormHelperText
+  TextField
 } from '@mui/material';
-import { useFormContext, SubmitHandler } from 'react-hook-form';
+import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import { Rsvp } from '../../types/rsvp';
-import { FormData } from './RsvpFlowPage';
+import {Rsvp} from '../../types/rsvp';
+import {FormData} from './RsvpFlowPage';
 
 interface PrimaryContactStepProps {
   rsvp: Rsvp;

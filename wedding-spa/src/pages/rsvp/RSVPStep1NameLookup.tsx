@@ -1,6 +1,6 @@
 // pages/rsvp/RSVPStep1NameLookup.tsx
 import React, {useState} from 'react';
-import {Box, CircularProgress, TextField, Typography} from '@mui/material';
+import {CircularProgress, TextField, Typography} from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
 import {Rsvp} from '../../types/rsvp';
