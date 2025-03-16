@@ -17,6 +17,7 @@ import RsvpRocePage from "./RSVPStep6-1Roce";
 import RsvpRehearsalPage from "./RSVPStep6-2Rehearsal";
 import RsvpCeremonyPage from "./RSVPStep6-3Ceremony";
 import RsvpReceptionPage from "./RSVPStep6-4Reception";
+import CustomButton from "../../components/shared/CustomButton";
 
 const NAME_LOOKUP_STEP = 1;
 const SELECTION_STEP = NAME_LOOKUP_STEP + 1;
@@ -414,7 +415,7 @@ const RsvpFlow: React.FC = () => {
 
           {/* Cancel Button */}
           <Box sx={{ mb: 2 }}>
-            <Button onClick={handleCancel}>Cancel</Button>
+            <CustomButton text="Cancel" onClick={handleCancel} variant="lightOutlined" width='auto'/>
           </Box>
 
           {/* Submission Progress */}

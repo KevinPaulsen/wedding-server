@@ -1,6 +1,6 @@
 // pages/rsvp/RSVPStep1NameLookup.tsx
 import React, {useState} from 'react';
-import {CircularProgress, TextField, Typography} from '@mui/material';
+import {Box, CircularProgress, TextField, Typography} from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
 import {Rsvp} from '../../types/rsvp';
@@ -13,7 +13,7 @@ interface NameLookupStepProps {
 }
 
 const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
-  const { register, handleSubmit, formState: { errors } } = useFormContext<FormData>();
+  const { register, handleSubmit, formState: { errors }, trigger } = useFormContext<FormData>();
   const [loading, setLoading] = useState(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const lookupRsvpApi = useLookupRsvp();
@@ -36,30 +36,40 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
           title="Enter Your Name"
           description="Please enter your first and last name to look up your RSVP."
           onSubmit={handleSubmit(onSubmit)}
-          nextText={loading ? <CircularProgress size={24} /> : 'Lookup RSVP'}
+          nextText={loading ? <CircularProgress size={24} color={"secondary"} /> : 'Lookup RSVP'}
           nextDisabled={loading}
       >
-        <TextField
-            label="First Name"
-            fullWidth
-            margin="normal"
-            {...register('first_name', { required: 'First name is required' })}
-            error={!!errors.first_name}
-            helperText={errors.first_name?.message}
-        />
-        <TextField
-            label="Last Name"
-            fullWidth
-            margin="normal"
-            {...register('last_name', { required: 'Last name is required' })}
-            error={!!errors.last_name}
-            helperText={errors.last_name?.message}
-        />
-        {lookupError && (
-            <Typography color="error" variant="body2">
-              {lookupError}
-            </Typography>
-        )}
+        <Box maxWidth='300px'>
+          <TextField
+              label="First Name"
+              size='small'
+              fullWidth
+              margin="normal"
+              {...register('first_name', {
+                required: 'First name is required',
+                onBlur: () => trigger('first_name'),
+              })}
+              error={!!errors.first_name}
+              helperText={errors.first_name?.message}
+          />
+          <TextField
+              label="Last Name"
+              size='small'
+              fullWidth
+              margin="normal"
+              {...register('last_name', {
+                required: 'Last name is required',
+                onBlur: () => trigger('last_name'),
+              })}
+              error={!!errors.last_name}
+              helperText={errors.last_name?.message}
+          />
+          {lookupError && (
+              <Typography color="error" variant="body2">
+                {lookupError}
+              </Typography>
+          )}
+        </Box>
       </StepLayout>
   );
 };

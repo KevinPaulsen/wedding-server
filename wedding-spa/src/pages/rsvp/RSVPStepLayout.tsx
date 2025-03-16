@@ -1,6 +1,7 @@
 // pages/rsvp/RSVPStepLayout.tsx
 import React, {JSX} from 'react';
 import {Box, Button, Typography} from '@mui/material';
+import CustomButton from "../../components/shared/CustomButton";
 
 export interface StepLayoutProps {
   title: string;
@@ -20,11 +21,12 @@ const StepLayout: React.FC<StepLayoutProps> = ({
                                                  onBack = null,
                                                  onNext = null,
                                                  onSubmit = null,
-                                                 nextText = 'next',
+                                                 nextText = 'Next',
                                                  nextDisabled = false,
                                                }) => {
   return (
-      <Box sx={{
+      <Box
+          sx={{
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -40,24 +42,27 @@ const StepLayout: React.FC<StepLayoutProps> = ({
             </Typography>
         )}
 
-        <Box component={onSubmit ? 'form' : 'div'} onSubmit={onSubmit ? onSubmit: () => {}} textAlign="center"
-             width="100%">
+        <Box
+            component={onSubmit ? 'form' : 'div'}
+            onSubmit={onSubmit ? onSubmit: () => {}}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+            }}
+        >
           {children}
 
-          {(onNext || onSubmit) && <Box mt={2} display="flex" justifyContent={onBack ? 'space-between' : 'center'}>
+          {(onNext || onSubmit) && <Box mt={2} display="flex" justifyContent={onBack ? 'space-between' : 'center'} width='100%'>
             {onBack &&
-                <Button variant="outlined" onClick={onBack}>
-                  Back
-                </Button>
+                <CustomButton text="Back" onClick={onBack} variant="dark" width='auto' />
             }
             {onNext === null ?
-                <Button type="submit" variant="contained" disabled={nextDisabled}>
-                  {nextText}
-                </Button>
+                <CustomButton text={nextText} type="submit" variant="dark" width='auto' />
                 :
-                <Button variant="contained" onClick={onNext} disabled={nextDisabled}>
-                  {nextText}
-                </Button>
+                <CustomButton text={nextText} onClick={onNext} disabled={nextDisabled} variant="dark" width='auto' />
             }
           </Box>}
         </Box>

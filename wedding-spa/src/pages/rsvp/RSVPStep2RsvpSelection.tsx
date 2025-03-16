@@ -72,11 +72,13 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
                   <Card
                       key={rsvp.rsvp_id}
                       onClick={() => handleSelect(rsvp)}
+                      elevation={10}
                       sx={{
                         width: 300,
                         mb: 2,
                         cursor: 'pointer',
-                        border: isSelected ? '2px solid blue' : '1px solid grey',
+                        border: '2px solid',
+                        bgcolor: (theme) => isSelected ? theme.palette.secondary.dark : theme.palette.secondary.main,
                       }}
                   >
                     <CardActionArea>
