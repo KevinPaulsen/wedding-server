@@ -12,7 +12,7 @@ import EventAttendanceStep from './RSVPStep6EventAttendance';
 import ConfirmationStep from './RSVPStep7Confirmation';
 import ThankYouStep from './RSVPStep8ThankYou';
 
-import { Rsvp } from '../../types/rsvp';
+import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
 import { useSubmitRsvp } from '../../hooks/rsvp/useSubmitRsvp';
 
 export type FormData = {
@@ -28,6 +28,7 @@ export type FormData = {
   ceremony_attendance?: string[];
   reception_attendance?: string[];
   roce_attendance?: string[];
+  guest_details?: RsvpGuestDetailWithId[];
 };
 
 const RsvpFlow: React.FC = () => {
@@ -45,6 +46,7 @@ const RsvpFlow: React.FC = () => {
       ceremony_attendance: [],
       reception_attendance: [],
       roce_attendance: [],
+      guest_details: [],
     },
   });
 
@@ -76,6 +78,10 @@ const RsvpFlow: React.FC = () => {
   const nextStep = () => transitionToStep(currentStep + 1);
   const previousStep = () => transitionToStep(currentStep - 1);
 
+  // Helper to convert guest list object to an array.
+  const convertToGuestList = (guestList: { [key: string]: any }): RsvpGuestDetailWithId[] =>
+      Object.entries(guestList).map(([id, details]) => ({ id, ...details }));
+
   // Handle name lookup: if one RSVP is found, skip the selection step.
   const handleLookupNext = (results: Rsvp[]) => {
     setLookupResults(results);
@@ -92,6 +98,8 @@ const RsvpFlow: React.FC = () => {
       methods.setValue('ceremony_attendance', singleRsvp.ceremony.guests_attending);
       methods.setValue('reception_attendance', singleRsvp.reception.guests_attending);
       methods.setValue('roce_attendance', singleRsvp.roce.guests_attending);
+      // Also set guest details.
+      methods.setValue('guest_details', convertToGuestList(singleRsvp.guest_list));
       setSkippedSelection(true);
       transitionToStep(3); // Jump to Attendance Decision (step 3)
     } else if (results.length > 1) {
@@ -112,21 +120,24 @@ const RsvpFlow: React.FC = () => {
     methods.setValue('ceremony_attendance', rsvp.ceremony.guests_attending);
     methods.setValue('reception_attendance', rsvp.reception.guests_attending);
     methods.setValue('roce_attendance', rsvp.roce.guests_attending);
+    // Also set guest details.
+    methods.setValue('guest_details', convertToGuestList(rsvp.guest_list));
     nextStep(); // Proceed to Attendance Decision (step 3)
   };
 
   // When the user selects "no" for attendance.
   const handleSubmitNo = async () => {
     const formData = methods.getValues();
-    const updatedGuestList = Object.fromEntries(
-        Object.entries(selectedRsvp!.guest_list).map(([id, guest]) => [
-          id,
-          { ...guest, coming: false },
-        ])
-    );
+    const updatedGuestList = (formData.guest_details || []).map((guest) => ({
+      ...guest,
+      coming: false,
+    }));
     const rsvpToSubmit: Rsvp = {
       ...selectedRsvp!,
-      guest_list: updatedGuestList,
+      guest_list: updatedGuestList.reduce(
+          (acc, guest, idx) => ({ ...acc, [idx]: guest }),
+          {}
+      ),
       submitted: true,
       primary_contact: {
         name: formData.primary_contact_name,
@@ -166,11 +177,33 @@ const RsvpFlow: React.FC = () => {
     const rsvpToSubmit: Rsvp = {
       ...selectedRsvp!,
       submitted: true,
+      guest_list: formData.guest_details
+          ? formData.guest_details.reduce((acc, guest) => {
+            acc[guest.id] = guest;
+            return acc;
+          }, {} as { [key: string]: any })
+          : {},
       primary_contact: {
         name: formData.primary_contact_name,
         email: formData.primary_contact_email,
         phone_number: formData.primary_contact_phone,
         address: formData.primary_contact_address,
+      },
+      roce: {
+        invited: selectedRsvp!.roce.invited,
+        guests_attending: formData.roce_attendance || [],
+      },
+      rehearsal: {
+        invited: selectedRsvp!.rehearsal.invited,
+        guests_attending: formData.rehearsal_attendance || [],
+      },
+      ceremony: {
+        invited: selectedRsvp!.ceremony.invited,
+        guests_attending: formData.ceremony_attendance || [],
+      },
+      reception: {
+        invited: selectedRsvp!.reception.invited,
+        guests_attending: formData.reception_attendance || [],
       },
     };
     const response = await submitRsvpApi.execute(rsvpToSubmit);
