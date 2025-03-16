@@ -55,7 +55,7 @@ const StepLayout: React.FC<StepLayoutProps> = ({
         >
           {children}
 
-          {(onNext || onSubmit) && <Box mt={2} display="flex" justifyContent={onBack ? 'space-between' : 'center'} width='100%'>
+          {(onNext || onSubmit) && <Box mt={2} display="flex" justifyContent={onBack ? 'space-evenly' : 'center'} width='100%'>
             {onBack &&
                 <CustomButton text="Back" onClick={onBack} variant="dark" width='auto' />
             }

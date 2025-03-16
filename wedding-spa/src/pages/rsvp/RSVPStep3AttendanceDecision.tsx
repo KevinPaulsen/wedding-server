@@ -57,13 +57,13 @@ const AttendanceDecisionStep: React.FC<AttendanceDecisionStepProps> = ({
           <CustomButton
               text="Yes"
               onClick={() => handleOptionSelect(true)}
-              variant={selection === true ? 'dark' : 'lightOutlined'}
+              variant={selection === true ? 'dark' : 'light'}
               width="100px"
           />
           <CustomButton
               text="No"
               onClick={() => handleOptionSelect(false)}
-              variant={selection === false ? 'dark' : 'lightOutlined'}
+              variant={selection === false ? 'dark' : 'light'}
               width="100px"
           />
         </Box>

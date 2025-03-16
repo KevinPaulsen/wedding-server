@@ -455,32 +455,30 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
           onBack={onBack}
           onNext={onNext}
       >
-        <Box textAlign="center">
-          <Box sx={{ maxWidth: 900, mx: 'auto', color: theme.palette.primary.main, p: theme.spacing(1) }}>
-            {guests.length === 0 ? (
-                <Typography>No guests found.</Typography>
-            ) : (
-                <GuestTable
-                    guests={guests}
-                    theme={theme}
-                    editingGuestId={editingGuest ? editingGuest.id : null}
-                    onToggleComing={handleToggleComing}
-                    onEdit={handleEdit}
-                    hasAnyOther={hasAnyOther}
-                    onSave={() => {}}
-                    onCancelEdit={handleModalClose}
-                />
-            )}
-          </Box>
-          <EditGuestDialog
-              open={openModal}
-              editingGuest={editingGuest}
-              setEditingGuest={setEditingGuest}
-              onSave={handleModalSave}
-              onClose={handleModalClose}
-              theme={theme}
-          />
+        <Box sx={{ maxWidth: "900px", width: "100%", mx: "auto", }} >
+          {guests.length === 0 ? (
+              <Typography>No guests found.</Typography>
+          ) : (
+              <GuestTable
+                  guests={guests}
+                  theme={theme}
+                  editingGuestId={editingGuest ? editingGuest.id : null}
+                  onToggleComing={handleToggleComing}
+                  onEdit={handleEdit}
+                  hasAnyOther={hasAnyOther}
+                  onSave={() => {}}
+                  onCancelEdit={handleModalClose}
+              />
+          )}
         </Box>
+        <EditGuestDialog
+            open={openModal}
+            editingGuest={editingGuest}
+            setEditingGuest={setEditingGuest}
+            onSave={handleModalSave}
+            onClose={handleModalClose}
+            theme={theme}
+        />
       </StepLayout>
   );
 };

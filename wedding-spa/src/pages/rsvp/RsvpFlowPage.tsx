@@ -409,7 +409,7 @@ const RsvpFlow: React.FC = () => {
               }}
           >
             <Fade in={showStep} timeout={300}>
-              <Box>{renderStep()}</Box>
+              <Box width='100%'>{renderStep()}</Box>
             </Fade>
           </Box>
 
