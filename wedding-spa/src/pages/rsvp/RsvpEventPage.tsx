@@ -105,8 +105,8 @@ const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
                           text={guest.display_name}
                           onClick={() => handleToggle(id)}
                           variant={isAttending ? 'dark' : 'light'}
-                          height={50}
-                          maxWidth={300}
+                          height={60}
+                          width={250}
                           marginBottom={1}
                       />
                   );

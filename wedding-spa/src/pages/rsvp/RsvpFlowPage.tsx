@@ -39,7 +39,7 @@ export type FormData = {
   first_name: string;
   last_name: string;
   selectedRsvpId?: string;
-  anyGuestAttending: 'yes' | 'no';
+  anyGuestAttending: 'yes' | 'no' | '';
   primary_contact_name: string;
   primary_contact_email: string;
   primary_contact_phone: string;
@@ -57,7 +57,7 @@ const RsvpFlow: React.FC = () => {
     defaultValues: {
       first_name: '',
       last_name: '',
-      anyGuestAttending: 'yes',
+      anyGuestAttending: '',
       primary_contact_name: '',
       primary_contact_email: '',
       primary_contact_phone: '',
@@ -113,7 +113,7 @@ const RsvpFlow: React.FC = () => {
   // Helper functions to skip event steps that the user is not invited to.
   const getNextStep = (step: number): number => {
     let next = step + 1;
-    while ([6, 7, 8, 9].includes(next) && !isStepInvited(next)) {
+    while ([ROCE_EVENT_STEP, REHEARSAL_EVENT_STEP, CEREMONY_EVENT_STEP, RECEPTION_EVENT_STEP].includes(next) && !isStepInvited(next)) {
       next++;
     }
     return next;
@@ -121,7 +121,7 @@ const RsvpFlow: React.FC = () => {
 
   const getPreviousStep = (step: number): number => {
     let prev = step - 1;
-    while ([6, 7, 8, 9].includes(prev) && !isStepInvited(prev)) {
+    while ([ROCE_EVENT_STEP, REHEARSAL_EVENT_STEP, CEREMONY_EVENT_STEP, RECEPTION_EVENT_STEP].includes(prev) && !isStepInvited(prev)) {
       prev--;
     }
     return prev;
@@ -165,10 +165,10 @@ const RsvpFlow: React.FC = () => {
       // Set guest details.
       methods.setValue('guest_details', convertToGuestList(singleRsvp.guest_list));
       setSkippedSelection(true);
-      transitionToStep(3); // Proceed to Attendance Decision
+      transitionToStep(ATTENDANCE_DECISION_STEP);
     } else if (results.length > 1) {
       setSkippedSelection(false);
-      transitionToStep(2); // Proceed to RSVP Selection
+      transitionToStep(SELECTION_STEP);
     }
   };
 
@@ -239,7 +239,7 @@ const RsvpFlow: React.FC = () => {
 
     const response = await submitRsvpApi.execute(rsvpToSubmit);
     if (response.success) {
-      transitionToStep(11); // Thank You step
+      transitionToStep(THANK_YOU_STEP);
     } else {
       alert(response.error || 'Submission failed');
     }
@@ -280,13 +280,13 @@ const RsvpFlow: React.FC = () => {
   // Custom onBack for Attendance Decision.
   const onBackFromAttendance = () => {
     if (skippedSelection) {
-      transitionToStep(1);
+      transitionToStep(NAME_LOOKUP_STEP);
     } else {
-      transitionToStep(2);
+      transitionToStep(SELECTION_STEP);
     }
   };
 
-  const invitedSteps = [6, 7, 8, 9].filter((step) => isStepInvited(step));
+  const invitedSteps = [ROCE_EVENT_STEP, REHEARSAL_EVENT_STEP, CEREMONY_EVENT_STEP, RECEPTION_EVENT_STEP].filter((step) => isStepInvited(step));
   const lastInvitedStep = invitedSteps.length ? Math.max(...invitedSteps) : null;
 
   // Render steps.
