@@ -4,9 +4,12 @@ import { Box, FormControlLabel, Switch, Typography } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { FormData } from './RsvpFlowPage';
 import CustomButton from '../../components/shared/CustomButton';
+import StepLayout from "./RSVPStepLayout";
 
 interface RsvpEventPageProps {
   eventKey: 'roce' | 'rehearsal' | 'ceremony' | 'reception';
+  title: string;
+  description: string;
   nextPage: (formData: FormData) => void;
   previousPage: (formData: FormData) => void;
   isLastEvent?: boolean;
@@ -14,6 +17,8 @@ interface RsvpEventPageProps {
 
 const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
                                                        eventKey,
+                                                       title,
+                                                       description,
                                                        nextPage,
                                                        previousPage,
                                                        isLastEvent,
@@ -54,7 +59,13 @@ const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
   const numComing = eventData.guests_attending.length;
 
   return (
-      <Box sx={{ p: 3 }}>
+      <StepLayout
+          title={title}
+          description={description}
+          onBack={() => previousPage(formData)}
+          onNext={() => nextPage(formData)}
+          nextText={isLastEvent ? "Submit RSVP" : "Next"}
+      >
         {!eventData.invited ? (
             <Typography>You have no invitation.</Typography>
         ) : (
@@ -103,22 +114,7 @@ const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
               </Box>
             </>
         )}
-        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mt: 3 }}>
-          <CustomButton
-              text="Back"
-              onClick={() => previousPage(formData)}
-              variant="dark"
-              width={75}
-          />
-          <CustomButton
-              text={isLastEvent ? "Submit RSVP" : "Next"}
-              onClick={() => nextPage(formData)}
-              variant="dark"
-              width="auto"
-          />
-        </Box>
-
-      </Box>
+      </StepLayout>
   );
 };
 

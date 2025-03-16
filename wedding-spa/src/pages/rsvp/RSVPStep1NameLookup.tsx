@@ -1,12 +1,12 @@
 // pages/rsvp/RSVPStep1NameLookup.tsx
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
-import { useFormContext, SubmitHandler } from 'react-hook-form';
+import React, {useState} from 'react';
+import {Box, CircularProgress, TextField, Typography} from '@mui/material';
+import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import { Rsvp } from '../../types/rsvp';
-import { useLookupRsvp } from '../../hooks/rsvp/useLookupRsvp';
-import { LookupDTO } from '../../types/RsvpDTO';
-import { FormData } from './RsvpFlowPage';
+import {Rsvp} from '../../types/rsvp';
+import {useLookupRsvp} from '../../hooks/rsvp/useLookupRsvp';
+import {LookupDTO} from '../../types/RsvpDTO';
+import {FormData} from './RsvpFlowPage';
 
 interface NameLookupStepProps {
   onNext: (results: Rsvp[]) => void;
@@ -35,35 +35,31 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
       <StepLayout
           title="Enter Your Name"
           description="Please enter your first and last name to look up your RSVP."
+          onSubmit={handleSubmit(onSubmit)}
+          nextText={loading ? <CircularProgress size={24} /> : 'Lookup RSVP'}
+          nextDisabled={loading}
       >
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} textAlign="center">
-          <TextField
-              label="First Name"
-              fullWidth
-              margin="normal"
-              {...register('first_name', { required: 'First name is required' })}
-              error={!!errors.first_name}
-              helperText={errors.first_name?.message}
-          />
-          <TextField
-              label="Last Name"
-              fullWidth
-              margin="normal"
-              {...register('last_name', { required: 'Last name is required' })}
-              error={!!errors.last_name}
-              helperText={errors.last_name?.message}
-          />
-          {lookupError && (
-              <Typography color="error" variant="body2">
-                {lookupError}
-              </Typography>
-          )}
-          <Box mt={2} display="flex" justifyContent="center">
-            <Button type="submit" variant="contained" color="primary" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : 'Lookup RSVP'}
-            </Button>
-          </Box>
-        </Box>
+        <TextField
+            label="First Name"
+            fullWidth
+            margin="normal"
+            {...register('first_name', { required: 'First name is required' })}
+            error={!!errors.first_name}
+            helperText={errors.first_name?.message}
+        />
+        <TextField
+            label="Last Name"
+            fullWidth
+            margin="normal"
+            {...register('last_name', { required: 'Last name is required' })}
+            error={!!errors.last_name}
+            helperText={errors.last_name?.message}
+        />
+        {lookupError && (
+            <Typography color="error" variant="body2">
+              {lookupError}
+            </Typography>
+        )}
       </StepLayout>
   );
 };

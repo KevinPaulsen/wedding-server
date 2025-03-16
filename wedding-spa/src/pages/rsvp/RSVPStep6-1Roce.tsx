@@ -15,17 +15,14 @@ const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
                                                      isLastEvent,
                                                    }) => {
   return (
-      <StepLayout
+      <RsvpEventPage
+          eventKey="roce"
           title="Roce Event"
           description="Join us for a memorable Roce experience."
-      >
-        <RsvpEventPage
-            eventKey="roce"
-            nextPage={nextPage}
-            previousPage={previousPage}
-            isLastEvent={isLastEvent}
-        />
-      </StepLayout>
+          nextPage={nextPage}
+          previousPage={previousPage}
+          isLastEvent={isLastEvent}
+      />
   );
 };
 

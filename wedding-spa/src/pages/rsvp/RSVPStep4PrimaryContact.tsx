@@ -1,6 +1,15 @@
 // pages/rsvp/RSVPStep4PrimaryContact.tsx
-import React, { useEffect } from 'react';
-import { Box, Button, FormControl, FormLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import React from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  FormHelperText
+} from '@mui/material';
 import { useFormContext, SubmitHandler } from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
 import { Rsvp } from '../../types/rsvp';
@@ -13,7 +22,11 @@ interface PrimaryContactStepProps {
 }
 
 const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, onBack }) => {
-  const { register, handleSubmit, formState: { errors } } = useFormContext<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useFormContext<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = () => onNext();
 
@@ -25,19 +38,31 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
 
   // Compute default display value.
   const defaultPrimaryContactDisplayName =
-      rsvp.guest_list[rsvp.primary_contact.name]?.display_name || rsvp.primary_contact.name;
+      rsvp.guest_list[rsvp.primary_contact.name]?.display_name ||
+      rsvp.primary_contact.name;
 
   return (
       <StepLayout
           title="Primary Contact Information"
           description="Confirm or update your contact details."
+          onBack={onBack}
+          onSubmit={handleSubmit(onSubmit)}
       >
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} textAlign="center">
-          <FormControl fullWidth margin="normal">
-            <FormLabel>Primary Contact</FormLabel>
+        <Box maxWidth="400px">
+          <FormControl
+              fullWidth
+              margin="normal"
+              size="small"
+              error={!!errors.primary_contact_name}
+          >
+            <InputLabel id="primary-contact-label">Primary Contact</InputLabel>
             <Select
+                labelId="primary-contact-label"
+                label="Primary Contact"
                 defaultValue={defaultPrimaryContactDisplayName}
-                {...register('primary_contact_name', { required: 'Please select a primary contact' })}
+                {...register('primary_contact_name', {
+                  required: 'Please select a primary contact',
+                })}
             >
               {guestOptions.map((guest) => (
                   <MenuItem key={guest.id} value={guest.name}>
@@ -45,39 +70,46 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
                   </MenuItem>
               ))}
             </Select>
+            <FormHelperText sx={{ marginTop: 0, marginBottom: 0, minHeight: 0 }}>
+              {errors.primary_contact_name?.message || ''}
+            </FormHelperText>
           </FormControl>
           <TextField
               label="Email"
               fullWidth
               margin="normal"
-              {...register('primary_contact_email', { required: 'Email is required' })}
+              size="small"
+              required
+              {...register('primary_contact_email', {
+                required: 'Email is required',
+              })}
               error={!!errors.primary_contact_email}
-              helperText={errors.primary_contact_email?.message}
+              helperText={errors.primary_contact_email?.message || ''}
           />
           <TextField
               label="Phone Number"
               fullWidth
               margin="normal"
-              {...register('primary_contact_phone', { required: 'Phone number is required' })}
+              size="small"
+              required
+              {...register('primary_contact_phone', {
+                required: 'Phone number is required',
+              })}
               error={!!errors.primary_contact_phone}
-              helperText={errors.primary_contact_phone?.message}
+              helperText={errors.primary_contact_phone?.message || ''}
           />
           <TextField
               label="Address"
               fullWidth
               margin="normal"
-              {...register('primary_contact_address', { required: 'Address is required' })}
+              size="small"
+              required
+              {...register('primary_contact_address', {
+                required: 'Address is required',
+              })}
               error={!!errors.primary_contact_address}
-              helperText={errors.primary_contact_address?.message}
+              helperText={errors.primary_contact_address?.message || ''}
           />
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Button variant="outlined" onClick={onBack}>
-              Back
-            </Button>
-            <Button type="submit" variant="contained">
-              Next
-            </Button>
-          </Box>
         </Box>
       </StepLayout>
   );

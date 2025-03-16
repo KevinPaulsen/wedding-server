@@ -30,35 +30,27 @@ const AttendanceDecisionStep: React.FC<AttendanceDecisionStepProps> = ({
       <StepLayout
           title="Will Any Guest Attend?"
           description="Let us know if any guest will be attending the wedding."
+          onBack={onBack}
+          onSubmit={handleSubmit(onSubmit)}
       >
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} textAlign="center">
-          <FormControl component="fieldset" margin="normal">
-            <FormLabel component="legend">Attendance</FormLabel>
-            <RadioGroup row defaultValue='yes'>
-              <FormControlLabel
-                  value="yes"
-                  control={<Radio {...register('anyGuestAttending', { required: true })} />}
-                  label="Yes"
-              />
-              <FormControlLabel
-                  value="no"
-                  control={<Radio {...register('anyGuestAttending', { required: true })} />}
-                  label="No"
-              />
-            </RadioGroup>
-            {errors.anyGuestAttending && (
-                <Typography color="error">This field is required</Typography>
-            )}
-          </FormControl>
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Button variant="outlined" onClick={onBack}>
-              Back
-            </Button>
-            <Button type="submit" variant="contained">
-              Next
-            </Button>
-          </Box>
-        </Box>
+        <FormControl component="fieldset" margin="normal">
+          <FormLabel component="legend">Attendance</FormLabel>
+          <RadioGroup row defaultValue='yes'>
+            <FormControlLabel
+                value="yes"
+                control={<Radio {...register('anyGuestAttending', { required: true })} />}
+                label="Yes"
+            />
+            <FormControlLabel
+                value="no"
+                control={<Radio {...register('anyGuestAttending', { required: true })} />}
+                label="No"
+            />
+          </RadioGroup>
+          {errors.anyGuestAttending && (
+              <Typography color="error">This field is required</Typography>
+          )}
+        </FormControl>
       </StepLayout>
   );
 };

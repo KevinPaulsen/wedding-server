@@ -15,17 +15,14 @@ const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({
                                                                isLastEvent,
                                                              }) => {
   return (
-      <StepLayout
+      <RsvpEventPage
+          eventKey="rehearsal"
           title="Rehearsal Dinner"
           description="Enjoy an intimate rehearsal dinner with us."
-      >
-        <RsvpEventPage
-            eventKey="rehearsal"
-            nextPage={nextPage}
-            previousPage={previousPage}
-            isLastEvent={isLastEvent}
-        />
-      </StepLayout>
+          nextPage={nextPage}
+          previousPage={previousPage}
+          isLastEvent={isLastEvent}
+      />
   );
 };
 

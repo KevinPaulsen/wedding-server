@@ -1,10 +1,10 @@
 // pages/rsvp/RSVPStep2RsvpSelection.tsx
-import React, { useState } from 'react';
-import { Box, Button, Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import { useFormContext } from 'react-hook-form';
+import React, {useState} from 'react';
+import {Box, Card, CardActionArea, CardContent, Typography} from '@mui/material';
+import {useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import { Rsvp } from '../../types/rsvp';
-import { FormData } from './RsvpFlowPage';
+import {Rsvp} from '../../types/rsvp';
+import {FormData} from './RsvpFlowPage';
 
 interface RsvpSelectionStepProps {
   lookupResults: Rsvp[];
@@ -54,6 +54,9 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
       <StepLayout
           title="Select Your RSVP Record"
           description="Multiple records were found. Please select the correct one."
+          onBack={onBack}
+          onNext={handleNext}
+          nextDisabled={!selectedId}
       >
         <Box textAlign="center">
           <Box display="flex" flexDirection="column" alignItems="center">
@@ -89,14 +92,6 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
                   </Card>
               );
             })}
-          </Box>
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Button variant="outlined" onClick={onBack}>
-              Back
-            </Button>
-            <Button variant="contained" onClick={handleNext} disabled={!selectedId}>
-              Next
-            </Button>
           </Box>
         </Box>
       </StepLayout>

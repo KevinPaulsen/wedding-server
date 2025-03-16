@@ -450,7 +450,12 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
   const hasAnyOther = guests.some((g) => g.other && g.other.trim() !== '');
 
   return (
-      <StepLayout title="Guest Details" description="Review and update your guest details as needed.">
+      <StepLayout
+          title="Guest Details"
+          description="Review and update your guest details as needed."
+          onBack={onBack}
+          onNext={onNext}
+      >
         <Box textAlign="center">
           <Box sx={{ maxWidth: 900, mx: 'auto', color: theme.palette.primary.main, p: theme.spacing(1) }}>
             {guests.length === 0 ? (
@@ -476,14 +481,6 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
               onClose={handleModalClose}
               theme={theme}
           />
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Button variant="outlined" onClick={onBack}>
-              Back
-            </Button>
-            <Button variant="contained" onClick={onNext}>
-              Next
-            </Button>
-          </Box>
         </Box>
       </StepLayout>
   );
