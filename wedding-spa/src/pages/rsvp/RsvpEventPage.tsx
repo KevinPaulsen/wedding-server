@@ -9,15 +9,14 @@ interface RsvpEventPageProps {
   eventKey: 'roce' | 'rehearsal' | 'ceremony' | 'reception';
   nextPage: (formData: FormData) => void;
   previousPage: (formData: FormData) => void;
-  requireAnswers: boolean;
-  returnPage?: string | null;
-  withSubmission?: boolean;
+  isLastEvent?: boolean;
 }
 
 const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
                                                        eventKey,
                                                        nextPage,
                                                        previousPage,
+                                                       isLastEvent,
                                                      }) => {
   // Use watch() to subscribe to form changes
   const { watch, setValue } = useFormContext<FormData>();
@@ -112,12 +111,13 @@ const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
               width={75}
           />
           <CustomButton
-              text="Next"
+              text={isLastEvent ? "Submit RSVP" : "Next"}
               onClick={() => nextPage(formData)}
               variant="dark"
               width="auto"
           />
         </Box>
+
       </Box>
   );
 };

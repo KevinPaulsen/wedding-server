@@ -1,23 +1,33 @@
 // pages/rsvp/RsvpFlowPage.tsx
-import React, { useState } from 'react';
-import { Box, Button, CircularProgress, Fade, Typography } from '@mui/material';
-import { useForm, FormProvider } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Box, Button, CircularProgress, Fade, Typography} from '@mui/material';
+import {FormProvider, useForm} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
 
 import NameLookupStep from './RSVPStep1NameLookup';
 import RsvpSelectionStep from './RSVPStep2RsvpSelection';
 import AttendanceDecisionStep from './RSVPStep3AttendanceDecision';
 import PrimaryContactStep from './RSVPStep4PrimaryContact';
 import RsvpGuestDetailsStep from './RSVPStep5GuestDetails';
-import ConfirmationStep from './RSVPStep7Confirmation';
-import ThankYouStep from './RSVPStep8ThankYou';
+import ThankYouStep from './RSVPStep7ThankYou';
 
-import { Rsvp, RsvpGuestDetailWithId } from '../../types/rsvp';
-import { useSubmitRsvp } from '../../hooks/rsvp/useSubmitRsvp';
+import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
+import {useSubmitRsvp} from '../../hooks/rsvp/useSubmitRsvp';
 import RsvpRocePage from "./RSVPStep6-1Roce";
 import RsvpRehearsalPage from "./RSVPStep6-2Rehearsal";
 import RsvpCeremonyPage from "./RSVPStep6-3Ceremony";
 import RsvpReceptionPage from "./RSVPStep6-4Reception";
+
+const NAME_LOOKUP_STEP = 1;
+const SELECTION_STEP = NAME_LOOKUP_STEP + 1;
+const ATTENDANCE_DECISION_STEP = SELECTION_STEP + 1;
+const PRIMARY_CONTACT_STEP = ATTENDANCE_DECISION_STEP + 1;
+const GUEST_DETAILS_STEP = PRIMARY_CONTACT_STEP + 1;
+const ROCE_EVENT_STEP = GUEST_DETAILS_STEP + 1;
+const REHEARSAL_EVENT_STEP = ROCE_EVENT_STEP + 1;
+const CEREMONY_EVENT_STEP = REHEARSAL_EVENT_STEP + 1;
+const RECEPTION_EVENT_STEP = CEREMONY_EVENT_STEP + 1;
+const THANK_YOU_STEP = RECEPTION_EVENT_STEP + 1;
 
 export type EventData = {
   invited: boolean;
@@ -260,15 +270,10 @@ const RsvpFlow: React.FC = () => {
     const response = await submitRsvpApi.execute(rsvpToSubmit);
     setSubmitting(false);
     if (response.success) {
-      nextStep(); // Proceed to Thank You (step 11)
+      nextStep(); // Proceed to Thank You (step 10)
     } else {
       alert(response.error || 'Submission failed');
     }
-  };
-
-  const handleConfirmationNext = () => {
-    const formData = methods.getValues();
-    handleSubmitRsvp(formData);
   };
 
   // Custom onBack for Attendance Decision.
@@ -280,12 +285,15 @@ const RsvpFlow: React.FC = () => {
     }
   };
 
+  const invitedSteps = [6, 7, 8, 9].filter((step) => isStepInvited(step));
+  const lastInvitedStep = invitedSteps.length ? Math.max(...invitedSteps) : null;
+
   // Render steps.
   const renderStep = () => {
     switch (currentStep) {
-      case 1:
+      case NAME_LOOKUP_STEP:
         return <NameLookupStep onNext={handleLookupNext} />;
-      case 2:
+      case SELECTION_STEP:
         return (
             lookupResults && (
                 <RsvpSelectionStep
@@ -295,7 +303,7 @@ const RsvpFlow: React.FC = () => {
                 />
             )
         );
-      case 3:
+      case ATTENDANCE_DECISION_STEP:
         return (
             <AttendanceDecisionStep
                 onNext={nextStep}
@@ -303,7 +311,7 @@ const RsvpFlow: React.FC = () => {
                 onBack={onBackFromAttendance}
             />
         );
-      case 4:
+      case PRIMARY_CONTACT_STEP:
         return (
             selectedRsvp && (
                 <PrimaryContactStep
@@ -313,7 +321,7 @@ const RsvpFlow: React.FC = () => {
                 />
             )
         );
-      case 5:
+      case GUEST_DETAILS_STEP:
         return (
             selectedRsvp && (
                 <RsvpGuestDetailsStep
@@ -323,47 +331,47 @@ const RsvpFlow: React.FC = () => {
                 />
             )
         );
-      case 6:
+      case ROCE_EVENT_STEP:
         return selectedRsvp ? (
             <RsvpRocePage
-                nextPage={(formData: FormData) => nextStep()}
+                nextPage={(formData: FormData) =>
+                    currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
+                }
                 previousPage={(formData: FormData) => previousStep()}
-                requireAnswers={true}
+                isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
-      case 7:
+      case REHEARSAL_EVENT_STEP:
         return selectedRsvp ? (
             <RsvpRehearsalPage
-                nextPage={(formData: FormData) => nextStep()}
+                nextPage={(formData: FormData) =>
+                    currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
+                }
                 previousPage={(formData: FormData) => previousStep()}
-                requireAnswers={true}
+                isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
-      case 8:
+      case CEREMONY_EVENT_STEP:
         return selectedRsvp ? (
             <RsvpCeremonyPage
-                nextPage={(formData: FormData) => nextStep()}
+                nextPage={(formData: FormData) =>
+                    currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
+                }
                 previousPage={(formData: FormData) => previousStep()}
-                requireAnswers={true}
+                isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
-      case 9:
+      case RECEPTION_EVENT_STEP:
         return selectedRsvp ? (
             <RsvpReceptionPage
-                nextPage={(formData: FormData) => nextStep()}
+                nextPage={(formData: FormData) =>
+                    currentStep === lastInvitedStep ? handleSubmitRsvp(formData) : nextStep()
+                }
                 previousPage={(formData: FormData) => previousStep()}
-                requireAnswers={true}
+                isLastEvent={currentStep === lastInvitedStep}
             />
         ) : null;
-      case 10:
-        return (
-            <ConfirmationStep
-                formData={methods.getValues()}
-                onNext={handleConfirmationNext}
-                onBack={previousStep}
-            />
-        );
-      case 11:
+      case THANK_YOU_STEP:
         return <ThankYouStep />;
       default:
         return null;

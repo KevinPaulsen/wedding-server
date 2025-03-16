@@ -6,15 +6,13 @@ import StepLayout from "./RSVPStepLayout";
 interface RsvpCeremonyPageProps {
   nextPage: (formData: any) => void;
   previousPage: (formData: any) => void;
-  requireAnswers: boolean;
-  returnPage?: string | null;
+  isLastEvent?: boolean;
 }
 
 const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({
                                                              nextPage,
                                                              previousPage,
-                                                             requireAnswers,
-                                                             returnPage,
+                                                             isLastEvent,
                                                            }) => {
   return (
       <StepLayout
@@ -25,8 +23,7 @@ const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({
             eventKey="ceremony"
             nextPage={nextPage}
             previousPage={previousPage}
-            requireAnswers={requireAnswers}
-            returnPage={returnPage}
+            isLastEvent={isLastEvent}
         />
       </StepLayout>
   );
