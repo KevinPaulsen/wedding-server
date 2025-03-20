@@ -17,6 +17,7 @@ export interface CreateRsvpDTO {
 export interface LookupDTO {
   first_name: string;
   last_name: string;
+  rsvp_code: string;
 }
 
 // src/types/AddGuestDTO.ts

@@ -21,7 +21,11 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setLoading(true);
     setLookupError(null);
-    const dto: LookupDTO = { first_name: data.first_name, last_name: data.last_name };
+    const dto: LookupDTO = {
+      first_name: data.first_name,
+      last_name: data.last_name,
+      rsvp_code: data.rsvp_code
+    };
     const response = await lookupRsvpApi.execute(dto);
     if (response.success && response.data) {
       onNext(response.data);
@@ -63,6 +67,18 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
               })}
               error={!!errors.last_name}
               helperText={errors.last_name?.message}
+          />
+          <TextField
+              label="RSVP Code"
+              size='small'
+              fullWidth
+              margin="normal"
+              {...register('rsvp_code', {
+                required: 'RSVP Code is required',
+                onBlur: () => trigger('rsvp_code'),
+              })}
+              error={!!errors.rsvp_code}
+              helperText={errors.rsvp_code?.message}
           />
           {lookupError && (
               <Typography color="error" variant="body2">

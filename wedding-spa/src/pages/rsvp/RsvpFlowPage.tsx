@@ -38,6 +38,7 @@ export type EventData = {
 export type FormData = {
   first_name: string;
   last_name: string;
+  rsvp_code: string;
   selectedRsvpId?: string;
   anyGuestAttending: 'yes' | 'no' | '';
   primary_contact_name: string;
@@ -57,6 +58,7 @@ const RsvpFlow: React.FC = () => {
     defaultValues: {
       first_name: '',
       last_name: '',
+      rsvp_code: '',
       anyGuestAttending: '',
       primary_contact_name: '',
       primary_contact_email: '',
