@@ -140,7 +140,7 @@ public class RsvpControllerTest {
     Rsvp rsvp2 = new Rsvp();
     rsvp2.setRsvpId("rsvp2");
 
-    when(rsvpService.getGuest("John", "Doe")).thenReturn(guest);
+    when(rsvpService.getGuest("John", "Doe", "CHRYSOSTOM")).thenReturn(guest);
     when(rsvpService.findRsvpById("rsvp1")).thenReturn(rsvp1);
     when(rsvpService.findRsvpById("rsvp2")).thenReturn(rsvp2);
 

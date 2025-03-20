@@ -1,5 +1,6 @@
 package com.paulsen.wedding.controllers;
 
+import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
@@ -79,7 +80,7 @@ public class RsvpController {
 
   @PostMapping("/lookup")
   public ResponseEntity<List<Rsvp>> lookup(@RequestBody LookupDTO guestDto) {
-    WeddingGuest guest = rsvpService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name());
+    WeddingGuest guest = rsvpService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name(), guestDto.getRsvp_code());
     return ResponseEntity.ok(guest.getRsvpIds().stream().map(rsvpService::findRsvpById).toList());
   }
 

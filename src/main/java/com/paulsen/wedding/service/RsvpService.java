@@ -1,5 +1,6 @@
 package com.paulsen.wedding.service;
 
+import static com.paulsen.wedding.util.StringFormatUtil.formatRsvpCode;
 import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
@@ -27,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RsvpService {
+
+  private static final String RSVP_CODE = formatRsvpCode("CHRYSOSTOM");
 
   private final RsvpRepository rsvpRepository;
   private final WeddingGuestRepository weddingGuestRepository;
@@ -224,7 +227,11 @@ public class RsvpService {
     return weddingGuests;
   }
 
-  public WeddingGuest getGuest(String firstName, String lastName) {
+  public WeddingGuest getGuest(String firstName, String lastName, String rsvpCode) {
+    if (!formatRsvpCode(rsvpCode).equals(RSVP_CODE)) {
+      throw new IllegalArgumentException("Invalid RSVP code provided.");
+    }
+
     String fullName = StringFormatUtil.formatToIndexName(firstName, lastName);
     return weddingGuestRepository.findByFullName(fullName)
         .orElseThrow(() -> new IllegalArgumentException(

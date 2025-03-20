@@ -4,6 +4,7 @@ public class LookupDTO {
 
   private String first_name;
   private String last_name;
+  private String rsvp_code;
 
   public String getFirst_name() {
     return first_name;
@@ -19,5 +20,13 @@ public class LookupDTO {
 
   public void setLast_name(String last_name) {
     this.last_name = last_name;
+  }
+
+  public String getRsvp_code() {
+    return rsvp_code;
+  }
+
+  public void setRsvp_code(String rsvp_code) {
+    this.rsvp_code = rsvp_code;
   }
 }

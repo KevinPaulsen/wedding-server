@@ -53,4 +53,12 @@ public class StringFormatUtil {
 
     return builder.toString();
   }
+
+  public static String formatRsvpCode(String rsvpCode) {
+    if (rsvpCode == null || rsvpCode.trim().isBlank()) {
+      throw new IllegalArgumentException("RSVP Code must not be null or empty.");
+    }
+
+    return rsvpCode.trim().toUpperCase();
+  }
 }

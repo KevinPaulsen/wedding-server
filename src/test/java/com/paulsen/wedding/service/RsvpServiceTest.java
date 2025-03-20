@@ -359,13 +359,13 @@ public class RsvpServiceTest {
     guest.setRsvpIds(List.of());
     when(weddingGuestRepository.findByFullName(PRIMARY_GUEST_KEY)).thenReturn(Optional.of(guest));
 
-    WeddingGuest result = rsvpService.getGuest("John", "Doe");
+    WeddingGuest result = rsvpService.getGuest("John", "Doe", "CHRYSOSTOM");
     assertNotNull(result);
     assertEquals(PRIMARY_GUEST_KEY, result.getFullName());
-    result = rsvpService.getGuest("jOHN", "dOE");
+    result = rsvpService.getGuest("jOHN", "dOE", "CHRYSOSTOM");
     assertNotNull(result);
     assertEquals(PRIMARY_GUEST_KEY, result.getFullName());
-    result = rsvpService.getGuest("        John           ", "        Doe       ");
+    result = rsvpService.getGuest("        John           ", "        Doe       ", "CHRYSOSTOM");
     assertNotNull(result);
     assertEquals(PRIMARY_GUEST_KEY, result.getFullName());
   }
@@ -373,11 +373,11 @@ public class RsvpServiceTest {
   @Test
   public void testGetGuestNotFoundOrInvalid() {
     when(weddingGuestRepository.findByFullName(PRIMARY_GUEST_KEY)).thenReturn(Optional.empty());
-    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", "Doe"));
-    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest(null, "Doe"));
-    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", null));
-    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest(" ", "Doe"));
-    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", "  "));
+    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", "Doe", "CHRYSOSTOM"));
+    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest(null, "Doe", "CHRYSOSTOM"));
+    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", null, "CHRYSOSTOM"));
+    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest(" ", "Doe", "CHRYSOSTOM"));
+    assertThrows(IllegalArgumentException.class, () -> rsvpService.getGuest("John", "  ", "CHRYSOSTOM"));
   }
 
   /* --- Helper Method --- */
