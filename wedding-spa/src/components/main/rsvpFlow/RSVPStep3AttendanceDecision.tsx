@@ -1,10 +1,10 @@
-// pages/rsvp/RSVPStep3AttendanceDecision.tsx
-import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
+// components/main/rsvpFlow/RSVPStep3AttendanceDecision.tsx
+import React, {useEffect, useState} from 'react';
+import {Box, Typography} from '@mui/material';
+import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import { FormData } from './RsvpFlowPage';
-import CustomButton from "../../components/shared/CustomButton";
+import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
+import CustomButton from "../../shared/CustomButton";
 
 interface AttendanceDecisionStepProps {
   onNext: () => void;

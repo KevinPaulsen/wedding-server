@@ -1,6 +1,6 @@
-// pages/rsvp/RSVPStep6-1Roce.tsx
+// components/main/rsvpFlow/RSVPStep6-1Roce.tsx
 import React from 'react';
-import RsvpEventPage from './RsvpEventPage';
+import RsvpEvents from './RsvpEvents';
 
 interface RsvpRocePageProps {
   nextPage: (formData: any) => void;
@@ -14,7 +14,7 @@ const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
                                                      isLastEvent,
                                                    }) => {
   return (
-      <RsvpEventPage
+      <RsvpEvents
           eventKey="roce"
           title="Roce Event"
           description="Join us for a memorable Roce experience."

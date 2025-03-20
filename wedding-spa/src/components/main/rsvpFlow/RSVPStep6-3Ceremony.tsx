@@ -1,6 +1,6 @@
-// pages/rsvp/RSVPStep6-3Ceremony.tsx
+// components/main/rsvpFlow/RSVPStep6-3Ceremony.tsx
 import React from 'react';
-import RsvpEventPage from './RsvpEventPage';
+import RsvpEvents from './RsvpEvents';
 
 interface RsvpCeremonyPageProps {
   nextPage: (formData: any) => void;
@@ -14,7 +14,7 @@ const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({
                                                              isLastEvent,
                                                            }) => {
   return (
-      <RsvpEventPage
+      <RsvpEvents
           eventKey="ceremony"
           title="Wedding Ceremony"
           description="Celebrate our love during the wedding ceremony."

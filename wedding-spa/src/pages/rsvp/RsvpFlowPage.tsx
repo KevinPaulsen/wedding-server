@@ -4,19 +4,19 @@ import {Box, Button, CircularProgress, Fade, Typography} from '@mui/material';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 
-import NameLookupStep from './RSVPStep1NameLookup';
-import RsvpSelectionStep from './RSVPStep2RsvpSelection';
-import AttendanceDecisionStep from './RSVPStep3AttendanceDecision';
-import PrimaryContactStep from './RSVPStep4PrimaryContact';
-import RsvpGuestDetailsStep from './RSVPStep5GuestDetails';
-import ThankYouStep from './RSVPStep7ThankYou';
+import NameLookupStep from '../../components/main/rsvpFlow/RSVPStep1NameLookup';
+import RsvpSelectionStep from '../../components/main/rsvpFlow/RSVPStep2RsvpSelection';
+import AttendanceDecisionStep from '../../components/main/rsvpFlow/RSVPStep3AttendanceDecision';
+import PrimaryContactStep from '../../components/main/rsvpFlow/RSVPStep4PrimaryContact';
+import RsvpGuestDetailsStep from '../../components/main/rsvpFlow/RSVPStep5GuestDetails';
+import ThankYouStep from '../../components/main/rsvpFlow/RSVPStep7ThankYou';
 
 import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
 import {useSubmitRsvp} from '../../hooks/rsvp/useSubmitRsvp';
-import RsvpRocePage from "./RSVPStep6-1Roce";
-import RsvpRehearsalPage from "./RSVPStep6-2Rehearsal";
-import RsvpCeremonyPage from "./RSVPStep6-3Ceremony";
-import RsvpReceptionPage from "./RSVPStep6-4Reception";
+import RsvpRocePage from "../../components/main/rsvpFlow/RSVPStep6-1Roce";
+import RsvpRehearsalPage from "../../components/main/rsvpFlow/RSVPStep6-2Rehearsal";
+import RsvpCeremonyPage from "../../components/main/rsvpFlow/RSVPStep6-3Ceremony";
+import RsvpReceptionPage from "../../components/main/rsvpFlow/RSVPStep6-4Reception";
 import CustomButton from "../../components/shared/CustomButton";
 
 const NAME_LOOKUP_STEP = 1;

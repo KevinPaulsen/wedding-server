@@ -1,23 +1,23 @@
-// pages/rsvp/RSVPStep6-2Rehearsal.tsx
+// components/main/rsvpFlow/RSVPStep6-4Reception.tsx
 import React from 'react';
-import RsvpEventPage from './RsvpEventPage';
+import RsvpEvents from './RsvpEvents';
 
-interface RsvpRehearsalPageProps {
+interface RsvpReceptionPageProps {
   nextPage: (formData: any) => void;
   previousPage: (formData: any) => void;
   isLastEvent?: boolean;
 }
 
-const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({
+const RsvpReceptionPage: React.FC<RsvpReceptionPageProps> = ({
                                                                nextPage,
                                                                previousPage,
                                                                isLastEvent,
                                                              }) => {
   return (
-      <RsvpEventPage
-          eventKey="rehearsal"
-          title="Rehearsal Dinner"
-          description="Enjoy an intimate rehearsal dinner with us."
+      <RsvpEvents
+          eventKey="reception"
+          title="Wedding Reception"
+          description="Dance the night away at our wedding reception."
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}
@@ -25,4 +25,4 @@ const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({
   );
 };
 
-export default RsvpRehearsalPage;
+export default RsvpReceptionPage;

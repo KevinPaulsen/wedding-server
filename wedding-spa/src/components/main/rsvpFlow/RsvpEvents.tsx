@@ -1,9 +1,9 @@
-// pages/rsvp/RsvpEventPage.tsx
+// components/main/rsvpFlow/RsvpEvents.tsx
 import React from 'react';
 import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
 import {useFormContext} from 'react-hook-form';
-import {FormData} from './RsvpFlowPage';
-import CustomButton from '../../components/shared/CustomButton';
+import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
+import CustomButton from '../../shared/CustomButton';
 import StepLayout from "./RSVPStepLayout";
 
 interface RsvpEventPageProps {
@@ -15,7 +15,7 @@ interface RsvpEventPageProps {
   isLastEvent?: boolean;
 }
 
-const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
+const RsvpEvents: React.FC<RsvpEventPageProps> = ({
                                                        eventKey,
                                                        title,
                                                        description,
@@ -118,4 +118,4 @@ const RsvpEventPage: React.FC<RsvpEventPageProps> = ({
   );
 };
 
-export default RsvpEventPage;
+export default RsvpEvents;

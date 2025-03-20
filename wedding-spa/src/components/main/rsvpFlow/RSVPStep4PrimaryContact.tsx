@@ -1,4 +1,4 @@
-// pages/rsvp/RSVPStep4PrimaryContact.tsx
+// components/main/rsvpFlow/RSVPStep4PrimaryContact.tsx
 import React from 'react';
 import {
   Box,
@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import {Rsvp} from '../../types/rsvp';
-import {FormData} from './RsvpFlowPage';
+import {Rsvp} from '../../../types/rsvp';
+import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
 
 interface PrimaryContactStepProps {
   rsvp: Rsvp;

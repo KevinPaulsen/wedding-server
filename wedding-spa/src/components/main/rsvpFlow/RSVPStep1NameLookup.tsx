@@ -1,12 +1,12 @@
-// pages/rsvp/RSVPStep1NameLookup.tsx
+// components/main/rsvpFlow/RSVPStep1NameLookup.tsx
 import React, {useState} from 'react';
 import {Box, CircularProgress, TextField, Typography} from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import {Rsvp} from '../../types/rsvp';
-import {useLookupRsvp} from '../../hooks/rsvp/useLookupRsvp';
-import {LookupDTO} from '../../types/RsvpDTO';
-import {FormData} from './RsvpFlowPage';
+import {Rsvp} from '../../../types/rsvp';
+import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
+import {LookupDTO} from '../../../types/RsvpDTO';
+import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
 
 interface NameLookupStepProps {
   onNext: (results: Rsvp[]) => void;

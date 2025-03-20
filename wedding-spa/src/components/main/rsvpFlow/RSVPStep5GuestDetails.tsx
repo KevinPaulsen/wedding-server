@@ -1,4 +1,4 @@
-// pages/rsvp/RSVPStep5GuestDetails.tsx
+// components/main/rsvpFlow/RSVPStep5GuestDetails.tsx
 import React, {useEffect, useState} from 'react';
 import {
   Autocomplete,
@@ -23,12 +23,12 @@ import {
 } from '@mui/material';
 import StepLayout from './RSVPStepLayout';
 import {useFormContext} from 'react-hook-form';
-import {Rsvp, RsvpGuestDetailWithId} from '../../types/rsvp';
+import {Rsvp, RsvpGuestDetailWithId} from '../../../types/rsvp';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import {EventData, FormData} from './RsvpFlowPage';
-import CustomButton from '../../components/shared/CustomButton';
+import {EventData, FormData} from '../../../pages/rsvp/RsvpFlowPage';
+import CustomButton from '../../shared/CustomButton';
 
 interface RsvpGuestDetailsStepProps {
   rsvp: Rsvp;

@@ -1,10 +1,10 @@
-// pages/rsvp/RSVPStep2RsvpSelection.tsx
+// components/main/rsvpFlow/RSVPStep2RsvpSelection.tsx
 import React, {useState} from 'react';
 import {Box, Card, CardActionArea, CardContent, Typography} from '@mui/material';
 import {useFormContext} from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import {Rsvp} from '../../types/rsvp';
-import {FormData} from './RsvpFlowPage';
+import {Rsvp} from '../../../types/rsvp';
+import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
 
 interface RsvpSelectionStepProps {
   lookupResults: Rsvp[];

@@ -1,9 +1,9 @@
-// pages/rsvp/RSVPStep7ThankYou.tsx
+// components/main/rsvpFlow/RSVPStep7ThankYou.tsx
 import React from 'react';
-import {Box, Button, Typography} from '@mui/material';
-import {Link, useNavigate} from 'react-router-dom';
+import {Box, Typography} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 import StepLayout from './RSVPStepLayout';
-import CustomButton from "../../components/shared/CustomButton";
+import CustomButton from "../../shared/CustomButton";
 
 const ThankYouStep: React.FC = () => {
   const navigate = useNavigate();
