@@ -1,12 +1,12 @@
 // components/main/rsvpFlow/RSVPStep1NameLookup.tsx
-import React, {useState} from 'react';
-import {Box, CircularProgress, TextField, Typography} from '@mui/material';
-import {SubmitHandler, useFormContext} from 'react-hook-form';
+import React, { useState } from 'react';
+import { Box, CircularProgress, TextField, Typography } from '@mui/material';
+import { SubmitHandler, useFormContext } from 'react-hook-form';
 import StepLayout from './RSVPStepLayout';
-import {Rsvp} from '../../../types/rsvp';
-import {useLookupRsvp} from '../../../hooks/rsvp/useLookupRsvp';
-import {LookupDTO} from '../../../types/RsvpDTO';
-import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
+import { Rsvp } from '../../../types/rsvp';
+import { useLookupRsvp } from '../../../hooks/rsvp/useLookupRsvp';
+import { LookupDTO } from '../../../types/RsvpDTO';
+import { FormData } from '../../../pages/rsvp/RsvpFlowPage';
 
 interface NameLookupStepProps {
   onNext: (results: Rsvp[]) => void;
@@ -75,10 +75,14 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
               margin="normal"
               {...register('rsvp_code', {
                 required: 'RSVP Code is required',
+                onChange: (e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                },
                 onBlur: () => trigger('rsvp_code'),
               })}
               error={!!errors.rsvp_code}
               helperText={errors.rsvp_code?.message}
+              inputProps={{ style: { textTransform: 'uppercase' } }}
           />
           {lookupError && (
               <Typography color="error" variant="body2">
