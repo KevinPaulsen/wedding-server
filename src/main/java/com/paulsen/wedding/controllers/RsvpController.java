@@ -1,8 +1,5 @@
 package com.paulsen.wedding.controllers;
 
-import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
-import static com.paulsen.wedding.util.StringFormatUtil.strip;
-
 import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
 import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
@@ -21,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 @RequestMapping("/rsvp")
 @RestController

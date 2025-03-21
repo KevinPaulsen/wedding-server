@@ -1,5 +1,9 @@
 package com.paulsen.wedding.util;
 
+import com.stripe.model.tax.Registration;
+import java.text.Normalizer;
+import java.util.Locale;
+
 public class StringFormatUtil {
 
   /**
@@ -10,21 +14,34 @@ public class StringFormatUtil {
       throw new IllegalArgumentException("Name must not be null or empty.");
     }
 
-    fullName = fullName.trim();
-    fullName = fullName.toLowerCase();
+    fullName = fullName.toLowerCase(Locale.ROOT);
+
+    // Normalize to remove accents
+    fullName = Normalizer.normalize(fullName, Normalizer.Form.NFD);
+    fullName = fullName.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+    // Collapse multiple spaces
     fullName = fullName.replaceAll("\\s+", " ");
-    fullName = fullName.replaceAll("[^a-z ]", "*");
+
+    // Remove apostrophes and similar characters
+    fullName = fullName.replaceAll("['’`]", "");
+
+    // Replace hyphens with spaces
+    fullName = fullName.replace("-", " ");
+
+    fullName = fullName.strip();
 
     return fullName;
   }
 
   public static String formatToIndexName(String firstName, String lastName) {
-    if (firstName == null || firstName.trim().isBlank() || lastName == null || lastName.trim()
-        .isBlank()) {
-      throw new IllegalArgumentException("First and last name must not be null or empty.");
+    if (firstName == null || firstName.trim().isBlank()) {
+      throw new IllegalArgumentException("First name must not be null or empty.");
+    } else if(lastName == null || lastName.trim().isBlank()) {
+      throw new IllegalArgumentException("Last name must not be null or empty.");
     }
 
-    return formatToIndexName(firstName + " " + lastName);
+    return formatToIndexName(String.format("%s %s", firstName, lastName));
   }
 
   public static String capitalize(String word) {

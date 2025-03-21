@@ -234,8 +234,7 @@ public class RsvpService {
 
     String fullName = StringFormatUtil.formatToIndexName(firstName, lastName);
     return weddingGuestRepository.findByFullName(fullName)
-        .orElseThrow(() -> new IllegalArgumentException(
-            "RSVP with name " + fullName + " not found."));
+        .orElseThrow(() -> new IllegalArgumentException( String.format("RSVP with name %s %s not found", firstName, lastName)));
   }
 
   private List<String> getAllNames(Rsvp rsvp) {
