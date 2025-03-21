@@ -17,7 +17,7 @@ const RsvpReceptionPage: React.FC<RsvpReceptionPageProps> = ({
       <RsvpEvents
           eventKey="reception"
           title="Wedding Reception"
-          description="Dance the night away at our wedding reception."
+          description="Celebrate with us at the reception at Pickering Barn (1730 10th Ave NW, Issaquah, WA 98027) at 5:30 p.m. on September 13th, 2025. Please select all guests who will be attending."
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}

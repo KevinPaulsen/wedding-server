@@ -53,7 +53,7 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
   return (
       <StepLayout
           title="Select Your RSVP Record"
-          description="Multiple records were found. Please select the correct one."
+          description="Multiple RSVPs were found under this name. Please select the correct one."
           onBack={onBack}
           onNext={handleNext}
           nextDisabled={!selectedId}

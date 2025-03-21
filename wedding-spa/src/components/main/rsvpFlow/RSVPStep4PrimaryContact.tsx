@@ -43,7 +43,7 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
   return (
       <StepLayout
           title="Primary Contact Information"
-          description="Confirm or update your contact details."
+          description="Confirm or update your primary contact information, including your best mailing address. We will use this if anything changes."
           onBack={onBack}
           onSubmit={handleSubmit(onSubmit)}
       >

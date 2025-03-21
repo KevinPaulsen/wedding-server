@@ -451,7 +451,7 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
   return (
       <StepLayout
           title="Guest Details"
-          description="Review and update your guest details as needed."
+          description="Review and update guest details as needed. By clicking “Edit,” you can change a guest’s preferred name or add dietary restrictions. If a guest cannot attend any part of the wedding, mark the “X” to indicate their absence."
           onBack={onBack}
           onNext={onNext}
       >

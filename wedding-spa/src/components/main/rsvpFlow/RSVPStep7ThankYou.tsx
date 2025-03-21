@@ -9,7 +9,7 @@ const ThankYouStep: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <StepLayout title="Thank You!" description="We appreciate your response.">
+    <StepLayout title="Thank You!" description="Thank you for submitting your RSVP! You may redo this form at any time to make changes. If you have any questions or concerns, please contact Kevin or Olivia.">
       <Box textAlign="center">
         <Typography variant="body1" sx={{ mb: 2 }}>
           Your RSVP has been submitted.
