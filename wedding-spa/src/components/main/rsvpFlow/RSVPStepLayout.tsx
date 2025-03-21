@@ -5,7 +5,7 @@ import CustomButton from "../../shared/CustomButton";
 
 export interface StepLayoutProps {
   title: string;
-  description?: string;
+  description?: string | JSX.Element;
   children: React.ReactNode;
   onBack?: () => void;
   onNext?: () => void;
@@ -37,7 +37,7 @@ const StepLayout: React.FC<StepLayoutProps> = ({
         </Typography>
 
         {description && (
-            <Typography variant="body1" sx={{textAlign: 'center', mb: 2}}>
+            <Typography variant="body1" sx={{textAlign: 'center', mb: 2, maxWidth: "500px"}}>
               {description}
             </Typography>
         )}
