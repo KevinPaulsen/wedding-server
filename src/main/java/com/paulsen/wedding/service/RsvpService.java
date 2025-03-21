@@ -4,6 +4,10 @@ import static com.paulsen.wedding.util.StringFormatUtil.formatRsvpCode;
 import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+import java.util.regex.Pattern;
+import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
 import com.paulsen.wedding.model.rsvp.Event;
 import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.rsvp.RsvpGuestDetails;
@@ -13,6 +17,10 @@ import com.paulsen.wedding.repositories.RsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
 import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class RsvpService {
@@ -109,8 +118,7 @@ public class RsvpService {
         : rsvpRepository.findByRsvpId(
                 input.getRsvpId())
             .orElseThrow(() -> new IllegalArgumentException(
-                "RSVP" +
-                    " object not found."));
+                "RSVP object not found."));
 
     Set<String> beforeNames = stored.getGuestList() == null ? new HashSet<>()
         : new HashSet<>(stored.getGuestList().keySet());
@@ -307,7 +315,7 @@ public class RsvpService {
   }
 
   private Event mergeEvent(Event stored, Event input, Set<String> allowedGuests) {
-    // Ensure at lest 1 of the given events is non-null, if not return the standard Event.
+    // Ensure at least one of the given events is non-null, if not return the standard Event.
     if (input == null && stored == null) {
       return new Event();
     }
@@ -323,7 +331,7 @@ public class RsvpService {
       return new Event();
     }
 
-    // Try to get guests from input first, then stored, then default to false.
+    // Try to get guests from input first, then stored, then default to empty list.
     List<String> guests;
     if (input != null && input.getGuestsAttending() != null) {
       guests = input.getGuestsAttending();
@@ -405,7 +413,7 @@ public class RsvpService {
     WeddingGuest weddingGuest = weddingGuestRepository.findByFullName(indexName)
         .orElse(new WeddingGuest());
 
-    // Put the rsvpID in the wedding guest object
+    // Remove the rsvpId from the wedding guest
     if (weddingGuest.getRsvpIds() != null) {
       weddingGuest.setRsvpIds(
           weddingGuest.getRsvpIds().stream().filter(id -> !id.equals(rsvpId)).toList());
@@ -416,5 +424,118 @@ public class RsvpService {
     } else {
       weddingGuestRepository.save(weddingGuest);
     }
+  }
+
+  /**
+   * Imports RSVPs from a CSV file with flexible header ordering.
+   * <p>
+   * Expected CSV format:
+   *   - First row is metadata (e.g., "Total Guests Invited =,275") and is skipped.
+   *   - Second row is the header. Column names can be in any order.
+   *     Expected columns (case-insensitive) include:
+   *         "Name of Primary Contact", "Address", "Phone Number", "Email"
+   *         and event invitation columns: "Roce", "Rehearsal Dinner", "Ceremony", "Reception".
+   *         Any column header matching the regex "Guest\s*\d+" will be treated as an additional guest.
+   * <p>
+   * For any event column that is not present in the header, the RSVP is assumed to be invited (i.e. true).
+   */
+  @Transactional
+  public String importRsvpsFromCsv(MultipartFile file) {
+    int count = 0;
+
+    try (InputStream is = file.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+        com.opencsv.CSVReader csvReader = new CSVReader(isr)) {
+
+      // Skip the first metadata row.
+      csvReader.readNext();
+
+      // Read the header row.
+      String[] header = csvReader.readNext();
+      if (header == null || header.length == 0) {
+        throw new IllegalArgumentException("CSV header row is missing.");
+      }
+
+      // Build a mapping from lower-cased header name to its column index.
+      Map<String, Integer> headerMap = new HashMap<>();
+      for (int i = 0; i < header.length; i++) {
+        headerMap.put(header[i].trim().toLowerCase(), i);
+      }
+
+      // Precompile the guest column regex pattern.
+      Pattern guestPattern = Pattern.compile("guest\\s*\\d+", Pattern.CASE_INSENSITIVE);
+
+      // Process each subsequent row.
+      String[] row;
+      while ((row = csvReader.readNext()) != null) {
+        if (row.length == 0) continue; // Skip empty rows.
+        CreateRsvpDTO dto = new CreateRsvpDTO();
+
+        // Primary contact fields (if header present, read value; else leave null).
+        if (headerMap.containsKey("name of primary contact")) {
+          int idx = headerMap.get("name of primary contact");
+          dto.setPrimaryName(idx < row.length ? row[idx] : null);
+        }
+        if (headerMap.containsKey("address")) {
+          int idx = headerMap.get("address");
+          dto.setAddress(idx < row.length ? row[idx] : null);
+        }
+        if (headerMap.containsKey("phone number")) {
+          int idx = headerMap.get("phone number");
+          dto.setPhoneNumber(idx < row.length ? row[idx] : null);
+        }
+        if (headerMap.containsKey("email")) {
+          int idx = headerMap.get("email");
+          dto.setEmail(idx < row.length ? row[idx] : null);
+        }
+
+        // Event invitations.
+        // For each event, if the header is missing, assume invitation = true.
+        int roceIdx = headerMap.getOrDefault("roce", -1);
+        dto.setHasRoceInvitation(roceIdx == -1 || convertStringToBoolean(row[roceIdx]));
+
+        int rehearsalIdx = headerMap.getOrDefault("rehearsal dinner", -1);
+        dto.setHasRehearsalInvitation(rehearsalIdx == -1 || convertStringToBoolean(row[rehearsalIdx]));
+
+        int ceremonyIdx = headerMap.getOrDefault("ceremony", -1);
+        dto.setHasCeremonyInvitation(ceremonyIdx == -1 || convertStringToBoolean(row[ceremonyIdx]));
+
+        int receptionIdx = headerMap.getOrDefault("reception", -1);
+        dto.setHasReceptionInvitation(receptionIdx == -1 || convertStringToBoolean(row[receptionIdx]));
+
+        // Process any column whose header matches "Guest <number>".
+        Set<String> guestNames = new HashSet<>();
+        for (int i = 0; i < header.length; i++) {
+          // Check if the header at this column matches the guest pattern.
+          String colHeader = header[i].trim();
+          if (guestPattern.matcher(colHeader).matches() && i < row.length) {
+            String guest = row[i];
+            if (guest != null && !guest.trim().isEmpty()) {
+              guestNames.add(guest.trim());
+            }
+          }
+        }
+        dto.setAllowedGuestDisplayNames(guestNames);
+
+        // Convert the DTO to an Rsvp and add to the list.
+        saveRsvp(dto.toRsvp(), true);
+        count++;
+      }
+    } catch (IOException | CsvValidationException e) {
+      throw new RuntimeException("Failed to process CSV file", e);
+    }
+
+    return "Successfully imported " + count + " RSVP records.";
+  }
+
+  /**
+   * Converts a string value (e.g., "yes", "true", "no", "false") to a Boolean.
+   */
+  private Boolean convertStringToBoolean(String value) {
+    if (value == null) {
+      return false;
+    }
+    String trimmed = value.trim();
+    return trimmed.equalsIgnoreCase("yes") || trimmed.equalsIgnoreCase("true");
   }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
@@ -52,6 +53,11 @@ public class RsvpController {
   public ResponseEntity<Rsvp> create(@RequestBody CreateRsvpDTO rsvpDTO) {
     Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO.toRsvp(), true);
     return new ResponseEntity<>(savedRsvp, HttpStatus.CREATED);
+  }
+
+  @PostMapping("/create-all")
+  public ResponseEntity<String> createAll(@RequestParam("file") MultipartFile file) {
+    return new ResponseEntity<>(rsvpService.importRsvpsFromCsv(file), HttpStatus.CREATED);
   }
 
   @PutMapping("/edit")

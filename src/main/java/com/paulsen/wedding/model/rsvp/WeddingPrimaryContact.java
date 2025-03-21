@@ -1,5 +1,7 @@
 package com.paulsen.wedding.model.rsvp;
 
+import static com.paulsen.wedding.util.StringFormatUtil.formatToIndexName;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,7 +20,7 @@ public class WeddingPrimaryContact {
   }
 
   public WeddingPrimaryContact(String name, String email, String phoneNumber, String address) {
-    this.name = name;
+    this.name = formatToIndexName(name);
     this.email = email;
     this.phoneNumber = phoneNumber;
     this.address = address;

@@ -41,7 +41,7 @@ public class CreateRsvpDTO {
     Rsvp rsvp = new Rsvp();
 
     rsvp.setSubmitted(false);
-    rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, phoneNumber, email, address));
+    rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, email, phoneNumber, address));
     rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
     rsvp.setRoce(new Event(hasRoceInvitation, Collections.emptyList()));
     rsvp.setRehearsal(new Event(hasRehearsalInvitation, Collections.emptyList()));
