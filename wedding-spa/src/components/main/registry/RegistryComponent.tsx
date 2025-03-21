@@ -75,16 +75,16 @@ const RegistryComponent: React.FC = () => {
           <DonateCard
               image={rome}
               title="Honeymoon Fund"
-              description="Donate what you wish."
-              buttonText="Donate"
+              description="Give what you wish."
+              buttonText="Give"
               onButtonClick={handleOpen}
               showVenmo
           />
           <DonateCard
               image={furnishing}
               title="Furnishing Our Home"
-              description="Donate what you wish."
-              buttonText="Donate"
+              description="Give what you wish."
+              buttonText="Give"
               onButtonClick={handleOpen}
               showVenmo
           />
