@@ -32,7 +32,7 @@ export interface StoryProps {
 const storySteps: StoryStep[] = [
   {
     label: "In the Beginning...",
-    longDescription: "Kevin and Olivia both attended the University of Washington and were active members of the Newman Center. Oddly enough, neither one can recall the exact moment they first met. Kevin was a freshman in 2020, while Olivia was a year ahead of him—and each had their own circle of friends. Kevin’s first memory happened at a Chipotle: a group of mischievous upperclassmen (led by Olivia) tried to convince Kevin that Olivia and another student, Daphne, were sisters. Of course, they weren't. From that day on, Kevin knew who Olivia was, but they remained distant acquaintances throughout their time on campus.\n",
+    longDescription: "Kevin and Olivia both attended the University of Washington and were active members of the Newman Center. Oddly enough, neither one can recall the exact moment they first met. Kevin was a freshman in 2020, while Olivia was a year ahead of him—and each had their own circle of friends. Kevin’s first memory happened at a Chipotle: a group of mischievous upperclassmen (led by Olivia) tried to convince Kevin that Olivia and another student were sisters. Of course, they weren't. From that day on, Kevin knew who Olivia was, but they remained distant acquaintances throughout their time on campus.\n",
     icon: <SchoolIcon />,
     image: firstMysteryImage,
   },
@@ -44,7 +44,7 @@ const storySteps: StoryStep[] = [
   },
   {
     label: "Midwest Shade & Sparks",
-    longDescription: "During that wedding trip, Kevin quickly became smitten by Olivia’s beauty, her sarcastic sense of humor, and her inexplicably fierce pride for Washington State. Her endless comments about the Midwest—often tinged with witty skepticism about corn and flatness—left Kevin oddly charmed. He soon found himself finding every excuse to be around her once they returned to Seattle, even though it was painfully obvious (to literally everyone) that he was falling hard.\n",
+    longDescription: "During that wedding trip, Kevin quickly became smitten by Olivia’s beauty, her sarcastic sense of humor, and her inexplicably fierce pride for Washington State. Her endless comments about the Midwest—often tinged with witty skepticism about corn and flatness—left Kevin oddly charmed. He soon found himself finding every excuse to be around her once they returned to Seattle, and it was painfully obvious (to literally everyone) that he was falling hard.\n",
     icon: <MoodIcon />,
     image: firstMysteryImage,
   },

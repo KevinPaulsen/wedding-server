@@ -79,7 +79,7 @@ const DesktopStoryStepper: React.FC<StoryProps> = ({ page, handleStep, storyStep
                 p: 3,
                 borderRadius: 2,
                 background: theme.palette.secondary.dark,
-                overflow: 'hidden', // ensures adjacent slides are not visible
+                overflow: 'hidden',
               }}
               {...swipeHandlers}
           >
@@ -127,18 +127,25 @@ const DesktopStoryStepper: React.FC<StoryProps> = ({ page, handleStep, storyStep
                             />
                           </Box>
                       )}
-                      <Box sx={{ flex: 2, textAlign: 'center' }}>
+                      <Box sx={{ flex: 2 }}>
                         <Typography
                             variant="h4"
                             gutterBottom
                             sx={{
                               fontWeight: 500,
                               color: theme.palette.primary.light,
+                              textAlign: 'center',
                             }}
                         >
                           {step.label}
                         </Typography>
-                        <Typography variant="body1" sx={{ mt: 2, fontSize: 20 }}>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                              mt: 2,
+                              fontSize: 20,
+                              textAlign: 'left',
+                        }}>
                           {step.longDescription}
                         </Typography>
                       </Box>
