@@ -43,9 +43,28 @@ const detailsData = [
   },
 ];
 
-// Helper function to create a map link for addresses.
-const getMapLink = (address: string) =>
-    `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
+// Helper function to determine the best map link based on device.
+const getMapLink = (address: string) => {
+  if (typeof navigator !== 'undefined') {
+    const userAgent = navigator.userAgent;
+    // Check if the device is mobile
+    const isMobile = /Mobi|Android|iPad|iPhone|iPod/.test(userAgent);
+    const isAndroid = /Android/.test(userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream;
+    if (isMobile) {
+      if (isAndroid) {
+        // Android: use the geo scheme to launch the default maps app.
+        return `geo:0,0?q=${encodeURIComponent(address)}`;
+      }
+      if (isIOS) {
+        // iOS: use a Google Maps HTTPS link.
+        return `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
+      }
+    }
+  }
+  // Desktop fallback: use Google Maps HTTPS.
+  return `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
+};
 
 const DetailsComponent = () => {
   return (
@@ -93,10 +112,7 @@ const DetailsComponent = () => {
           </Typography>
           <Typography variant="body1">
             For questions or concerns, please email{' '}
-            <Link
-                href="mailto:kevinoliviapaulsen@gmail.com"
-                underline="hover"
-            >
+            <Link href="mailto:kevinoliviapaulsen@gmail.com" underline="hover">
               kevinoliviapaulsen@gmail.com
             </Link>.
           </Typography>
