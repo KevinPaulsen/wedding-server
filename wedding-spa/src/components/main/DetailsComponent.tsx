@@ -44,25 +44,7 @@ const detailsData = [
 ];
 
 // Helper function to determine the best map link based on device.
-const getMapLink = (address: string) => {
-  if (typeof navigator !== 'undefined') {
-    const userAgent = navigator.userAgent;
-    // Check if the device is mobile by looking for "Mobi" or "Android" or iOS identifiers.
-    const isMobile = /Mobi|Android|iPad|iPhone|iPod/.test(userAgent);
-    if (isMobile) {
-      const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream;
-      if (isIOS) {
-        // For iOS, use the Apple Maps URL scheme.
-        return `maps://?q=${encodeURIComponent(address)}`;
-      } else {
-        // For Android and other mobile devices, use the geo: scheme.
-        return `geo:0,0?q=${encodeURIComponent(address)}`;
-      }
-    }
-  }
-  // For non-mobile (e.g., desktop), fallback to a Google Maps HTTPS URL.
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-};
+const getMapLink = (address: string) => `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
 
 const DetailsComponent = () => {
   return (
