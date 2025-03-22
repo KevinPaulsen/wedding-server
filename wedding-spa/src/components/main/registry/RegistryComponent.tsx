@@ -82,7 +82,7 @@ const RegistryComponent: React.FC = () => {
           />
           <DonateCard
               image={furnishing}
-              title="Furnishing Our Home"
+              title="Future Family Fund"
               description="Give what you wish."
               buttonText="Give"
               onButtonClick={handleOpen}

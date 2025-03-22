@@ -176,7 +176,7 @@ const ExpressCheckoutDialog: React.FC<ExpressCheckoutModalProps> = ({open, onClo
                     alignItems: 'center'
                   }}>
                     <Typography variant="h6" gutterBottom sx={{textAlign: 'center'}}>
-                      Select a donation amount (USD):
+                      Select an amount (USD):
                     </Typography>
                     {[25, 50, 100].map(amount => (
                         <CustomButton
