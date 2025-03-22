@@ -43,8 +43,9 @@ const detailsData = [
   },
 ];
 
-// Helper function to determine the best map link based on device.
-const getMapLink = (address: string) => `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
+// Helper function to create a map link for addresses.
+const getMapLink = (address: string) =>
+    `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
 
 const DetailsComponent = () => {
   return (
@@ -71,7 +72,7 @@ const DetailsComponent = () => {
               </Typography>
               <Typography variant="body1">{item.content}</Typography>
               {item.address && (
-                  <Typography variant="body2" color="primary">
+                  <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
                     <Link
                         href={getMapLink(item.address)}
                         target="_blank"
@@ -84,6 +85,22 @@ const DetailsComponent = () => {
               )}
             </Box>
         ))}
+
+        <Divider sx={{ my: 3 }} />
+        <Box>
+          <Typography variant="subtitle1" color="text.secondary">
+            Contact
+          </Typography>
+          <Typography variant="body1">
+            For questions or concerns, please email{' '}
+            <Link
+                href="mailto:kevinoliviapaulsen@gmail.com"
+                underline="hover"
+            >
+              kevinoliviapaulsen@gmail.com
+            </Link>.
+          </Typography>
+        </Box>
       </Paper>
   );
 };
