@@ -74,7 +74,8 @@ const RsvpSelectionStep: React.FC<RsvpSelectionStepProps> = ({ lookupResults, on
                       onClick={() => handleSelect(rsvp)}
                       elevation={10}
                       sx={{
-                        width: 300,
+                        width: '100%',
+                        maxWidth: 300,
                         mb: 2,
                         cursor: 'pointer',
                         border: '2px solid',

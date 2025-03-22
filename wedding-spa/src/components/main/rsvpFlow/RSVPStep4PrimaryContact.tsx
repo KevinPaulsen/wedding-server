@@ -43,7 +43,7 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
   return (
       <StepLayout
           title="Primary Contact Information"
-          description="Confirm or update your primary contact information, including your best mailing address. We will use this if anything changes."
+          description="Confirm or update your primary contact information, including your best mailing address. We will contact you if anything changes."
           onBack={onBack}
           onSubmit={handleSubmit(onSubmit)}
       >
@@ -54,22 +54,39 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
               size="small"
               error={!!errors.primary_contact_name}
           >
-            <InputLabel id="primary-contact-label">Primary Contact</InputLabel>
+            <InputLabel
+                id="primary-contact-label"
+                sx={{ textAlign: "left", width: "100%" }}
+            >
+              Primary Contact
+            </InputLabel>
             <Select
                 labelId="primary-contact-label"
                 label="Primary Contact"
                 defaultValue={defaultPrimaryContactDisplayName}
+                sx={{ textAlign: "left" }}
                 {...register('primary_contact_name', {
                   required: 'Please select a primary contact',
                 })}
             >
               {guestOptions.map((guest) => (
-                  <MenuItem key={guest.id} value={guest.name}>
+                  <MenuItem
+                      key={guest.id}
+                      value={guest.name}
+                      sx={{ textAlign: "left" }}
+                  >
                     {guest.name}
                   </MenuItem>
               ))}
             </Select>
-            <FormHelperText sx={{ marginTop: 0, marginBottom: 0, minHeight: 0 }}>
+            <FormHelperText
+                sx={{
+                  marginTop: 0,
+                  marginBottom: 0,
+                  minHeight: 0,
+                  textAlign: "left",
+                }}
+            >
               {errors.primary_contact_name?.message || ''}
             </FormHelperText>
           </FormControl>
@@ -98,7 +115,7 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
               helperText={errors.primary_contact_phone?.message || ''}
           />
           <TextField
-              label="Address"
+              label="Mailing Address"
               fullWidth
               margin="normal"
               size="small"

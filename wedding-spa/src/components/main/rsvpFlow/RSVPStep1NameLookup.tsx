@@ -38,7 +38,7 @@ const NameLookupStep: React.FC<NameLookupStepProps> = ({ onNext }) => {
   return (
       <StepLayout
           title="Enter Your Name"
-          description="Enter your first and last name exactly as they appear on your RSVP. If you have any trouble, please contact Kevin or Olivia."
+          description="Enter your first and last name. If you have any trouble, please contact Kevin or Olivia."
           onSubmit={handleSubmit(onSubmit)}
           nextText={loading ? <CircularProgress size={24} color={"secondary"} /> : 'Lookup RSVP'}
           nextDisabled={loading}

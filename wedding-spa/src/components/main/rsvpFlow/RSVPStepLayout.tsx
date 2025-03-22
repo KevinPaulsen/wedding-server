@@ -1,6 +1,6 @@
 // components/main/rsvpFlow/RSVPStepLayout.tsx
 import React, {JSX} from 'react';
-import {Box, Typography} from '@mui/material';
+import {Box, Paper, Typography} from '@mui/material';
 import CustomButton from "../../shared/CustomButton";
 
 export interface StepLayoutProps {
@@ -27,17 +27,19 @@ const StepLayout: React.FC<StepLayoutProps> = ({
   return (
       <Box
           sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-        <Typography variant="h4" sx={{textAlign: 'center'}}>
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+      >
+
+        <Typography variant="h4">
           {title}
         </Typography>
 
         {description && (
-            <Typography variant="body1" sx={{textAlign: 'center', mb: 2, maxWidth: "500px"}}>
+            <Typography variant="body1" sx={{ mb: 2, maxWidth: "500px"}}>
               {description}
             </Typography>
         )}

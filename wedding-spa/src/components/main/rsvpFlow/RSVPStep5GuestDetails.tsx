@@ -19,6 +19,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import StepLayout from './RSVPStepLayout';
@@ -51,90 +52,118 @@ const GuestRow: React.FC<GuestRowProps> = ({
                                              onToggleComing,
                                              onEdit,
                                              hasAnyOther,
-                                           }) => (
-    <TableRow
-        sx={{
-          backgroundColor: guest.coming ? 'inherit' : theme.palette.action.disabledBackground,
-        }}
-    >
-      <TableCell
+                                           }) => {
+  // Check if the screen is small.
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // Predefined abbreviations for common dietary restrictions.
+  const abbreviationMapping: Record<string, string> = {
+    'Vegetarian': 'Veg',
+    'Vegan': 'VG',
+    'Gluten Free': 'GF',
+    'Nut Free': 'NF',
+    'Shellfish Free': 'SF',
+  };
+
+  // Helper to shorten text: use the mapping if available,
+  // otherwise return the first 2 characters followed by an ellipsis.
+  const getAbbreviatedText = (text: string) => {
+    if (abbreviationMapping[text]) return abbreviationMapping[text];
+    return text.length > 5 ? text.slice(0, 5) + '...' : text;
+  };
+
+  return (
+      <TableRow
           sx={{
-            fontWeight: 'bold',
-            whiteSpace: { xs: 'normal', sm: 'nowrap' },
-            wordBreak: 'break-word',
-            color: guest.coming ? 'inherit' : theme.palette.text.disabled,
+            backgroundColor: guest.coming ? 'inherit' : theme.palette.action.disabledBackground,
           }}
       >
-        {guest.display_name}
-      </TableCell>
-      <TableCell
-          sx={{
-            whiteSpace: { xs: 'normal', sm: 'nowrap' },
-            wordBreak: 'break-word',
-            color: guest.coming ? 'inherit' : theme.palette.text.disabled,
-          }}
-      >
-        {guest.dietary_restrictions.length > 0 || guest.other.trim() !== '' ? (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {guest.dietary_restrictions.map((r, idx) => (
-                  <Chip key={idx} label={r} size="small" />
-              ))}
-              {hasAnyOther && guest.other.trim() !== '' && (
-                  <Chip key="other" label={guest.other} size="small" />
-              )}
-            </Box>
-        ) : (
-            'None'
-        )}
-      </TableCell>
-      <TableCell sx={{ width: { xs: 'auto', md: '1%' } }}>
-        <Box
+        <TableCell
             sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 0,
+              fontWeight: 'bold',
+              whiteSpace: { xs: 'normal', sm: 'nowrap' },
+              color: guest.coming ? 'inherit' : theme.palette.text.disabled,
             }}
         >
-          <IconButton
-              onClick={() => onToggleComing(guest.id, true)}
+          {guest.display_name}
+        </TableCell>
+        <TableCell
+            sx={{
+              whiteSpace: { xs: 'normal', sm: 'nowrap' },
+              wordBreak: 'break-word',
+              color: guest.coming ? 'inherit' : theme.palette.text.disabled,
+            }}
+        >
+          {guest.dietary_restrictions.length > 0 || guest.other.trim() !== '' ? (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {guest.dietary_restrictions.map((r, idx) => (
+                    <Chip
+                        key={idx}
+                        label={isSmallScreen ? getAbbreviatedText(r) : r}
+                        size="small"
+                    />
+                ))}
+                {hasAnyOther && guest.other.trim() !== '' && (
+                    <Chip
+                        key="other"
+                        label={isSmallScreen ? getAbbreviatedText(guest.other) : guest.other}
+                        size="small"
+                    />
+                )}
+              </Box>
+          ) : (
+              'None'
+          )}
+        </TableCell>
+        <TableCell sx={{ width: { xs: 'auto', md: '1%' } }}>
+          <Box
               sx={{
-                backgroundColor: guest.coming ? theme.palette.primary.main : 'transparent',
-                color: guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
-                '&:hover': {
-                  backgroundColor: guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
-                },
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 0,
               }}
           >
-            <CheckIcon />
-          </IconButton>
-          <IconButton
-              onClick={() => onToggleComing(guest.id, false)}
-              sx={{
-                backgroundColor: !guest.coming ? theme.palette.primary.main : 'transparent',
-                color: !guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
-                '&:hover': {
-                  backgroundColor: !guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
-                },
-              }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <IconButton
-              aria-label="Edit Guest"
-              onClick={() => onEdit(guest.id)}
-              disabled={!guest.coming}
-              sx={{
-                opacity: guest.coming ? 1 : 0.5,
-              }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Box>
-      </TableCell>
-    </TableRow>
-);
+            <IconButton
+                onClick={() => onToggleComing(guest.id, true)}
+                sx={{
+                  backgroundColor: guest.coming ? theme.palette.primary.main : 'transparent',
+                  color: guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
+                  '&:hover': {
+                    backgroundColor: guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
+                  },
+                }}
+            >
+              <CheckIcon />
+            </IconButton>
+            <IconButton
+                onClick={() => onToggleComing(guest.id, false)}
+                sx={{
+                  backgroundColor: !guest.coming ? theme.palette.primary.main : 'transparent',
+                  color: !guest.coming ? theme.palette.primary.contrastText : theme.palette.primary.main,
+                  '&:hover': {
+                    backgroundColor: !guest.coming ? theme.palette.primary.dark : 'rgba(0,0,0,0.1)',
+                  },
+                }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <IconButton
+                aria-label="Edit Guest"
+                onClick={() => onEdit(guest.id)}
+                disabled={!guest.coming}
+                sx={{
+                  opacity: guest.coming ? 1 : 0.5,
+                }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Box>
+        </TableCell>
+      </TableRow>
+  );
+}
 
 // --- GuestTable Component ---
 interface GuestTableProps {

@@ -1,6 +1,6 @@
 // pages/rsvp/RsvpFlowPage.tsx
-import React, {useState} from 'react';
-import {Box, Button, CircularProgress, Fade, Typography} from '@mui/material';
+import React, {useLayoutEffect, useRef, useState} from 'react';
+import {Box, Button, CircularProgress, Collapse, Fade, Paper, Typography} from '@mui/material';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 
@@ -18,6 +18,7 @@ import RsvpRehearsalPage from "../../components/main/rsvpFlow/RSVPStep6-2Rehears
 import RsvpCeremonyPage from "../../components/main/rsvpFlow/RSVPStep6-3Ceremony";
 import RsvpReceptionPage from "../../components/main/rsvpFlow/RSVPStep6-4Reception";
 import CustomButton from "../../components/shared/CustomButton";
+import {AnimatePresence, motion} from "framer-motion";
 
 const NAME_LOOKUP_STEP = 1;
 const SELECTION_STEP = NAME_LOOKUP_STEP + 1;
@@ -391,6 +392,7 @@ const RsvpFlow: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               p: 2,
+              gap: 3,
             }}
         >
           {/* Header */}
@@ -401,23 +403,31 @@ const RsvpFlow: React.FC = () => {
           </Box>
 
           {/* Step Content */}
-          <Box
+          <Paper
+              elevation={3}
               sx={{
-                flex: 1,
                 display: 'flex',
+                flexDirection: 'column',
+                width: "100%",
+                maxWidth: 600,
+                px: {xs: 1, sm: 3},
+                py: 3,
+                borderRadius: 2,
+                textAlign: 'center',
                 alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
+                backgroundColor: 'secondary.dark',
               }}
           >
-            <Fade in={showStep} timeout={300}>
-              <Box width='100%'>{renderStep()}</Box>
-            </Fade>
-          </Box>
+            <AnimatedHeightWrapper currentStep={currentStep}>
+              {renderStep()}
+            </AnimatedHeightWrapper>
+          </Paper>
 
           {/* Cancel Button */}
           <Box sx={{ mb: 2 }}>
-            <CustomButton text="Cancel" onClick={handleCancel} variant="lightOutlined" width='auto'/>
+            {currentStep !== THANK_YOU_STEP &&
+                <CustomButton text="Cancel" onClick={handleCancel} variant="lightOutlined" width='auto'/>
+            }
           </Box>
 
           {/* Submission Progress */}
@@ -428,6 +438,41 @@ const RsvpFlow: React.FC = () => {
           )}
         </Box>
       </FormProvider>
+  );
+};
+
+interface AnimatedHeightWrapperProps {
+  currentStep: number;
+  children: React.ReactNode;
+}
+
+const AnimatedHeightWrapper: React.FC<AnimatedHeightWrapperProps> = ({ currentStep, children }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState<number>(350);
+
+  // Measure the content height whenever the step changes or children update.
+  useLayoutEffect(() => {
+    if (contentRef.current) {
+      const newHeight = contentRef.current.getBoundingClientRect().height;
+      setHeight(newHeight);
+    }
+  }, [currentStep, children]);
+
+  return (
+      <AnimatePresence mode="wait">
+        <motion.div
+            key={currentStep}
+            animate={{ height: 'auto', opacity: 1 }}
+            initial={{ height: height, opacity: 0 }}
+            exit={{ height: height, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ overflow: 'hidden', width: '100%' }}
+        >
+          <div ref={contentRef}>
+            {children}
+          </div>
+        </motion.div>
+      </AnimatePresence>
   );
 };
 
