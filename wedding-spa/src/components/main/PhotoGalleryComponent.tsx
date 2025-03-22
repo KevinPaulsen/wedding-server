@@ -42,7 +42,7 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
   const commonComponentsProps = () => ({
     image: {
       style: {
-        border: '2px solid var(--main-dark)',
+        border: '2px solid #c6b7a7',
         padding: '1px',
       },
     },

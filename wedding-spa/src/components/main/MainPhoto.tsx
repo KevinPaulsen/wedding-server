@@ -37,7 +37,7 @@ const MainPhoto: React.FC = () => {
               fontSize: 'clamp(1em, 12vw + 1em, 15rem)',
             }}
         >
-          09 . 13. 2025
+          09 . 13 . 2025
         </Typography>
       </Box>
   );
