@@ -43,11 +43,12 @@ const MainPhoto: React.FC = () => {
                   <Typography
                       variant="h3"
                       sx={{
+                            fontFamily: '"Baskervville", serif',
                             color: (theme) => theme.palette.primary.contrastText,
-                            fontSize: 'clamp(1em, 3vw + 1em, 15rem)',
+                            fontSize: 'clamp(1em, 2vw + 1em, 15rem)',
                       }}
                   >
-                        SEATTLE, WA
+                        S E A T T L E , W A
                   </Typography>
             </Box>
       </Box>

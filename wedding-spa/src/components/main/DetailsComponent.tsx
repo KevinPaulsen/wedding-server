@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Typography, Paper, Divider, Link } from '@mui/material';
 
-const detailsData = [
+const timeData = [
   {
     title: 'Ceremony 12:30 PM',
     content: 'Blessed Sacrament Church',
@@ -18,6 +18,8 @@ const detailsData = [
     content: 'Pickering Barn',
     address: '1730 10th Ave NW, Issaquah, WA 98027',
   },
+];
+const detailsData = [
   {
     title: 'RSVP Deadline',
     content: 'Please respond by June 15, 2025.',
@@ -57,8 +59,7 @@ const getMapLink = (address: string) => {
         return `geo:0,0?q=${encodeURIComponent(address)}`;
       }
       if (isIOS) {
-        // iOS: use a Google Maps HTTPS link.
-        return `https://maps.google.com/maps?q=${encodeURIComponent(address)}`;
+        return `https://maps.apple.com/?q=${encodeURIComponent(address)}`;
       }
     }
   }
@@ -68,6 +69,47 @@ const getMapLink = (address: string) => {
 
 const DetailsComponent = () => {
   return (
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3,
+      }}>
+        <Paper
+            elevation={3}
+            sx={{
+              p: 4,
+              mx: 'auto',
+              width: 600,
+              borderRadius: 2,
+              textAlign: 'center',
+              backgroundColor: 'secondary.light',
+            }}
+        >
+          <Typography variant="h4" align="center" gutterBottom>
+            Schedule
+          </Typography>
+          {timeData.map((item) => (
+              <Box key={item.title}>
+                <Divider sx={{ my: 3 }} />
+                <Typography variant="h6" color="text.secondary">
+                  {item.title}
+                </Typography>
+                <Typography variant="body1" fontWeight="bold">{item.content}</Typography>
+                {item.address && (
+                    <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                      <Link
+                          href={getMapLink(item.address)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          underline="hover"
+                      >
+                        {item.address}
+                      </Link>
+                    </Typography>
+                )}
+              </Box>
+          ))}
+        </Paper>
       <Paper
           elevation={3}
           sx={{
@@ -80,34 +122,22 @@ const DetailsComponent = () => {
           }}
       >
         <Typography variant="h4" align="center" gutterBottom>
-          Wedding Details
+          Details
         </Typography>
 
         {detailsData.map((item) => (
             <Box key={item.title}>
               <Divider sx={{ my: 3 }} />
-              <Typography variant="subtitle1" color="text.secondary">
+              <Typography variant="h6" color="text.secondary">
                 {item.title}
               </Typography>
               <Typography variant="body1">{item.content}</Typography>
-              {item.address && (
-                  <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                    <Link
-                        href={getMapLink(item.address)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="hover"
-                    >
-                      {item.address}
-                    </Link>
-                  </Typography>
-              )}
             </Box>
         ))}
 
         <Divider sx={{ my: 3 }} />
         <Box>
-          <Typography variant="subtitle1" color="text.secondary">
+          <Typography variant="h6" color="text.secondary">
             Contact
           </Typography>
           <Typography variant="body1">
@@ -118,6 +148,7 @@ const DetailsComponent = () => {
           </Typography>
         </Box>
       </Paper>
+      </Box>
   );
 };
 
