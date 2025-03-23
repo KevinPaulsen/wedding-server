@@ -72,15 +72,18 @@ const DetailsComponent = () => {
       <Box sx={{
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         gap: 3,
+        mx: 2,
       }}>
         <Paper
             elevation={3}
             sx={{
               p: 4,
-              mx: 'auto',
-              width: 600,
+              width: '100%',
               borderRadius: 2,
+              maxWidth: 600,
               textAlign: 'center',
               backgroundColor: 'secondary.light',
             }}
@@ -114,7 +117,6 @@ const DetailsComponent = () => {
           elevation={3}
           sx={{
             p: 4,
-            mx: 'auto',
             maxWidth: 600,
             borderRadius: 2,
             textAlign: 'center',
