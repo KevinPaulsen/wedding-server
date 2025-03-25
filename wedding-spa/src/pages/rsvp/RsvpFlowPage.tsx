@@ -250,6 +250,48 @@ const RsvpFlow: React.FC = () => {
 
   // Final submission: convert guest_details array back to object and include event data.
   const handleSubmitRsvp = async (formData: FormData) => {
+    // Helper: returns true if a guest is attending at least one event
+    const isGuestAttendingAnyEvent = (guestId: string) => {
+      const events: EventData[] = [
+        formData.roce,
+        formData.rehearsal,
+        formData.ceremony,
+        formData.reception,
+      ];
+      return events.some(
+          (eventData) =>
+              eventData && eventData.guests_attending.includes(guestId)
+      );
+    };
+
+    // Data sanitization: find guests marked as coming but not assigned to any event
+    const guestsNotInEvents =
+        formData.guest_details?.filter(
+            (guest) => guest.coming && !isGuestAttendingAnyEvent(guest.id)
+        ) || [];
+
+    if (guestsNotInEvents.length > 0) {
+      // Create a list of guest display names
+      const guestNames = guestsNotInEvents
+      .map((guest) => `- ${guest.display_name}`)
+      .join('\n');
+
+      // Prompt the user with the bullet list
+      const message = `The following guests are marked as coming but are not attending any part of the wedding:\n\n${guestNames}\n\nDo you want to mark them as absent and proceed?`;
+      if (!window.confirm(message)) {
+        // If the user cancels, stop the submission
+        return;
+      }
+
+      // Mark those guests as not coming
+      formData.guest_details = formData.guest_details?.map((guest) =>
+          guestsNotInEvents.find((g) => g.id === guest.id)
+              ? { ...guest, coming: false }
+              : guest
+      );
+    }
+
+    // Continue with submission
     setSubmitting(true);
     const rsvpToSubmit: Rsvp = {
       ...selectedRsvp!,
@@ -271,6 +313,7 @@ const RsvpFlow: React.FC = () => {
       ceremony: formData.ceremony,
       reception: formData.reception,
     };
+
     const response = await submitRsvpApi.execute(rsvpToSubmit);
     setSubmitting(false);
     if (response.success) {
