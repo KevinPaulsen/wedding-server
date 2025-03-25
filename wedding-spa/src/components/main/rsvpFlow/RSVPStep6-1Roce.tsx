@@ -17,7 +17,8 @@ const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
       <RsvpEvents
           eventKey="roce"
           title="Roce"
-          description="Join us for a traditional Roce ceremony on Thursday, September 11th, 2025, at 6:30 p.m. in Seattle (location TBD). We will email more details as they become available. Please select all guests who will be attending."
+          time="Thursday, September 11th, 2025, at 6:30 p.m."
+          description="Join us for a traditional Roce ceremony in Seattle (location TBD). We will email more details as they become available. Please select all guests who will be attending."
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}

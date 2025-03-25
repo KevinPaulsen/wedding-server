@@ -9,6 +9,7 @@ import StepLayout from "./RSVPStepLayout";
 interface RsvpEventPageProps {
   eventKey: 'roce' | 'rehearsal' | 'ceremony' | 'reception';
   title: string;
+  time: string;
   description: string;
   nextPage: (formData: FormData) => void;
   previousPage: (formData: FormData) => void;
@@ -18,6 +19,7 @@ interface RsvpEventPageProps {
 const RsvpEvents: React.FC<RsvpEventPageProps> = ({
                                                        eventKey,
                                                        title,
+                                                    time,
                                                        description,
                                                        nextPage,
                                                        previousPage,
@@ -61,6 +63,7 @@ const RsvpEvents: React.FC<RsvpEventPageProps> = ({
   return (
       <StepLayout
           title={title}
+          header={time}
           description={description}
           onBack={() => previousPage(formData)}
           onNext={() => nextPage(formData)}

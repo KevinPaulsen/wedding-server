@@ -17,7 +17,8 @@ const RsvpCeremonyPage: React.FC<RsvpCeremonyPageProps> = ({
       <RsvpEvents
           eventKey="ceremony"
           title="Wedding Ceremony"
-          description="Join us for the Wedding Mass at Blessed Sacrament Church (5050 8th Ave NE, Seattle, WA 98105) at 12:30 p.m. on Saturday, September 13th, 2025. Please select all guests who will be attending."
+          time="Saturday, September 13th, 2025, at 12:30 PM"
+          description="Join us for the Wedding Mass at Blessed Sacrament Church (5050 8th Ave NE, Seattle, WA 98105). Please select all guests who will be attending."
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}

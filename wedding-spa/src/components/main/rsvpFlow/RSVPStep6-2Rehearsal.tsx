@@ -17,7 +17,8 @@ const RsvpRehearsalPage: React.FC<RsvpRehearsalPageProps> = ({
       <RsvpEvents
           eventKey="rehearsal"
           title="Rehearsal Dinner"
-          description="Join us for the Rehearsal Dinner on Friday, September 12th, 2025, in Seattle (location and time TBD). Please select all guests who will be attending."
+          time="Friday, September 12th, 2025, (Time TBD)"
+          description="Join us for the Rehearsal Dinner in Seattle (location and time TBD). Please select all guests who will be attending."
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}

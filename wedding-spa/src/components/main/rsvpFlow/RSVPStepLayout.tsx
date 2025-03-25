@@ -5,6 +5,7 @@ import CustomButton from "../../shared/CustomButton";
 
 export interface StepLayoutProps {
   title: string;
+  header?: string;
   description?: string | JSX.Element;
   children: React.ReactNode;
   onBack?: () => void;
@@ -16,6 +17,7 @@ export interface StepLayoutProps {
 
 const StepLayout: React.FC<StepLayoutProps> = ({
                                                  title,
+                                                 header,
                                                  description,
                                                  children,
                                                  onBack = null,
@@ -34,9 +36,13 @@ const StepLayout: React.FC<StepLayoutProps> = ({
           }}
       >
 
-        <Typography variant="h4">
+        <Typography variant="h4" fontWeight="bold">
           {title}
         </Typography>
+        {header && <Typography variant="h6">
+          {header}
+        </Typography>}
+
 
         {description && (
             <Typography variant="body1" sx={{ mb: 2, maxWidth: "500px"}}>
