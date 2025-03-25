@@ -480,11 +480,17 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
   return (
       <StepLayout
           title="Guest Details"
-          description="Review and update guest details as needed. By clicking “Edit,” you can change a guest’s preferred name or add dietary restrictions. If a guest cannot attend any part of the wedding, mark the “X” to indicate their absence."
+          description={
+            <p>
+              Review and update guest details as needed. By clicking <EditIcon/> you can change a
+              guest’s preferred name or add dietary restrictions. If a guest cannot attend any part
+              of the wedding, mark the <CloseIcon /> to indicate their absence.
+            </p>
+          }
           onBack={onBack}
           onNext={onNext}
       >
-        <Box sx={{ maxWidth: "900px", width: "100%", mx: "auto", }} >
+        <Box sx={{maxWidth: "900px", width: "100%", mx: "auto",}}>
           {guests.length === 0 ? (
               <Typography>No guests found.</Typography>
           ) : (
