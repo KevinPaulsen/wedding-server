@@ -1,6 +1,6 @@
 // components/main/rsvpFlow/RSVPStepLayout.tsx
 import React, {JSX} from 'react';
-import {Box, Paper, Typography} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import CustomButton from "../../shared/CustomButton";
 
 export interface StepLayoutProps {

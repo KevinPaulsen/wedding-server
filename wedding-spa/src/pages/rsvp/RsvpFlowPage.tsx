@@ -415,7 +415,7 @@ const RsvpFlow: React.FC = () => {
                 borderRadius: 2,
                 textAlign: 'center',
                 alignItems: 'center',
-                backgroundColor: 'secondary.dark',
+                backgroundColor: 'secondary.light',
               }}
           >
             <AnimatedHeightWrapper currentStep={currentStep}>

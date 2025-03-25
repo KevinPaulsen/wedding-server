@@ -185,7 +185,7 @@ const GuestTable: React.FC<GuestTableProps> = ({
                                                  onEdit,
                                                  hasAnyOther,
                                                }) => (
-    <TableContainer component={Paper} sx={{ backgroundColor: theme.palette.secondary.light }}>
+    <TableContainer component={Paper} sx={{ backgroundColor: theme.palette.secondary.dark }}>
       <Table sx={{ width: '100%', tableLayout: 'auto' }}>
         <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
           <TableRow>
