@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.paulsen.wedding.util.StringFormatUtil;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,10 +44,11 @@ public class CreateRsvpDTO {
     rsvp.setSubmitted(false);
     rsvp.setPrimaryContact(new WeddingPrimaryContact(primaryName, email, phoneNumber, address));
     rsvp.setGuestList(toRsvpGuestDetailsMap(allowedGuestDisplayNames));
-    rsvp.setRoce(new Event(hasRoceInvitation, Collections.emptyList()));
-    rsvp.setRehearsal(new Event(hasRehearsalInvitation, Collections.emptyList()));
-    rsvp.setCeremony(new Event(hasCeremonyInvitation, Collections.emptyList()));
-    rsvp.setReception(new Event(hasReceptionInvitation, Collections.emptyList()));
+    List<String> indexNames = rsvp.getGuestList().keySet().stream().toList();
+    rsvp.setRoce(new Event(hasRoceInvitation, indexNames));
+    rsvp.setRehearsal(new Event(hasRehearsalInvitation, indexNames));
+    rsvp.setCeremony(new Event(hasCeremonyInvitation, indexNames));
+    rsvp.setReception(new Event(hasReceptionInvitation, indexNames));
 
     return rsvp;
   }

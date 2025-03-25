@@ -1,5 +1,7 @@
 package com.paulsen.wedding.controllers;
 
+import static com.paulsen.wedding.util.StringFormatUtil.strip;
+
 import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
 import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 @RequestMapping("/rsvp")
 @RestController
@@ -85,7 +85,8 @@ public class RsvpController {
 
   @PostMapping("/lookup")
   public ResponseEntity<List<Rsvp>> lookup(@RequestBody LookupDTO guestDto) {
-    WeddingGuest guest = rsvpService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name(), guestDto.getRsvp_code());
+    WeddingGuest guest = rsvpService.getGuest(guestDto.getFirst_name(), guestDto.getLast_name(),
+        guestDto.getRsvp_code());
     return ResponseEntity.ok(guest.getRsvpIds().stream().map(rsvpService::findRsvpById).toList());
   }
 
