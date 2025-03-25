@@ -436,13 +436,24 @@ const RsvpGuestDetailsStep: React.FC<RsvpGuestDetailsStepProps> = ({ rsvp, onNex
     );
     setValue('guest_details', updatedGuests);
 
+    const currentFormData = getValues();
+    const eventKeys: (keyof FormData)[] = ['roce', 'rehearsal', 'ceremony', 'reception'];
+
     if (!newValue) {
-      const currentFormData = getValues();
-      const eventKeys: (keyof FormData)[] = ['roce', 'rehearsal', 'ceremony', 'reception'];
+      // Removal: Filter the guest out if they are not coming.
       eventKeys.forEach((key) => {
         const eventData: EventData = currentFormData[key] as EventData;
         if (eventData && eventData.guests_attending.includes(guestId)) {
           const updatedAttending = eventData.guests_attending.filter((id: string) => id !== guestId);
+          setValue(key, { ...eventData, guests_attending: updatedAttending });
+        }
+      });
+    } else {
+      // Addition: Add the guest if they are coming and not already added.
+      eventKeys.forEach((key) => {
+        const eventData: EventData = currentFormData[key] as EventData;
+        if (eventData && !eventData.guests_attending.includes(guestId)) {
+          const updatedAttending = [...eventData.guests_attending, guestId];
           setValue(key, { ...eventData, guests_attending: updatedAttending });
         }
       });
