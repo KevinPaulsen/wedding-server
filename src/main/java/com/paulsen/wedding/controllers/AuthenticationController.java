@@ -3,7 +3,6 @@ package com.paulsen.wedding.controllers;
 import com.paulsen.wedding.model.User;
 import com.paulsen.wedding.responses.LoginResponse;
 import com.paulsen.wedding.security.LoginUserDto;
-import com.paulsen.wedding.security.RegisterUserDto;
 import com.paulsen.wedding.service.AuthenticationService;
 import com.paulsen.wedding.service.JwtService;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping("/signup") public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    @PostMapping("/signup")
+    public ResponseEntity<User> register(@RequestBody LoginUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);

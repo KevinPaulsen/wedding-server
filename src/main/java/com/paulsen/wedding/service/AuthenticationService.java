@@ -3,7 +3,6 @@ package com.paulsen.wedding.service;
 import com.paulsen.wedding.model.User;
 import com.paulsen.wedding.repositories.UserRepository;
 import com.paulsen.wedding.security.LoginUserDto;
-import com.paulsen.wedding.security.RegisterUserDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +25,7 @@ public class AuthenticationService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User signup(RegisterUserDto input) {
+  public User signup(LoginUserDto input) {
     User user = new User();
     user.setUsername(input.getUsername());
     user.setPassword(passwordEncoder.encode(input.getPassword()));
