@@ -11,7 +11,7 @@ const Timeline: React.FC = () => {
   const containerHeight = 50 + padding + buffer + (timelineEvents.length - 2) * padding + 100;
 
   return (
-      <Box textAlign="center">
+      <Box textAlign="center" mt={5}>
         <Typography variant="h3">
           Our Big Day!
         </Typography>
