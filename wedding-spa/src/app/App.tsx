@@ -162,6 +162,7 @@ const App: React.FC = () => {
             <Route path="/rsvp/*" element={<RsvpFlowPage />} />
 
             {/* Admin Login */}
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/login" element={<Navigate to="/admin/login" replace />} />
             <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
 
@@ -172,7 +173,6 @@ const App: React.FC = () => {
                   <PrivateRoute component={
                     <AdminDataProvider>
                       <Routes>
-                        <Route path="login" element={<AdminLogin />} />
                         <Route path="dashboard" element={<AdminMain />} />
                         <Route path="guests" element={<GuestListPage />} />
                         <Route path="add-photos" element={<UploadPhotoPage />} />

@@ -1,4 +1,3 @@
-// components/admin/adminRsvpTable/RsvpTable.tsx
 import React from 'react';
 import {
   Alert,
@@ -12,12 +11,12 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import {Rsvp} from "../../../types/rsvp";
+import { Rsvp } from "../../../types/rsvp";
 import EditRsvpDialog from "./EditRsvpDialog";
-import {useEditRsvp} from "../../../hooks/rsvp/useEditRsvp";
-import {RsvpTableRow} from "./RsvpTableRow";
-import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
-import {CreateRsvpDTO} from "../../../types/RsvpDTO";
+import { useEditRsvp } from "../../../hooks/rsvp/useEditRsvp";
+import { RsvpTableRow } from "./RsvpTableRow";
+import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
+import { CreateRsvpDTO } from "../../../types/RsvpDTO";
 import CreateRsvpDialog from "./CreateRsvpDialog";
 
 interface RsvpTableProps {
@@ -31,7 +30,6 @@ interface RsvpTableProps {
   updateRsvpInState: (updatedRsvp: Rsvp) => void;
 }
 
-// Columns for main table (with optional responsive hiding)
 interface ColumnConfig {
   id: string;
   label: string;
@@ -101,7 +99,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
                                                createRsvp,
                                                createError,
                                                createLoading,
-                                               updateRsvpInState
+                                               updateRsvpInState,
                                              }) => {
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = React.useState<string>("primaryName");
@@ -115,21 +113,13 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
     setOrderBy(columnId);
   };
 
-  const {
-    error: updateError,
-    loading: updateLoading,
-    execute: editRsvpApi
-  } = useEditRsvp();
+  const { error: updateError, loading: updateLoading, execute: editRsvpApi } = useEditRsvp();
 
-  // This method is passed to <EditRsvpDialog onSave={handleUpdateRsvp} />
   const handleUpdateRsvp = async (updatedRsvp: Rsvp) => {
     const newRsvpData = await editRsvpApi(updatedRsvp);
-
-    // 2) If the API call returned success (no updateError), update local data
     if (newRsvpData.success) {
       updateRsvpInState(newRsvpData.data as Rsvp);
     }
-
     return newRsvpData;
   };
 
@@ -149,7 +139,6 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
   const handleSelectClick = (rsvpId: string) => {
     const selectedIndex = selected.indexOf(rsvpId);
     let newSelected: readonly string[] = [];
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, rsvpId);
     } else if (selectedIndex === 0) {
@@ -171,12 +160,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
     if (!window.confirm("Are you sure you want to delete the selected RSVPs?")) {
       return;
     }
-
-    // Using allSettled so each RSVP deletion can succeed/fail independently
-    await Promise.allSettled(
-        selected.map((rsvpId) => deleteRsvp(rsvpId))
-    );
-
+    await Promise.allSettled(selected.map((rsvpId) => deleteRsvp(rsvpId)));
     setSelected([]);
   };
 
@@ -193,14 +177,25 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
         : String(valueB).localeCompare(String(valueA));
   };
 
-  const sortedRows = React.useMemo(() => {
+  // Instead of using useMemo to sort from scratch, we initialize sortedRows in state.
+  const [sortedRows, setSortedRows] = React.useState<Rsvp[]>(() => {
     return [...rsvpData].sort(comparator);
-  }, [rsvpData, order, orderBy]);
+  });
+
+  // When rsvpData changes, reinitialize the sorted list.
+  React.useEffect(() => {
+    setSortedRows([...rsvpData].sort(comparator));
+  }, [rsvpData]);
+
+  // When sort parameters change, re-sort the previously sorted list.
+  React.useEffect(() => {
+    setSortedRows((prevSorted) => [...prevSorted].sort(comparator));
+  }, [order, orderBy]);
 
   return (
       <Paper
           sx={{
-            maxWidth: 1200, // Limit width on larger screens
+            maxWidth: 1200,
             mx: "auto",
             bgcolor: (theme) => theme.palette.secondary.light,
             p: 2,
@@ -221,8 +216,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
               <TableRow
                   sx={{
                     "& th": {
-                      borderBottom: (theme) =>
-                          `2px solid ${theme.palette.primary.main}`,
+                      borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
                       fontWeight: "bold",
                     },
                   }}
@@ -230,17 +224,11 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
                 <TableCell padding="checkbox">
                   <Checkbox
                       color="primary"
-                      indeterminate={
-                          selected.length > 0 && selected.length < rsvpData.length
-                      }
-                      checked={
-                          rsvpData.length > 0 && selected.length === rsvpData.length
-                      }
+                      indeterminate={selected.length > 0 && selected.length < rsvpData.length}
+                      checked={rsvpData.length > 0 && selected.length === rsvpData.length}
                       onChange={handleSelectAllClick}
                       slotProps={{
-                        input: {
-                          "aria-label": "select all RSVPs",
-                        },
+                        input: { "aria-label": "select all RSVPs" },
                       }}
                   />
                 </TableCell>
@@ -248,9 +236,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
                     <TableCell
                         key={column.id}
                         sx={{
-                          display: column.hideOnSmall
-                              ? {xs: "none", md: "table-cell"}
-                              : "table-cell",
+                          display: column.hideOnSmall ? { xs: "none", md: "table-cell" } : "table-cell",
                         }}
                     >
                       <TableSortLabel

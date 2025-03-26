@@ -1,5 +1,4 @@
-// components/admin/adminGuestTable/GuestTable.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AggregatedGuest, EventType } from './AdminGuestController';
 import {
   Paper,
@@ -30,7 +29,7 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
   const theme = useTheme();
 
   // Define common columns.
-  // The dietary column now aggregates both the dietary restrictions and any "other" value.
+  // The dietary column aggregates both dietary restrictions and any "other" value.
   let columns: ColumnConfig[] = [
     { id: "name", label: "Guest Name", getValue: (g) => g.name },
     {
@@ -63,6 +62,7 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
     setOrderBy(columnId);
   };
 
+  // Comparator function using the current sort order and column.
   const comparator = (a: AggregatedGuest, b: AggregatedGuest) => {
     const col = columns.find(col => col.id === orderBy);
     if (!col) return 0;
@@ -73,14 +73,20 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
         : String(valueB).localeCompare(String(valueA));
   };
 
-  const sortedGuests = React.useMemo(() => {
-    if (!guests) return [];
+  // Instead of using useMemo, store the sorted guests in state.
+  const [sortedGuests, setSortedGuests] = useState<AggregatedGuest[]>(() => {
+    return guests ? [...guests].sort(comparator) : [];
+  });
 
-    console.log(guests && guests.length + ' ' + order + ' ' + orderBy + ' ');
-    const temp = [...guests].sort(comparator);
-    console.log('Done!');
-    return temp;
-  }, [guests, order, orderBy]);
+  // When the underlying guests change, reinitialize the sorted list.
+  useEffect(() => {
+    setSortedGuests(guests ? [...guests].sort(comparator) : []);
+  }, [guests, selectedEvent]); // include selectedEvent if it affects columns
+
+  // When sort parameters change, re-sort the previously sorted list.
+  useEffect(() => {
+    setSortedGuests(prevSorted => [...prevSorted].sort(comparator));
+  }, [order, orderBy, columns]);
 
   // Helper to render a status pill using Chip.
   const renderStatusPill = (status: 'Coming' | 'Not Coming' | 'Pending' | null) => {
