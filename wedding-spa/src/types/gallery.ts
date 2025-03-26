@@ -11,15 +11,3 @@ export interface ImageMetadata {
   height?: number;
   // Add additional fields if necessary.
 }
-
-/**
- * Represents a photo in the client-side gallery.
- */
-export interface Photo {
-  src: string;
-  width: number;
-  height: number;
-  imageId: string;
-  key?: string;
-  srcSet?: Array<{ src: string; width: number }>;
-}
