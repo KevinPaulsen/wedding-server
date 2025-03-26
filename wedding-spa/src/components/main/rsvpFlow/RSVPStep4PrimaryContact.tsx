@@ -10,7 +10,6 @@ import {
   TextField
 } from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
-import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import StepLayout from './RSVPStepLayout';
 import {Rsvp} from '../../../types/rsvp';
 import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
