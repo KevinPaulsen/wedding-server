@@ -1,3 +1,4 @@
+// components/admin/adminGuestTable/GuestTable.tsx
 import React, { useState } from 'react';
 import { AggregatedGuest, EventType } from './AdminGuestController';
 import {
