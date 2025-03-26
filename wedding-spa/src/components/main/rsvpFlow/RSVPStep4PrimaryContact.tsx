@@ -10,6 +10,7 @@ import {
   TextField
 } from '@mui/material';
 import {SubmitHandler, useFormContext} from 'react-hook-form';
+import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import StepLayout from './RSVPStepLayout';
 import {Rsvp} from '../../../types/rsvp';
 import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
@@ -98,6 +99,10 @@ const PrimaryContactStep: React.FC<PrimaryContactStepProps> = ({ rsvp, onNext, o
               required
               {...register('primary_contact_email', {
                 required: 'Email is required',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Please enter a valid email address',
+                }
               })}
               error={!!errors.primary_contact_email}
               helperText={errors.primary_contact_email?.message || ''}

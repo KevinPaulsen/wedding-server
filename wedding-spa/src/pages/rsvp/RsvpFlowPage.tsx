@@ -1,6 +1,6 @@
 // pages/rsvp/RsvpFlowPage.tsx
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import {Box, Button, CircularProgress, Collapse, Fade, Paper, Typography} from '@mui/material';
+import {Box, CircularProgress, Paper, Typography} from '@mui/material';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 
