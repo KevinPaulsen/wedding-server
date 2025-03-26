@@ -73,7 +73,14 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
         : String(valueB).localeCompare(String(valueA));
   };
 
-  const sortedGuests = [...guests].sort(comparator);
+  const sortedGuests = React.useMemo(() => {
+    if (!guests) return [];
+
+    console.log(guests && guests.length + ' ' + order + ' ' + orderBy + ' ');
+    const temp = [...guests].sort(comparator);
+    console.log('Done!');
+    return temp;
+  }, [guests, order, orderBy]);
 
   // Helper to render a status pill using Chip.
   const renderStatusPill = (status: 'Coming' | 'Not Coming' | 'Pending' | null) => {

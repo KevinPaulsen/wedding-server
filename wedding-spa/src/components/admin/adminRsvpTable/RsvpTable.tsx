@@ -193,7 +193,9 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
         : String(valueB).localeCompare(String(valueA));
   };
 
-  const sortedRows = [...rsvpData].sort(comparator);
+  const sortedRows = React.useMemo(() => {
+    return [...rsvpData].sort(comparator);
+  }, [rsvpData, order, orderBy]);
 
   return (
       <Paper

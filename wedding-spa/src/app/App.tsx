@@ -1,5 +1,5 @@
 // app/App.tsx
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import AdminLogin from '../components/admin/AdminLogin';
@@ -19,6 +19,9 @@ import RegistryPage from "../pages/home/RegistryPage";
 import PaymentConfirmationPage from "../pages/home/PaymentConfirmationPage";
 import ThingsToDoPage from "../pages/home/ThingsToDoPage";
 import WeddingPartyPage from "../pages/home/WeddingPartyPage";
+import '../styles/App.css';
+import {AdminDataProvider} from "../context/AdminDataContext";
+import {LoadingIcon} from "yet-another-react-lightbox";
 
 // Define your color constants
 const primaryMainDark = '#574c3f';
@@ -29,7 +32,6 @@ const secondaryMainLight = '#ece4da';
 const secondaryLightLight = '#d4c8ba';
 const secondaryDarkLight = '#c6b7a7';
 
-// Create the theme using the variables
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -142,37 +144,49 @@ const theme = createTheme({
   },
 });
 
-
 const App: React.FC = () => {
   return (
       <ThemeProvider theme={theme}>
-        <Routes>
-          {/* Login page/redirects */}
-          <Route path="/admin/login" element={<AdminLogin/>}/>
-          <Route path="/login" element={<Navigate to="/admin/login" replace/>}/>
-          <Route path="/admin" element={<Navigate to="/admin/login" replace/>}/>
+        <Suspense fallback={<LoadingIcon />}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/details" element={<Details />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/registry" element={<RegistryPage />} />
+            <Route path="/payment-confirmation" element={<PaymentConfirmationPage />} />
+            <Route path="/story" element={<StoryPage />} />
+            <Route path="/things-to-do" element={<ThingsToDoPage />} />
+            <Route path="/wedding-party" element={<WeddingPartyPage />} />
+            <Route path="/rsvp/*" element={<RsvpFlowPage />} />
 
-          {/* Dashboard Page/redirects */}
-          <Route path="/admin/dashboard" element={<PrivateRoute component={<AdminMain/>}/>}/>
-          <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace/>}/>
+            {/* Admin Login */}
+            <Route path="/login" element={<Navigate to="/admin/login" replace />} />
+            <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
 
-          <Route path="/admin/guests" element={<PrivateRoute component={<GuestListPage/>}/>}/>
-          <Route path="/admin/add-photos" element={<PrivateRoute component={<UploadPhotoPage/>}/>}/>
+            {/* Grouped Admin Routes */}
+            <Route
+                path="/admin/*"
+                element={
+                  <PrivateRoute component={
+                    <AdminDataProvider>
+                      <Routes>
+                        <Route path="login" element={<AdminLogin />} />
+                        <Route path="dashboard" element={<AdminMain />} />
+                        <Route path="guests" element={<GuestListPage />} />
+                        <Route path="add-photos" element={<UploadPhotoPage />} />
+                        {/* You can add more admin routes here */}
+                      </Routes>
+                    </AdminDataProvider>
+                  } />
+                }
+            />
 
-          <Route path="/" element={<HomePage/>}/>
-          <Route path="/gallery" element={<Gallery/>}/>
-          <Route path="/details" element={<Details/>}/>
-          <Route path="/contact" element={<Contact/>}/>
-          <Route path="/registry" element={<RegistryPage/>}/>
-          <Route path="/payment-confirmation" element={<PaymentConfirmationPage/>}/>
-          <Route path="/story" element={<StoryPage/>}/>
-          <Route path="/things-to-do" element={<ThingsToDoPage/>}/>
-          <Route path="/wedding-party" element={<WeddingPartyPage/>}/>
-
-          <Route path="/rsvp/*" element={<RsvpFlowPage/>}/>
-
-          <Route path="*" element={<NotFound/>}/>
-        </Routes>
+            {/* Catch-all NotFound */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </ThemeProvider>
   );
 };

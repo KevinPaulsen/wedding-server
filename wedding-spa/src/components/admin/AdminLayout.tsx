@@ -23,10 +23,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
             flexDirection: 'column',
             minHeight: '100vh',
             p: 5,
-            gap: 3
+            gap: 3,
           }}
       >
-
         <WeddingHeader
             title="Admin Page"
             leftLinks={leftLinks}
@@ -36,11 +35,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
         />
 
         {/* Main Content */}
-        <Box sx={{flexGrow: 1}}>
+        <Box sx={{ flexGrow: 1 }}>
           {children}
         </Box>
         <Box>
-          <Footer/>
+          <Footer />
         </Box>
       </Box>
   );

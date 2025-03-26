@@ -12,8 +12,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useRsvpData } from "../../../hooks/rsvp/useRsvpData";
-import { Rsvp } from "../../../types/rsvp";
+import { useAdminData } from '../../../context/AdminDataContext';
+import { Rsvp } from '../../../types/rsvp';
 import GuestTable from "./GuestTable";
 
 export type EventType = 'all' | 'roce' | 'rehearsal' | 'ceremony' | 'reception';
@@ -33,20 +33,20 @@ export interface AggregatedGuest {
 }
 
 const AdminGuestController: React.FC = () => {
-  const { data } = useRsvpData();
+  // Use the cached data from the context.
+  const { data } = useAdminData();
   const [selectedEvent, setSelectedEvent] = useState<EventType>('all');
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // Aggregate all guests from each RSVP into one list.
+  // Aggregate guests from each RSVP.
   const aggregatedGuests: AggregatedGuest[] = useMemo(() => {
     if (!data) return [];
     const guests: AggregatedGuest[] = [];
     data.forEach((rsvp: Rsvp) => {
       Object.keys(rsvp.guest_list).forEach((guestId) => {
         const guestDetail = rsvp.guest_list[guestId];
-        // Compute status for each event based on RSVP submission and invitation.
         const computeStatus = (
             eventField: { invited: boolean; guests_attending: string[] }
         ): 'Coming' | 'Not Coming' | 'Pending' | null => {
@@ -75,7 +75,6 @@ const AdminGuestController: React.FC = () => {
     return guests;
   }, [data]);
 
-  // When a specific event is selected, filter to only include guests invited for that event.
   const filteredGuests = useMemo(() => {
     if (selectedEvent === 'all') return aggregatedGuests;
     return aggregatedGuests.filter(guest => guest.events[selectedEvent] !== null);
@@ -94,7 +93,6 @@ const AdminGuestController: React.FC = () => {
           Guest List
         </Typography>
         {isMobile ? (
-            // Mobile friendly: Use a Select dropdown for event filtering.
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel id="select-event-label">Event</InputLabel>
               <Select
@@ -112,7 +110,6 @@ const AdminGuestController: React.FC = () => {
               </Select>
             </FormControl>
         ) : (
-            // Desktop: Use tabs.
             <Tabs
                 value={selectedEvent}
                 onChange={(_e, newValue) => setSelectedEvent(newValue)}
