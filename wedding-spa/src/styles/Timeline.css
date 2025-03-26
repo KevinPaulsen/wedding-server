@@ -16,8 +16,8 @@
   --connector-width: 25%; /* Enough to span from item edge to vertical center */
 
   /* Event content offsets */
-  --event-transform-y: -155px; /* How far up/down to shift event content */
-  --event-offset: calc(var(--connector-width) - 40px);
+  --event-transform-y: -50%; /* How far up/down to shift event content */
+  --event-offset: calc(var(--connector-width) + 5px);
 
   /* Bullseye circles */
   --circle1-size: calc(var(--arc-container-diamater) - 2 * var(--line-width));
@@ -67,18 +67,18 @@
   position: absolute;
   width: calc(50% - var(--timeline-item-gap));
   padding: var(--timeline-item-padding);
-  text-align: center;
-  /* No explicit z-index here, so it remains above the line’s z-index: 0 */
 }
 
 /* Left-side items: pinned to the left side */
 .timeline-item.left {
   left: 0;
+  text-align: right;
 }
 
 /* Right-side items: pinned to the right side */
 .timeline-item.right {
   right: 0;
+  text-align: left;
 }
 
 /************************************************
@@ -140,7 +140,6 @@
   width: 100px; /* Adjust the size as needed */
   height: 100px; /* Adjust the size as needed */
   background-color: var(--main-dark);
-  display: block;
 }
 
 /************************************************
@@ -232,7 +231,7 @@
 /* Left Half Arc: shows the left half of the circle */
 .arc.left-half::before {
   top: 0;
-  left: 0px;
+  left: 0;
 }
 
 /* Right Half Arc: shows the right half of the circle */

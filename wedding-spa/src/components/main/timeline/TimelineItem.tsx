@@ -1,7 +1,7 @@
 // components/main/timeline/TimelineItem.tsx
 import React from "react";
 import '../../../styles/Timeline.css';
-import {Box, Typography} from "@mui/material";
+import {Box, Typography, useMediaQuery, useTheme} from "@mui/material";
 
 interface TimelineDetailsProps {
   image: string;
@@ -9,6 +9,7 @@ interface TimelineDetailsProps {
   title: string;
   location?: string;
   height?: number;
+  position: "left" | "right" | "center";
 }
 
 const TimelineDetails: React.FC<TimelineDetailsProps> = ({
@@ -16,16 +17,20 @@ const TimelineDetails: React.FC<TimelineDetailsProps> = ({
                                                            time,
                                                            title,
                                                            location,
-                                                           height = 130
+                                                           height = 130,
+                                                           position
                                                          }) => {
+  const isXs = useMediaQuery(`(max-width: ${400}px)`);
+
   return (
       <>
         <Box sx={{
           minHeight: height,
-          display: "block",
           alignContent: "end",
-          maxWidth: "100px",
-          margin: "0 auto 0.5rem",
+          display: "flex",
+          justifyContent: position === 'left' ? 'flex-end' : position === 'right' ? 'flex-start' : 'center',
+          alignItems: "end",
+          pb: 1,
         }}>
           <div
               className="icon"
@@ -35,17 +40,24 @@ const TimelineDetails: React.FC<TimelineDetailsProps> = ({
               }}
           />
         </Box>
+        <Typography variant="h6" sx={{display: "inline-block"}}>{time}</Typography>
         <Box sx={{
           minHeight: height,
-          minWidth: "168px",
           display: 'flex',
           flexDirection: 'column',
         }}>
-          <Typography variant="h6" sx={{display: "inline-block"}}>{time}</Typography>
-          <Typography variant="h6" color="primary.main"
-                      sx={{display: "inline-block"}}>{title}</Typography>
-          <Typography variant="body1" color="primary.light"
-                      sx={{display: "inline-block"}}>{location}</Typography>
+          <Typography variant={isXs ? "body1" : "h6"}
+                      color="primary.main"
+                      sx={{display: "inline-block"}}
+          >
+            {title}
+          </Typography>
+          <Typography variant={isXs ? "body2" : "body1"}
+                      color="primary.light"
+                      sx={{display: "inline-block"}}
+          >
+            {location}
+          </Typography>
         </Box>
       </>
   );
@@ -72,7 +84,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   if (position === "center") {
     return (
         <Box className="timeline-item center">
-          <TimelineDetails image={image} location={location} time={time} title={title} height={0}/>
+          <TimelineDetails image={image} location={location} time={time} title={title} height={0}
+                           position={position}/>
         </Box>
     );
   }
@@ -88,7 +101,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           <div className={`arc half ${halfArcClass}`}/>
         </div>
         <Box className="event-content">
-          <TimelineDetails image={image} location={location} time={time} title={title}/>
+          <TimelineDetails image={image} location={location} time={time} title={title}
+                           position={position}/>
         </Box>
       </div>
   );
