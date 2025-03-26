@@ -22,6 +22,7 @@ import com.paulsen.wedding.service.RsvpService;
 import com.paulsen.wedding.util.StringFormatUtil;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,6 +53,8 @@ public class RsvpControllerTest {
   public void testCreateRsvp() throws Exception {
     // Create a sample CreateRsvpDTO.
     CreateRsvpDTO createDto = new CreateRsvpDTO();
+    createDto.setPrimaryName("John Doe");
+    createDto.setAllowedGuestDisplayNames(Set.of("John Doe"));
     // Populate createDto with the minimal fields required (if any)
     // Assume that toRsvp() converts this DTO to a valid Rsvp.
     Rsvp convertedRsvp = new Rsvp();
@@ -127,6 +130,7 @@ public class RsvpControllerTest {
     LookupDTO lookupDTO = new LookupDTO();
     lookupDTO.setFirst_name("John");
     lookupDTO.setLast_name("Doe");
+    lookupDTO.setRsvp_code("CHRYSOSTOM");
 
     WeddingGuest guest = new WeddingGuest();
     // Assume that fullName is normalized using getFullName.

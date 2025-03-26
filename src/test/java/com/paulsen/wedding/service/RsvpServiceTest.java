@@ -157,8 +157,9 @@ public class RsvpServiceTest {
     // Input RSVP with empty primary contact name.
     Rsvp input = new Rsvp();
     input.setRsvpId("invalidRsvp");
-    WeddingPrimaryContact primary = new WeddingPrimaryContact("", "email@example.com", "1234567890",
+    WeddingPrimaryContact primary = new WeddingPrimaryContact("temp", "email@example.com", "1234567890",
         "123 Main St");
+    primary.setName("");
     input.setPrimaryContact(primary);
     input.setGuestList(new HashMap<>()); // Even if guest list exists, primary contact is invalid.
 
