@@ -6,7 +6,6 @@ import static com.paulsen.wedding.util.StringFormatUtil.strip;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import java.util.regex.Pattern;
 import com.paulsen.wedding.model.rsvp.CreateRsvpDTO;
 import com.paulsen.wedding.model.rsvp.Event;
 import com.paulsen.wedding.model.rsvp.Rsvp;
@@ -16,7 +15,6 @@ import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.repositories.RsvpRepository;
 import com.paulsen.wedding.repositories.WeddingGuestRepository;
 import com.paulsen.wedding.util.StringFormatUtil;
-import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,8 +25,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
@@ -43,8 +43,7 @@ public class RsvpService {
   private final RsvpRepository rsvpRepository;
   private final WeddingGuestRepository weddingGuestRepository;
 
-  public RsvpService(RsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository,
-      FileDescriptorMetrics fileDescriptorMetrics) {
+  public RsvpService(RsvpRepository rsvpRepository, WeddingGuestRepository weddingGuestRepository) {
     this.rsvpRepository = rsvpRepository;
     this.weddingGuestRepository = weddingGuestRepository;
   }
@@ -114,19 +113,30 @@ public class RsvpService {
   @Transactional
   public Rsvp saveRsvp(Rsvp input, boolean overwriteGuestList) {
     // Obtain the stored object; if no ID, create a new one.
-    Rsvp stored = (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty()) ? new Rsvp()
-        : rsvpRepository.findByRsvpId(
-                input.getRsvpId())
-            .orElseThrow(() -> new IllegalArgumentException(
-                "RSVP object not found."));
+    Rsvp stored;
 
-    Set<String> beforeNames = stored.getGuestList() == null ? new HashSet<>()
-        : new HashSet<>(stored.getGuestList().keySet());
+    // If there is an rsvp search for it, otherwise this is a new rsvp
+    if (input.getRsvpId() == null || input.getRsvpId().trim().isEmpty()) {
+      stored = new Rsvp();
+      stored.setCreationTime(System.currentTimeMillis());
+    } else {
+      stored = rsvpRepository
+          .findByRsvpId(input.getRsvpId())
+          .orElseThrow(() -> new IllegalArgumentException("RSVP object not found."));
+    }
 
-    // For booleans (submitted), always override.
+    // Get before names to see if the guest list changes (needed for maintaining guest list)
+    Set<String> beforeNames;
+    if (stored.getGuestList() == null) {
+      beforeNames = new HashSet<>();
+    } else {
+      beforeNames = new HashSet<>(stored.getGuestList().keySet());
+    }
+
+    // For submitted, always override.
     stored.setSubmitted(input.isSubmitted());
 
-    // Merge guest_list.
+    // Merge the guest list.
     Map<String, RsvpGuestDetails> mergedGuestList;
     if (overwriteGuestList) {
       sanitize(input);
@@ -153,10 +163,12 @@ public class RsvpService {
     stored.setCeremony(mergeEvent(stored.getCeremony(), input.getCeremony(), allowedGuests));
     stored.setReception(mergeEvent(stored.getReception(), input.getReception(), allowedGuests));
 
-    for (String name : getAllNames(stored)) {
-      if (!stored.getGuestList().containsKey(name)) {
-        throw new IllegalArgumentException("Name " + name + " is not the guest list.");
-      }
+    // Ensure that guest invariants are correct before storing to DB
+    validateCorrectness(stored);
+
+    // If this rsvp is submitted, then update the submission time
+    if (stored.isSubmitted()) {
+      stored.setLastSubmissionTime(System.currentTimeMillis());
     }
 
     stored = rsvpRepository.save(stored);
@@ -176,6 +188,28 @@ public class RsvpService {
     }
 
     return stored;
+  }
+
+  private void validateCorrectness(Rsvp stored) {
+    Set<String> guestsInRsvp = stored.getNamesInEvents();
+
+    // Ensure that for each guest, they must be marked coming, this is self-correcting
+    for (Entry<String, RsvpGuestDetails> guestEntry: stored.getGuestList().entrySet()) {
+      String indexName = guestEntry.getKey();
+      RsvpGuestDetails guestDetails = guestEntry.getValue();
+      if (guestDetails.isComing() && !guestsInRsvp.contains(indexName)) {
+        guestDetails.setComing(false);
+      }
+    }
+
+    guestsInRsvp.add(stored.getPrimaryContact().getName());
+
+    // Search all names (in each event and primary contact) and ensure they are in the guest list
+    for (String indexName : guestsInRsvp) {
+      if (!stored.getGuestList().containsKey(indexName)) {
+        throw new IllegalArgumentException("Name " + indexName + " is not the guest list.");
+      }
+    }
   }
 
   @Transactional
@@ -242,11 +276,12 @@ public class RsvpService {
 
     String fullName = StringFormatUtil.formatToIndexName(firstName, lastName);
     return weddingGuestRepository.findByFullName(fullName)
-        .orElseThrow(() -> new IllegalArgumentException( String.format("RSVP with name %s %s not found", firstName, lastName)));
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("RSVP with name %s %s not found", firstName, lastName)));
   }
 
-  private List<String> getAllNames(Rsvp rsvp) {
-    List<String> allNames = new ArrayList<>();
+  private Set<String> getAllNames(Rsvp rsvp) {
+    Set<String> allNames = new HashSet<>();
 
     allNames.add(rsvp.getPrimaryContact().getName());
     allNames.addAll(rsvp.getRoce().getGuestsAttending());
@@ -429,15 +464,14 @@ public class RsvpService {
   /**
    * Imports RSVPs from a CSV file with flexible header ordering.
    * <p>
-   * Expected CSV format:
-   *   - First row is metadata (e.g., "Total Guests Invited =,275") and is skipped.
-   *   - Second row is the header. Column names can be in any order.
-   *     Expected columns (case-insensitive) include:
-   *         "Name of Primary Contact", "Address", "Phone Number", "Email"
-   *         and event invitation columns: "Roce", "Rehearsal Dinner", "Ceremony", "Reception".
-   *         Any column header matching the regex "Guest\s*\d+" will be treated as an additional guest.
+   * Expected CSV format: - First row is metadata (e.g., "Total Guests Invited =,275") and is
+   * skipped. - Second row is the header. Column names can be in any order. Expected columns
+   * (case-insensitive) include: "Name of Primary Contact", "Address", "Phone Number", "Email" and
+   * event invitation columns: "Roce", "Rehearsal Dinner", "Ceremony", "Reception". Any column
+   * header matching the regex "Guest\s*\d+" will be treated as an additional guest.
    * <p>
-   * For any event column that is not present in the header, the RSVP is assumed to be invited (i.e. true).
+   * For any event column that is not present in the header, the RSVP is assumed to be invited (i.e.
+   * true).
    */
   @Transactional
   public String importRsvpsFromCsv(MultipartFile file) {
@@ -468,7 +502,9 @@ public class RsvpService {
       // Process each subsequent row.
       String[] row;
       while ((row = csvReader.readNext()) != null) {
-        if (row.length == 0) continue; // Skip empty rows.
+        if (row.length == 0) {
+          continue; // Skip empty rows.
+        }
         CreateRsvpDTO dto = new CreateRsvpDTO();
 
         // Primary contact fields (if header present, read value; else leave null).
@@ -495,13 +531,15 @@ public class RsvpService {
         dto.setHasRoceInvitation(roceIdx == -1 || convertStringToBoolean(row[roceIdx]));
 
         int rehearsalIdx = headerMap.getOrDefault("rehearsal dinner", -1);
-        dto.setHasRehearsalInvitation(rehearsalIdx == -1 || convertStringToBoolean(row[rehearsalIdx]));
+        dto.setHasRehearsalInvitation(
+            rehearsalIdx == -1 || convertStringToBoolean(row[rehearsalIdx]));
 
         int ceremonyIdx = headerMap.getOrDefault("ceremony", -1);
         dto.setHasCeremonyInvitation(ceremonyIdx == -1 || convertStringToBoolean(row[ceremonyIdx]));
 
         int receptionIdx = headerMap.getOrDefault("reception", -1);
-        dto.setHasReceptionInvitation(receptionIdx == -1 || convertStringToBoolean(row[receptionIdx]));
+        dto.setHasReceptionInvitation(
+            receptionIdx == -1 || convertStringToBoolean(row[receptionIdx]));
 
         // Process any column whose header matches "Guest <number>".
         Set<String> guestNames = new HashSet<>();
