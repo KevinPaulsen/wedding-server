@@ -56,8 +56,8 @@ public class RsvpController {
   }
 
   @PostMapping("/create-all")
-  public ResponseEntity<String> createAll(@RequestParam("file") MultipartFile file) {
-    return new ResponseEntity<>(rsvpService.importRsvpsFromCsv(file), HttpStatus.CREATED);
+  public ResponseEntity<Map<String, String>> createAll(@RequestParam("file") MultipartFile file) {
+    return new ResponseEntity<>(Map.of("message", rsvpService.importRsvpsFromCsv(file)), HttpStatus.CREATED);
   }
 
   @PutMapping("/edit")

@@ -27,7 +27,7 @@ public class Rsvp {
   @DynamoDBAttribute(attributeName = "creation_time")
   private Long creationTime;
 
-  @DynamoDBAttribute(attributeName = "submission_time")
+  @DynamoDBAttribute(attributeName = "last_submission_time")
   private Long lastSubmissionTime;
 
   @DynamoDBAttribute(attributeName = "submitted")
