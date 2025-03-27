@@ -57,7 +57,7 @@ const AdminRsvpInfoPage: React.FC = () => {
           }],
         },
         {
-          statName: 'Total not Coming',
+          statName: 'Total Not Coming',
           data: [{
             statData: notComingInvitations,
             color: theme.palette.error.main,
