@@ -124,7 +124,7 @@ export async function createAllRsvps(file: File): Promise<ApiResponse<string>> {
   formData.append("file", file);
 
   // Make the API call; note we do not set "Content-Type" header manually
-  return request<string>("/create-all", {
+  return request<string>("/rsvp/create-all", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,

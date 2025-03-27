@@ -12,13 +12,15 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import { Rsvp } from "../../../types/rsvp";
+import {Rsvp} from "../../../types/rsvp";
 import EditRsvpDialog from "./EditRsvpDialog";
-import { useEditRsvp } from "../../../hooks/rsvp/useEditRsvp";
-import { RsvpTableRow } from "./RsvpTableRow";
-import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
-import { CreateRsvpDTO } from "../../../types/RsvpDTO";
+import {useEditRsvp} from "../../../hooks/rsvp/useEditRsvp";
+import {RsvpTableRow} from "./RsvpTableRow";
+import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
+import {CreateRsvpDTO} from "../../../types/RsvpDTO";
 import CreateRsvpDialog from "./CreateRsvpDialog";
+import CreateBatchRsvpDialog from "./CreateBatchRsvpDialog";
+import {useCreateAllRsvps} from "../../../hooks/rsvp/useCreateAllRsvps";
 
 interface RsvpTableProps {
   rsvpData: Rsvp[];
@@ -107,6 +109,8 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [editingRsvp, setEditingRsvp] = React.useState<Rsvp | null>(null);
   const [creatingRsvp, setCreatingRsvp] = React.useState<CreateRsvpDTO | null>(null);
+  // New state to control the batch upload dialog.
+  const [batchDialogOpen, setBatchDialogOpen] = React.useState(false);
 
   const handleRequestSort = (columnId: string) => {
     const isAsc = orderBy === columnId && order === "asc";
@@ -193,6 +197,23 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
     setSortedRows((prevSorted) => [...prevSorted].sort(comparator));
   }, [order, orderBy]);
 
+  // Handler to open the batch upload dialog.
+  const handleBatchAdd = () => {
+    setBatchDialogOpen(true);
+  };
+
+  // Use the new hook for batch creation via file upload.
+  const { execute: batchCreateRsvps, error: batchError, loading: batchLoading } = useCreateAllRsvps();
+
+  const handleBatchSubmit = async (file: File) => {
+    const response = await batchCreateRsvps(file);
+    if (response.success) {
+      // Optionally, refresh the table data or notify the user.
+      return true;
+    }
+    return false;
+  };
+
   return (
       <Paper
           sx={{
@@ -207,6 +228,7 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
             numSelected={selected.length}
             onDelete={handleDelete}
             onAddRsvp={() => setCreatingRsvp(JSON.parse(JSON.stringify(createRsvpDto)))}
+            onBatchAdd={handleBatchAdd}
             loading={deleteLoading}
         />
         {deleteError && <Alert severity="error">{deleteError}</Alert>}
@@ -281,6 +303,13 @@ const RsvpTable: React.FC<RsvpTableProps> = ({
             onSave={handleUpdateRsvp}
             loading={updateLoading}
             error={updateError}
+        />
+        <CreateBatchRsvpDialog
+            open={batchDialogOpen}
+            onClose={() => setBatchDialogOpen(false)}
+            onSubmit={handleBatchSubmit}
+            loading={batchLoading}
+            error={batchError}
         />
       </Paper>
   );
