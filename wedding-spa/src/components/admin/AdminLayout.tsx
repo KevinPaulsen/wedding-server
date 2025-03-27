@@ -22,7 +22,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100vh',
-            p: 5,
+            py: 5,
             gap: 3,
           }}
       >
@@ -35,7 +35,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
         />
 
         {/* Main Content */}
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{
+          width: "100%",
+          maxWidth: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 3,
+          p: 1,
+        }}>
           {children}
         </Box>
         <Box>

@@ -8,10 +8,8 @@ import PhotoGalleryComponent from '../../components/main/PhotoGalleryComponent';
 const UploadPhotoPage: React.FC = () => {
   return (
       <AdminLayout>
-        <>
-          <AdminFileUploadComponent/>
-          <PhotoGalleryComponent makeDraggable/>
-        </>
+        <AdminFileUploadComponent/>
+        <PhotoGalleryComponent makeDraggable/>
       </AdminLayout>
   );
 };

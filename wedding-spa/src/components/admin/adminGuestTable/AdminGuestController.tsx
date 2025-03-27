@@ -33,7 +33,6 @@ export interface AggregatedGuest {
 }
 
 const AdminGuestController: React.FC = () => {
-  // Use the cached data from the context.
   const { data } = useAdminData();
   const [selectedEvent, setSelectedEvent] = useState<EventType>('all');
 
@@ -83,15 +82,12 @@ const AdminGuestController: React.FC = () => {
   return (
       <Paper
           sx={{
-            maxWidth: 1200,
-            mx: "auto",
+            maxWidth: { xs: '100%', md: 1200 },
+            mx: 5,
             p: 2,
             bgcolor: (theme) => theme.palette.secondary.light,
           }}
       >
-        <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
-          Guest List
-        </Typography>
         {isMobile ? (
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel id="select-event-label">Event</InputLabel>
@@ -101,6 +97,8 @@ const AdminGuestController: React.FC = () => {
                   value={selectedEvent}
                   label="Event"
                   onChange={(e) => setSelectedEvent(e.target.value as EventType)}
+                  variant="outlined"
+                  size="small"
               >
                 <MenuItem value="all">All</MenuItem>
                 <MenuItem value="roce">Roce</MenuItem>
