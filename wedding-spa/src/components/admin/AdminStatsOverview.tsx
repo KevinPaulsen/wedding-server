@@ -1,18 +1,18 @@
 // components/admin/AdminStatsDashboard.tsx
 import React from 'react';
-import {Box, Card, CardContent, Grid2, Typography, useTheme} from '@mui/material';
-
-interface EventStats {
-  pending: number;
-  coming: number;
-  notComing: number;
-}
+import {Box, Card, CardContent, Grid, Grid2, Typography, useTheme} from '@mui/material';
 
 export interface StatsData {
-  totalGuests: number;
-  events: {
-    [key: string]: EventStats;
-  };
+  mainStatName: string;
+  mainStatData: number;
+  smallStats: {
+    statName: string;
+    data: {
+      name?: string;
+      statData: number;
+      color?: string;
+    }[]
+  }[];
 }
 
 interface AdminStatsDashboardProps {
@@ -22,72 +22,81 @@ interface AdminStatsDashboardProps {
 const AdminStatsDashboard: React.FC<AdminStatsDashboardProps> = ({ stats }) => {
   const theme = useTheme();
 
-  // Helper function using MUI theme colors
-  const getColor = (type: 'pending' | 'coming' | 'notComing'): string => {
-    switch (type) {
-      case 'pending':
-        return theme.palette.info.main;
-      case 'coming':
-        return theme.palette.success.main;
-      case 'notComing':
-        return theme.palette.error.main;
-      default:
-        return '#000';
-    }
-  };
+  // Helper to determine the color: use provided color or fallback to theme text primary.
+  const getColor = (color?: string): string => color || theme.palette.text.primary;
 
   return (
       <Box sx={{
-        width: '100%',
-        maxWidth: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        mx: 1,
       }}>
         <Card
             sx={{
+              display: 'flex',
+              flexDirection: 'column',
               p: 2,
-              mx: 1,
+              gap: 1,
+              width: '100%',
               maxWidth: 1100,
-              bgcolor: theme.palette.secondary.light
+              bgcolor: theme.palette.secondary.light,
             }}
         >
-          <Grid2 container spacing={2}>
-            {/* Global Total Guests */}
-            <Grid2 size={12}>
-              <Card sx={{ textAlign: 'center' }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    Total Guests
-                  </Typography>
-                  <Typography variant="h4">{stats.totalGuests}</Typography>
-                </CardContent>
-              </Card>
-            </Grid2>
-            {/* Event-specific Stats */}
-            {Object.entries(stats.events).map(([eventName, eventData]) => (
-                <Grid2 size={{xs: 12, sm: 6, lg: 3}} key={eventName}>
+          <Card sx={{ textAlign: 'center' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                {stats.mainStatName}
+              </Typography>
+              <Typography variant="h4">{stats.mainStatData}</Typography>
+            </CardContent>
+          </Card>
+
+          {/* Small Stats Cards */}
+          <Grid2 container spacing={1} justifyContent="center">
+            {stats.smallStats.map((group, index) => (
+                <Grid2 key={index} size={{xs: 12, sm: 6, lg: 3}}>
                   <Card>
                     <CardContent>
-                      <Typography variant="h6" sx={{ textTransform: 'capitalize', mb: 1, textAlign: 'center' }}>
-                        {eventName}
-                      </Typography>
-                      <Grid2 container spacing={1}>
-                        {(['pending', 'coming', 'notComing'] as const).map((key) => (
-                            <Grid2 size={4} key={key}>
-                              <Box sx={{ textAlign: 'center' }}>
-                                <Typography
-                                    variant="subtitle2"
-                                    sx={{ color: getColor(key), fontWeight: 'bold' }}
-                                >
-                                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                                </Typography>
-                                <Typography variant="h6">{eventData[key]}</Typography>
-                              </Box>
-                            </Grid2>
-                        ))}
-                      </Grid2>
+                      {/* If there is only one data item without a name, display a simple card */}
+                      {group.data.length === 1 && !group.data[0].name ? (
+                          <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+                              {group.statName}
+                            </Typography>
+                            <Typography variant="h4" sx={{ color: getColor(group.data[0].color) }}>
+                              {group.data[0].statData}
+                            </Typography>
+                          </Box>
+                      ) : (
+                          <>
+                            <Typography
+                                variant="h6"
+                                sx={{ textAlign: 'center', textTransform: 'capitalize', mb: 1 }}
+                            >
+                              {group.statName}
+                            </Typography>
+                            <Box sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'space-around',
+                            }}>
+                              {group.data.map((item, idx) => (
+                                  <Box sx={{ textAlign: 'center' }}>
+                                    {item.name && (
+                                        <Typography
+                                            variant="subtitle2"
+                                            sx={{ fontWeight: 'bold', color: getColor(item.color) }}
+                                        >
+                                          {item.name}
+                                        </Typography>
+                                    )}
+                                    <Typography variant="h6">{item.statData}</Typography>
+                                  </Box>
+                              ))}
+                            </Box>
+                          </>
+                      )}
                     </CardContent>
                   </Card>
                 </Grid2>
