@@ -1,6 +1,6 @@
 package com.paulsen.wedding.util;
 
-import com.stripe.model.tax.Registration;
+import com.paulsen.wedding.service.RsvpService.InvalidRsvpInputException;
 import java.text.Normalizer;
 import java.util.Locale;
 
@@ -11,7 +11,7 @@ public class StringFormatUtil {
    */
   public static String formatToIndexName(String fullName) {
     if (fullName == null || fullName.trim().isBlank()) {
-      throw new IllegalArgumentException("Name must not be null or empty.");
+      throw new InvalidRsvpInputException("Name must not be null or empty.");
     }
 
     fullName = fullName.toLowerCase(Locale.ROOT);
@@ -36,9 +36,9 @@ public class StringFormatUtil {
 
   public static String formatToIndexName(String firstName, String lastName) {
     if (firstName == null || firstName.trim().isBlank()) {
-      throw new IllegalArgumentException("First name must not be null or empty.");
+      throw new InvalidRsvpInputException("First name must not be null or empty.");
     } else if(lastName == null || lastName.trim().isBlank()) {
-      throw new IllegalArgumentException("Last name must not be null or empty.");
+      throw new InvalidRsvpInputException("Last name must not be null or empty.");
     }
 
     return formatToIndexName(String.format("%s %s", firstName, lastName));
@@ -50,7 +50,7 @@ public class StringFormatUtil {
 
   public static String strip(String string) {
     if (string == null || string.trim().isBlank()) {
-      throw new IllegalArgumentException("Name must not be null or empty.");
+      throw new InvalidRsvpInputException("Name must not be null or empty.");
     }
 
     StringBuilder builder = new StringBuilder();
@@ -73,7 +73,7 @@ public class StringFormatUtil {
 
   public static String formatRsvpCode(String rsvpCode) {
     if (rsvpCode == null || rsvpCode.trim().isBlank()) {
-      throw new IllegalArgumentException("RSVP Code must not be null or empty.");
+      throw new InvalidRsvpInputException("RSVP Code must not be null or empty.");
     }
 
     return rsvpCode.trim().toUpperCase();
