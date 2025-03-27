@@ -1,4 +1,4 @@
-// components/admin/AdminStatsDashboard.tsx
+// components/admin/AdminStatsOverview.tsx
 import React from 'react';
 import {Box, Card, CardContent, Grid, Grid2, Typography, useTheme} from '@mui/material';
 

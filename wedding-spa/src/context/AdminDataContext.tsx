@@ -1,4 +1,4 @@
-// src/context/AdminDataContext.tsx
+// context/AdminDataContext.tsx
 import React, { createContext, useContext } from 'react';
 import { useRsvpData } from '../hooks/rsvp/useRsvpData';
 import { Rsvp } from '../types/rsvp';
