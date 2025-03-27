@@ -114,6 +114,28 @@ export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<R
 }
 
 /**
+ * Import RSVPs from a CSV file by uploading it.
+ * Java backend endpoint: POST /rsvp/create-all
+ * Accepts a multipart/form-data file upload.
+ */
+export async function createAllRsvps(file: File): Promise<ApiResponse<string>> {
+  // Create FormData and append the file with key 'file'
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Make the API call; note we do not set "Content-Type" header manually
+  return request<string>("/create-all", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
+      // No Content-Type here: letting the browser set multipart boundary
+    },
+    credentials: "include",
+    body: formData,
+  });
+}
+
+/**
  * Edit an existing RSVP by calling PUT /rsvp/edit.
  * The backend expects the full Rsvp object in the body, returns {message}.
  */
