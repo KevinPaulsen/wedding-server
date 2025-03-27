@@ -721,6 +721,10 @@ public class RsvpService {
         }
         dto.setAllowedGuestDisplayNames(guestNames);
 
+        if (!dto.isValid()) {
+          continue;
+        }
+
         // Convert DTO to RSVP and save it (overwriting the guest list).
         saveRsvp(dto.toRsvp(), true);
         count++;

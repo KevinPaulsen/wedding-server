@@ -1,5 +1,7 @@
 package com.paulsen.wedding.model.rsvp;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.paulsen.wedding.util.StringFormatUtil;
 import java.util.Collections;
@@ -141,5 +143,14 @@ public class CreateRsvpDTO {
   @JsonProperty("reception_invitation")
   public void setHasReceptionInvitation(Boolean hasReceptionInvitation) {
     this.hasReceptionInvitation = hasReceptionInvitation;
+  }
+
+  @JsonIgnore
+  @DynamoDBIgnore
+  public boolean isValid() {
+    boolean isValid = primaryName != null && !primaryName.trim().isEmpty();
+    isValid = isValid && allowedGuestDisplayNames != null && !allowedGuestDisplayNames.isEmpty();
+
+    return isValid;
   }
 }
