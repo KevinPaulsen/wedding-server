@@ -1,7 +1,6 @@
 // components/admin/AdminLayout.tsx
 import React from 'react';
 import {Box} from '@mui/material';
-import "../../styles/Header.css";
 import WeddingHeader, {HeaderLink} from "../main/headerComponents/Header";
 import Footer from "../main/headerComponents/Footer";
 
@@ -29,10 +28,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
         <WeddingHeader
             title="Admin Page"
             leftLinks={leftLinks}
-            centerButton={false}
             homeIconDestination={'/'}
             mainDestination="/admin/dashboard"
         />
+
+        {/* Add optional metadata component */}
 
         {/* Main Content */}
         <Box sx={{

@@ -230,21 +230,13 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
           ) : (
               <>
                 {/* Desktop Navigation Links */}
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 3 }}>
-                  {leftLinks.map((link) => (
-                      <StyledNavLink key={link.to} to={link.to}>
-                        {link.label}
-                      </StyledNavLink>
-                  ))}
-                  {rightLinks.map((link) => (
-                      <StyledNavLink key={link.to} to={link.to}>
-                        {link.label}
-                      </StyledNavLink>
-                  ))}
-                </Box>
-
-                {/* Mobile Navigation Links */}
-                <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'center', gap: 3, mt: 2 }}>
+                <Box
+                    sx={{
+                      display: { xs: 'none', md: 'flex' },
+                      justifyContent: 'center',
+                      gap: 3
+                    }}
+                >
                   {leftLinks.map((link) => (
                       <StyledNavLink key={link.to} to={link.to}>
                         {link.label}
