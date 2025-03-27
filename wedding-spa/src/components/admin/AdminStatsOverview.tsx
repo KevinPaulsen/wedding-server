@@ -1,6 +1,6 @@
 // components/admin/AdminStatsDashboard.tsx
 import React from 'react';
-import { Box, Card, CardContent, Typography, Grid, useTheme } from '@mui/material';
+import {Box, Card, CardContent, Grid2, Typography, useTheme} from '@mui/material';
 
 interface EventStats {
   pending: number;
@@ -50,12 +50,12 @@ const AdminStatsDashboard: React.FC<AdminStatsDashboardProps> = ({ stats }) => {
               p: 2,
               mx: 1,
               maxWidth: 1100,
-              bgcolor: theme.palette.secondary.dark
+              bgcolor: theme.palette.secondary.light
             }}
         >
-          <Grid container spacing={2}>
+          <Grid2 container spacing={2}>
             {/* Global Total Guests */}
-            <Grid item xs={12}>
+            <Grid2 size={12}>
               <Card sx={{ textAlign: 'center' }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
@@ -64,18 +64,18 @@ const AdminStatsDashboard: React.FC<AdminStatsDashboardProps> = ({ stats }) => {
                   <Typography variant="h4">{stats.totalGuests}</Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
             {/* Event-specific Stats */}
             {Object.entries(stats.events).map(([eventName, eventData]) => (
-                <Grid item xs={12} sm={6} md={3} key={eventName}>
+                <Grid2 size={{xs: 12, sm: 6, lg: 3}} key={eventName}>
                   <Card>
                     <CardContent>
-                      <Typography variant="h6" sx={{ textTransform: 'capitalize', mb: 1 }}>
+                      <Typography variant="h6" sx={{ textTransform: 'capitalize', mb: 1, textAlign: 'center' }}>
                         {eventName}
                       </Typography>
-                      <Grid container spacing={1}>
+                      <Grid2 container spacing={1}>
                         {(['pending', 'coming', 'notComing'] as const).map((key) => (
-                            <Grid item xs={4} key={key}>
+                            <Grid2 size={4} key={key}>
                               <Box sx={{ textAlign: 'center' }}>
                                 <Typography
                                     variant="subtitle2"
@@ -85,14 +85,14 @@ const AdminStatsDashboard: React.FC<AdminStatsDashboardProps> = ({ stats }) => {
                                 </Typography>
                                 <Typography variant="h6">{eventData[key]}</Typography>
                               </Box>
-                            </Grid>
+                            </Grid2>
                         ))}
-                      </Grid>
+                      </Grid2>
                     </CardContent>
                   </Card>
-                </Grid>
+                </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         </Card>
       </Box>
   );

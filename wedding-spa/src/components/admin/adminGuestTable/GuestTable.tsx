@@ -1,6 +1,6 @@
 // components/admin/adminGuestTable/GuestTable.tsx
-import React, {useState} from 'react';
-import {AggregatedGuest, EventType} from './AdminGuestController';
+import React, { useState } from 'react';
+import { AggregatedGuest, EventType } from './AdminGuestController';
 import {
   Chip,
   Paper,
@@ -12,6 +12,7 @@ import {
   TableRow,
   TableSortLabel,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 interface GuestTableProps {
@@ -28,6 +29,7 @@ interface ColumnConfig {
 
 const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Define common columns.
   // The dietary column now aggregates both the dietary restrictions and any "other" value.
@@ -51,6 +53,11 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
   } else {
     // Otherwise, show a single "Status" column for the selected event.
     columns.push({ id: "status", label: "Status", getValue: (g) => g.events[selectedEvent] });
+  }
+
+  // Remove dietary restrictions column on small screens.
+  if (isSmallScreen) {
+    columns = columns.filter(col => col.id !== 'dietary');
   }
 
   // Sorting state.
@@ -78,7 +85,7 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
     return [...guests].sort(comparator);
   });
 
-  // When rsvpData changes, reinitialize the sorted list.
+  // When guests change, reinitialize the sorted list.
   React.useEffect(() => {
     setSortedRows([...guests].sort(comparator));
   }, [guests]);
