@@ -79,7 +79,7 @@ public class Rsvp {
   }
 
   @JsonProperty("creation_time")
-  public void setCreationTime(long creationTime) {
+  public void setCreationTime(Long creationTime) {
     this.creationTime = creationTime;
   }
 
@@ -89,7 +89,7 @@ public class Rsvp {
   }
 
   @JsonProperty("last_submission_time")
-  public void setLastSubmissionTime(long lastSubmissionTime) {
+  public void setLastSubmissionTime(Long lastSubmissionTime) {
     this.lastSubmissionTime = lastSubmissionTime;
   }
 
