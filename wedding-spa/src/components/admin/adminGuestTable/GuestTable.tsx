@@ -1,7 +1,8 @@
 // components/admin/adminGuestTable/GuestTable.tsx
-import React, { useState } from 'react';
-import { AggregatedGuest, EventType } from './AdminGuestController';
+import React, {useState} from 'react';
+import {AggregatedGuest, EventType} from './AdminGuestController';
 import {
+  Chip,
   Paper,
   Table,
   TableBody,
@@ -10,7 +11,6 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Chip,
   useTheme,
 } from "@mui/material";
 
@@ -73,14 +73,20 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
         : String(valueB).localeCompare(String(valueA));
   };
 
-  const sortedGuests = React.useMemo(() => {
-    if (!guests) return [];
+  // Instead of using useMemo to sort from scratch, we initialize sortedRows in state.
+  const [sortedRows, setSortedRows] = React.useState<AggregatedGuest[]>(() => {
+    return [...guests].sort(comparator);
+  });
 
-    console.log(guests && guests.length + ' ' + order + ' ' + orderBy + ' ');
-    const temp = [...guests].sort(comparator);
-    console.log('Done!');
-    return temp;
-  }, [guests, order, orderBy]);
+  // When rsvpData changes, reinitialize the sorted list.
+  React.useEffect(() => {
+    setSortedRows([...guests].sort(comparator));
+  }, [guests]);
+
+  // When sort parameters change, re-sort the previously sorted list.
+  React.useEffect(() => {
+    setSortedRows((prevSorted) => [...prevSorted].sort(comparator));
+  }, [order, orderBy]);
 
   // Helper to render a status pill using Chip.
   const renderStatusPill = (status: 'Coming' | 'Not Coming' | 'Pending' | null) => {
@@ -117,7 +123,7 @@ const GuestTable: React.FC<GuestTableProps> = ({ guests, selectedEvent }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedGuests.map((guest, index) => (
+            {sortedRows.map((guest, index) => (
                 <TableRow
                     key={`${guest.rsvpId}-${guest.guestId}-${index}`}
                     sx={{

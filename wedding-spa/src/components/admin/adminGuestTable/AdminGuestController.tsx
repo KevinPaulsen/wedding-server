@@ -82,7 +82,8 @@ const AdminGuestController: React.FC = () => {
   return (
       <Paper
           sx={{
-            maxWidth: { xs: '100%', md: 1200 },
+            width: "100%",
+            maxWidth: { xs: '100%', md: 1100 },
             mx: 5,
             p: 2,
             bgcolor: (theme) => theme.palette.secondary.light,
