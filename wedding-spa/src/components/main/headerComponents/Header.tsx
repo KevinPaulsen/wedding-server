@@ -1,8 +1,8 @@
 // components/main/headerComponents/Header.tsx
-import React, { useState, useEffect, useRef } from 'react';
-import { Box, Grid2, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import React, {useEffect, useRef, useState} from 'react';
+import {Box, Grid2, Typography} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import {Link, NavLink, useNavigate} from 'react-router-dom';
 import FullScreenMenu from './FullScreenMenu';
 import CustomButton from '../../shared/CustomButton';
 import HomeIcon from '@mui/icons-material/Home';
@@ -60,13 +60,19 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
 
   const handleClick = () => {
     navigate('/rsvp');
+    window.scrollTo(0, 0);
+  };
+
+  // Handler to scroll to top on link click
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
     const handleScroll = () => {
       if (titleRef.current) {
         const rect = titleRef.current.getBoundingClientRect();
-        // When the title's top is at or above 64px (adjust to your fixed header height)
+        // When the title's top is at or above 40px (adjust to your fixed header height)
         setIsTitleSticky(rect.top <= 40);
       }
     };
@@ -86,7 +92,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
               width: '100%',
               zIndex: 1100,
               py: 1,
-              px: {xs: 1, sm: 3},
+              px: { xs: 1, sm: 3 },
               backgroundColor: (theme) => theme.palette.secondary.main,
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -98,6 +104,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
               <Box
                   component={NavLink}
                   to={homeIconDestination}
+                  onClick={scrollToTop}
                   sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <HomeIcon fontSize="large" sx={{ color: (theme) => theme.palette.primary.main }} />
@@ -106,17 +113,18 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
 
           {/* Center placeholder: either title when sticky, or an empty box with fixed width */}
           <Box sx={{ textAlign: 'center' }}>
-              <Typography
-                  variant="h1"
-                  sx={{
-                    color: (theme) => isTitleSticky ? theme.palette.primary.main : theme.palette.secondary.main,
-                    fontSize: 'clamp(1em, 4vw + 1em, 6em)',
-                    transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
-                    opacity: 1,
-                  }}
-              >
-                {title}
-              </Typography>
+            <Typography
+                variant="h1"
+                sx={{
+                  color: (theme) =>
+                      isTitleSticky ? theme.palette.primary.main : theme.palette.secondary.main,
+                  fontSize: 'clamp(1em, 4vw + 1em, 6em)',
+                  transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
+                  opacity: 1,
+                }}
+            >
+              {title}
+            </Typography>
           </Box>
 
           {/* FullScreen Menu on the right */}
@@ -139,6 +147,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
                   <Box
                       component={NavLink}
                       to={homeIconDestination}
+                      onClick={scrollToTop}
                       sx={{ display: 'flex', alignItems: 'center' }}
                   >
                     <HomeIcon fontSize="large" sx={{ color: (theme) => theme.palette.primary.main }} />
@@ -147,7 +156,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
             </Grid2>
             <Grid2 size={8} sx={{ textAlign: 'center' }}>
               {mainDestination ? (
-                  <Link to={mainDestination} style={{ textDecoration: 'none' }}>
+                  <Link to={mainDestination} onClick={scrollToTop} style={{ textDecoration: 'none' }}>
                     <Typography variant="h1" sx={{ fontSize: 'clamp(1em, 4vw + 1em, 6em)' }}>
                       {title}
                     </Typography>
@@ -175,8 +184,11 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
               }}
           >
             {mainDestination ? (
-                <Link to={mainDestination} style={{ textDecoration: 'none' }}>
-                  <Typography variant="h1" sx={{ fontSize: 'clamp(1em, 4vw + 1em, 6em)', textAlign: 'center' }}>
+                <Link to={mainDestination} onClick={scrollToTop} style={{ textDecoration: 'none' }}>
+                  <Typography
+                      variant="h1"
+                      sx={{ fontSize: 'clamp(1em, 4vw + 1em, 6em)', textAlign: 'center' }}
+                  >
                     {title}
                   </Typography>
                 </Link>
@@ -202,7 +214,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
                   {leftLinks && (
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3 }}>
                         {leftLinks.map((link) => (
-                            <StyledNavLink key={link.to} to={link.to}>
+                            <StyledNavLink key={link.to} to={link.to} onClick={scrollToTop}>
                               {link.label}
                             </StyledNavLink>
                         ))}
@@ -214,7 +226,7 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
                   {rightLinks && (
                       <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 3 }}>
                         {rightLinks.map((link) => (
-                            <StyledNavLink key={link.to} to={link.to}>
+                            <StyledNavLink key={link.to} to={link.to} onClick={scrollToTop}>
                               {link.label}
                             </StyledNavLink>
                         ))}
@@ -234,16 +246,16 @@ const WeddingHeader: React.FC<AppHeaderProps> = ({
                     sx={{
                       display: { xs: 'none', md: 'flex' },
                       justifyContent: 'center',
-                      gap: 3
+                      gap: 3,
                     }}
                 >
                   {leftLinks.map((link) => (
-                      <StyledNavLink key={link.to} to={link.to}>
+                      <StyledNavLink key={link.to} to={link.to} onClick={scrollToTop}>
                         {link.label}
                       </StyledNavLink>
                   ))}
                   {rightLinks.map((link) => (
-                      <StyledNavLink key={link.to} to={link.to}>
+                      <StyledNavLink key={link.to} to={link.to} onClick={scrollToTop}>
                         {link.label}
                       </StyledNavLink>
                   ))}

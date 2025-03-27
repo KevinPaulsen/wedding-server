@@ -77,7 +77,14 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ links }) => {
             {/* Menu Links (Grows to fill available space) */}
             <Box sx={{ flexGrow: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               {links.map(link => (
-                  <StyledMenuLink key={link.to} to={link.to}>
+                  <StyledMenuLink
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                        setMenuOpen(false);
+                      }}
+                  >
                     {link.label}
                   </StyledMenuLink>
               ))}
