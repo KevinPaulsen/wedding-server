@@ -118,13 +118,13 @@ export async function createRsvp(rsvpData: CreateRsvpDTO): Promise<ApiResponse<R
  * Java backend endpoint: POST /rsvp/create-all
  * Accepts a multipart/form-data file upload.
  */
-export async function createAllRsvps(file: File): Promise<ApiResponse<string>> {
+export async function createAllRsvps(file: File): Promise<ApiResponse<Rsvp[]>> {
   // Create FormData and append the file with key 'file'
   const formData = new FormData();
   formData.append("file", file);
 
   // Make the API call; note we do not set "Content-Type" header manually
-  return request<string>("/rsvp/create-all", {
+  return request<Rsvp[]>("/rsvp/create-all", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,

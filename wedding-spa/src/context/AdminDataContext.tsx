@@ -65,7 +65,15 @@ export const AdminDataProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const createAllRsvps = async (file: File) => {
-    return await createAllRsvpsApi(file);
+    const response = await createAllRsvpsApi(file);
+
+    if (response.success && response.data) {
+      response.data.forEach((rsvp: Rsvp) => {
+        rsvpData.addRsvp(rsvp);
+      });
+    }
+
+    return response;
   };
 
   const value: AdminDataContextProps = {
