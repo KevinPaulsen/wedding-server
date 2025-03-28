@@ -14,7 +14,7 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { useChangeImageOrder } from '../../hooks/gallery/useChangeImageOrder';
 import { useDeleteImage } from '../../hooks/gallery/useDeleteImage';
 
-const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDraggable = false }) => {
+const PhotoGalleryComponent: React.FC<{ targetRowHeight?: number, makeDraggable?: boolean }> = ({ makeDraggable = false, targetRowHeight = 175 }) => {
   const [index, setIndex] = useState<number>(-1);
   const { data, setData, loading, error } = useGetPhotoMetadata();
   const { execute: changeImageOrder } = useChangeImageOrder();
@@ -102,12 +102,12 @@ const PhotoGalleryComponent: React.FC<{ makeDraggable?: boolean }> = ({ makeDrag
                         movePhoto={handleMovePhoto}
                         handleDelete={handleDelete}
                         componentsProps={commonComponentsProps}
-                        targetRowHeight={175}
+                        targetRowHeight={targetRowHeight}
                     />
                 ) : (
                     <RowsPhotoAlbum
                         photos={data}
-                        targetRowHeight={175}
+                        targetRowHeight={targetRowHeight}
                         onClick={({ index }) => setIndex(index)}
                         componentsProps={commonComponentsProps}
                     />
