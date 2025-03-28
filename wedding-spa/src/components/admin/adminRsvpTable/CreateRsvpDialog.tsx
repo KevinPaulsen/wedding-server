@@ -16,25 +16,25 @@ import {
 } from "@mui/material";
 import CustomButton from "../../shared/CustomButton";
 import {CreateRsvpDTO} from "../../../types/RsvpDTO";
+import {useAdminData} from "../../../context/AdminDataContext";
 
 interface CreateRsvpDialogProps {
   open: boolean;
   rsvp: CreateRsvpDTO | null;
   onClose: () => void;
-  onSubmit: (updatedRsvpDTO: CreateRsvpDTO) => Promise<boolean>;
-  loading?: boolean;
-  error: string | null;
 }
 
 const CreateRsvpDialog: React.FC<CreateRsvpDialogProps> = ({
                                                              open,
                                                              rsvp,
                                                              onClose,
-                                                             onSubmit,
-                                                             loading,
-                                                             error,
                                                            }) => {
   const theme = useTheme();
+  const {
+    createRsvp,
+    createLoading,
+    createError,
+  } = useAdminData();
 
   const [formData, setFormData] = React.useState<CreateRsvpDTO>(
       rsvp || {
@@ -130,7 +130,7 @@ const CreateRsvpDialog: React.FC<CreateRsvpDialogProps> = ({
       setPrimaryNameError(true);
       return;
     }
-    const success = await onSubmit(formData);
+    const success = await createRsvp(formData);
     if (success) {
       onClose();
     }
@@ -153,7 +153,7 @@ const CreateRsvpDialog: React.FC<CreateRsvpDialogProps> = ({
       >
         <DialogTitle>Create RSVP</DialogTitle>
         <DialogContent sx={{display: "flex", flexDirection: "column", gap: 2}}>
-          {error && <Alert severity="error">{error}</Alert>}
+          {createError && <Alert severity="error">{createError}</Alert>}
           <Typography variant="h6" textAlign="center" marginBottom={1}>
             Primary Contact Information
           </Typography>
@@ -239,11 +239,11 @@ const CreateRsvpDialog: React.FC<CreateRsvpDialogProps> = ({
               marginRight={1}
           />
           <CustomButton
-              text={loading ? "Saving..." : "Save"}
+              text={createLoading ? "Saving..." : "Save"}
               onClick={handleSave}
               variant="dark"
               width="75px"
-              disabled={loading}
+              disabled={createLoading}
           />
         </DialogActions>
       </Dialog>

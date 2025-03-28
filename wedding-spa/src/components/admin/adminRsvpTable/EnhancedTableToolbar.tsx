@@ -12,13 +12,13 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { useAdminData } from "../../../context/AdminDataContext";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
   onDelete: () => void;
   onAddRsvp: () => void;
-  onBatchAdd: () => void; // New callback for batch file upload
-  loading: boolean;
+  onBatchAdd: () => void;
 }
 
 export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
@@ -26,8 +26,13 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
                                                                             onDelete,
                                                                             onAddRsvp,
                                                                             onBatchAdd,
-                                                                            loading,
                                                                           }) => {
+  // Get individual loading states from the centralized AdminData context.
+  const { deleteLoading, createLoading, createAllLoading } = useAdminData();
+  // Determine which loading state is relevant based on the current action.
+  const loading =
+      numSelected > 0 ? deleteLoading : (createLoading || createAllLoading);
+
   return (
       <Toolbar
           sx={{
@@ -43,7 +48,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
       >
         {numSelected > 0 ? (
             <Typography
-                sx={{flex: "1 1 100%"}}
+                sx={{ flex: "1 1 100%" }}
                 color="inherit"
                 variant="subtitle1"
                 component="div"
@@ -52,7 +57,7 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
             </Typography>
         ) : (
             <Typography
-                sx={{flex: "1 1 100%"}}
+                sx={{ flex: "1 1 100%" }}
                 variant="h6"
                 id="tableTitle"
                 component="div"
@@ -66,11 +71,11 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
         ) : numSelected > 0 ? (
             <Tooltip title="Delete">
               <IconButton onClick={onDelete}>
-                <DeleteIcon/>
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
         ) : (
-            // Replace the simple add button with a SpeedDial for multiple add options.
+            // Show a SpeedDial with options for adding a single RSVP or batch adding
             <SpeedDial
                 ariaLabel="Add RSVP or Batch Add"
                 icon={<SpeedDialIcon />}
@@ -99,5 +104,5 @@ export const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
             </SpeedDial>
         )}
       </Toolbar>
-  )
+  );
 };

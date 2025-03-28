@@ -12,26 +12,26 @@ import {
 } from "@mui/material";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import CustomButton from "../../shared/CustomButton";
+import {useAdminData} from "../../../context/AdminDataContext";
 
 interface CreateBatchRsvpDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (file: File) => Promise<boolean>;
-  loading?: boolean;
-  error: string | null;
 }
 
 const CreateBatchRsvpDialog: React.FC<CreateBatchRsvpDialogProps> = ({
                                                                        open,
                                                                        onClose,
-                                                                       onSubmit,
-                                                                       loading,
-                                                                       error,
                                                                      }) => {
   const theme = useTheme();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const {
+    createAllRsvps,
+    createAllLoading,
+    createAllError,
+  } = useAdminData();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -69,7 +69,7 @@ const CreateBatchRsvpDialog: React.FC<CreateBatchRsvpDialogProps> = ({
 
   const handleSave = async () => {
     if (!selectedFile) return;
-    const success = await onSubmit(selectedFile);
+    const success = await createAllRsvps(selectedFile);
     if (success) {
       setSelectedFile(null);
       onClose();
@@ -110,9 +110,9 @@ const CreateBatchRsvpDialog: React.FC<CreateBatchRsvpDialogProps> = ({
               gap: 2,
             }}
         >
-          {error && (
+          {createAllError && (
               <Alert severity="error" sx={{ width: "100%" }}>
-                {error}
+                {createAllError}
               </Alert>
           )}
           <Box
@@ -163,11 +163,11 @@ const CreateBatchRsvpDialog: React.FC<CreateBatchRsvpDialogProps> = ({
               width="100px"
           />
           <CustomButton
-              text={loading ? "Uploading..." : "Save"}
+              text={createAllLoading ? "Uploading..." : "Save"}
               onClick={handleSave}
               variant="dark"
               width="100px"
-              disabled={!selectedFile || loading}
+              disabled={!selectedFile || createAllLoading}
           />
         </DialogActions>
       </Dialog>

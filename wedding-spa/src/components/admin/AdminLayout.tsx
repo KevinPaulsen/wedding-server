@@ -8,7 +8,7 @@ import AdminStatsOverview, {StatsData} from './AdminStatsOverview';
 interface AdminLayoutProps {
   children: React.ReactNode;
   // Make the stats prop optional
-  stats?: StatsData;
+  stats?: StatsData | null;
 }
 
 // Links shown in the header

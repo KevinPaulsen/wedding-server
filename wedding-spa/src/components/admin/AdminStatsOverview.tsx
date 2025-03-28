@@ -1,6 +1,6 @@
 // components/admin/AdminStatsOverview.tsx
 import React from 'react';
-import {Box, Card, CardContent, Grid, Grid2, Typography, useTheme} from '@mui/material';
+import {Box, Card, CardContent, Grid2, Typography, useTheme} from '@mui/material';
 
 export interface StatsData {
   mainStatName: string;

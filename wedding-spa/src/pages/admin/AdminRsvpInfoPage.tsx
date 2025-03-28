@@ -1,9 +1,9 @@
 // pages/admin/AdminRsvpInfoPage.tsx
-import React, { useMemo } from 'react';
-import { useTheme } from '@mui/material';
+import React, {useMemo} from 'react';
+import {useTheme} from '@mui/material';
 import AdminLayout from '../../components/admin/AdminLayout';
-import AdminRsvpController from '../../components/admin/adminRsvpTable/AdminRsvpController';
-import { useAdminData } from '../../context/AdminDataContext';
+import {useAdminData} from '../../context/AdminDataContext';
+import RsvpTable from "../../components/admin/adminRsvpTable/RsvpTable";
 
 const AdminRsvpInfoPage: React.FC = () => {
   const { data: rsvps, loading, error } = useAdminData();
@@ -38,7 +38,7 @@ const AdminRsvpInfoPage: React.FC = () => {
     const daysUntilDeadline = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     // Build the new stats object.
-    const newStats = {
+    return {
       mainStatName: 'Invitations',
       mainStatData: totalInvitations,
       smallStats: [
@@ -65,20 +65,15 @@ const AdminRsvpInfoPage: React.FC = () => {
         },
         {
           statName: 'Days Until Deadline',
-          data: [{ statData: daysUntilDeadline }],
+          data: [{statData: daysUntilDeadline}],
         },
       ],
     };
-
-    return newStats;
   }, [rsvps, loading, error, theme]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error || !statsData) return <div>Error: {error}</div>;
 
   return (
       <AdminLayout stats={statsData}>
-        <AdminRsvpController />
+        <RsvpTable />
       </AdminLayout>
   );
 };

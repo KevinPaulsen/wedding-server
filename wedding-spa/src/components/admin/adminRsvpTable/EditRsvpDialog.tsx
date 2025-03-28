@@ -20,7 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {Rsvp} from "../../../types/rsvp";
 import CustomInputField from "../../shared/CustomInputField";
 import CustomButton from "../../shared/CustomButton";
-import {ApiResponse} from "../../../services/ApiService";
+import {useAdminData} from "../../../context/AdminDataContext";
 
 const dietaryOptions = [
   "Vegetarian",
@@ -35,21 +35,20 @@ interface EditRsvpDialogProps {
   open: boolean;
   rsvp: Rsvp | null;
   onClose: () => void;
-  onSave: (updatedRsvp: Rsvp) => Promise<ApiResponse<Rsvp>>;
-  loading?: boolean;
-  error: string | null;
 }
 
 const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
                                                          open,
                                                          rsvp,
                                                          onClose,
-                                                         onSave,
-                                                         loading,
-                                                         error,
                                                        }) => {
   const theme = useTheme();
   const [formData, setFormData] = React.useState<Rsvp | null>(null);
+  const {
+    editRsvp,
+    editLoading,
+    editError,
+  } = useAdminData();
 
   // Clone the RSVP into local state whenever it changes.
   React.useEffect(() => {
@@ -238,7 +237,7 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
       return;
     }
 
-    const response = await onSave(formData);
+    const response = await editRsvp(formData);
     if (response.success) {
       onClose();
     }
@@ -261,7 +260,7 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
       >
         <DialogTitle>Edit RSVP</DialogTitle>
         <DialogContent sx={{display: "flex", flexDirection: "column", gap: 2}}>
-          {error && <Alert severity="error">{error}</Alert>}
+          {editError && <Alert severity="error">{editError}</Alert>}
           {formData && (
               <>
                 <Typography variant="h6" textAlign="center" marginBottom={1}>
@@ -572,11 +571,11 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
               marginRight={1}
           />
           <CustomButton
-              text={loading ? "Saving..." : "Save"}
+              text={editLoading ? "Saving..." : "Save"}
               onClick={handleSave}
               variant="dark"
               width="75px"
-              disabled={loading}
+              disabled={editLoading}
           />
         </DialogActions>
       </Dialog>

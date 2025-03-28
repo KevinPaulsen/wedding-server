@@ -1,19 +1,18 @@
 // components/admin/adminGuestTable/AdminGuestController.tsx
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import {
-  Paper,
-  Tabs,
-  Tab,
-  Typography,
-  useTheme,
-  useMediaQuery,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Paper,
+  Select,
+  Tab,
+  Tabs,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { useAdminData } from '../../../context/AdminDataContext';
-import { Rsvp } from '../../../types/rsvp';
+import {useAdminData} from '../../../context/AdminDataContext';
+import {Rsvp} from '../../../types/rsvp';
 import GuestTable from "./GuestTable";
 
 export type EventType = 'all' | 'roce' | 'rehearsal' | 'ceremony' | 'reception';
