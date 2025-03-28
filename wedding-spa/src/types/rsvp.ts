@@ -18,25 +18,20 @@ export interface PrimaryContact {
   address: string;
 }
 
+export interface Event {
+  invited: boolean;
+  guests_attending: string[];
+}
+
 export interface Rsvp {
   rsvp_id: string;
+  creation_time: number;
+  last_submission_time: number;
+  submitted: boolean;
   primary_contact: PrimaryContact;
   guest_list: { [key: string]: GuestListDetail };
-  roce: {
-    invited: boolean;
-    guests_attending: string[];
-  };
-  rehearsal: {
-    invited: boolean;
-    guests_attending: string[];
-  };
-  ceremony: {
-    invited: boolean;
-    guests_attending: string[];
-  };
-  reception: {
-    invited: boolean;
-    guests_attending: string[];
-  };
-  submitted: boolean;
+  roce: Event;
+  rehearsal: Event;
+  ceremony: Event;
+  reception: Event;
 }

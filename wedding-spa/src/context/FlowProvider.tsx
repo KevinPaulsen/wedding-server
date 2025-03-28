@@ -24,6 +24,8 @@ const initialState: FlowState = {
   },
   formData: {
     rsvp_id: '',
+    creation_time: 0,
+    last_submission_time: 0,
     primary_contact: {
       name: '',
       email: '',
