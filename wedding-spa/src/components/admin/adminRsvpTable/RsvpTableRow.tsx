@@ -1,5 +1,4 @@
-// components/admin/adminRsvpTable/RsvpTableRow.tsx
-import {Rsvp} from "../../../types/rsvp";
+import { Rsvp } from "../../../types/rsvp";
 import React from "react";
 import {
   Box,
@@ -15,7 +14,7 @@ import {
   TableSortLabel,
   Tooltip,
 } from "@mui/material";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 
 interface CollapsibleRowProps {
@@ -25,7 +24,12 @@ interface CollapsibleRowProps {
   onEdit: (row: Rsvp) => void;
 }
 
-export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSelect, onEdit}) => {
+export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({
+                                                              row,
+                                                              selected,
+                                                              onSelect,
+                                                              onEdit,
+                                                            }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const status =
@@ -51,13 +55,16 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
     {
       id: "coming",
       label: "Coming",
-      getValue: (entry: GuestEntry) => (entry[1].coming ? "Coming" : "Not Coming"),
+      getValue: (entry: GuestEntry) =>
+          entry[1].coming ? "Coming" : "Not Coming",
     },
     {
       id: "dietary",
       label: "Dietary Restrictions",
       getValue: (entry: GuestEntry) =>
-          [...entry[1].dietary_restrictions, entry[1].other].filter(Boolean).join(", "),
+          [...entry[1].dietary_restrictions, entry[1].other]
+          .filter(Boolean)
+          .join(", "),
     },
     {
       id: "roce",
@@ -160,25 +167,50 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
                 }}
             />
           </TableCell>
-          <TableCell
-              sx={{
-                color: (theme) => theme.palette.secondary.contrastText,
-                fontWeight: "bold",
-                textWrap: "nowrap",
-              }}
-          >
-            <IconButton
-                aria-label="expand row"
-                size="small"
-                onClick={() => setOpen(!open)}
+          <TableCell>
+            <Box
+                sx={{
+                  color: (theme) => theme.palette.secondary.contrastText,
+                  fontWeight: "bold",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "left",
+                }}
             >
-              {open ? <KeyboardArrowUp/> : <KeyboardArrowDown/>}
-            </IconButton>
-            {row.guest_list[row.primary_contact.name].display_name}
+              <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+              >
+                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+              </IconButton>
+              <Box
+                  sx={{
+                    maxWidth: 200,
+                    whiteSpace: "normal", // Allow wrapping at white space
+                    wordBreak: "normal", // Do not break words arbitrarily
+                    overflowWrap: "normal", // Ensures wrapping happens only at natural break points
+                  }}
+              >
+                {row.guest_list[row.primary_contact.name].display_name}
+              </Box>
+            </Box>
           </TableCell>
           <TableCell
               sx={{
-                display: {xs: "none", md: "table-cell"},
+                display: { xs: "none", md: "table-cell" },
+                color: (theme) => theme.palette.secondary.contrastText,
+              }}
+          >
+            {row.last_submission_time
+                ? new Date(row.last_submission_time).toLocaleString("en-US", {
+                  timeZone: "America/Los_Angeles",
+                }) : ""}
+          </TableCell>
+          <TableCell
+              sx={{
+                display: { xs: "none", md: "table-cell" },
                 color: (theme) => theme.palette.secondary.contrastText,
               }}
           >
@@ -186,7 +218,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
           </TableCell>
           <TableCell
               sx={{
-                display: {xs: "none", md: "table-cell"},
+                display: { xs: "none", md: "table-cell" },
                 color: (theme) => theme.palette.secondary.contrastText,
               }}
           >
@@ -194,7 +226,7 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
           </TableCell>
           <TableCell
               sx={{
-                display: {xs: "none", md: "table-cell"},
+                display: { xs: "none", md: "table-cell" },
                 color: (theme) => theme.palette.secondary.contrastText,
               }}
           >
@@ -202,22 +234,24 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
           </TableCell>
           <TableCell
               sx={{
-                display: {xs: "none", md: "table-cell"},
+                display: { xs: "none", md: "table-cell" },
                 color: (theme) => theme.palette.secondary.contrastText,
               }}
           >
             {Object.keys(row.guest_list).length}
           </TableCell>
           <TableCell>
-            <Chip label={status} color={statusChipColor}/>
+            <Chip label={status} color={statusChipColor} />
           </TableCell>
           <TableCell>
             <Tooltip title="Edit">
-              <IconButton onClick={(e) => {
-                e.stopPropagation();
-                onEdit(row);
-              }}>
-                <EditIcon/>
+              <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(row);
+                  }}
+              >
+                <EditIcon />
               </IconButton>
             </Tooltip>
           </TableCell>
@@ -230,7 +264,10 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
               },
             }}
         >
-          <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={8}>
+          <TableCell
+              style={{ paddingBottom: 0, paddingTop: 0 }}
+              colSpan={9}
+          >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box marginLeft={3}>
                 <Table size="small" aria-label="guest-list">
@@ -238,7 +275,8 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
                     <TableRow
                         sx={{
                           "& th": {
-                            borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+                            borderBottom: (theme) =>
+                                `2px solid ${theme.palette.primary.main}`,
                           },
                           fontWeight: "bold",
                         }}
@@ -247,7 +285,9 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
                           <TableCell key={column.id}>
                             <TableSortLabel
                                 active={guestOrderBy === column.id}
-                                direction={guestOrderBy === column.id ? guestOrder : "asc"}
+                                direction={
+                                  guestOrderBy === column.id ? guestOrder : "asc"
+                                }
                                 onClick={() => handleGuestRequestSort(column.id)}
                             >
                               {column.label}
@@ -305,8 +345,12 @@ export const RsvpTableRow: React.FC<CollapsibleRowProps> = ({row, selected, onSe
                                       ...entry[1].dietary_restrictions,
                                       ...(entry[1].other ? [entry[1].other] : []),
                                     ].map((restriction, i) => (
-                                        <Chip key={i} label={restriction} sx={{m: 0.5}}
-                                              size="small"/>
+                                        <Chip
+                                            key={i}
+                                            label={restriction}
+                                            sx={{ m: 0.5 }}
+                                            size="small"
+                                        />
                                     ))}
                                   </TableCell>
                               );

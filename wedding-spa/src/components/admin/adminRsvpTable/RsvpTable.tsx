@@ -1,7 +1,9 @@
 import React from 'react';
 import {
-  Alert, Box,
-  Checkbox, CircularProgress,
+  Alert,
+  Box,
+  Checkbox,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -11,15 +13,14 @@ import {
   TableRow,
   TableSortLabel,
 } from "@mui/material";
-import { Rsvp } from "../../../types/rsvp";
+import {Rsvp} from "../../../types/rsvp";
 import EditRsvpDialog from "./EditRsvpDialog";
-import { RsvpTableRow } from "./RsvpTableRow";
-import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
-import { CreateRsvpDTO } from "../../../types/RsvpDTO";
+import {RsvpTableRow} from "./RsvpTableRow";
+import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
+import {CreateRsvpDTO} from "../../../types/RsvpDTO";
 import CreateRsvpDialog from "./CreateRsvpDialog";
 import CreateBatchRsvpDialog from "./CreateBatchRsvpDialog";
-import { useAdminData } from "../../../context/AdminDataContext";
-import {LoadingIcon} from "yet-another-react-lightbox";
+import {useAdminData} from "../../../context/AdminDataContext";
 
 interface ColumnConfig {
   id: string;
@@ -34,6 +35,15 @@ const columns: ColumnConfig[] = [
     label: "Primary Contact Name",
     getValue: (row: Rsvp) =>
         row.guest_list[row.primary_contact.name].display_name,
+  },
+  {
+    id: "last_submission_time",
+    label: "Last Submitted",
+    getValue: (row: Rsvp) =>
+        row.last_submission_time
+            ? new Date(row.last_submission_time).toLocaleString()
+            : "N/A",
+    hideOnSmall: true,
   },
   {
     id: "email",
