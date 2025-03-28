@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -220,9 +220,7 @@ public class RsvpService {
    */
   private Rsvp getOrCreateRsvp(Rsvp rsvpInput) {
     if (rsvpInput.getRsvpId() == null || rsvpInput.getRsvpId().trim().isEmpty()) {
-      Rsvp newRsvp = new Rsvp();
-      newRsvp.setCreationTime(System.currentTimeMillis());
-      return newRsvp;
+      return new Rsvp();
     }
     return rsvpRepository.findByRsvpId(rsvpInput.getRsvpId())
         .orElseThrow(() -> new RsvpNotFoundException("RSVP object not found."));
@@ -647,8 +645,8 @@ public class RsvpService {
    * @throws RuntimeException if the file cannot be processed or is invalid
    */
   @Transactional
-  public String importRsvpsFromCsv(MultipartFile file) {
-    int count = 0;
+  public Collection<Rsvp> importRsvpsFromCsv(MultipartFile file) {
+    List<Rsvp> rsvps = new ArrayList<>();
     try (InputStream is = file.getInputStream();
         InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
         CSVReader csvReader = new CSVReader(isr)) {
@@ -726,14 +724,22 @@ public class RsvpService {
         }
 
         // Convert DTO to RSVP and save it (overwriting the guest list).
-        saveRsvp(dto.toRsvp(), true);
-        count++;
+        rsvps.add(dto.toRsvp());
       }
     } catch (IOException | CsvValidationException e) {
       throw new RuntimeException("Failed to process CSV file", e);
     }
 
-    return "Successfully imported " + count + " RSVP records.";
+    List<Rsvp> savedRsvps = new ArrayList<>();
+    rsvpRepository.saveAll(rsvps).forEach(savedRsvps::add);
+
+    for (Rsvp rsvp : savedRsvps) {
+      for (String guestName : rsvp.getGuestList().keySet()) {
+        linkGuestToRsvp(guestName, rsvp.getRsvpId());
+      }
+    }
+
+    return savedRsvps;
   }
 
   /**

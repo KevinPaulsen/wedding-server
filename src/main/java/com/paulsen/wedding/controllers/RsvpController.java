@@ -8,6 +8,7 @@ import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
 import com.paulsen.wedding.model.weddingGuest.dto.LookupDTO;
 import com.paulsen.wedding.service.RsvpService;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -56,8 +57,8 @@ public class RsvpController {
   }
 
   @PostMapping("/create-all")
-  public ResponseEntity<Map<String, String>> createAll(@RequestParam("file") MultipartFile file) {
-    return new ResponseEntity<>(Map.of("message", rsvpService.importRsvpsFromCsv(file)), HttpStatus.CREATED);
+  public ResponseEntity<Collection<Rsvp>> createAll(@RequestParam("file") MultipartFile file) {
+    return new ResponseEntity<>(rsvpService.importRsvpsFromCsv(file), HttpStatus.CREATED);
   }
 
   @PutMapping("/edit")
