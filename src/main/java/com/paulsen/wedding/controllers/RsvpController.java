@@ -7,6 +7,7 @@ import com.paulsen.wedding.model.rsvp.Rsvp;
 import com.paulsen.wedding.model.weddingGuest.WeddingGuest;
 import com.paulsen.wedding.model.weddingGuest.dto.AddGuestDTO;
 import com.paulsen.wedding.model.weddingGuest.dto.LookupDTO;
+import com.paulsen.wedding.service.EmailService;
 import com.paulsen.wedding.service.RsvpService;
 import java.util.Collection;
 import java.util.List;
@@ -28,13 +29,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class RsvpController {
 
   private final RsvpService rsvpService;
+  private final EmailService emailService;
 
-  public RsvpController(RsvpService rsvpService) {
+  public RsvpController(RsvpService rsvpService, EmailService emailService) {
     this.rsvpService = rsvpService;
+    this.emailService = emailService;
   }
 
   private static void clearRestrictedFields(Rsvp rsvp) {
     rsvp.setSubmitted(true);
+    rsvp.setCreationTime(null);
+    rsvp.setLastSubmissionTime(null);
 
     if (rsvp.getRoce() != null) {
       rsvp.getRoce().setInvited(null);
@@ -75,7 +80,16 @@ public class RsvpController {
   @PostMapping("/submit")
   public ResponseEntity<Map<String, String>> submitRsvp(@RequestBody Rsvp rsvpDTO) {
     clearRestrictedFields(rsvpDTO);
-    rsvpService.saveRsvp(rsvpDTO, false);
+    Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO, false);
+
+    // For example, send confirmation email asynchronously
+    if (savedRsvp.getPrimaryContact() != null && savedRsvp.getPrimaryContact().getEmail() != null) {
+      emailService.sendConfirmationEmail(
+          savedRsvp.getPrimaryContact().getEmail(),
+          savedRsvp
+      );
+    }
+
     return ResponseEntity.ok(Map.of("message", "RSVP object updated successfully."));
   }
 
