@@ -258,11 +258,25 @@ const RsvpFlow: React.FC = () => {
         formData.ceremony,
         formData.reception,
       ];
-      return events.some(
-          (eventData) =>
-              eventData && eventData.guests_attending.includes(guestId)
-      );
+      return events.some(e => e.guests_attending.includes(guestId));
     };
+
+    // 1) if *no* one is attending any event, double‑check:
+    const anyGuestComes = formData.guest_details?.some(g =>
+        isGuestAttendingAnyEvent(g.id)
+    );
+    if (!anyGuestComes) {
+      const ok = window.confirm(
+          "No guests are marked as attending any part of the wedding. " +
+          "Do you want to RSVP “no” for all your guests and proceed?"
+      );
+      if (!ok) return;
+      // mark everyone as not coming
+      formData.guest_details = formData.guest_details?.map(g => ({
+        ...g,
+        coming: false,
+      }));
+    }
 
     // Data sanitization: find guests marked as coming but not assigned to any event
     const guestsNotInEvents =
