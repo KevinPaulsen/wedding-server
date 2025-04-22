@@ -59,7 +59,7 @@ const AttendanceDecisionStep: React.FC<AttendanceDecisionStepProps> = ({
 
   return (
       <StepLayout
-          title="Will Any Guest Attend?"
+          title="Will you be able to attend?"
           description="If you or anyone in your party can attend the wedding, select “Yes” and proceed with the RSVP."
           onBack={onBack}
           onSubmit={handleSubmit(onSubmit)}
