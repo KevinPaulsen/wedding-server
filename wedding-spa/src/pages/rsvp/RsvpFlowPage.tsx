@@ -387,6 +387,7 @@ const RsvpFlow: React.FC = () => {
                 }
                 previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
+                loading={submitting}
             />
         ) : null;
       case REHEARSAL_EVENT_STEP:
@@ -397,6 +398,7 @@ const RsvpFlow: React.FC = () => {
                 }
                 previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
+                loading={submitting}
             />
         ) : null;
       case CEREMONY_EVENT_STEP:
@@ -407,6 +409,7 @@ const RsvpFlow: React.FC = () => {
                 }
                 previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
+                loading={submitting}
             />
         ) : null;
       case RECEPTION_EVENT_STEP:
@@ -417,6 +420,7 @@ const RsvpFlow: React.FC = () => {
                 }
                 previousPage={() => previousStep()}
                 isLastEvent={currentStep === lastInvitedStep}
+                loading={submitting}
             />
         ) : null;
       case THANK_YOU_STEP:
@@ -473,13 +477,6 @@ const RsvpFlow: React.FC = () => {
                 <CustomButton text="Cancel" onClick={handleCancel} variant="lightOutlined" width='auto'/>
             }
           </Box>
-
-          {/* Submission Progress */}
-          {submitting && (
-              <Box mt={2} display="flex" justifyContent="center">
-                <CircularProgress />
-              </Box>
-          )}
         </Box>
       </FormProvider>
   );

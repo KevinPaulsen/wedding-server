@@ -6,12 +6,14 @@ interface RsvpRocePageProps {
   nextPage: (formData: any) => void;
   previousPage: (formData: any) => void;
   isLastEvent?: boolean;
+  loading: boolean;
 }
 
 const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
                                                      nextPage,
                                                      previousPage,
                                                      isLastEvent,
+                                                     loading,
                                                    }) => {
   return (
       <RsvpEvents
@@ -22,6 +24,7 @@ const RsvpRocePage: React.FC<RsvpRocePageProps> = ({
           nextPage={nextPage}
           previousPage={previousPage}
           isLastEvent={isLastEvent}
+          loading={loading}
       />
   );
 };

@@ -1,6 +1,6 @@
 // components/main/rsvpFlow/RsvpEvents.tsx
 import React from 'react';
-import {Box, FormControlLabel, Switch, Typography} from '@mui/material';
+import {Box, CircularProgress, FormControlLabel, Switch, Typography} from '@mui/material';
 import {useFormContext} from 'react-hook-form';
 import {FormData} from '../../../pages/rsvp/RsvpFlowPage';
 import CustomButton from '../../shared/CustomButton';
@@ -14,17 +14,19 @@ interface RsvpEventPageProps {
   nextPage: (formData: FormData) => void;
   previousPage: (formData: FormData) => void;
   isLastEvent?: boolean;
+  loading: boolean;
 }
 
 const RsvpEvents: React.FC<RsvpEventPageProps> = ({
-                                                       eventKey,
-                                                       title,
+                                                    eventKey,
+                                                    title,
                                                     time,
-                                                       description,
-                                                       nextPage,
-                                                       previousPage,
-                                                       isLastEvent,
-                                                     }) => {
+                                                    description,
+                                                    nextPage,
+                                                    previousPage,
+                                                    isLastEvent,
+                                                    loading,
+                                                  }) => {
   // Use watch() to subscribe to form changes
   const { watch, setValue } = useFormContext<FormData>();
   const formData = watch();
@@ -67,7 +69,10 @@ const RsvpEvents: React.FC<RsvpEventPageProps> = ({
           description={description}
           onBack={() => previousPage(formData)}
           onNext={() => nextPage(formData)}
-          nextText={isLastEvent ? "Submit RSVP" : "Next"}
+          nextText={isLastEvent ?
+              (loading ? <CircularProgress size={24} color={"secondary"} /> : "Submit RSVP") :
+              "Next"
+          }
       >
         {!eventData.invited ? (
             <Typography>You have no invitation.</Typography>
