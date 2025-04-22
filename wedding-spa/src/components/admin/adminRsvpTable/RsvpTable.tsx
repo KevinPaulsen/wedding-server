@@ -155,17 +155,52 @@ const RsvpTable: React.FC = () => {
     setSelected([]);
   };
 
-  const comparator = (a: Rsvp, b: Rsvp) => {
-    const column = columns.find((col) => col.id === orderBy);
-    if (!column) return 0;
-    const valueA = column.getValue(a);
-    const valueB = column.getValue(b);
-    if (typeof valueA === "number" && typeof valueB === "number") {
-      return order === "asc" ? valueA - valueB : valueB - valueA;
+  // inside your RsvpTable component, replace the old comparator with:
+
+  const comparator = (a: Rsvp, b: Rsvp): number => {
+    const col = columns.find(c => c.id === orderBy);
+    if (!col) return 0;
+
+    // For the date column, pull out a raw timestamp; otherwise use getValue()
+    let valueA: any, valueB: any;
+    if (orderBy === 'last_submission_time') {
+      valueA = a.last_submission_time
+          ? new Date(a.last_submission_time).getTime()
+          : null;
+      valueB = b.last_submission_time
+          ? new Date(b.last_submission_time).getTime()
+          : null;
+    } else {
+      valueA = col.getValue(a);
+      valueB = col.getValue(b);
     }
-    return order === "asc"
-        ? String(valueA).localeCompare(String(valueB))
-        : String(valueB).localeCompare(String(valueA));
+
+    // Treat null/undefined/empty/'N/A' as “empty”
+    const isEmpty = (v: any) =>
+        v === null ||
+        v === undefined ||
+        v === '' ||
+        (typeof v === 'string' && v.toUpperCase() === 'N/A');
+
+    // If both empty, they’re equal
+    if (isEmpty(valueA) && isEmpty(valueB)) return 0;
+    // Empty always comes last:
+    if (isEmpty(valueA)) return 1;
+    if (isEmpty(valueB)) return -1;
+
+    // Now both are non‐empty:
+    if (typeof valueA === 'number' && typeof valueB === 'number') {
+      return order === 'asc'
+          ? valueA - valueB
+          : valueB - valueA;
+    }
+
+    // Fallback to string compare
+    const strA = String(valueA);
+    const strB = String(valueB);
+    return order === 'asc'
+        ? strA.localeCompare(strB)
+        : strB.localeCompare(strA);
   };
 
   const [sortedRows, setSortedRows] = React.useState<Rsvp[]>(() => {
