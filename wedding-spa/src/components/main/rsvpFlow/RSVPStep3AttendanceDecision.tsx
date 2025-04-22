@@ -10,21 +10,34 @@ interface AttendanceDecisionStepProps {
   onNext: () => void;
   onSubmitNo: () => void;
   onBack: () => void;
+  submitted: boolean;
 }
 
 const AttendanceDecisionStep: React.FC<AttendanceDecisionStepProps> = ({
                                                                          onNext,
                                                                          onSubmitNo,
                                                                          onBack,
+                                                                         submitted,
                                                                        }) => {
   const {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useFormContext<FormData>();
+
+  const guestDetails = watch('guest_details') || [];
 
   // Local state: null means no selection, true for yes, false for no.
   const [selection, setSelection] = useState<boolean | null>(null);
+
+  // If this RSVP has already been submitted, default based on who’s coming
+  useEffect(() => {
+    if (submitted) {
+      const anyComing = guestDetails.some(g => g.coming);
+      setSelection(anyComing);
+    }
+  }, [submitted, guestDetails]);
 
   // Update the form field only if a selection has been made.
   useEffect(() => {

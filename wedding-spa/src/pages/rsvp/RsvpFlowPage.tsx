@@ -356,6 +356,7 @@ const RsvpFlow: React.FC = () => {
                 onNext={nextStep}
                 onSubmitNo={handleSubmitNo}
                 onBack={onBackFromAttendance}
+                submitted={!!selectedRsvp?.submitted}
             />
         );
       case PRIMARY_CONTACT_STEP:
