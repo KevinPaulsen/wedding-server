@@ -371,18 +371,33 @@ export async function deleteImageRequest(imageId: string): Promise<ApiResponse<n
   });
 }
 
+/** DTO for registry payments */
+export interface CreatePaymentIntentDTO {
+  amount: number;
+  payerName: string;
+}
+
 /** ============================
  REGISTRY-related methods
  ============================ */
 
-export async function createPaymentIntent(amount: number): Promise<ApiResponse<{
-  clientSecret: string
-}>> {
-  return request<{ clientSecret: string }>("/create-payment-intent", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({amount})
-  });
+/**
+ * Initialize a Stripe PaymentIntent.
+ * Sends { amount, payerName, payerEmail } to your backend,
+ * which responds with a clientSecret.
+ */
+export async function createPaymentIntent(
+    payload: CreatePaymentIntentDTO
+): Promise<ApiResponse<{ clientSecret: string }>> {
+  return request<{ clientSecret: string }>(
+      "/create-payment-intent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // no auth required for the public registry
+        body: JSON.stringify(payload),
+      }
+  );
 }

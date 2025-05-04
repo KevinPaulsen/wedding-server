@@ -45,6 +45,11 @@ const StyledButton = styled(Button, {
         '&:hover': {
           backgroundColor: theme.palette.primary.dark,
         },
+        '&:disabled': {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          opacity: 0.7,
+        }
       };
     case 'lightOutlined':
       return {
