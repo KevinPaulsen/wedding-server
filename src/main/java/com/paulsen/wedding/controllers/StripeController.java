@@ -1,6 +1,6 @@
 package com.paulsen.wedding.controllers;
 
-import com.stripe.Stripe;
+import com.paulsen.wedding.model.CreatePaymentIntentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -13,23 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StripeController {
 
-    // Set your secret key (switch to live key in production)
-    static {
-        Stripe.apiKey = "sk_test_51QzKvKJr833cmALTA01BSrKZQo7y5dwbLrfb6ksAzCeQiedOdtsPWqzVWAAnL5mwG3hPr9egQ76JEd2Bn84eHfp200fJLYAc3Y";
-    }
-
     @PostMapping("/create-payment-intent")
-    public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody Map<String, Object> data) throws StripeException {
-        long amount = 5000L; // default to $50 if no amount provided
-        if (data.get("amount") != null) {
-            amount = ((Number) data.get("amount")).longValue();
-        }
-        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+    public ResponseEntity<Map<String, String>> createPaymentIntent(
+        @RequestBody CreatePaymentIntentRequest req
+    ) throws StripeException {
+        long amount = (req.getAmount() != null) ? req.getAmount() : 5000L;
+
+        PaymentIntentCreateParams.Builder params = PaymentIntentCreateParams.builder()
             .setAmount(amount)
             .setCurrency("usd")
-            .addPaymentMethodType("card")  // Ensure credit card is available
-            .build();
-        PaymentIntent paymentIntent = PaymentIntent.create(params);
-        return ResponseEntity.ok(Map.of("clientSecret", paymentIntent.getClientSecret()));
+            .addPaymentMethodType("card");
+
+        if (req.getPayerName() != null) {
+            params.putMetadata("payer_name", req.getPayerName());
+        }
+
+        PaymentIntent pi = PaymentIntent.create(params.build());
+        return ResponseEntity.ok(Map.of("clientSecret", pi.getClientSecret()));
     }
 }
