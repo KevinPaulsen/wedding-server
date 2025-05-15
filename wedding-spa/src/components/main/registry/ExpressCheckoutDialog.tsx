@@ -12,7 +12,7 @@ import { createPaymentIntent } from '../../../services/ApiService';
 import CustomButton from '../../shared/CustomButton';
 
 // Initialize Stripe
-const stripePromise = loadStripe('pk_live_51QzKvKJr833cmALTNbrwomfY6hvl90TnAXao94eskn7AAhzMTTS4EVWWD7G61Sc5q4fKFlGIIDIr90tTIMzzuqWv00Btxq3PJK');
+const stripePromise = loadStripe('pk_live_51...');
 
 const appearance = {
   theme: 'flat',

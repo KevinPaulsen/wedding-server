@@ -223,7 +223,7 @@ const RsvpTable: React.FC = () => {
       <Paper
           sx={{
             width: "100%",
-            maxWidth: 1100,
+            maxWidth: 1200,
             mx: 5,
             bgcolor: (theme) => theme.palette.secondary.light,
             p: 2,

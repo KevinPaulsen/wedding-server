@@ -39,7 +39,7 @@ const AdminStatsDashboard: React.FC<AdminStatsDashboardProps> = ({ stats }) => {
               p: 2,
               gap: 1,
               width: '100%',
-              maxWidth: 1100,
+              maxWidth: 1200,
               bgcolor: theme.palette.secondary.light,
             }}
         >
