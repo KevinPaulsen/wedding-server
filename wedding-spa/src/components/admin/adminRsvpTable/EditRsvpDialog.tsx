@@ -75,15 +75,13 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
   // Toggle event allowed: set allowed_guests to guest count or 0.
   const handleEventAllowedToggle = (
       eventName: "roce" | "rehearsal" | "ceremony" | "reception",
-      checked: boolean
   ) => {
     if (!formData) return;
-    const newAllowedGuests = checked ? Object.keys(formData.guest_list).length : 0;
     setFormData({
       ...formData,
       [eventName]: {
         ...formData[eventName],
-        allowed_guests: newAllowedGuests,
+        invited: formData && !formData[eventName].invited,
       },
     });
   };
@@ -362,7 +360,6 @@ const EditRsvpDialog: React.FC<EditRsvpDialogProps> = ({
                                   onChange={(e) =>
                                       handleEventAllowedToggle(
                                           eventName,
-                                          e.target.checked
                                       )
                                   }
                               />
