@@ -83,7 +83,8 @@ public class RsvpController {
     Rsvp savedRsvp = rsvpService.saveRsvp(rsvpDTO, false);
 
     // For example, send confirmation email asynchronously
-    if (savedRsvp.getPrimaryContact() != null && savedRsvp.getPrimaryContact().getEmail() != null) {
+    if (savedRsvp.getPrimaryContact() != null && savedRsvp.getPrimaryContact().getEmail() != null
+        && !savedRsvp.getPrimaryContact().getEmail().isEmpty()) {
       emailService.sendConfirmationEmail(
           savedRsvp.getPrimaryContact().getEmail(),
           savedRsvp

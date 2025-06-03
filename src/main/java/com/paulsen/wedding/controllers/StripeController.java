@@ -19,10 +19,15 @@ public class StripeController {
     ) throws StripeException {
         long amount = (req.getAmount() != null) ? req.getAmount() : 5000L;
 
+        // Use automatic_payment_methods to include any enabled wallets (Apple Pay, Google Pay, etc.)
         PaymentIntentCreateParams.Builder params = PaymentIntentCreateParams.builder()
             .setAmount(amount)
             .setCurrency("usd")
-            .addPaymentMethodType("card");
+            .setAutomaticPaymentMethods(
+                PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
+                    .setEnabled(true)
+                    .build()
+            );
 
         if (req.getPayerName() != null) {
             params.putMetadata("payer_name", req.getPayerName());
