@@ -112,7 +112,15 @@ const PAIRS: Pair[] = [
     groomsman: {
       name: 'Alix',
       role: 'Best Man',
-      photos: [`/assets/wedding-party/bachelor/alix/IMG_7875.jpeg`],
+      photos: [
+        `/assets/wedding-party/bachelor/alix/IMG_7875.jpeg`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-1.jpg`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-2.JPG`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-3.jpeg`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-4.jpeg`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-5.jpg`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-6.jpeg`,
+      ],
       blurb: 'Day-one friend with a legendary playlist.',
     },
     bridesmaid: {
@@ -142,7 +150,10 @@ const PAIRS: Pair[] = [
     groomsman: {
       name: 'Nathan',
       role: 'Groomsman',
-      photos: [],
+      photos: [
+        `/assets/wedding-party/bachelor/nathan/a150d2a3-0f75-478f-b7b6-cff2ab3b6df6.JPG`,
+        `/assets/wedding-party/bachelor/nathan/IMG_1596.JPG`,
+      ],
       blurb: 'Calm in the chaos.',
     },
     bridesmaid: {
@@ -157,7 +168,10 @@ const PAIRS: Pair[] = [
     groomsman: {
       name: 'Alan',
       role: 'Groomsman',
-      photos: [],
+      photos: [
+        `/assets/wedding-party/bachelor/alan/alan-bad.jpg`,
+        `/assets/wedding-party/bachelor/alan/alan-good.jpg`,
+      ],
       blurb: 'Reserved for future shenanigans.',
     },
     bridesmaid: {
