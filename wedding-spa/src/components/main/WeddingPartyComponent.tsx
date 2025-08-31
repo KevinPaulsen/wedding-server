@@ -72,7 +72,6 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
                 key={currentSrc}
                 src={currentSrc}
                 alt={person.alt ?? person.name}
-                onError={handleError}
                 loading="lazy"
                 custom={direction}
                 variants={variants}
