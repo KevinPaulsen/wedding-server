@@ -14,7 +14,7 @@ type Pair = { groomsman: Member; bridesmaid: Member };
 
 // --- Small pieces ------------------------------------------------------------
 
-const validImages = (paths: string[]) => paths.filter((p) => /\.(jpe?g|png|webp)$/i.test(p)); // exclude HEIC
+const validImages = (paths: string[]) => paths.filter((p) => /\.(jpe?g|png|webp|jpeg|JPG)$/i.test(p)); // exclude HEIC
 
 const MemberCard: React.FC<{ person: Member }> = ({person}) => {
   const fallback = '/assets/wedding-party/placeholder.jpg';
