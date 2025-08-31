@@ -1,6 +1,6 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Box, Container, Grid2, Stack, Typography} from '@mui/material';
-import {AnimatePresence, motion} from 'framer-motion';
+import {AnimatePresence, motion, useInView, useReducedMotion} from 'framer-motion';
 
 type Member = {
   name: string;
@@ -24,16 +24,27 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
     return ok.length ? ok : [fallback];
   }, [person.photos]);
 
-  const [idx, setIdx] = useState(0);
+  const prefersReduced = useReducedMotion();
 
-  // Auto-advance every 5s
+  // Only advance when the card is actually visible.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(rootRef, {margin: '0px 0px 0px 0px', amount: 0.3});
+
+  const [idx, setIdx] = useState(0);
   useEffect(() => {
     if (photos.length <= 1) return;
-    const id = setInterval(() => {
-      setIdx((i) => (i + 1) % photos.length);
-    }, 5000);
+    if (!inView) return;
+
+    const id = setInterval(() => setIdx((i) => (i + 1) % photos.length), 5000);
     return () => clearInterval(id);
-  }, [photos.length]);
+  }, [photos.length, inView]);
+
+  // Don’t animate across the screen — crossfade is much cheaper.
+  const variants = {
+    enter: {opacity: 0},
+    center: {opacity: 1},
+    exit: {opacity: 0}
+  };
 
   const handleError: React.ReactEventHandler<HTMLImageElement> = (e) => {
     const img = e.currentTarget as HTMLImageElement;
@@ -43,19 +54,10 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
     }
   };
 
-  const currentSrc = photos[idx];
-
-  // Always push forward
-  const direction = 1;
-
-  const variants = {
-    enter: (dir: number) => ({x: dir > 0 ? '100%' : '-100%'}),
-    center: {x: '0%'},
-    exit: (dir: number) => ({x: dir > 0 ? '-100%' : '100%'}),
-  };
-
+  // Hint browser to avoid heavy layout/paint in the container.
+  // `contain` + `backfaceVisibility` reduce repaint scope; `translateZ(0)` keeps it on the compositor.
   return (
-      <Stack spacing={1.25} sx={{alignItems: 'center', textAlign: 'center'}}>
+      <Stack ref={rootRef} spacing={1.25} sx={{alignItems: 'center', textAlign: 'center'}}>
         <Box
             sx={{
               position: 'relative',
@@ -65,21 +67,31 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
               overflow: 'hidden',
               border: (t) => `2px solid ${t.palette.divider}`,
               backgroundColor: 'secondary.light',
+              contain: 'content',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
             }}
         >
-          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <AnimatePresence initial={false} mode="wait">
             <motion.img
-                key={currentSrc}
-                src={currentSrc}
+                key={photos[idx]}
+                src={photos[idx]}
                 alt={person.alt ?? person.name}
                 onError={handleError}
                 loading="lazy"
-                custom={direction}
+                decoding="async"
+                fetchPriority="low"
+                // If you know typical rendered width, set a sizes hint to stop over-downloading:
+                // sizes="(max-width: 600px) 50vw, 360px"
                 variants={variants}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{type: 'tween', duration: 0.45, ease: 'easeInOut'}}
+                transition={prefersReduced ? {duration: 0} : {
+                  type: 'tween',
+                  duration: 0.28,
+                  ease: 'easeInOut'
+                }}
                 style={{
                   position: 'absolute',
                   inset: 0,
@@ -87,7 +99,7 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
                   height: '100%',
                   objectFit: 'cover',
                   display: 'block',
-                  willChange: 'transform',
+                  willChange: 'opacity',
                 }}
             />
           </AnimatePresence>
@@ -99,7 +111,7 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
         <Typography variant="body2" color="text.secondary" sx={{letterSpacing: 1}}>
           {person.role.toUpperCase()}
         </Typography>
-        {/*<Typography variant="body2">{person.blurb}</Typography>*/}
+        {/* <Typography variant="body2">{person.blurb}</Typography> */}
       </Stack>
   );
 };
