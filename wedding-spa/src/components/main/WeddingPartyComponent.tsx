@@ -72,6 +72,7 @@ const MemberCard: React.FC<{ person: Member }> = ({person}) => {
                 key={currentSrc}
                 src={currentSrc}
                 alt={person.alt ?? person.name}
+                onError={handleError}
                 loading="lazy"
                 custom={direction}
                 variants={variants}
@@ -114,7 +115,7 @@ const PAIRS: Pair[] = [
       photos: [
         `/assets/wedding-party/bachelor/alix/IMG_7875.jpeg`,
         `/assets/wedding-party/bachelor/alix/alix-bad-1.jpg`,
-        `/assets/wedding-party/bachelor/alix/alix-bad-2.JPG`,
+        `/assets/wedding-party/bachelor/alix/alix-bad-2.jpg`,
         `/assets/wedding-party/bachelor/alix/alix-bad-3.jpeg`,
         `/assets/wedding-party/bachelor/alix/alix-bad-4.jpeg`,
         `/assets/wedding-party/bachelor/alix/alix-bad-5.jpg`,
@@ -150,8 +151,8 @@ const PAIRS: Pair[] = [
       name: 'Nathan',
       role: 'Groomsman',
       photos: [
-        `/assets/wedding-party/bachelor/nathan/a150d2a3-0f75-478f-b7b6-cff2ab3b6df6.JPG`,
-        `/assets/wedding-party/bachelor/nathan/IMG_1596.JPG`,
+        `/assets/wedding-party/bachelor/nathan/a150d2a3-0f75-478f-b7b6-cff2ab3b6df6.jpg`,
+        `/assets/wedding-party/bachelor/nathan/IMG_1596.jpg`,
       ],
       blurb: 'Calm in the chaos.',
     },
@@ -187,9 +188,9 @@ const PAIRS: Pair[] = [
       role: 'Groomsman',
       photos: [
         `/assets/wedding-party/bachelor/jonah/IMG_6104.jpg`,
-        `/assets/wedding-party/bachelor/jonah/IMG_2223.JPG`,
+        `/assets/wedding-party/bachelor/jonah/IMG_2223.jpg`,
         `/assets/wedding-party/bachelor/jonah/IMG_9842.jpg`,
-        `/assets/wedding-party/bachelor/jonah/3266849689714258639.JPG`,
+        `/assets/wedding-party/bachelor/jonah/3266849689714258639.jpg`,
         `/assets/wedding-party/bachelor/jonah/76762713476__4B88B754-39C3-49FF-91AF-14F64B6C3681.jpg`,
         `/assets/wedding-party/bachelor/jonah/IMG_0290.jpg`,
         `/assets/wedding-party/bachelor/jonah/IMG_4998.jpeg`,
@@ -215,8 +216,8 @@ const PAIRS: Pair[] = [
         `/assets/wedding-party/bachelor/jack/IMG_3939.jpg`,
         `/assets/wedding-party/bachelor/jack/IMG_4473_Original.jpg`,
         `/assets/wedding-party/bachelor/jack/IMG_9237.jpg`,
-        `/assets/wedding-party/bachelor/jack/27690CA5-633D-4AA6-9CE8-14135BB4E90F.JPG`,
-        `/assets/wedding-party/bachelor/jack/6CCB3C97-E489-4C16-A916-93212778138C.JPG`,
+        `/assets/wedding-party/bachelor/jack/27690CA5-633D-4AA6-9CE8-14135BB4E90F.jpg`,
+        `/assets/wedding-party/bachelor/jack/6CCB3C97-E489-4C16-A916-93212778138C.jpg`,
         `/assets/wedding-party/bachelor/jack/7_Original.jpg`,
         `/assets/wedding-party/bachelor/jack/IMG_0441.jpg`,
         `/assets/wedding-party/bachelor/jack/IMG_1204.jpg`,
