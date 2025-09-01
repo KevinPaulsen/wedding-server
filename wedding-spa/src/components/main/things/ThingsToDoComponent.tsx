@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Divider,
-  Stack,
-  Link as MuiLink,
-} from '@mui/material';
+import {Box, Container, Divider, Link as MuiLink, Stack, Typography,} from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import PublicIcon from '@mui/icons-material/Public';
 
@@ -42,22 +35,16 @@ const SECTIONS: Section[] = [
     title: 'Coffee & Brunch',
     items: [
       {
-        name: 'Storyville Coffee (Pike Place)',
-        address: '94 Pike St #34, Seattle, WA 98101',
-        note: 'Cozy spot above the Market.',
-        website: 'https://www.storyville.com',
-      },
-      {
         name: 'Portage Bay Cafe',
         address: '4130 Roosevelt Way NE, Seattle, WA 98105',
         note: 'Local favorite with a toppings bar.',
         website: 'https://www.portagebaycafe.com',
       },
       {
-        name: 'Victrola Coffee Roasters',
-        address: '310 E Pike St, Seattle, WA 98122',
-        note: 'Capitol Hill roastery.',
-        website: 'https://www.victrolacoffee.com',
+        name: "Pete's Eggnest",
+        address: '7717 Greenwood Ave N Seattle, WA  98103 United States',
+        note: 'Lots of chicken art, oliva loves this place.',
+        website: 'https://peteseggnest.com',
       },
     ],
   },
@@ -71,36 +58,48 @@ const SECTIONS: Section[] = [
         website: 'https://pikeplacemarket.org',
       },
       {
-        name: 'Kerry Park',
-        address: '211 W Highland Dr, Seattle, WA 98119',
-        note: 'Best skyline photo at sunset.',
+        name: 'Green Lake Park',
+        address: '7201 East Green Lake Dr N, Seattle, WA 98115',
+        note: 'Lots of geese and lots of dogs.',
       },
       {
         name: 'Gas Works Park',
         address: '2101 N Northlake Way, Seattle, WA 98103',
         note: 'Lake Union views + picnic lawns.',
       },
-      {
-        name: 'Discovery Park Loop',
-        address: '3801 Discovery Park Blvd, Seattle, WA 98199',
-        note: 'Easy coastal loop with lighthouse.',
-      },
     ],
+  },
+  {
+    title: 'Good Eats',
+    items: [
+      {
+        name: 'Rachel’s Ginger Beer - U-Village',
+        address: '4626 26th Ave NE, Seattle, WA 98105',
+        note: "A Ginger Beer float is the sweet treat you didn't know you needed",
+        website: 'https://rachelsgingerbeer.com/pages/university-village',
+      },
+      {
+        name: 'Bongos',
+        address: '6501 Aurora Ave N, Seattle, WA 98103',
+        note: 'Best cheap Caribbean food, Olivia loves this place.',
+        website: 'http://www.bongosseattle.com',
+      },
+    ]
   },
   {
     title: 'Date Night',
     items: [
       {
-        name: 'The Pink Door',
-        address: '1919 Post Alley, Seattle, WA 98101',
-        note: 'Italian with a view—book ahead.',
-        website: 'https://thepinkdoor.net',
+        name: 'The Mountaineering Club',
+        address: '4507 Brooklyn Ave NE, Seattle, WA 98105',
+        note: 'The place Kevin Proposed with speakeasy vibes and 360° views.',
+        website: 'https://www.themountaineeringclub.com',
       },
       {
-        name: 'Smith Tower Observatory Bar',
-        address: '506 2nd Ave, Seattle, WA 98104',
-        note: 'Speakeasy vibes + 360° views.',
-        website: 'https://www.smithtower.com',
+        name: 'Bathtub Gin',
+        address: '2205 2nd Ave #310, Seattle, WA 98121',
+        note: "Kevin and Olivia's most frequent Speakeasy in seattle.",
+        website: 'https://www.bathtubginseattle.com',
       },
     ],
   },
